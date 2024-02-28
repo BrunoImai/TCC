@@ -1,6 +1,6 @@
 
 
-import authserver.users.User
+import authserver.central.Central
 import jakarta.persistence.*
 
 @Entity
@@ -12,5 +12,5 @@ class Role(
     val name: String = "",
 
     @ManyToMany(mappedBy = "roles")
-    val users: MutableSet<User> = mutableSetOf()
+    val centrals: MutableSet<Central> = mutableSetOf()
 )

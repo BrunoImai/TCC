@@ -1,4 +1,4 @@
-package authserver.users
+package authserver.central
 
 import Role
 import org.springframework.data.jpa.repository.JpaRepository

@@ -1,6 +1,6 @@
 package authserver.security
 
-import authserver.users.User
+import authserver.central.Central
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.jackson.io.JacksonSerializer
@@ -18,11 +18,11 @@ import java.util.*
 
 @Component
 class Jwt(val properties: SecurityProperties) {
-    fun createToken(user: User): String =
+    fun createToken(central: Central): String =
         UserToken(
-            id = user.id ?: -1L,
-            name = user.name,
-            roles = user.roles.map { it.name }.toSortedSet()
+            id = central.id ?: -1L,
+            name = central.name,
+            roles = central.roles.map { it.name }.toSortedSet()
         ).let {
             Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(properties.secret.toByteArray()))

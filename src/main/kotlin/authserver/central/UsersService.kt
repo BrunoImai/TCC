@@ -1,4 +1,4 @@
-package authserver.users
+package authserver.central
 
 import br.pucpr.authserver.exception.BadRequestException
 import authserver.security.Jwt
@@ -16,22 +16,22 @@ class UsersService(
     val rolesRepository: RolesRepository,
     val jwt: Jwt
 ) {
-    fun save(req: UserRequest): User {
-        val user = User(
-            email = req.email!!,
-            password = req.password!!,
-            name = req.name!!
-        )
-        val userRole = rolesRepository.findByName("USER")
-            ?: throw IllegalStateException("Role 'USER' not found!")
-
-        user.roles.add(userRole)
-        return repository.save(user)
-    }
+//    fun save(req: UserRequest): Central {
+//        val central = Central(
+//            email = req.email!!,
+//            password = req.password!!,
+//            name = req.name!!
+//        )
+//        val userRole = rolesRepository.findByName("USER")
+//            ?: throw IllegalStateException("Role 'USER' not found!")
+//
+//        central.roles.add(userRole)
+//        return repository.save(central)
+//    }
 
     fun getById(id: Long) = repository.findByIdOrNull(id)
 
-    fun findAll(role: String?): List<User> =
+    fun findAll(role: String?): List<Central> =
         if (role == null) repository.findAll(Sort.by("name"))
         else repository.findAllByRole(role)
 

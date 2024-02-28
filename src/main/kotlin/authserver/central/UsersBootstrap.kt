@@ -1,9 +1,12 @@
-package authserver.users
+package authserver.central
 
 import Role
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 @Component
 class UsersBootstrap(
@@ -17,10 +20,12 @@ class UsersBootstrap(
             rolesRepository.save(Role(name = "USER"))
         }
         if (userRepository.count() == 0L) {
-            val admin = User(
+            val admin = Central(
                 email = "admin@authserver.com",
                 password = "admin",
                 name = "Auth Server Administrator",
+                creationDate = Date.from(LocalDate.now()
+                                   .atStartOfDay(ZoneId.systemDefault()).toInstant())
             )
             admin.roles.add(adminRole)
             userRepository.save(admin)

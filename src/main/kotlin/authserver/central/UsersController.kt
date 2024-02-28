@@ -1,4 +1,4 @@
-package authserver.users
+package authserver.central
 
 import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.UserRequest
