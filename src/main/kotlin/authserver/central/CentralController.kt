@@ -1,7 +1,7 @@
 package authserver.central
 
 import br.pucpr.authserver.users.requests.LoginRequest
-import br.pucpr.authserver.users.requests.UserRequest
+import br.pucpr.authserver.users.requests.CentralRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -15,10 +15,10 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/users")
-class UsersController(val service: UsersService) {
+@RequestMapping("/central")
+class CentralController(val service: CentralService) {
     @Operation(
-        summary = "Lista todos os usuários",
+        summary = "Lista todas as centrais",
         parameters = [
             Parameter(
                 name = "role",
@@ -28,13 +28,13 @@ class UsersController(val service: UsersService) {
     )
     @GetMapping
     fun listUsers(@RequestParam("role") role: String?) =
-        service.findAll(role)
+        service.findAllCentrals(role)
             .map { it.toResponse() }
 
     @Transactional
     @PostMapping
-    fun createUser(@Valid @RequestBody req: UserRequest) =
-        service.save(req)
+    fun createCentral(@Valid @RequestBody req: CentralRequest) =
+        service.createCentral(req)
             .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
@@ -45,13 +45,13 @@ class UsersController(val service: UsersService) {
 
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) =
-        service.getById(id)
+        service.getCentralById(id)
             ?.let { ResponseEntity.ok(it.toResponse()) }
             ?: ResponseEntity.notFound().build()
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody credentials: LoginRequest) =
-        service.login(credentials)
+        service.centralLogin(credentials)
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
@@ -59,6 +59,6 @@ class UsersController(val service: UsersService) {
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "AuthServer")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
-        if (service.delete(id)) ResponseEntity.ok().build()
+        if (service.centralSelfDelete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 }

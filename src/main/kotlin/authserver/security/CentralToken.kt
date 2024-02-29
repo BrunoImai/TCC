@@ -1,6 +1,6 @@
 package authserver.security
 
-data class UserToken(
+data class CentralToken(
     val id: Long,
     val name: String,
     val roles: Set<String>

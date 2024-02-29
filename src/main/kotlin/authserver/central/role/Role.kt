@@ -1,4 +1,4 @@
-
+package authserver.central.role
 
 import authserver.central.Central
 import jakarta.persistence.*

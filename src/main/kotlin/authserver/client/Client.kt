@@ -1,8 +1,8 @@
-package org.example.authserver.client
+package authserver.client
 
+import authserver.assistance.Assistance
 import authserver.central.Central
 import jakarta.persistence.*
-import org.example.authserver.service.Assistance
 import java.util.*
 
 @Entity

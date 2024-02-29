@@ -1,6 +1,5 @@
-package authserver.central
+package authserver.central.role
 
-import Role
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface RolesRepository : JpaRepository<Role, Long> {

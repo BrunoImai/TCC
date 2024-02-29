@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UsersRepository : JpaRepository<Central, Long> {
+interface CentralRepository : JpaRepository<Central, Long> {
     @Query(
         value = "select distinct u from Central u" +
                 " join u.roles r" +
