@@ -9,6 +9,7 @@ import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/constants/images_strings.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/constants/text_strings.dart';
+import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
 
 
 class WelcomeScreen extends StatelessWidget{
@@ -62,7 +63,7 @@ class WelcomeScreen extends StatelessWidget{
                     children: [
                       Expanded(
                           child: OutlinedButton(
-                              onPressed: (){},
+                              onPressed: () => Get.to(() => const LoginScreen()),
                               child: Text(tLogin.toUpperCase())
                           )
                       ),
