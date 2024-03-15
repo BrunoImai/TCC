@@ -10,6 +10,7 @@ import 'package:tcc_front/src/constants/images_strings.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/constants/text_strings.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
+import 'package:tcc_front/src/features/authentication/screens/signup/signup_screen.dart';
 
 
 class WelcomeScreen extends StatelessWidget{
@@ -72,7 +73,7 @@ class WelcomeScreen extends StatelessWidget{
                       ),
                       Expanded(
                           child: ElevatedButton(
-                              onPressed: (){},
+                              onPressed: ()=> Get.to(() => const SignUpScreen()),
                               child: Text(tSignUp.toUpperCase())
                           )
                       ),

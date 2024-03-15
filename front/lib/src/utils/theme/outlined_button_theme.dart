@@ -8,19 +8,19 @@ class TOutlinedButtonTheme {
 
   static final lightOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      shape: RoundedRectangleBorder(),
       foregroundColor: tSecondaryColor,
-      side: BorderSide(color: tSecondaryColor),
-      padding: EdgeInsets.symmetric(vertical: tButtomHeight),
+      side: const BorderSide(color: tSecondaryColor),
+      padding: const EdgeInsets.symmetric(vertical: tButtomHeight),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
     ),
   );
 
   static final darkOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      shape: RoundedRectangleBorder(),
       foregroundColor: tWhiteColor,
-      side: BorderSide(color: tWhiteColor),
-      padding: EdgeInsets.symmetric(vertical: tButtomHeight),
+      side: const BorderSide(color: tWhiteColor),
+      padding: const EdgeInsets.symmetric(vertical: tButtomHeight),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
     ),
   );
 }

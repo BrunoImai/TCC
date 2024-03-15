@@ -1,8 +1,13 @@
 //Generic Text
 const String tLogin = "Login";
-const String tSignUp = "Cadastro";
+const String tSignUp = "Cadastrar";
 const String tPassword = "Senha";
+const String tForgetPassword = "Esqueceu a senha?";
 const String tEmail = "Email";
+const String tSignInWithGoogle = "Entre com o Google";
+const String tFullName = "Nome completo";
+const String tPhoneNo = "Celular";
+
 
 //Splash Screen
 const String tAppName = "A.G.E";
@@ -16,7 +21,11 @@ const String tWelcomeSubTitle = "Gerenciando seu negócio";
 const String tLoginTitle = "Bem vindo de volta,";
 const String tLoginSubTitle = "É hora de gerenciar o seu negócio";
 const String tRememberMe = "Lembra de mim?";
-const String tAlreadyHaveAnAccount = "Já possui uma conta?";
 const String tDontHaveAnAccount = "Não possui uma conta?";
-const String tForgetPassword = "Esqueceu a senha?";
-const String tSignInWithGoogle = "Entre com o Google";
+
+
+
+//SignUp Screen
+const String tSignUpTitle = "Hora de se tornar A.G.E";
+const String tSignUpSubTitle = "Crie seu perfil e comece essa jornada com A.G.Ente...";
+const String tAlreadyHaveAnAccount = "Já possui uma conta?";

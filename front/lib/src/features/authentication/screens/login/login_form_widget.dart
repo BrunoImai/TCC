@@ -20,7 +20,8 @@ class LoginForm extends StatelessWidget {
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: tEmail,
                   hintText: tEmail,
-                  border: OutlineInputBorder()),
+                  border: OutlineInputBorder()
+              ),
             ),
             const SizedBox(height: tFormHeight - 20),
             TextFormField(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/text_strings.dart';
 
@@ -13,14 +14,15 @@ class LoginHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image(
-            image: const AssetImage(tWelcomeImage),
-            height: size.height * 0.2),
-        Text(tLoginTitle, style: Theme.of(context).textTheme.headline1),
-        Text(tLoginSubTitle, style: Theme.of(context).textTheme.bodyText1),
+        FormHeaderWidget(
+          image: tWelcomeImage,
+          title: tLoginTitle,
+          subTitle: tLoginSubTitle,
+          imageHeight: 0.2,
+        ),
       ],
     );
   }
