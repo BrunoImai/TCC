@@ -16,13 +16,13 @@ class SignUpScreen extends StatelessWidget {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(tDefaultSize),
+            padding: const EdgeInsets.all(defaultSize),
             child: Column(
               children: const [
                 FormHeaderWidget(
-                  image: tWelcomeImage,
-                  title: tSignUpTitle,
-                  subTitle: tSignUpSubTitle,
+                  image: welcomeImage,
+                  title: signUpTitle,
+                  subTitle: signUpSubTitle,
                   imageHeight: 0.15,
                 ),
                 SignUpFormWidget(),

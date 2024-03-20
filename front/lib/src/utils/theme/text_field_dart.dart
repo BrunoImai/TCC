@@ -7,19 +7,19 @@ class TTextFormFieldTheme {
 
   static InputDecorationTheme lightInputDecorationTheme =
     const InputDecorationTheme( border: OutlineInputBorder(),
-    prefixIconColor: tSecondaryColor,
-    floatingLabelStyle: TextStyle(color: tSecondaryColor),
+    prefixIconColor: secondaryColor,
+    floatingLabelStyle: TextStyle(color: secondaryColor),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(width: 2, color: tSecondaryColor),
+      borderSide: BorderSide(width: 2, color: secondaryColor),
       )
     );
 
   static InputDecorationTheme darkInputDecorationTheme =
     const InputDecorationTheme( border: OutlineInputBorder(),
-    prefixIconColor: tPrimaryColor,
-    floatingLabelStyle: TextStyle(color: tPrimaryColor),
+    prefixIconColor: primaryColor,
+    floatingLabelStyle: TextStyle(color: primaryColor),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(width: 2, color: tPrimaryColor),
+      borderSide: BorderSide(width: 2, color: primaryColor),
       )
     );
 }

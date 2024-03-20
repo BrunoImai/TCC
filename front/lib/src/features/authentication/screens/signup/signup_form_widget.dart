@@ -11,37 +11,42 @@ class SignUpFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: tFormHeight - 10),
+      padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
       child: Form(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(tFullName),
+                  label: Text(companyName),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
             ),
-            const SizedBox(height: tFormHeight - 20),
+            const SizedBox(height: formHeight - 20),
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(tEmail), prefixIcon: Icon(Icons.email_outlined)),
+                  label: Text(email), prefixIcon: Icon(Icons.email_outlined)),
             ),
-            const SizedBox(height: tFormHeight - 20),
+            const SizedBox(height: formHeight - 20),
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(tPhoneNo), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(phoneNo), prefixIcon: Icon(Icons.numbers)),
             ),
-            const SizedBox(height: tFormHeight - 20),
+            const SizedBox(height: formHeight - 20),
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(tPassword), prefixIcon: Icon(Icons.fingerprint)),
+                  label: Text(password), prefixIcon: Icon(Icons.fingerprint)),
             ),
-            const SizedBox(height: tFormHeight - 10),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                  label: Text(confirmPassword), prefixIcon: Icon(Icons.fingerprint)),
+            ),
+            const SizedBox(height: formHeight - 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {},
-                child: Text(tSignUp.toUpperCase()),
+                child: Text(signUp.toUpperCase()),
               ),
             )
           ],

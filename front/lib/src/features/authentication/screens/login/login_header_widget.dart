@@ -18,9 +18,9 @@ class LoginHeaderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormHeaderWidget(
-          image: tWelcomeImage,
-          title: tLoginTitle,
-          subTitle: tLoginSubTitle,
+          image: welcomeImage,
+          title: loginTitle,
+          subTitle: loginSubTitle,
           imageHeight: 0.2,
         ),
       ],

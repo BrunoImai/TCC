@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget{
     final isDarkMode = brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDarkMode ? tSecondaryColor : tPrimaryColor,
+      backgroundColor: isDarkMode ? secondaryColor : primaryColor,
       body: Stack(
         children: [
           TFadeInAnimation(
@@ -44,20 +44,20 @@ class WelcomeScreen extends StatelessWidget{
               rightBefore: 0,
             ),
             child: Container(
-              padding: const EdgeInsets.all(tDefaultSize),
+              padding: const EdgeInsets.all(defaultSize),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Hero(
                       tag: 'welcome-image-tag',
                       child: Image(
-                        image: const AssetImage(tWelcomeImage),
+                        image: const AssetImage(welcomeImage),
                         height: height * 0.6,)
                   ),
                   Column(
                     children: [
-                      Text(tWelcomeTitle, style: Theme.of(context).textTheme.headline3,),
-                      Text(tWelcomeSubTitle, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center,),
+                      Text(welcomeTitle, style: Theme.of(context).textTheme.headline3,),
+                      Text(welcomeSubTitle, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center,),
                     ],
                   ),
                   Row(
@@ -65,7 +65,7 @@ class WelcomeScreen extends StatelessWidget{
                       Expanded(
                           child: OutlinedButton(
                               onPressed: () => Get.to(() => const LoginScreen()),
-                              child: Text(tLogin.toUpperCase())
+                              child: Text(login.toUpperCase())
                           )
                       ),
                       const SizedBox(
@@ -74,7 +74,7 @@ class WelcomeScreen extends StatelessWidget{
                       Expanded(
                           child: ElevatedButton(
                               onPressed: ()=> Get.to(() => const SignUpScreen()),
-                              child: Text(tSignUp.toUpperCase())
+                              child: Text(signUp.toUpperCase())
                           )
                       ),
                     ],

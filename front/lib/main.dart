@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tcc_front/src/features/authentication/screens/slapsh_screen/slapsh_screen.dart';
 import 'package:tcc_front/src/utils/theme/theme.dart';
@@ -15,9 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       themeMode: ThemeMode.system,
-      theme: TAppTheme.lightTheme,
-      darkTheme: TAppTheme.darkTheme,
+      theme: ThemeApp.lightTheme,
+      darkTheme: ThemeApp.darkTheme,
       debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.leftToRightWithFade,
+      transitionDuration: const Duration(milliseconds: 500),
       home: SplashScreen(),
     );
   }

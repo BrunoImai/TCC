@@ -17,7 +17,7 @@ class LoginFooterWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text("OU"),
+        /*const Text("OU"),
         const SizedBox(height: tFormHeight - 20),
         SizedBox(
           width: double.infinity,
@@ -26,17 +26,17 @@ class LoginFooterWidget extends StatelessWidget {
             onPressed: () {},
             label: const Text(tSignInWithGoogle),
           ),
-        ),
-        const SizedBox(height: tFormHeight - 20),
+        ),*/
+        const SizedBox(height: formHeight - 20),
         TextButton(
           onPressed: () => Get.to(() => const SignUpScreen()),
           child: Text.rich(
             TextSpan(
-                text: tDontHaveAnAccount,
+                text: dontHaveAnAccount,
                 style: Theme.of(context).textTheme.bodyText1,
                 children: const [
                   TextSpan(
-                      text: tSignUp,
+                      text: signUp,
                       style: TextStyle(color: Colors.blue)
                   )
                 ]),

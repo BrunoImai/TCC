@@ -9,10 +9,10 @@ class TElevatedButtonTheme {
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: tWhiteColor,
-      backgroundColor: tSecondaryColor,
-      side: const BorderSide(color: tSecondaryColor),
-      padding: const EdgeInsets.symmetric(vertical: tButtomHeight),
+      foregroundColor: whiteColor,
+      backgroundColor: secondaryColor,
+      side: const BorderSide(color: secondaryColor),
+      padding: const EdgeInsets.symmetric(vertical: buttomHeight),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
     ),
   );
@@ -20,10 +20,10 @@ class TElevatedButtonTheme {
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: tSecondaryColor,
-      backgroundColor: tWhiteColor,
-      side: const BorderSide(color: tSecondaryColor),
-      padding: const EdgeInsets.symmetric(vertical: tButtomHeight),
+      foregroundColor: secondaryColor,
+      backgroundColor: whiteColor,
+      side: const BorderSide(color: secondaryColor),
+      padding: const EdgeInsets.symmetric(vertical: buttomHeight),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
     ),
   );

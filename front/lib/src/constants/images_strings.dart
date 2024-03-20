@@ -1,6 +1,8 @@
-const String tSplashTopIcon = "assets/images/pngwingcom.png";
-const String tSplashImage = "assets/images/pngwingcom.png";
+const String splashTopIcon = "assets/images/pngwingcom.png";
+const String splashImage = "assets/images/pngwingcom.png";
 
-const String tWelcomeImage = "assets/images/pngwingcom.png";
+const String welcomeImage = "assets/images/pngwingcom.png";
 
-const String tGoogleLogoImage = "assets/images/logo/googlelogo.png";
+const String forgetPasswordImage = "assets/images/pngwingcom.png";
+
+const String userProfileImage = "assets/images/userProfileImage.png";

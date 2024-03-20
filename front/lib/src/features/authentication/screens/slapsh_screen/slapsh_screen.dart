@@ -26,29 +26,29 @@ class SplashScreen extends StatelessWidget {
           TFadeInAnimation(
             durationInMs: 1600,
             animate: TAnimatePosition(
-              topAfter: 0, topBefore: -30, leftBefore: -30, leftAfter: 0,
+              topAfter: 150, topBefore: -30, leftBefore: -30, leftAfter: 0,
             ),
-            child: const Image(image: AssetImage(tSplashTopIcon)),
+            child: const Image(image: AssetImage(splashTopIcon)),
           ),
           TFadeInAnimation(
             durationInMs: 2000,
-            animate: TAnimatePosition(topBefore: 80, topAfter: 80, leftAfter: tDefaultSize, leftBefore: -80),
+            animate: TAnimatePosition(topBefore: 80, topAfter: 80, leftAfter: defaultSize, leftBefore: -80),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(tAppName,
+                Text(appName,
                     style: Theme.of(context).textTheme.headline3),
-                Text(tAppTagLine,
+                Text(appTagLine,
                     style: Theme.of(context).textTheme.headline2)
               ],
             ),
           ),
-          TFadeInAnimation(
+          /*TFadeInAnimation(
             durationInMs: 2400,
             animate: TAnimatePosition(bottomBefore: 0, bottomAfter: 100),
-            child: const Image(image: AssetImage(tSplashImage)),
-          ),
-          TFadeInAnimation(
+            child: const Image(image: AssetImage(tSplashImage), width: 20,),
+          ),*/
+          /*TFadeInAnimation(
             durationInMs: 2400,
             animate: TAnimatePosition(bottomBefore: 0, bottomAfter: 60, rightBefore: tDefaultSize, rightAfter: tDefaultSize),
             child: Container(
@@ -59,7 +59,7 @@ class SplashScreen extends StatelessWidget {
                   color: tPrimaryColor
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

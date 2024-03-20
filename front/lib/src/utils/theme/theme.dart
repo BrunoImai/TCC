@@ -4,13 +4,13 @@ import 'package:tcc_front/src/utils/theme/outlined_button_theme.dart';
 import 'package:tcc_front/src/utils/theme/text_field_dart.dart';
 import 'package:tcc_front/src/utils/theme/text_theme.dart';
 
-class TAppTheme {
+class ThemeApp {
 
-  TAppTheme._();
+  ThemeApp._();
 
   static ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,
-      textTheme: TTextTheme.lightTextTheme,
+      textTheme: ThemeText.lightTextTheme,
       outlinedButtonTheme: TOutlinedButtonTheme.lightOutlinedButtonTheme,
       elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
       inputDecorationTheme: TTextFormFieldTheme.lightInputDecorationTheme,
@@ -18,7 +18,7 @@ class TAppTheme {
 
   static ThemeData darkTheme = ThemeData(
       brightness: Brightness.dark,
-      textTheme: TTextTheme.darkTextTheme,
+      textTheme: ThemeText.darkTextTheme,
       outlinedButtonTheme: TOutlinedButtonTheme.darkOutlinedButtonTheme,
       elevatedButtonTheme: TElevatedButtonTheme.darkElevatedButtonTheme,
       inputDecorationTheme: TTextFormFieldTheme.darkInputDecorationTheme,
