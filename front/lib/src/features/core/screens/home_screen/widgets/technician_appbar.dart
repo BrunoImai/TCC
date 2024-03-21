@@ -14,8 +14,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
       elevation: 0,
       centerTitle: true,
       backgroundColor: Colors.transparent,
-      leading: const Icon(
-        Icons.menu,
+      leading: IconButton(
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+        icon: const Icon(Icons.menu),
       ),
       title: Text(appName, style: Theme.of(context).textTheme.headline4),
       actions: [

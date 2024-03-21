@@ -33,11 +33,13 @@ class SignUpFormWidget extends StatelessWidget {
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              obscureText: true,
               decoration: const InputDecoration(
                   label: Text(password), prefixIcon: Icon(Icons.fingerprint)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              obscureText: true,
               decoration: const InputDecoration(
                   label: Text(confirmPassword), prefixIcon: Icon(Icons.fingerprint)),
             ),
