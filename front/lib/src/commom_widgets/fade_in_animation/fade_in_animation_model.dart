@@ -1,8 +1,8 @@
-class TAnimatePosition{
+class AnimatePosition{
   final double? topBefore, bottomBefore, leftBefore, rightBefore;
   final double? topAfter, bottomAfter, leftAfter, rightAfter;
 
-  TAnimatePosition ({
+  AnimatePosition ({
     this.topBefore,
     this.bottomBefore,
     this.leftBefore,

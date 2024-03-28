@@ -6,8 +6,8 @@ import 'package:tcc_front/src/commom_widgets/fade_in_animation/fade_in_animation
 
 import 'fade_in_animation_controller.dart';
 
-class TFadeInAnimation extends StatelessWidget {
-  TFadeInAnimation({
+class FadeInAnimation extends StatelessWidget {
+  FadeInAnimation({
     Key? key,
     required this.durationInMs,
     required this.child,
@@ -16,7 +16,7 @@ class TFadeInAnimation extends StatelessWidget {
 
   final controller = Get.put(FadeInAnimationController());
   final int durationInMs;
-  final TAnimatePosition? animate;
+  final AnimatePosition? animate;
   final Widget child;
 
   @override

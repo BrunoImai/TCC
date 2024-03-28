@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 
-class SignUpFormWidget extends StatelessWidget {
-  const SignUpFormWidget({
+class RegisterClientFormWidget extends StatelessWidget {
+  const RegisterClientFormWidget({
     Key? key,
   }) : super(key: key);
 
@@ -18,7 +18,7 @@ class SignUpFormWidget extends StatelessWidget {
           children: [
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(companyName),
+                  label: Text(fullName),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
             ),
             const SizedBox(height: formHeight - 20),
@@ -29,7 +29,7 @@ class SignUpFormWidget extends StatelessWidget {
             const SizedBox(height: formHeight - 20),
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(cnpj), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(cpf), prefixIcon: Icon(Icons.numbers)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -38,15 +38,18 @@ class SignUpFormWidget extends StatelessWidget {
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              obscureText: true,
               decoration: const InputDecoration(
-                  label: Text(password), prefixIcon: Icon(Icons.fingerprint)),
+                  label: Text(cep), prefixIcon: Icon(Icons.local_post_office)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              obscureText: true,
               decoration: const InputDecoration(
-                  label: Text(confirmPassword), prefixIcon: Icon(Icons.fingerprint)),
+                  label: Text(address), prefixIcon: Icon(Icons.location_on)),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                  label: Text(number), prefixIcon: Icon(Icons.numbers)),
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(

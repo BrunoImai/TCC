@@ -17,8 +17,8 @@ class SignUpScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(defaultSize),
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 FormHeaderWidget(
                   image: welcomeImage,
                   title: signUpTitle,

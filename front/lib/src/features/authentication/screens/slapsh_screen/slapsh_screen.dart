@@ -23,16 +23,24 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          TFadeInAnimation(
-            durationInMs: 1600,
-            animate: TAnimatePosition(
-              topAfter: 150, topBefore: -30, leftBefore: -30, leftAfter: 0,
+          FadeInAnimation(
+            durationInMs: 2000,
+            animate: AnimatePosition(
+              topAfter: MediaQuery.of(context).size.height / 2 - defaultSize * 6,
+              leftAfter: MediaQuery.of(context).size.width / 2 - defaultSize * 8.5,
+              topBefore: -30,
+              leftBefore: -30,
             ),
             child: const Image(image: AssetImage(splashTopIcon)),
           ),
-          TFadeInAnimation(
+          FadeInAnimation(
             durationInMs: 2000,
-            animate: TAnimatePosition(topBefore: 80, topAfter: 80, leftAfter: defaultSize, leftBefore: -80),
+            animate: AnimatePosition(
+                topBefore: 80,
+                topAfter: 80,
+                leftAfter: defaultSize,
+                leftBefore: -80
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -43,23 +51,6 @@ class SplashScreen extends StatelessWidget {
               ],
             ),
           ),
-          /*TFadeInAnimation(
-            durationInMs: 2400,
-            animate: TAnimatePosition(bottomBefore: 0, bottomAfter: 100),
-            child: const Image(image: AssetImage(tSplashImage), width: 20,),
-          ),*/
-          /*TFadeInAnimation(
-            durationInMs: 2400,
-            animate: TAnimatePosition(bottomBefore: 0, bottomAfter: 60, rightBefore: tDefaultSize, rightAfter: tDefaultSize),
-            child: Container(
-              width: tSplashContainerSize,
-              height: tSplashContainerSize,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: tPrimaryColor
-              ),
-            ),
-          ),*/
         ],
       ),
     );

@@ -27,5 +27,4 @@ class FadeInAnimationController  extends GetxController{
     await Future.delayed(const Duration(milliseconds: 500));
     animate.value = true;
   }
-
 }

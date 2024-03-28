@@ -31,9 +31,9 @@ class WelcomeScreen extends StatelessWidget{
       backgroundColor: isDarkMode ? secondaryColor : primaryColor,
       body: Stack(
         children: [
-          TFadeInAnimation(
+          FadeInAnimation(
             durationInMs: 1200,
-            animate: TAnimatePosition(
+            animate: AnimatePosition(
               bottomAfter: 0,
               bottomBefore: -100,
               leftBefore: 0,

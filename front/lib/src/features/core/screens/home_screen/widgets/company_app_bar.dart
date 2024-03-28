@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
@@ -20,14 +23,26 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
         },
         icon: const Icon(Icons.menu),
       ),
-      title: Text(appName, style: Theme.of(context).textTheme.headline4),
+      title: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => Get.to(() => const CompanyHomeScreen()),
+          child: Text(appName, style: Theme.of(context).textTheme.headline4),
+        ),
+      ),
+      /*title: IconButton(
+          onPressed: () => Get.to(() => const CompanyHomeScreen()),
+          icon: Text(appName, style: Theme.of(context).textTheme.headline4),
+      ),*/
       actions: [
         Container(
           margin: const EdgeInsets.only(right: 20, top: 7),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: IconButton(onPressed: () {}, icon: const Image(image: AssetImage(userProfileImage))),
+          child: IconButton(
+              onPressed: () {},
+              icon: const Image(image: AssetImage(userProfileImage))),
         )
       ],
     );
