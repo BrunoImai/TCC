@@ -19,7 +19,7 @@ import java.util.*
 @Component
 class Jwt(val properties: SecurityProperties) {
     fun createToken(central: Central): String =
-        UserToken(
+        CentralToken(
             id = central.id ?: -1L,
             name = central.name,
             roles = central.roles.map { it.name }.toSortedSet()
@@ -45,14 +45,14 @@ class Jwt(val properties: SecurityProperties) {
                 .setSigningKey(properties.secret.toByteArray())
                 .deserializeJsonWith(
                     JacksonDeserializer(
-                        mapOf(USER_FIELD to UserToken::class.java)
+                        mapOf(USER_FIELD to CentralToken::class.java)
                     )
                 ).build()
                 .parseClaimsJws(token)
                 .body
 
             if (claims.issuer != properties.issuer) return null
-            val user = claims.get(USER_FIELD, UserToken::class.java)
+            val user = claims.get(USER_FIELD, CentralToken::class.java)
             val authorities = user.roles.map { SimpleGrantedAuthority("ROLE_$it") }
             return UsernamePasswordAuthenticationToken.authenticated(user, user.id, authorities)
         } catch (e: Throwable) {

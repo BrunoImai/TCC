@@ -6,6 +6,13 @@ plugins {
     kotlin("plugin.jpa") version "1.7.22"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "18"
+    }
+}
+
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -16,6 +23,7 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("mysql:mysql-connector-java:8.0.33")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -43,5 +51,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(18)
 }

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
-data class UserRequest(
+data class CentralRequest(
     @field:NotBlank
     val name: String?,
 
@@ -12,5 +12,6 @@ data class UserRequest(
     val email: String?,
 
     @field:Size(min = 8, max = 50)
-    val password: String?
+    val password: String?,
+
 )

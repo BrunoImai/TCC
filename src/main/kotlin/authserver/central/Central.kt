@@ -1,10 +1,11 @@
 package authserver.central
 
-import Role
-import authserver.central.responses.UserResponse
+import authserver.assistance.Assistance
+import authserver.central.responses.CentralResponse
+import authserver.central.role.Role
 import jakarta.persistence.*
-import org.example.authserver.service.Assistance
-import org.example.authserver.worker.Worker
+
+import authserver.worker.Worker
 import java.util.*
 
 @Entity
@@ -39,8 +40,8 @@ class Central(
     @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
     var workers: MutableSet<Worker> = mutableSetOf(),
 
-    @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
     var assistances: MutableSet<Assistance> = mutableSetOf()
 ) {
-    fun toResponse() = UserResponse(id!!, name, email, creationDate,description)
+    fun toResponse() = CentralResponse(id!!, name, email, creationDate,description)
 }

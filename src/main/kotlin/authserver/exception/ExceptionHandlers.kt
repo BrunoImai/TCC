@@ -1,4 +1,4 @@
-package br.pucpr.authserver.exception
+package authserver.exception
 
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError

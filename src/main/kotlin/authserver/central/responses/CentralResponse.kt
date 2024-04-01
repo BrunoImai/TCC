@@ -2,10 +2,10 @@ package authserver.central.responses
 
 import java.util.*
 
-data class UserResponse(
+data class CentralResponse(
     val id: Long,
     val name: String,
     val email: String,
-    val creation_date: Date,
+    val creationDate: Date,
     val description: String
 )
