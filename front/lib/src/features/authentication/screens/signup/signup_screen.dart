@@ -8,7 +8,7 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

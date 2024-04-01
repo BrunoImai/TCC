@@ -14,6 +14,7 @@ class ThemeText{
     headline6: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.w600, color: darkColor),
     bodyText1: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.normal, color: darkColor),
     bodyText2: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.normal, color: darkColor),
+    overline: GoogleFonts.poppins(fontSize : 11.0, fontWeight: FontWeight.w200, color: darkColor),
   );
 
   static TextTheme darkTextTheme = TextTheme(
@@ -24,5 +25,6 @@ class ThemeText{
     headline6: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.w600, color: whiteColor),
     bodyText1: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.normal, color: whiteColor),
     bodyText2: GoogleFonts.poppins(fontSize : 14.0, fontWeight: FontWeight.normal, color: whiteColor),
+    overline: GoogleFonts.poppins(fontSize : 11.0, fontWeight: FontWeight.w200, color: whiteColor),
   );
 }

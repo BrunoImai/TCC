@@ -33,6 +33,11 @@ const String dontHaveAnAccount = "Não possui uma conta?";
 const String signUpTitle = "Hora de se tornar A.G.E";
 const String signUpSubTitle = "Crie seu perfil e comece essa jornada com A.G.Ente...";
 const String alreadyHaveAnAccount = "Já possui uma conta?";
+const String numberOfCharacters = "Contém pelo menos oito caracteres";
+const String uppercaseCharacter = "Contém pelo menos um carácter maiúsculo";
+const String lowercaseCharacter = "Contém pelo menos um carácter minúsculo";
+const String numberCharacter = "Contém pelo menos um número";
+const String specialCharacter = "Contém pelo menos um carácter especial";
 
 //Register Client Screen
 const String registerClientTilte = "Mais um cliente A.G.E";
