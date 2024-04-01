@@ -1,5 +1,7 @@
 package authserver.central
 
+import authserver.client.Client
+import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.CentralRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/central")
 class CentralController(val service: CentralService) {
+
+    // CENTRAL
     @Operation(
         summary = "Lista todas as centrais",
         parameters = [
@@ -26,10 +30,6 @@ class CentralController(val service: CentralService) {
                 example = "USER"
             )]
     )
-    @GetMapping
-    fun listUsers(@RequestParam("role") role: String?) =
-        service.findAllCentrals(role)
-            .map { it.toResponse() }
 
     @Transactional
     @PostMapping
@@ -38,17 +38,6 @@ class CentralController(val service: CentralService) {
             .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
-    @GetMapping("/me")
-    @PreAuthorize("permitAll()")
-    @SecurityRequirement(name = "AuthServer")
-    fun getSelf(auth: Authentication) = getUser(auth.credentials as Long)
-
-    @GetMapping("/{id}")
-    fun getUser(@PathVariable("id") id: Long) =
-        service.getCentralById(id)
-            ?.let { ResponseEntity.ok(it.toResponse()) }
-            ?: ResponseEntity.notFound().build()
-
     @PostMapping("/login")
     fun login(@Valid @RequestBody credentials: LoginRequest) =
         service.centralLogin(credentials)
@@ -56,9 +45,39 @@ class CentralController(val service: CentralService) {
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "AuthServer")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.centralSelfDelete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
+
+    // Client
+
+    @GetMapping("/client/{id}")
+    fun getClient(@PathVariable("id") id: Long) =
+        service.getClient(id)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/client")
+    fun listClients() =
+        service.listClients()
+            .map { it.toResponse() }
+
+    @PostMapping("/client")
+    fun createClient(@Valid @RequestBody req: ClientRequest) =
+        service.createClient(req)
+            .toResponse()
+            .let { ResponseEntity.status(CREATED).body(it) }
+
+    @PutMapping("/client/{id}")
+    fun updateClient(@PathVariable("id") id: Long, @Valid @RequestBody client: Client) =
+        service.updateClient(id, client)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/client/{id}")
+    fun deleteClient(@PathVariable("id") id: Long) =
+        if (service.deleteClient(id)) ResponseEntity.ok()
+        else ResponseEntity.notFound()
 }

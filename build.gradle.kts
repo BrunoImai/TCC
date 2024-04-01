@@ -6,6 +6,13 @@ plugins {
     kotlin("plugin.jpa") version "1.7.22"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "18"
+    }
+}
+
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
@@ -44,5 +51,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(18)
 }

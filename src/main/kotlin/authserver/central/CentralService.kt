@@ -4,9 +4,12 @@ import authserver.security.Jwt
 import authserver.security.CentralToken
 import br.pucpr.authserver.users.requests.CentralRequest
 import br.pucpr.authserver.users.requests.LoginRequest
-import br.pucpr.authserver.users.responses.CentralLoginResponse
+import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
+import authserver.client.Client
+import authserver.client.ClientRepository
+import authserver.client.requests.ClientRequest
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -20,7 +23,7 @@ class CentralService(
     val centralRepository: CentralRepository,
     val rolesRepository: RolesRepository,
     val jwt: Jwt,
-    val request: HttpServletRequest,
+    val request: HttpServletRequest, private val clientRepository: ClientRepository,
 ) {
 
     fun getCentralIdFromToken(): Long {
@@ -74,6 +77,61 @@ class CentralService(
         log.warn("Central deleted. id={} name={}", central.id, central.name)
         centralRepository.delete(central)
         return true
+    }
+
+    //CLIENT
+
+    fun getClient(clientId: Long): Client? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Not accepted! Central not found!")
+        val client = clientRepository.findByIdOrNull(clientId) ?: throw IllegalStateException("Client not found!")
+        if (client.central != central) throw IllegalStateException("Client not exist on Central: centralName = {}" + central.name)
+        return client
+    }
+
+    fun createClient(req: ClientRequest): Client {
+        val currentDate = LocalDate.now()
+
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Not accepted! Central not found!")
+
+        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val client = Client(
+            email = req.email,
+            name = req.name,
+            entryDate = date,
+            central = central,
+            address = req.address
+        )
+
+        return clientRepository.save(client)
+    }
+
+    fun deleteClient(clientId: Long): Boolean {
+        val client = getClient(clientId) ?: return false
+
+        log.warn("Client deleted deleted. id={} name={}", client.id, client.name)
+        clientRepository.delete(client)
+        return true
+    }
+
+    fun updateClient(id: Long, clientUpdated: Client): Client {
+        val client = getClient(id) ?: throw IllegalStateException("Client not found!")
+        client.email = clientUpdated.email
+        client.name = clientUpdated.name
+        client.address = clientUpdated.address
+        client.cellphone = clientUpdated.cellphone
+        client.cpf = clientUpdated.cpf
+        client.assistances = clientUpdated.assistances
+        client.central = clientUpdated.central
+        return clientRepository.save(client)
+    }
+
+    fun listClients(): List<Client> {
+        val centralId = getCentralIdFromToken()
+        val central = getCentralById(centralId) ?: throw IllegalStateException("Central not found!")
+        return clientRepository.findAllByCentral(central)
     }
 
     companion object {

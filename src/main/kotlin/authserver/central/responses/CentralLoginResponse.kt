@@ -1,6 +1,5 @@
-package br.pucpr.authserver.users.responses
+package authserver.central.responses
 
-import authserver.central.responses.CentralResponse
 
 data class CentralLoginResponse(
     val token: String,

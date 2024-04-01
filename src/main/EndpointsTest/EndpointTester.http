@@ -8,53 +8,42 @@ Content-Type: application/json
   "password": "central0000"
 }
 
-
-
-### Listar usuários
-GET localhost:8080/api/users
-
-### Cadastra um usuário
-POST localhost:8080/api/users
+### Login como Central
+POST localhost:8080/api/central/login
 Content-Type: application/json
 
 {
-  "name": "Vini",
-  "email": "Vini@gmail.com",
-  "password": "vini0000"
+  "email": "Central@gmail.com",
+  "password": "central0000"
 }
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.central.id)
+%}
 
-### Lista o usuário 2
-GET localhost:8080/api/users/102
 
-### Lista o próprio usuário
-GET localhost:8080/api/users/me
+### Listar Todos os clientes da central
+GET localhost:8080/api/central/client
 Authorization: Bearer {{token}}
 
-### Login
-POST localhost:8080/api/users/login
+### Cadastra um Cliente
+POST localhost:8080/api/central/client
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "email": "Vini@gmail.com",
-  "password": "vini0000"
+    "name": "Bruno",
+    "email": "bruno.y.l.imai@gmail.com",
+    "password": "bruno1234",
+    "cellphone": "11999999999",
+    "address": "Rua dos bobos, n 0",
+    "cpf": "12345678901"
 }
-> {%
-    client.global.set("token", response.body.token)
-    client.global.set("id", response.body.user.id)
-%}
 
-### Login como Admin
-POST localhost:8080/api/users/login
-Content-Type: application/json
 
-{
-  "email": "admin@authserver.com",
-  "password": "admin"
-}
-> {%
-    client.global.set("token", response.body.token)
-    client.global.set("id", response.body.user.id)
-%}
+### Lista o usuário 2
+GET localhost:8080/api/central/client/2
+
 
 ### Exclui o usuário
 DELETE localhost:8080/api/users/2
