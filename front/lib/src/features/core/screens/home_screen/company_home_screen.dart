@@ -8,8 +8,19 @@ import 'package:tcc_front/src/features/core/screens/home_screen/widgets/company_
 
 import '../../../../constants/text_strings.dart';
 
-class CompanyHomeScreen extends StatelessWidget{
-  const CompanyHomeScreen({Key? key}) : super(key: key);
+class CompanyHomeScreen extends StatefulWidget{
+  const CompanyHomeScreen({super.key});
+
+  @override
+  State<CompanyHomeScreen> createState() => _CompanyHomeScreenState();
+}
+
+class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isAdm = false;
+  final _loginFormKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
