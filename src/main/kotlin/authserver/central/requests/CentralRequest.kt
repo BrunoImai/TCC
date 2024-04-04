@@ -1,4 +1,4 @@
-package br.pucpr.authserver.users.requests
+package authserver.central.requests
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -11,7 +11,12 @@ data class CentralRequest(
     @field:Email
     val email: String?,
 
+    @field:NotBlank
+    val cnpj: String?,
+
+    @field:NotBlank
+    val cellphone: String?,
+
     @field:Size(min = 8, max = 50)
     val password: String?,
-
 )

@@ -3,7 +3,7 @@ package authserver.central
 import authserver.client.Client
 import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
-import br.pucpr.authserver.users.requests.CentralRequest
+import authserver.central.requests.CentralRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -12,8 +12,6 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController

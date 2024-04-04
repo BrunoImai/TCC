@@ -2,7 +2,7 @@ package authserver.central
 
 import authserver.security.Jwt
 import authserver.security.CentralToken
-import br.pucpr.authserver.users.requests.CentralRequest
+import authserver.central.requests.CentralRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
@@ -46,7 +46,9 @@ class CentralService(
             email = req.email!!,
             password = req.password!!,
             name = req.name!!,
-            creationDate = date
+            creationDate = date,
+            cnpj = req.cnpj!!,
+            cellphone = req.cellphone!!
         )
         val userRole = rolesRepository.findByName("CENTRAL")
             ?: throw IllegalStateException("Role 'CENTRAL' not found!")
