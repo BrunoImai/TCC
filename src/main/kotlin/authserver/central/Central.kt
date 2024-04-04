@@ -3,10 +3,10 @@ package authserver.central
 import authserver.assistance.Assistance
 import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
+import authserver.client.Client
 import jakarta.persistence.*
 
 import authserver.worker.Worker
-import org.hibernate.validator.constraints.br.CNPJ
 import java.util.*
 
 @Entity
@@ -45,7 +45,10 @@ class Central(
     var workers: MutableSet<Worker> = mutableSetOf(),
 
     @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var assistances: MutableSet<Assistance> = mutableSetOf()
+    var assistances: MutableSet<Assistance> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var client: MutableSet<Client> = mutableSetOf()
 ) {
-    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, celphone)
+    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, celphone, client.map { it.toResponse() })
 }
