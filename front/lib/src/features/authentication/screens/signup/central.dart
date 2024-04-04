@@ -44,7 +44,21 @@ class CentralLoginRequest {
 }
 
 class Central {
+  final long id;
+  final String name;
+  final String email;
+  final date creationDate;
+  final String cnpj;
+  final String cellphone;
 
+  Central(
+      this.id,
+      this.name,
+      this.email,
+      this.creationDate,
+      this.cnpj,
+      this.cellphone
+      );
 }
 
 class LoggedCentral {
@@ -52,17 +66,5 @@ class LoggedCentral {
   Central central = Central();
 
   LoggedCentral(this.token, this.central);
-
-/*int id;
-  String name;
-  String email;
-  bool isAdm;
-
-  LoggedCentral(
-      this.token,
-      this.id,
-      this.name,
-      this.email,
-      this.isAdm
-  );*/
+  
 }
