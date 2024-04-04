@@ -6,6 +6,7 @@ import authserver.central.role.Role
 import jakarta.persistence.*
 
 import authserver.worker.Worker
+import org.hibernate.validator.constraints.br.CNPJ
 import java.util.*
 
 @Entity
@@ -27,7 +28,10 @@ class Central(
     var email: String = "",
 
     @Column
-    var description: String = "",
+    var cnpj: String = "",
+
+    @Column
+    var celphone: String = "",
 
     @ManyToMany
     @JoinTable(
@@ -43,5 +47,5 @@ class Central(
     @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
     var assistances: MutableSet<Assistance> = mutableSetOf()
 ) {
-    fun toResponse() = CentralResponse(id!!, name, email, creationDate,description)
+    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, celphone)
 }

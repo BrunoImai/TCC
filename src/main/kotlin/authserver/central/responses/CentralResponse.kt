@@ -7,5 +7,6 @@ data class CentralResponse(
     val name: String,
     val email: String,
     val creationDate: Date,
-    val description: String
+    val cnpj: String,
+    val celphone: String
 )
