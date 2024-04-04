@@ -34,7 +34,7 @@ class RegisterClientFormWidget extends StatelessWidget {
             const SizedBox(height: formHeight - 20),
             TextFormField(
               decoration: const InputDecoration(
-                  label: Text(phoneNo), prefixIcon: Icon(Icons.phone_android)),
+                  label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(

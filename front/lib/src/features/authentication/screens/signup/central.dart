@@ -1,24 +1,24 @@
 
 class CentralRequest {
-  final String companyName;
+  final String central;
   final String email;
   final String cnpj;
-  final String phoneNo;
+  final String cellphone;
   final String password;
 
 
   CentralRequest({
-    required this.companyName,
+    required this.central,
     required this.email,
     required this.cnpj,
-    required this.phoneNo,
+    required this.cellphone,
     required this.password
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'companyName': companyName,
-      'phoneNo': phoneNo,
+      'central': central,
+      'cellphone': cellphone,
       'email': email,
       'password': password,
       'cnpj': cnpj
@@ -43,9 +43,17 @@ class CentralLoginRequest {
   }
 }
 
+class Central {
+
+}
+
 class LoggedCentral {
   String token;
-  int id;
+  Central central = Central();
+
+  LoggedCentral(this.token, this.central);
+
+/*int id;
   String name;
   String email;
   bool isAdm;
@@ -56,5 +64,5 @@ class LoggedCentral {
       this.name,
       this.email,
       this.isAdm
-  );
+  );*/
 }

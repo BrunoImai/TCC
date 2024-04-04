@@ -24,10 +24,10 @@ class SignUpFormWidget extends StatefulWidget {
 }
 
 class _SignUpFormWidgetState extends State<SignUpFormWidget> {
-  final TextEditingController companyNameController = TextEditingController();
+  final TextEditingController centralController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
-  final TextEditingController phoneNoController = TextEditingController();
+  final TextEditingController cellphoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
@@ -78,14 +78,14 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   @override
   Widget build(BuildContext context) {
     Future<void> registerUser(VoidCallback onSuccess) async {
-      String companyName = companyNameController.text;
-      String phoneNo = phoneNoController.text;
+      String central = centralController.text;
+      String cellphone = cellphoneController.text;
       String email = emailController.text;
       String cnpj = cnpjController.text;
       String password = passwordController.text;
 
-      if (companyName.isEmpty ||
-          phoneNo.isEmpty ||
+      if (central.isEmpty ||
+          cellphone.isEmpty ||
           email.isEmpty ||
           password.isEmpty) {
         showDialog(
@@ -109,7 +109,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         return;
       }
 
-      if (phoneNo.length > 12 || phoneNo.length < 7 || !phoneNo.contains(RegExp(r'^[0-9]*$'))) {
+      if (cellphone.length > 12 || cellphone.length < 7 || !cellphone.contains(RegExp(r'^[0-9]*$'))) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -122,10 +122,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       }
 
       CentralRequest centralRequest = CentralRequest(
-          companyName: companyName,
+          central: central,
           email: email,
           cnpj: cnpj,
-          phoneNo: phoneNo,
+          cellphone: cellphone,
           password: password
       );
 
@@ -134,7 +134,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/users'),
+          Uri.parse('http://localhost:8080/api/central'),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -144,14 +144,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           // Registration successful
           final token = jsonData['token'];
-          final user = jsonData['user'];
-
-          final userId = user['id'];
-          final userName = user['companyName'];
-          final userEmail = user['email'];
+          final central = jsonData['central'];
 
           CentralManager.instance.loggedUser =
-              LoggedCentral(token, userId, userName, userEmail, false);
+              LoggedCentral(token, central);
           onSuccess.call();
           print('Registration successful!');
         } else {
@@ -169,9 +165,9 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: companyNameController,
+              controller: centralController,
               decoration: const InputDecoration(
-                  label: Text(companyName),
+                  label: Text(central),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
             ),
             const SizedBox(height: formHeight - 20),
@@ -188,9 +184,9 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              controller: phoneNoController,
+              controller: cellphoneController,
               decoration: const InputDecoration(
-                  label: Text(phoneNo), prefixIcon: Icon(Icons.phone_android)),
+                  label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
