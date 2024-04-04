@@ -11,5 +11,4 @@ data class CentralResponse(
     val creationDate: Date,
     val cnpj: String,
     val cellphone: String,
-   // val mutableList: List<ClientResponse>
 )
