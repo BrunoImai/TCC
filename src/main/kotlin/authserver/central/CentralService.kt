@@ -41,7 +41,7 @@ class CentralService(
 
         // Convert LocalDate to Date
         val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-
+        log.info("entrou")
         val central = Central(
             email = req.email!!,
             password = req.password!!,
@@ -53,9 +53,11 @@ class CentralService(
 
         central.roles.add(userRole)
 
+        val newCentral = centralRepository.save(central)
+
         return CentralLoginResponse(
             token = jwt.createToken(central),
-            central.toResponse()
+            newCentral.toResponse()
         )
     }
 

@@ -31,7 +31,7 @@ class Central(
     var cnpj: String = "",
 
     @Column
-    var celphone: String = "",
+    var cellphone: String = "",
 
     @ManyToMany
     @JoinTable(
@@ -50,5 +50,5 @@ class Central(
     @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
     var client: MutableSet<Client> = mutableSetOf()
 ) {
-    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, celphone, client.map { it.toResponse() })
+    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj,cellphone /*client.map { it.toResponse() }*/)
 }

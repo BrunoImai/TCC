@@ -122,7 +122,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       }
 
       CentralRequest centralRequest = CentralRequest(
-          central: central,
+          name: central,
           email: email,
           cnpj: cnpj,
           cellphone: cellphone,
@@ -130,7 +130,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       );
 
       String requestBody = jsonEncode(centralRequest.toJson());
-      print("Alo");
 
       try {
         final response = await http.post(
@@ -140,7 +139,9 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
           },
           body: requestBody,
         );
+
         final jsonData = json.decode(response.body);
+
         if (response.statusCode == 200 || response.statusCode == 201) {
           // Registration successful
           final token = jsonData['token'];

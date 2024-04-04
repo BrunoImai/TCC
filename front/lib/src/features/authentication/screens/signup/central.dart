@@ -1,6 +1,6 @@
 
 class CentralRequest {
-  final String central;
+  final String name;
   final String email;
   final String cnpj;
   final String cellphone;
@@ -8,7 +8,7 @@ class CentralRequest {
 
 
   CentralRequest({
-    required this.central,
+    required this.name,
     required this.email,
     required this.cnpj,
     required this.cellphone,
@@ -17,7 +17,7 @@ class CentralRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'central': central,
+      'name': name,
       'cellphone': cellphone,
       'email': email,
       'password': password,

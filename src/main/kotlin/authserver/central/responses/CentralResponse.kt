@@ -10,6 +10,6 @@ data class CentralResponse(
     val email: String,
     val creationDate: Date,
     val cnpj: String,
-    val celphone: String,
-    val mutableList: List<ClientResponse>
+    val cellphone: String,
+   // val mutableList: List<ClientResponse>
 )
