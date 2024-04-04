@@ -36,7 +36,7 @@ class CentralService(
     }
 
 
-    fun createCentral(req: CentralRequest): Central {
+    fun createCentral(req: CentralRequest): CentralLoginResponse {
         val currentDate = LocalDate.now()
 
         // Convert LocalDate to Date
@@ -52,7 +52,11 @@ class CentralService(
             ?: throw IllegalStateException("Role 'CENTRAL' not found!")
 
         central.roles.add(userRole)
-        return centralRepository.save(central)
+
+        return CentralLoginResponse(
+            token = jwt.createToken(central),
+            central.toResponse()
+        )
     }
 
     fun getCentralById(id: Long) = centralRepository.findByIdOrNull(id)

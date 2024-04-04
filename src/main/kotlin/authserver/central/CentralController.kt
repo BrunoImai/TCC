@@ -35,7 +35,6 @@ class CentralController(val service: CentralService) {
     @PostMapping
     fun createCentral(@Valid @RequestBody req: CentralRequest) =
         service.createCentral(req)
-            .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
     @PostMapping("/login")
