@@ -29,6 +29,7 @@ dependencies:
   flutter_native_splash: ^2.3.10
   smooth_page_indicator: ^1.0.0+2
   flutter_otp_text_field: ^1.1.1
+  mask_text_input_formatter: ^2.9.0
 
 
 dev_dependencies:

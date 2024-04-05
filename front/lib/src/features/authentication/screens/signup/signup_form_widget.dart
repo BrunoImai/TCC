@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tcc_front/src/constants/colors.dart';
+import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
@@ -31,14 +34,27 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
+  final MaskTextInputFormatter phoneMaskFormatter1 = MaskTextInputFormatter(mask: '(##) #####-####');
+  final MaskTextInputFormatter phoneMaskFormatter2 = MaskTextInputFormatter(mask: '(##) ####-####');
+
+  // Custom TextInputFormatter for cellphone mask
+  MaskTextInputFormatter? cellphoneMaskFormatter;
+
+  @override
+  void initState() {
+    super.initState();
+    cellphoneMaskFormatter = phoneMaskFormatter1;
+  }
 
   bool isValidEmail(String email) {
     final emailRegExp =
     RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
   }
+
   final FocusNode _passwordFocusNode = FocusNode();
-  bool _isVisible = false;
+  bool _isVisiblePassword = false;
+  bool _isVisibleConfirmPassword = false;
   bool _isPasswordEightCharacters = false;
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordUppercase = false;
@@ -98,6 +114,17 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         return;
       }
 
+      if (central.length == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'O nome deve conter mais que um carácter');
+          },
+        );
+        return;
+      }
+
       if (!isValidEmail(email)) {
         showDialog(
           context: context,
@@ -109,16 +136,28 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         return;
       }
 
-      if (cellphone.length > 12 || cellphone.length < 7 || !cellphone.contains(RegExp(r'^[0-9]*$'))) {
+      if (cnpjController.text.replaceAll(RegExp(r'\D'), '').length != 14) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número de telefone deve ser válido. Lembre-se de inserir o DDD.');
+                'O número do CNPJ deve conter exatamente 14 dígitos.');
           },
         );
-        return; 
+        return;
+      }
+
+      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length < 10) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription:
+                'O número de telefone deve conter no mínimo 10 dígitos, incluindo o DDD.');
+          },
+        );
+        return;
       }
 
       CentralRequest centralRequest = CentralRequest(
@@ -180,12 +219,31 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: cnpjController,
+              inputFormatters: [
+                MaskTextInputFormatter(mask: '##.###.###/####-##',),
+              ],
               decoration: const InputDecoration(
                   label: Text(cnpj), prefixIcon: Icon(Icons.numbers)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: cellphoneController,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(16),
+                cellphoneMaskFormatter!,
+              ],
+              onChanged: (value) {
+                // Dynamically change mask based on input length
+                if (value.length == 15) {
+                  setState(() {
+                    cellphoneMaskFormatter = phoneMaskFormatter2;
+                  });
+                } else if (value.length == 16) {
+                  setState(() {
+                    cellphoneMaskFormatter = phoneMaskFormatter1;
+                  });
+                }
+              },
               decoration: const InputDecoration(
                   label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
             ),
@@ -193,7 +251,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             TextFormField(
               controller: passwordController,
               onChanged: (passwordController) => onPasswordChanged(passwordController),
-              obscureText: !_isVisible,
+              obscureText: !_isVisiblePassword,
               focusNode: _passwordFocusNode,
               onTap: () {
                 setState(() {
@@ -212,10 +270,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _isVisible = !_isVisible;
+                      _isVisiblePassword = !_isVisiblePassword;
                     });
                   },
-                  icon: _isVisible ? const Icon(Icons.visibility) :
+                  icon: _isVisiblePassword ? const Icon(Icons.visibility) :
                   const Icon(Icons.visibility_off),
                 ),
               ),
@@ -351,19 +409,19 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             TextFormField(
               controller: confirmPasswordController,
               onChanged: (confirmPasswordController) => onPasswordChanged(confirmPasswordController),
-              obscureText: !_isVisible,
+              obscureText: !_isVisibleConfirmPassword,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: password,
-                hintText: password,
+                labelText: confirmPassword,
+                hintText: confirmPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _isVisible = !_isVisible;
+                      _isVisibleConfirmPassword = !_isVisibleConfirmPassword;
                     });
                   },
-                  icon: _isVisible ? const Icon(Icons.visibility) :
+                  icon: _isVisibleConfirmPassword ? const Icon(Icons.visibility) :
                   const Icon(Icons.visibility_off),
                 ),
               ),
@@ -375,6 +433,20 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 onPressed: () {
                   String password = passwordController.text;
                   String confirmPassword = confirmPasswordController.text;
+
+                  if (central.isEmpty ||
+                      cellphone.isEmpty ||
+                      email.isEmpty ||
+                      password.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertPopUp(
+                            errorDescription: 'Todos os campos são obrigatórios.');
+                      },
+                    );
+                    return;
+                  }
 
                   if (password != confirmPassword) {
                     showDialog(
@@ -389,9 +461,9 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CompanyHomeScreen()));
+                              builder: (context) => const LoginScreen()));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Login Realizado')),
+                        const SnackBar(content: Text('Cadastro Realizado')),
                       );
                     });
                   }
@@ -405,3 +477,5 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
     );
   }
 }
+
+
