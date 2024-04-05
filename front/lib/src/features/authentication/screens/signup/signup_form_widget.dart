@@ -34,21 +34,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
-  final MaskTextInputFormatter phoneMaskFormatter1 = MaskTextInputFormatter(mask: '(##) #####-####');
-  final MaskTextInputFormatter phoneMaskFormatter2 = MaskTextInputFormatter(mask: '(##) ####-####');
-
-  // Custom TextInputFormatter for cellphone mask
-  MaskTextInputFormatter? cellphoneMaskFormatter;
-
-  @override
-  void initState() {
-    super.initState();
-    cellphoneMaskFormatter = phoneMaskFormatter1;
-  }
-
   bool isValidEmail(String email) {
-    final emailRegExp =
-    RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
   }
 
@@ -229,21 +216,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             TextFormField(
               controller: cellphoneController,
               inputFormatters: [
-                LengthLimitingTextInputFormatter(16),
-                cellphoneMaskFormatter!,
+                MaskTextInputFormatter(mask: '(##) #####-####',),
               ],
-              onChanged: (value) {
-                // Dynamically change mask based on input length
-                if (value.length == 15) {
-                  setState(() {
-                    cellphoneMaskFormatter = phoneMaskFormatter2;
-                  });
-                } else if (value.length == 16) {
-                  setState(() {
-                    cellphoneMaskFormatter = phoneMaskFormatter1;
-                  });
-                }
-              },
               decoration: const InputDecoration(
                   label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
             ),
