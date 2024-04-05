@@ -34,7 +34,9 @@ class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
           children: [
 
             //Heading
-            Text(homePageTitle, style: Theme.of(context).textTheme.bodyText2,),
+            Text(homePageTitle,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
             Text(exploreTechnician, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
 

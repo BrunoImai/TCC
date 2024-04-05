@@ -145,7 +145,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           // Registration successful
           final token = jsonData['token'];
-          final central = jsonData['central'];
+          final central = CentralResponse.fromJson(jsonData['central']);
 
           CentralManager.instance.loggedUser =
               LoggedCentral(token, central);

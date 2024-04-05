@@ -43,28 +43,34 @@ class CentralLoginRequest {
   }
 }
 
-class Central {
-  final long id;
+class  CentralResponse{
+  final num id;
   final String name;
   final String email;
-  final date creationDate;
+  final String creationDate;
   final String cnpj;
   final String cellphone;
 
-  Central(
-      this.id,
-      this.name,
-      this.email,
-      this.creationDate,
-      this.cnpj,
-      this.cellphone
-      );
+
+  CentralResponse(this.id, this.name, this.email, this.creationDate, this.cnpj,this.cellphone);
+
+
+  factory CentralResponse.fromJson(Map<String, dynamic> json) {
+    return CentralResponse(
+      json['id'] as num,
+      json['name'] as String,
+      json['email'] as String,
+      json['creationDate'] as String,
+      json['cnpj'] as String,
+      json['cellphone'] as String,
+    );
+  }
 }
 
 class LoggedCentral {
   String token;
-  Central central = Central();
+  CentralResponse central;
 
   LoggedCentral(this.token, this.central);
-  
+
 }
