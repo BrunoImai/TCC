@@ -13,7 +13,7 @@ POST localhost:8080/api/central/login
 Content-Type: application/json
 
 {
-  "email": "Central@gmail.com",
+  "email": "Central@gmail.com2",
   "password": "central0000"
 }
 > {%

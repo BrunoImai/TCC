@@ -254,7 +254,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             ),
             const SizedBox(height: formHeight - 29),
             Visibility(
-              visible: _passwordFocusNode.hasFocus, // Showing validations only when the password field is focused
+              visible: _passwordFocusNode.hasFocus,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

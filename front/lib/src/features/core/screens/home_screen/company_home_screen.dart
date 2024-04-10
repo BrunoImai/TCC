@@ -7,19 +7,19 @@ import 'package:tcc_front/src/features/core/screens/home_screen/widgets/company_
 import 'package:tcc_front/src/features/core/screens/home_screen/widgets/company_search_bar.dart';
 
 import '../../../../constants/text_strings.dart';
+import '../../../authentication/screens/signup/central_manager.dart';
 
 class CompanyHomeScreen extends StatefulWidget{
   const CompanyHomeScreen({super.key});
 
   @override
   State<CompanyHomeScreen> createState() => _CompanyHomeScreenState();
+
+
+
 }
 
 class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool isAdm = false;
-  final _loginFormKey = GlobalKey<FormState>();
 
 
   @override
@@ -34,7 +34,7 @@ class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
           children: [
 
             //Heading
-            Text(homePageTitle,
+            Text(homePageTitle + CentralManager.instance.loggedUser!.central.name,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(exploreTechnician, style: Theme.of(context).textTheme.headline2,),
