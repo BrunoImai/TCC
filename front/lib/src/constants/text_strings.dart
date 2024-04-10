@@ -68,3 +68,18 @@ const String registerService = "Registrar um novo serviço";
 const String serviceHistory = "Histórico de serviços";
 const String dashboards = "Dashboards";
 const String comissionControl = "Controle de comissões";
+
+//Profile screen
+const String profile = "Perfil";
+const String editProfile = "Editar perfil";
+const String logout = "Sair";
+const String profileHeading = "Nome usuário";
+const String profileSubHeading = "email usuário";
+const String settings = "Configurações";
+const String information = "Informações";
+const String userManagement = "Configurações do usuário";
+
+//Update profile screen
+const String delete = "Deletar";
+const String joined = "Cliente desde ";
+const String joinedAt = "data entrada da central no sistema";
