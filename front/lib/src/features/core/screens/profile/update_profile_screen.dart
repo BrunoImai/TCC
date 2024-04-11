@@ -312,18 +312,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: currentPasswordController,
-                      onChanged: (currentPasswordController) => onPasswordChanged(currentPasswordController),
                       obscureText: true,
-                      focusNode: _passwordFocusNode,
-                      onTap: () {
-                        setState(() {
-                          _isPasswordEightCharacters = false;
-                          _hasPasswordOneNumber = false;
-                          _hasPasswordLowercase = false;
-                          _hasPasswordUppercase = false;
-                          _hasPasswordSpecialCharacters = false;
-                        });
-                      },
                       decoration: InputDecoration(
                         labelText: currentPassword,
                         prefixIcon: const Icon(Icons.fingerprint),
@@ -336,6 +325,38 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               currentPasswordController.clear();
                             });
                           },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: formHeight - 20),
+                    Visibility(
+                      visible: _showNewPassword,
+                      child: TextFormField(
+                        controller: newPasswordController,
+                        onChanged: (newPasswordController) => onPasswordChanged(newPasswordController),
+                        obscureText: true,
+                        focusNode: _passwordFocusNode,
+                        onTap: () {
+                          setState(() {
+                            _isPasswordEightCharacters = false;
+                            _hasPasswordOneNumber = false;
+                            _hasPasswordLowercase = false;
+                            _hasPasswordUppercase = false;
+                            _hasPasswordSpecialCharacters = false;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: newPassword,
+                          prefixIcon: const Icon(Icons.fingerprint),
+                          suffixIcon: IconButton(
+                            icon: const Icon(LineAwesomeIcons.angle_up),
+                            onPressed: () {
+                              setState(() {
+                                _showNewPassword = false;
+                                newPasswordController.clear();
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -463,29 +484,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               Text(specialCharacter, style: Theme.of(context).textTheme.overline)
                             ],
                           ),
+                          const SizedBox(height: formHeight - 29)
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    Visibility(
-                      visible: _showNewPassword,
-                      child: TextFormField(
-                        controller: newPasswordController,
-                        onChanged: (newPasswordController) => onPasswordChanged(newPasswordController),
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: newPassword,
-                          prefixIcon: const Icon(Icons.fingerprint),
-                          suffixIcon: IconButton(
-                            icon: const Icon(LineAwesomeIcons.angle_up),
-                            onPressed: () {
-                              setState(() {
-                                _showNewPassword = false;
-                                newPasswordController.clear();
-                              });
-                            },
-                          ),
-                        ),
                       ),
                     ),
                     const SizedBox(height: formHeight),
