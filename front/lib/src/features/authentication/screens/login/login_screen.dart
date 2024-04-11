@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../constants/sizes.dart';
+import '../widgets/authentication_appbar.dart';
 import 'login_footer_widget.dart';
 import 'login_form_widget.dart';
 import 'login_header_widget.dart';
@@ -14,6 +15,7 @@ class LoginScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        appBar: const WelcomeAppBar(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(defaultSize),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
 
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../widgets/authentication_appbar.dart';
 import 'otp_screen.dart';
 
 class ForgetPasswordMailScreen extends StatelessWidget {
@@ -15,6 +18,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: const WelcomeAppBar(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(defaultSize),
@@ -58,3 +62,4 @@ class ForgetPasswordMailScreen extends StatelessWidget {
     );
   }
 }
+

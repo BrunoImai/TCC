@@ -6,6 +6,7 @@ import 'package:tcc_front/src/features/authentication/screens/signup/signup_form
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
+import '../widgets/authentication_appbar.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: const WelcomeAppBar(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(defaultSize),

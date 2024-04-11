@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../widgets/authentication_appbar.dart';
 
 class OTPScreen extends StatelessWidget {
   const OTPScreen({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class OTPScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const WelcomeAppBar(),
       body: Container(
         padding: const EdgeInsets.all(defaultSize),
         child: Column(
