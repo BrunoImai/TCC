@@ -3,6 +3,7 @@ package authserver.central
 import authserver.security.Jwt
 import authserver.security.CentralToken
 import authserver.central.requests.CentralRequest
+import authserver.central.requests.CentralUpdateRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
@@ -85,6 +86,28 @@ class CentralService(
         log.warn("Central deleted. id={} name={}", central.id, central.name)
         centralRepository.delete(central)
         return true
+    }
+
+    fun updateCentral(id: Long, centralUpdated: CentralUpdateRequest): Central {
+        val central = getCentralById(id) ?: throw IllegalStateException("Central not found!")
+        if (central.id != getCentralIdFromToken()) throw IllegalStateException("Not accepted! Only the own central can update itself!")
+
+        if (centralUpdated.oldPassword == null) {
+            central.email = centralUpdated.email!!
+            central.name = centralUpdated.name!!
+            central.cnpj = centralUpdated.cnpj!!
+            central.cellphone = centralUpdated.cellphone!!
+            return centralRepository.save(central)
+        } else if (central.password == centralUpdated.oldPassword) {
+            central.email = centralUpdated.email!!
+            central.name = centralUpdated.name!!
+            central.cnpj = centralUpdated.cnpj!!
+            central.cellphone = centralUpdated.cellphone!!
+            central.password = centralUpdated.newPassword!!
+            return centralRepository.save(central)
+        } else {
+            throw IllegalStateException("Old password is incorrect!")
+        }
     }
 
     //CLIENT

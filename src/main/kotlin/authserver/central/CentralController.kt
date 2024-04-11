@@ -4,6 +4,7 @@ import authserver.client.Client
 import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
+import authserver.central.requests.CentralUpdateRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -42,10 +43,14 @@ class CentralController(val service: CentralService) {
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "AuthServer")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.centralSelfDelete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
+
+    @PutMapping("/{id}")
+    fun updateCentral(@PathVariable("id") id: Long, @Valid @RequestBody req: CentralUpdateRequest) =
+        service.updateCentral(id, req)
+            .let { ResponseEntity.ok(it) }
 
     // Client
 
