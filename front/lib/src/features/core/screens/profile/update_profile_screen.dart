@@ -8,6 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
+
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
@@ -510,6 +513,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             return;
                           }
 
+
                           if (newPassword.isNotEmpty &&
                               currentPassword != newPassword) {
                             showDialog(
@@ -524,10 +528,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const LoginScreen())
+                                      builder: (context) => const WelcomeScreen())
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Cadastro Realizado')),
+                                const SnackBar(content: Text('Atualização Realizada')),
                               );
                             });
                           }
