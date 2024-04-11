@@ -10,6 +10,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../../../authentication/screens/signup/central_manager.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -53,8 +54,8 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(profileHeading, style: Theme.of(context).textTheme.headline4),
-              Text(profileSubHeading, style: Theme.of(context).textTheme.bodyText2),
+              Text(CentralManager.instance.loggedUser!.central.name, style: Theme.of(context).textTheme.headline4),
+              Text(CentralManager.instance.loggedUser!.central.email, style: Theme.of(context).textTheme.bodyText2),
               const SizedBox(height: 20),
               SizedBox(
                 width: 200,

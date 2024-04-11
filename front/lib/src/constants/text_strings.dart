@@ -1,12 +1,18 @@
+//General text
 const String login = "Login";
 const String signUp = "Cadastrar";
 const String password = "Senha";
+const String newPassword = "Nova Senha";
+const String currentPassword = "Senha Atual";
 const String confirmPassword = "Confirme sua senha";
 const String forgetPassword = "Esqueceu a senha?";
 const String email = "Email";
 const String signInWithGoogle = "Entre com o Google";
 const String fullName = "Nome completo";
 const String address = "Endereço";
+const String addressComplement = "Complemento";
+const String city = "Cidade";
+const String neighborhood = "Bairro";
 const String central = "Nome da Empresa";
 const String cellphone = "Celular";
 const String cnpj = "CNPJ";
@@ -64,6 +70,7 @@ const String nextService = "Seu próximo serviço";
 const String controlCenter = "Central de Controle";
 const String yourComissions = "Suas comissões";
 const String registerClient = "Registrar um novo cliente";
+const String clients = "Clientes cadastrados";
 const String registerService = "Registrar um novo serviço";
 const String serviceHistory = "Histórico de serviços";
 const String dashboards = "Dashboards";

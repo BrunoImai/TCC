@@ -80,7 +80,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> registerUser(VoidCallback onSuccess) async {
+    Future<void> registerCentral(VoidCallback onSuccess) async {
       String central = centralController.text;
       String cellphone = cellphoneController.text;
       String email = emailController.text;
@@ -431,7 +431,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                       },
                     );
                   } else {
-                    registerUser(() {
+                    registerCentral(() {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
