@@ -1,20 +1,79 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/authentication/screens/forget_password/forget_password_screen.dart';
+import 'package:tcc_front/src/features/authentication/screens/signup/central_manager.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
+import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../signup/central.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final _loginFormKey = GlobalKey<FormState>();
+  bool _isVisible = false;
 
 
 
   @override
   Widget build(BuildContext context) {
+    Future<void> centralLogin(VoidCallback onSuccess) async {
+      String email = emailController.text;
+      String password = passwordController.text;
+
+      if (email.isEmpty || password.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'Todos os campos são obrigatórios.');
+          },
+        );
+        return;
+      }
+
+      CentralLoginRequest centralLoginRequest = CentralLoginRequest(email: email, password: password);
+      String requestBody = jsonEncode(centralLoginRequest.toJson());
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:8080/api/central/login'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        );
+
+        final jsonData = json.decode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final token = jsonData['token'];
+          final central = CentralResponse.fromJson(jsonData['central']);
+
+          CentralManager.instance.loggedUser = LoggedCentral(token, central);
+          onSuccess.call();
+        } else {
+          // Registration failed
+          print('Login failed. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle any error that occurred during the HTTP request
+        print('Error occurred: $e');
+      }
+    }
     return Form(
+      key: _loginFormKey,
       child: Container(
         padding:
         const EdgeInsets.symmetric(vertical: formHeight - 10),
@@ -22,6 +81,7 @@ class LoginForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: emailController,
               decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: email,
@@ -31,15 +91,21 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              obscureText: true,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.fingerprint),
+              controller: passwordController,
+              obscureText: !_isVisible,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.fingerprint),
                 labelText: password,
                 hintText: password,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
-                  onPressed: null,
-                  icon: Icon(Icons.remove_red_eye_sharp),
+                  onPressed: () {
+                    setState(() {
+                      _isVisible = !_isVisible;
+                    });
+                  },
+                  icon: _isVisible ? const Icon(Icons.visibility) :
+                  const Icon(Icons.visibility_off),
                 ),
               ),
             ),
@@ -53,7 +119,20 @@ class LoginForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const CompanyHomeScreen()),
+                onPressed: () {
+                  if (_loginFormKey.currentState!.validate()) {
+                    centralLogin(() {
+                  if (!mounted) return;
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CompanyHomeScreen()),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Login Realizado')),
+                   );
+                 });
+                }
+              },
                 child: Text(login.toUpperCase()),
               ),
             ),

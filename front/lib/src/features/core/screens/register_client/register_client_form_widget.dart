@@ -51,6 +51,21 @@ class RegisterClientFormWidget extends StatelessWidget {
               decoration: const InputDecoration(
                   label: Text(number), prefixIcon: Icon(Icons.numbers)),
             ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                  label: Text(addressComplement), prefixIcon: Icon(Icons.location_city)),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                  label: Text(neighborhood), prefixIcon: Icon(Icons.location_city)),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                  label: Text(city), prefixIcon: Icon(Icons.location_city)),
+            ),
             const SizedBox(height: formHeight - 10),
             SizedBox(
               width: double.infinity,

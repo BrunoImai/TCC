@@ -68,6 +68,36 @@ class Company_central_control extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          clients,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       const Icon(Icons.work, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(

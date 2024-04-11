@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/profile/profile_screen.dart';
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
@@ -30,10 +31,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
           child: Text(appName, style: Theme.of(context).textTheme.headline4),
         ),
       ),
-      /*title: IconButton(
-          onPressed: () => Get.to(() => const CompanyHomeScreen()),
-          icon: Text(appName, style: Theme.of(context).textTheme.headline4),
-      ),*/
       actions: [
         Container(
           margin: const EdgeInsets.only(right: 20, top: 7),
@@ -41,7 +38,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
-              onPressed: () {},
+              onPressed: () => Get.to(() => const ProfileScreen()),
               icon: const Image(image: AssetImage(userProfileImage))),
         )
       ],
