@@ -91,7 +91,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       String email = emailController.text;
       String cnpj = cnpjController.text;
       String currentPassword = currentPasswordController.text;
-      String newPassword = newPasswordController.text;
+      String? newPassword = newPasswordController.text;
+      num id = CentralManager.instance.loggedUser!.central.id;
 
       if (central.isEmpty ||
           cellphone.isEmpty ||
@@ -153,34 +154,33 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         return;
       }
 
-      CentralRequest centralRequest = CentralRequest(
+      if (newPassword == "") {
+        newPassword = null;
+      }
+
+      UpdateCentralRequest updateCentralRequest = UpdateCentralRequest(
           name: central,
           email: email,
           cnpj: cnpj,
           cellphone: cellphone,
-          password: currentPassword
+          oldPassword: currentPassword,
+          newPassword : newPassword
       );
 
-      String requestBody = jsonEncode(centralRequest.toJson());
-
+      String requestBody = jsonEncode(updateCentralRequest.toJson());
+      print(requestBody);
+      print("\n" + id.toString());
       try {
-        final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central'),
+        final response = await http.put(
+          Uri.parse('http://localhost:8080/api/central/update/$id'),
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
           body: requestBody,
         );
 
-        final jsonData = json.decode(response.body);
-
         if (response.statusCode == 200 || response.statusCode == 201) {
-          // Registration successful
-          final token = jsonData['token'];
-          final central = CentralResponse.fromJson(jsonData['central']);
-
-          CentralManager.instance.loggedUser =
-              LoggedCentral(token, central);
           onSuccess.call();
           print('Registration successful!');
         } else {
@@ -190,6 +190,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         print('Error occurred: $e');
       }
     }
+
+    Future<void> deleteCentral() async {
+      num id = CentralManager.instance.loggedUser!.central.id;
+
+      final response = await http.delete(
+        Uri.parse('http://localhost:8080/api/central/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {
+          Navigator.pop(context, true);
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
@@ -515,12 +534,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
 
                           if (newPassword.isNotEmpty &&
-                              currentPassword != newPassword) {
+                              currentPassword == newPassword) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return const AlertPopUp(
-                                    errorDescription: 'As senhas não coincidem ');
+                                    errorDescription: 'A nova senha não pode ser igual a antiga');
                               },
                             );
                           } else {
@@ -560,7 +579,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Implement delete account logic
+                            Get.defaultDialog(
+                              title: delete.toUpperCase(),
+                              titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                              content: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text("Tem certeza que deseja excluir o seu perfil?"),
+                              ),
+                              confirm: Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    deleteCentral();
+                                    Get.to(const WelcomeScreen());
+                                  },
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
+                                  child: const Text("Sim"),
+                                ),
+                              ),
+                              cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.redAccent.withOpacity(0.1),

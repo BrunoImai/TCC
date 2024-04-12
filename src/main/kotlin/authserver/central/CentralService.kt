@@ -92,7 +92,7 @@ class CentralService(
         val central = getCentralById(id) ?: throw IllegalStateException("Central not found!")
         if (central.id != getCentralIdFromToken()) throw IllegalStateException("Not accepted! Only the own central can update itself!")
 
-        if (centralUpdated.oldPassword == null) {
+        if (centralUpdated.newPassword == null) {
             central.email = centralUpdated.email!!
             central.name = centralUpdated.name!!
             central.cnpj = centralUpdated.cnpj!!

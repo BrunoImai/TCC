@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-import '../../../../constants/text_strings.dart';
-import '../welcome/welcome_screen.dart';
+import '../constants/text_strings.dart';
+import '../features/authentication/screens/welcome/welcome_screen.dart';
 
 class WelcomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const WelcomeAppBar({

@@ -74,3 +74,26 @@ class LoggedCentral {
   LoggedCentral(this.token, this.central);
 
 }
+
+class  UpdateCentralRequest {
+  final String name;
+  final String email;
+  final String cnpj;
+  final String cellphone;
+  final String oldPassword;
+  final String? newPassword;
+
+  UpdateCentralRequest({required this.name, required this.email, required this.cnpj,
+    required this.cellphone, required this.oldPassword, required this.newPassword});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'cnpj': cnpj,
+      'cellphone': cellphone,
+      'oldPassword': oldPassword,
+      'newPassword': newPassword
+    };
+  }
+}

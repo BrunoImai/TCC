@@ -10,12 +10,14 @@ class AlertPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
+      title: Icon(Icons.warning_rounded, color: primaryColor),
+
+      /*title: const Text(
         'Erro',
         style: TextStyle(
             color: primaryColor,
             fontWeight: FontWeight.bold),
-      ),
+      ),*/
       content: Text(errorDescription),
       actions: [
         TextButton(

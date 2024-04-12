@@ -82,7 +82,7 @@ class ProfileScreen extends StatelessWidget {
                   onPress: () {
                     Get.defaultDialog(
                       title: logout.toUpperCase(),
-                      titleStyle: const TextStyle(fontSize: 20),
+                      titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       content: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
                         child: Text("Tem certeza que deseja sair?"),
@@ -96,7 +96,8 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
                     );
-                  }),
+                  }
+              ),
             ],
           ),
         ),

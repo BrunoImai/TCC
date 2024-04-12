@@ -47,7 +47,7 @@ class CentralController(val service: CentralService) {
         if (service.centralSelfDelete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     fun updateCentral(@PathVariable("id") id: Long, @Valid @RequestBody req: CentralUpdateRequest) =
         service.updateCentral(id, req)
             .let { ResponseEntity.ok(it) }

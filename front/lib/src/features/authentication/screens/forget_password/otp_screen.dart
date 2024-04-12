@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../widgets/authentication_appbar.dart';
+import '../../../../commom_widgets/authentication_appbar.dart';
 
 class OTPScreen extends StatelessWidget {
   const OTPScreen({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class OTPScreen extends StatelessWidget {
             const SizedBox(height: 20.0),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () {}, child: const Text(next)),
+              child: ElevatedButton(onPressed: () {}, child: Text(next.toUpperCase())),
             ),
           ],
         ),
