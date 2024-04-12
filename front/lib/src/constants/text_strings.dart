@@ -56,6 +56,8 @@ const String number = "Número";
 //Forget Password
 const String resetViaEmail = "Mude sua senha com a verificação do email";
 const String forgetPasswordSubTitle = "Coloque seu email cadastrado para receber o código";
+const String updatePasswordTitle = "Alteração de senha";
+const String updatePasswordSubTitle = "Coloque sua nova senha e a confirmação dela";
 
 //OTP Screen
 const String otpTitle = "CÓDIGO";

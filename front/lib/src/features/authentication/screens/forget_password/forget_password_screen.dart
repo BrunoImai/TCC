@@ -12,7 +12,7 @@ import '../../../../commom_widgets/authentication_appbar.dart';
 import 'otp_screen.dart';
 
 class ForgetPasswordMailScreen extends StatelessWidget {
-  const ForgetPasswordMailScreen({Key? key}) : super(key: key);
+  const ForgetPasswordMailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

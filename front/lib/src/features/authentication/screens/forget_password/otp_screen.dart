@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tcc_front/src/features/authentication/screens/forget_password/update_password_screen.dart';
 
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
@@ -35,7 +37,11 @@ class OTPScreen extends StatelessWidget {
             const SizedBox(height: 20.0),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () {}, child: Text(next.toUpperCase())),
+              child: ElevatedButton(
+                  onPressed: () {
+                      Get.to(() => const UpdatePasswordScreen());
+                  },
+                  child: Text(next.toUpperCase())),
             ),
           ],
         ),
