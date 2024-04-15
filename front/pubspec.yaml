@@ -1,0 +1,63 @@
+name: tcc_front
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  google_maps_flutter: ^2.5.0
+  flutter_polyline_points: ^2.0.0
+  geolocator: ^7.0.3
+  geocoding: ^2.0.0
+  flutter_screenutil: ^5.9.0
+  google_fonts: ^6.1.0
+  provider: ^6.1.0
+  get: ^4.6.6
+  flutter_vector_icons: ^2.0.0
+  cached_network_image: ^3.3.0
+  flutter_rating_bar: ^4.0.1
+  flutter_hooks: ^0.20.3
+  http: ^1.1.0
+  flutter_native_splash: ^2.3.10
+  smooth_page_indicator: ^1.0.0+2
+  flutter_otp_text_field: ^1.1.1
+  mask_text_input_formatter: ^2.9.0
+  line_awesome_flutter: ^2.0.0
+  intl: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+
+  flutter_lints: ^3.0.0
+
+flutter_native_splash:
+  color: #f7f6f1
+  color_dark: #272727
+  assets:
+    - assets/images/pngwingcom.png
+
+  android_12:
+    assets:
+      - assets/images/pngwingcom.png
+    icon_background_color: #f7f6f1
+    icon_background_color_dark: #f7f6f1
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/pngwingcom.png
+    - assets/images/userProfileImage.png
+

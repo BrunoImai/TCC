@@ -1,15 +1,15 @@
 package authserver.central
 
+import authserver.security.Jwt
+import authserver.security.CentralToken
+import br.pucpr.authserver.users.requests.CentralRequest
+import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
+import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
 import authserver.client.Client
 import authserver.client.ClientRepository
 import authserver.client.requests.ClientRequest
-import authserver.security.CentralToken
-import authserver.security.Jwt
-import br.pucpr.authserver.users.requests.CentralRequest
-import br.pucpr.authserver.users.requests.LoginRequest
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -36,23 +36,31 @@ class CentralService(
     }
 
 
-    fun createCentral(req: CentralRequest): Central {
+    fun createCentral(req: CentralRequest): CentralLoginResponse {
         val currentDate = LocalDate.now()
 
         // Convert LocalDate to Date
         val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-
+        log.info("entrou")
         val central = Central(
             email = req.email!!,
             password = req.password!!,
             name = req.name!!,
-            creationDate = date
+            creationDate = date,
+            cnpj = req.cnpj!!,
+            cellphone = req.cellphone!!
         )
         val userRole = rolesRepository.findByName("CENTRAL")
             ?: throw IllegalStateException("Role 'CENTRAL' not found!")
 
         central.roles.add(userRole)
-        return centralRepository.save(central)
+
+        val newCentral = centralRepository.save(central)
+
+        return CentralLoginResponse(
+            token = jwt.createToken(central),
+            newCentral.toResponse()
+        )
     }
 
     fun getCentralById(id: Long) = centralRepository.findByIdOrNull(id)
@@ -77,6 +85,28 @@ class CentralService(
         log.warn("Central deleted. id={} name={}", central.id, central.name)
         centralRepository.delete(central)
         return true
+    }
+
+    fun updateCentral(id: Long, centralUpdated: CentralUpdateRequest): Central {
+        val central = getCentralById(id) ?: throw IllegalStateException("Central not found!")
+        if (central.id != getCentralIdFromToken()) throw IllegalStateException("Not accepted! Only the own central can update itself!")
+
+        if (centralUpdated.newPassword == null) {
+            central.email = centralUpdated.email!!
+            central.name = centralUpdated.name!!
+            central.cnpj = centralUpdated.cnpj!!
+            central.cellphone = centralUpdated.cellphone!!
+            return centralRepository.save(central)
+        } else if (central.password == centralUpdated.oldPassword) {
+            central.email = centralUpdated.email!!
+            central.name = centralUpdated.name!!
+            central.cnpj = centralUpdated.cnpj!!
+            central.cellphone = centralUpdated.cellphone!!
+            central.password = centralUpdated.newPassword!!
+            return centralRepository.save(central)
+        } else {
+            throw IllegalStateException("Old password is incorrect!")
+        }
     }
 
     //CLIENT

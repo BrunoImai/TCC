@@ -3,6 +3,7 @@ package authserver.central
 import authserver.assistance.Assistance
 import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
+import authserver.client.Client
 import jakarta.persistence.*
 
 import authserver.worker.Worker
@@ -27,7 +28,10 @@ class Central(
     var email: String = "",
 
     @Column
-    var description: String = "",
+    var cnpj: String = "",
+
+    @Column
+    var cellphone: String = "",
 
     @ManyToMany
     @JoinTable(
@@ -41,7 +45,10 @@ class Central(
     var workers: MutableSet<Worker> = mutableSetOf(),
 
     @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var assistances: MutableSet<Assistance> = mutableSetOf()
+    var assistances: MutableSet<Assistance> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var client: MutableSet<Client> = mutableSetOf()
 ) {
-    fun toResponse() = CentralResponse(id!!, name, email, creationDate,description)
+    fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, cellphone )
 }

@@ -3,7 +3,8 @@ package authserver.central
 import authserver.client.Client
 import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
-import br.pucpr.authserver.users.requests.CentralRequest
+import authserver.central.requests.CentralRequest
+import authserver.central.requests.CentralUpdateRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -12,8 +13,6 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -35,7 +34,6 @@ class CentralController(val service: CentralService) {
     @PostMapping
     fun createCentral(@Valid @RequestBody req: CentralRequest) =
         service.createCentral(req)
-            .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
     @PostMapping("/login")
@@ -45,10 +43,14 @@ class CentralController(val service: CentralService) {
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "AuthServer")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.centralSelfDelete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
+
+    @PutMapping("/update/{id}")
+    fun updateCentral(@PathVariable("id") id: Long, @Valid @RequestBody req: CentralUpdateRequest) =
+        service.updateCentral(id, req)
+            .let { ResponseEntity.ok(it) }
 
     // Client
 

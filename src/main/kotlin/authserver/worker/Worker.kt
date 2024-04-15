@@ -30,5 +30,5 @@ class Worker(
     @ManyToMany(mappedBy = "responsibleWorkers")
     var currentAssistances: MutableSet<Assistance> = HashSet()
 ) {
-//    fun toResponse() = WorkerResponse(id!!, name, email, creationDate,description)
+//    fun toResponse() = WorkerResponse(id!!, name, email, creationDate, description)
 }
