@@ -1,15 +1,184 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
+import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
+import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
+import '../../../authentication/screens/signup/central_manager.dart';
+import 'client.dart';
 
-class RegisterClientFormWidget extends StatelessWidget {
+class RegisterClientFormWidget extends StatefulWidget {
   const RegisterClientFormWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  @override
+  _RegisterClientFormWidget createState() => _RegisterClientFormWidget();
+
+}
+
+class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
+  final TextEditingController clientController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
+  final TextEditingController cellphoneController = TextEditingController();
+  final TextEditingController cepController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController addressComplementController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController neighborhoodController = TextEditingController();
+
+  bool isValidEmail(String email) {
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegExp.hasMatch(email);
+  }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> registerClient(VoidCallback onSuccess) async {
+      String client = clientController.text;
+      String cellphone = cellphoneController.text;
+      String email = emailController.text;
+      String cpf = cpfController.text;
+      String cep = cepController.text;
+      String address = addressController.text;
+      String number = numberController.text;
+      String addressComplement = addressComplementController.text;
+      String city = cityController.text;
+      String state = stateController.text.toUpperCase();;
+      String neighborhood = neighborhoodController.text;
+
+      if (client.isEmpty ||
+          cellphone.isEmpty ||
+          email.isEmpty ||
+          cpf.isEmpty ||
+          cep.isEmpty ||
+          address.isEmpty ||
+          number.isEmpty ||
+          city.isEmpty ||
+          state.isEmpty ||
+          neighborhood.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'Os campos nome completo, celular, email, cpf, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
+          },
+        );
+        return;
+      }
+
+      if (client.length == 1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'O nome deve conter mais que um carácter');
+          },
+        );
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'O email inserido é inválido.');
+          },
+        );
+        return;
+      }
+
+      if (cpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription:
+                'O número do CPF deve conter exatamente 11 dígitos.');
+          },
+        );
+        return;
+      }
+
+      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription:
+                'O número de celular deve conter 11 dígitos, incluindo o DDD.');
+          },
+        );
+        return;
+      }
+
+      if (cepController.text.replaceAll(RegExp(r'\D'), '').length != 8) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'O CEP deve conter 8 dígitos');
+          },
+        );
+        return;
+      }
+
+      if (state.length != 2 || !RegExp(r'^[a-zA-Z]{2}$').hasMatch(state)) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+              errorDescription: 'Insira a sigla do seu estado, com duas letras.',
+            );
+          },
+        );
+        return;
+      }
+
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+
+      ClientRequest clientRequest = ClientRequest(
+          name: client,
+          email: email,
+          cpf: cpf,
+          cellphone: cellphone,
+          address: fullAddress
+      );
+
+      String requestBody = jsonEncode(clientRequest.toJson());
+      print(requestBody);
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:8080/api/central/client'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+          },
+          body: requestBody,
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          onSuccess.call();
+          print('Registration successful!');
+        } else {
+          print('Registration failed. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error occurred: $e');
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
       child: Form(
@@ -17,60 +186,119 @@ class RegisterClientFormWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: clientController,
               decoration: const InputDecoration(
                   label: Text(fullName),
-                  prefixIcon: Icon(Icons.person_outline_rounded)),
+                  prefixIcon: Icon(Icons.person_outline_rounded)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: emailController,
               decoration: const InputDecoration(
-                  label: Text(email), prefixIcon: Icon(Icons.email_outlined)),
+                  label: Text(email),
+                  prefixIcon: Icon(Icons.email_outlined)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: cpfController,
+              inputFormatters: [
+                MaskTextInputFormatter(mask: '###.###.###-##',),
+              ],
               decoration: const InputDecoration(
-                  label: Text(cpf), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(cpf),
+                  prefixIcon: Icon(Icons.numbers)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: cellphoneController,
+              inputFormatters: [
+                MaskTextInputFormatter(mask: '(##) #####-####',),
+              ],
               decoration: const InputDecoration(
-                  label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
+                  label: Text(cellphone),
+                  prefixIcon: Icon(Icons.phone_android)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: cepController,
+              inputFormatters: [
+                MaskTextInputFormatter(mask: '#####-###',),
+              ],
               decoration: const InputDecoration(
-                  label: Text(cep), prefixIcon: Icon(Icons.local_post_office)),
+                  label: Text(cep),
+                  prefixIcon: Icon(Icons.local_post_office)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: addressController,
               decoration: const InputDecoration(
-                  label: Text(address), prefixIcon: Icon(Icons.location_on)),
+                  label: Text(address),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: numberController,
               decoration: const InputDecoration(
-                  label: Text(number), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(number),
+                  prefixIcon: Icon(Icons.numbers)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: addressComplementController,
               decoration: const InputDecoration(
-                  label: Text(addressComplement), prefixIcon: Icon(Icons.location_city)),
+                  label: Text(addressComplement),
+                  prefixIcon: Icon(Icons.home_rounded)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: neighborhoodController,
               decoration: const InputDecoration(
-                  label: Text(neighborhood), prefixIcon: Icon(Icons.location_city)),
+                  label: Text(neighborhood),
+                  prefixIcon: Icon(Icons.holiday_village_rounded)
+              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
+              controller: cityController,
               decoration: const InputDecoration(
-                  label: Text(city), prefixIcon: Icon(Icons.location_city)),
+                  label: Text(city),
+                  prefixIcon: Icon(Icons.location_on)),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: stateController,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                LengthLimitingTextInputFormatter(2),
+              ],
+              decoration: const InputDecoration(
+                  label: Text(state),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  registerClient(() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CompanyHomeScreen()));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Cadastro Realizado')),
+                    );
+                  });
+                },
                 child: Text(signUp.toUpperCase()),
               ),
             )

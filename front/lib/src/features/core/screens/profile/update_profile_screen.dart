@@ -168,8 +168,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
 
       String requestBody = jsonEncode(updateCentralRequest.toJson());
-      print(requestBody);
-      print("\n" + id.toString());
+
       try {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/update/$id'),

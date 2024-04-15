@@ -131,6 +131,8 @@ class CentralService(
         val client = Client(
             email = req.email,
             name = req.name,
+            cpf = req.cpf,
+            cellphone = req.cellphone,
             entryDate = date,
             central = central,
             address = req.address

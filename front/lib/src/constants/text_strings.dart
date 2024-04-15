@@ -12,6 +12,7 @@ const String fullName = "Nome completo";
 const String address = "Endereço";
 const String addressComplement = "Complemento";
 const String city = "Cidade";
+const String state = "Estado";
 const String neighborhood = "Bairro";
 const String central = "Nome da Empresa";
 const String cellphone = "Celular";
@@ -83,7 +84,7 @@ const String profile = "Perfil";
 const String editProfile = "Editar perfil";
 const String logout = "Sair";
 const String profileHeading = "Nome usuário";
-const String profileSubHeading = "email usuário";
+const String profileSubHeading = "Email usuário";
 const String settings = "Configurações";
 const String information = "Informações";
 const String userManagement = "Configurações do usuário";
@@ -92,3 +93,6 @@ const String userManagement = "Configurações do usuário";
 const String delete = "Deletar";
 const String joined = "Cliente desde ";
 const String joinedAt = "data entrada da central no sistema";
+
+//Update client screen
+const String editClient = "Editar perfil";

@@ -32,12 +32,11 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "Bruno",
-    "email": "bruno.y.l.imai@gmail.com",
-    "password": "bruno1234",
-    "cellphone": "11999999999",
-    "address": "Rua dos bobos, n 0",
-    "cpf": "12345678901"
+  "name":"Cliente",
+  "cellphone":"(23) 36969-6992",
+  "email":"cliente@gmail.com",
+  "cpf":"123.456.782-22",
+  "address":"adf, 12 - csd, sfss - SF, 30025-588"
 }
 
 
