@@ -15,6 +15,7 @@ import 'package:tcc_front/src/features/core/screens/client/client.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
+import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
@@ -53,10 +54,10 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
     cellphoneController.text = widget.client.cellphone;
 
     List<String> addressParts = widget.client.address.split(', ');
-    addressController.text = addressParts[0]; // Rua
-    String numberNeighborhood = addressParts[1]; // Número - Bairro
-    String cityState = addressParts[2]; //Cidade - Estado
-    cepController.text = addressParts[3]; // CEP
+    addressController.text = addressParts[0];
+    String numberNeighborhood = addressParts[1];
+    String cityState = addressParts[2];
+    cepController.text = addressParts[3];
 
     List<String> numberNeighborhoodList = numberNeighborhood.split(' - ');
     numberController.text = numberNeighborhoodList[0];
@@ -251,6 +252,16 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
           padding: const EdgeInsets.all(defaultSize),
           child: Column(
             children: [
+              const Stack(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 50),
               Form(
                 child: Column(
                   children: [

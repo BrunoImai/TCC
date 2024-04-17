@@ -163,39 +163,103 @@ class _ClientListScreenState extends State<ClientListScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                client.name,
-                                style: GoogleFonts.poppins(fontSize: 16.0, fontWeight: FontWeight.w600, color: darkColor),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.person_outline_rounded,
+                                    color: darkColor,
+                                    size: 35,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    client.name,
+                                    style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
                               IconButton(
                                 onPressed: () {
                                   Get.to(() => UpdateClientScreen(client: client));
                                 },
-                                icon: const Icon(Icons.edit, color: darkColor,),
+                                icon: const Icon(Icons.edit, color: darkColor),
                               ),
                             ],
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            client.email,
-                            style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          const SizedBox(height: 10),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.email,
+                                    color: darkColor,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    client.email,
+                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            client.cellphone,
-                            style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          const SizedBox(height: 5),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.phone,
+                                    color: darkColor,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    client.cellphone,
+                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            client.address,
-                            style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          const SizedBox(height: 5),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: darkColor,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    client.address,
+                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),

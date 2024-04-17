@@ -98,5 +98,6 @@ const String joinedAt = "data entrada da central no sistema";
 //Update client screen
 const String editClient = "Editar cliente";
 
+
 //Client List Screen
 const String clientListSubTitle = "Econtre seus clientes";
