@@ -33,9 +33,9 @@ Content-Type: application/json
 
 {
   "name":"Cliente",
-  "cellphone":"(23) 36969-6992",
+  "cellphone":"(23) 36969-6993",
   "email":"cliente@gmail.com",
-  "cpf":"123.456.782-22",
+  "cpf":"123.456.782-12",
   "address":"adf, 12 - csd, sfss - SF, 30025-588"
 }
 

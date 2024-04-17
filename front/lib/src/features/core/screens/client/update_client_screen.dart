@@ -23,7 +23,8 @@ import 'client.dart';
 import 'client_manager.dart';
 
 class UpdateClientScreen extends StatefulWidget {
-  const UpdateClientScreen({super.key});
+  const UpdateClientScreen({Key? key, required this.clientId,}) : super(key: key);
+  final num clientId;
 
   @override
   _UpdateClientScreen createState() => _UpdateClientScreen();
@@ -75,7 +76,6 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
       String city = cityController.text;
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
-      num id = ClientManager.instance.clientInformations!.client.id;
 
       if (client.isEmpty ||
           cellphone.isEmpty ||
@@ -180,7 +180,7 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/central/client/update/$id'),
+          Uri.parse('http://localhost:8080/api/central/client/update/${widget.clientId}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'

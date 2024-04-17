@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tcc_front/src/features/core/screens/register_client/register_client_screen.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
+import '../../client/list_client_screen.dart';
+import '../../client/register_client_screen.dart';
 
-class Company_central_control extends StatelessWidget {
-  const Company_central_control({
+class CompanyCentralControl extends StatelessWidget {
+  const CompanyCentralControl({
     super.key,
   });
 
@@ -57,7 +58,7 @@ class Company_central_control extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(() => const ClientListScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

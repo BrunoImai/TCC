@@ -79,3 +79,28 @@ class  UpdateClientRequest {
     };
   }
 }
+
+class ClientsList {
+  final num id;
+  final String name;
+  final String email;
+  final String entryDate;
+  final String cpf;
+  final String cellphone;
+  final String address;
+
+  ClientsList({required this.id, required this.name, required this.email, required this.entryDate, required this.cpf,
+    required this.cellphone, required this.address});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id' : id,
+      'name': name,
+      'email': email,
+      'entryDate' : entryDate,
+      'cpf': cpf,
+      'cellphone': cellphone,
+      'address': address,
+    };
+  }
+}
