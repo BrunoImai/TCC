@@ -11,6 +11,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
+import 'package:tcc_front/src/features/core/screens/client/client.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
@@ -18,20 +19,20 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../../../authentication/screens/login/login_screen.dart';
+import '../../../authentication/screens/signup/central.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import 'client.dart';
-import 'client_manager.dart';
 
 class UpdateClientScreen extends StatefulWidget {
-  const UpdateClientScreen({Key? key, required this.clientId,}) : super(key: key);
-  final num clientId;
-
+  const UpdateClientScreen({super.key, required this.client});
+  final ClientsList client;
+  
   @override
-  _UpdateClientScreen createState() => _UpdateClientScreen();
+  _UpdateClientScreenState createState() => _UpdateClientScreenState();
 }
 
-class _UpdateClientScreen extends State<UpdateClientScreen> {
-  final TextEditingController clientController = TextEditingController();
+class _UpdateClientScreenState extends State<UpdateClientScreen> {
+  final TextEditingController clientNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
@@ -43,7 +44,30 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
 
-  bool _clearFieldClient = false;
+  @override
+  void initState() {
+    super.initState();
+    clientNameController.text = widget.client.name;
+    emailController.text = widget.client.email;
+    cpfController.text = widget.client.cpf;
+    cellphoneController.text = widget.client.cellphone;
+
+    List<String> addressParts = widget.client.address.split(', ');
+    addressController.text = addressParts[0]; // Rua
+    String numberNeighborhood = addressParts[1]; // Número - Bairro
+    String cityState = addressParts[2]; //Cidade - Estado
+    cepController.text = addressParts[3]; // CEP
+
+    List<String> numberNeighborhoodList = numberNeighborhood.split(' - ');
+    numberController.text = numberNeighborhoodList[0];
+    neighborhoodController.text = numberNeighborhoodList[1];
+
+    List<String> cityStateList = cityState.split(' - ');
+    cityController.text = cityStateList[0];
+    stateController.text = cityStateList[1];
+  }
+
+  bool _clearFieldClientName = false;
   bool _clearFieldEmail = false;
   bool _clearFieldCpf = false;
   bool _clearFieldCellphone = false;
@@ -59,13 +83,12 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
   }
-
-
+  
 
   @override
   Widget build(BuildContext context) {
     Future<void> updateClient(VoidCallback onSuccess) async {
-      String client = clientController.text;
+      String clientName = clientNameController.text;
       String cellphone = cellphoneController.text;
       String email = emailController.text;
       String cpf = cpfController.text;
@@ -77,7 +100,7 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
 
-      if (client.isEmpty ||
+      if (clientName.isEmpty ||
           cellphone.isEmpty ||
           email.isEmpty ||
           cpf.isEmpty ||
@@ -97,7 +120,7 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
         return;
       }
 
-      if (client.length == 1) {
+      if (clientName.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -166,21 +189,22 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
         return;
       }
 
+
       String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
 
       UpdateClientRequest updateClientRequest = UpdateClientRequest(
-          name: central,
-          email: email,
-          cpf: cpf,
-          cellphone: cellphone,
-          address: fullAddress,
+        name: clientName,
+        email: email,
+        cpf: cpf,
+        cellphone: cellphone,
+        address: fullAddress,
       );
 
       String requestBody = jsonEncode(updateClientRequest.toJson());
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/central/client/update/${widget.clientId}'),
+          Uri.parse('http://localhost:8080/api/central/client/${widget.client.id}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -200,10 +224,9 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
     }
 
     Future<void> deleteClient() async {
-      num id = CentralManager.instance.loggedUser!.central.id;
 
       final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/central/client/$id'),
+        Uri.parse('http://localhost:8080/api/central/client/${widget.client.id}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
@@ -220,46 +243,19 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editProfile, style: Theme.of(context).textTheme.headline4),
+        title: Text(editClient, style: Theme.of(context).textTheme.headline4),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(defaultSize),
           child: Column(
             children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: const Image(image: AssetImage(userProfileImage))),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-
-                      },
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(100), color: primaryColor),
-                        child: const Icon(LineAwesomeIcons.camera, color: Colors.black, size: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
               Form(
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: clientController,
+                      controller: clientNameController,
                       decoration: InputDecoration(
                         labelText: fullName,
                         prefixIcon: const Icon(LineAwesomeIcons.user),
@@ -267,9 +263,9 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
                           icon: const Icon(Icons.edit),
                           onPressed: () {
                             setState(() {
-                              _clearFieldClient = true;
-                              if (_clearFieldClient) {
-                                clientController.clear();
+                              _clearFieldClientName = true;
+                              if (_clearFieldClientName) {
+                                clientNameController.clear();
                               }
                             });
                           },
@@ -481,7 +477,33 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          updateClient(() {
+
+                          if (central.isEmpty ||
+                              cellphone.isEmpty ||
+                              email.isEmpty ||
+                              currentPassword.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AlertPopUp(
+                                    errorDescription: 'Todos os campos são obrigatórios.');
+                              },
+                            );
+                            return;
+                          }
+
+
+                          if (newPassword.isNotEmpty &&
+                              currentPassword == newPassword) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AlertPopUp(
+                                    errorDescription: 'A nova senha não pode ser igual a antiga');
+                              },
+                            );
+                          } else {
+                            updateClient(() {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -491,13 +513,13 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
                                 const SnackBar(content: Text('Atualização Realizada')),
                               );
                             });
-
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColor,
                             side: BorderSide.none,
                             shape: const StadiumBorder()),
-                        child: Text(editClient.toUpperCase(),style: const TextStyle(color: darkColor)),
+                        child: Text(editProfile.toUpperCase(),style: const TextStyle(color: darkColor)),
                       ),
                     ),
                     const SizedBox(height: formHeight),
@@ -510,7 +532,7 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
                             style: const TextStyle(fontSize: 12),
                             children: [
                               TextSpan(
-                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(ClientManager.instance.clientInformations!.client.entryDate)),
+                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.client.entryDate)),
                                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
                             ],
                           ),
@@ -528,7 +550,7 @@ class _UpdateClientScreen extends State<UpdateClientScreen> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     deleteClient();
-                                    Get.to(const WelcomeScreen());
+                                    Get.to(const CompanyHomeScreen());
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                   child: const Text("Sim"),

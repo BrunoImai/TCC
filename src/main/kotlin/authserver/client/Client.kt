@@ -38,5 +38,5 @@ class Client(
     @OneToMany(mappedBy = "client", cascade = [CascadeType.ALL], orphanRemoval = true)
     var assistances: MutableSet<Assistance> = HashSet()
 ) {
-    fun toResponse() = ClientResponse(id!!, name, email, cpf, address, cellphone, assistances, entryDate)
+    fun toResponse() = ClientResponse(id!!, name, cpf, address, cellphone, email, assistances, entryDate)
 }

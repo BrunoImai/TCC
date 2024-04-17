@@ -212,6 +212,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
         title: Text(editProfile, style: Theme.of(context).textTheme.headline4),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(

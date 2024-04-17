@@ -18,4 +18,5 @@ data class ClientRequest(
 
     @field:NotBlank(message = "Email is mandatory")
     val email: String,
+
 )

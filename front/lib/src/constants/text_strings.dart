@@ -64,6 +64,7 @@ const String updatePasswordSubTitle = "Coloque sua nova senha e a confirmação 
 const String otpTitle = "CÓDIGO";
 const String otpSubTitle = "de Verificação";
 const String otpMessage = "Insira o código enviado por ";
+const String code = "Código ";
 
 //Initial logged screen
 const String homePageTitle = "Olá, ";
@@ -95,7 +96,7 @@ const String joined = "Cliente desde ";
 const String joinedAt = "data entrada da central no sistema";
 
 //Update client screen
-const String editClient = "Editar perfil";
+const String editClient = "Editar cliente";
 
 //Client List Screen
 const String clientListSubTitle = "Econtre seus clientes";

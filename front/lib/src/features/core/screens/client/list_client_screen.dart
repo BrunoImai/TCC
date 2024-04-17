@@ -6,14 +6,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tcc_front/src/features/core/screens/client/update_client_screen.dart';
-import '../../../../commom_widgets/authentication_appbar.dart';
+import 'package:tcc_front/src/features/core/screens/profile/update_profile_screen.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../home_screen/company_home_screen.dart';
 import '../home_screen/widgets/company_app_bar.dart';
 import 'client.dart';
 
@@ -77,6 +75,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
               cellphone: item['cellphone'],
               address: item['address']);
           clientsList.add(client);
+          print(client);
         }
 
         setState(() {
@@ -177,7 +176,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateClientScreen(clientId: client.id));
+                                  Get.to(() => UpdateClientScreen(client: client));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor,),
                               ),

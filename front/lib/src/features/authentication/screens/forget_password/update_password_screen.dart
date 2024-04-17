@@ -270,7 +270,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                               onPressed: () {
-                                Get.to(() => const OTPScreen());
+
                               },
                               child: Text(next.toUpperCase())
                           )

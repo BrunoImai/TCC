@@ -52,10 +52,10 @@ class  ClientResponse{
 }
 
 class ClientInformations {
-  String token;
-  ClientResponse client;
+  String id;
+  ClientsList client;
 
-  ClientInformations(this.token, this.client);
+  ClientInformations(this.id, this.client);
 
 }
 
