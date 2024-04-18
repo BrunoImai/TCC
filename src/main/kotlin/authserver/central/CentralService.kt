@@ -195,8 +195,6 @@ class CentralService(
             entryDate = date,
             central = central,
             address = req.address,
-            cellphone = req.cellphone,
-            cpf = req.cpf,
             complement = req.complement
         )
 
