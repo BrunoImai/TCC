@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,7 +7,6 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
-import '../signup/central.dart';
 import 'otp_screen.dart';
 
 class ForgetPasswordMailScreen extends StatefulWidget {
@@ -23,17 +20,17 @@ class ForgetPasswordMailScreen extends StatefulWidget {
 class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
   final TextEditingController emailController = TextEditingController();
   final _emailFormKey = GlobalKey<FormState>();
-  bool isValidEmail(String email) {
+  bool isValidEmail(String emailSend) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(email);
+    return emailRegExp.hasMatch(emailSend);
   }
 
   @override
   Widget build(BuildContext context) {
     Future<void> sendToken(VoidCallback onSuccess) async {
-      String email = emailController.text;
+      String emailSend = emailController.text;
 
-      if (email.isEmpty) {
+      if (emailSend.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -44,7 +41,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
         return;
       }
 
-      if (!isValidEmail(email)) {
+      if (!isValidEmail(emailSend)) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -57,7 +54,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/login/sendToken?email=$email'),
+          Uri.parse('http://localhost:8080/api/central/login/sendToken?email=$emailSend'),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -70,7 +67,6 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
           print('Email failed. Status code: ${response.statusCode}');
         }
       } catch (e) {
-        // Handle any error that occurred during the HTTP request
         print('Error occurred: $e');
       }
     }
@@ -98,6 +94,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: emailController,
                         decoration: const InputDecoration(
                             label: Text(email),
                             hintText: email,
@@ -108,12 +105,13 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                               onPressed: () {
+                                String emailSend = emailController.text;
                                 if (_emailFormKey.currentState!.validate()) {
                                   sendToken(() {
                                     if (!mounted) return;
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const OTPScreen(email: email,)),
+                                      MaterialPageRoute(builder: (context) => OTPScreen(emailSend: emailSend,)),
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Token enviado com sucesso!')),
