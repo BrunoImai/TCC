@@ -8,7 +8,6 @@ data class ClientRequest(
     val name: String,
 
     @field:NotBlank(message = "CPF is mandatory")
-    @field:Size(min = 11, max = 11, message = "CPF must be 11 characters long")
     val cpf: String,
 
     @field:NotBlank(message = "Address is mandatory")
@@ -21,4 +20,5 @@ data class ClientRequest(
 
     @field:NotBlank(message = "Email is mandatory")
     val email: String,
+
 )

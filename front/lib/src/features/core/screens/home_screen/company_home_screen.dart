@@ -41,13 +41,13 @@ class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const Company_searchbar(),
+            const CompanySearchBar(),
             const SizedBox(height: homePadding,),
 
             //Control Center
             Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            const Company_central_control(),
+            const CompanyCentralControl(),
             const SizedBox(height: homePadding,),
 
             //

@@ -190,6 +190,8 @@ class CentralService(
         val client = Client(
             email = req.email,
             name = req.name,
+            cpf = req.cpf,
+            cellphone = req.cellphone,
             entryDate = date,
             central = central,
             address = req.address,
@@ -209,15 +211,13 @@ class CentralService(
         return true
     }
 
-    fun updateClient(id: Long, clientUpdated: Client): Client {
+    fun updateClient(id: Long, clientUpdated: ClientRequest): Client {
         val client = getClient(id) ?: throw IllegalStateException("Client not found!")
         client.email = clientUpdated.email
         client.name = clientUpdated.name
         client.address = clientUpdated.address
         client.cellphone = clientUpdated.cellphone
         client.cpf = clientUpdated.cpf
-        client.assistances = clientUpdated.assistances
-        client.central = clientUpdated.central
         return clientRepository.save(client)
     }
 

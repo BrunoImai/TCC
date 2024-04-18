@@ -135,13 +135,13 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         return;
       }
 
-      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 9) {
+      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número de telefone deve conter 9 dígitos, incluindo o DDD.');
+                'O número de celular deve conter 11 dígitos, incluindo o DDD.');
           },
         );
         return;

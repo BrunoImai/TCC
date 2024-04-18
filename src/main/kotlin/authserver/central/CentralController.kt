@@ -92,7 +92,7 @@ class CentralController(val service: CentralService) {
             }
 
     @PutMapping("/client/{id}")
-    fun updateClient(@PathVariable("id") id: Long, @Valid @RequestBody client: Client) =
+    fun updateClient(@PathVariable("id") id: Long, @Valid @RequestBody client: ClientRequest) =
         service.updateClient(id, client)
             .toResponse()
             .let { ResponseEntity.ok(it) }

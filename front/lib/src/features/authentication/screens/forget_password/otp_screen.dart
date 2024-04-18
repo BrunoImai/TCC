@@ -1,16 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:tcc_front/src/features/authentication/screens/forget_password/update_password_screen.dart';
+import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
 
-class OTPScreen extends StatelessWidget {
-  const OTPScreen({Key? key}) : super(key: key);
+class OTPScreen extends StatefulWidget {
+  const OTPScreen({super.key, required this.email,});
+  final String email;
+
+  @override
+  _OTPScreenState createState() => _OTPScreenState();
+
+}
+
+class _OTPScreenState extends State<OTPScreen>{
+  final TextEditingController otpController = TextEditingController();
+  final _otpFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    Future<void> validateToken(VoidCallback onSuccess) async {
+      String otp = otpController.text;
+
+      if (otp.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'É necessário fornecer o código enviado para o email cadastrado');
+          },
+        );
+        return;
+      }
+
+      if (otp.length != 6) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription:
+                'O código deve possuir 6 caracteres.');
+          },
+        );
+        return;
+      }
+
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:8080/api/central/login/validateToken?email=$email'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          onSuccess.call();
+          print("Token validated");
+        } else {
+          print('Token failed. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle any error that occurred during the HTTP request
+        print('Error occurred: $e');
+      }
+    }
+
     return Scaffold(
       appBar: const WelcomeAppBar(),
       body: Container(
@@ -24,18 +82,39 @@ class OTPScreen extends StatelessWidget {
             ),
             Text(otpSubTitle.toUpperCase(), style: Theme.of(context).textTheme.headline6),
             const SizedBox(height: 40.0),
-            const Text("$otpMessage support.age@gmail.com", textAlign: TextAlign.center),
+            const Text("$otpMessage equipe.a.g.e.oficial@gmail.com", textAlign: TextAlign.center),
             const SizedBox(height: 20.0),
-            OtpTextField(
-                mainAxisAlignment: MainAxisAlignment.center,
-                numberOfFields: 6,
-                fillColor: Colors.black.withOpacity(0.1),
-                filled: true,
-                onSubmit: (code) => print("OTP is => $code")),
-            const SizedBox(height: 20.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(onPressed: () {}, child: Text(next.toUpperCase())),
+            Form(
+              key: _otpFormKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        label: Text(code),
+                        hintText: code,
+                        prefixIcon: Icon(Icons.numbers)),
+                  ),
+                  const SizedBox(height: 20.0),
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (_otpFormKey.currentState!.validate()) {
+                              validateToken(() {
+                                if (!mounted) return;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const UpdatePasswordScreen()),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Token validado com sucesso!')),
+                                );
+                              });
+                            }
+                          },
+                          child: Text(next.toUpperCase()))),
+                ],
+              ),
             ),
           ],
         ),

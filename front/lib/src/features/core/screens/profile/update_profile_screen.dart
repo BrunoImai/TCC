@@ -167,8 +167,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
 
       String requestBody = jsonEncode(updateCentralRequest.toJson());
-      print(requestBody);
-      print("\n" + id.toString());
+
       try {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/update/$id'),
@@ -212,6 +211,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
         title: Text(editProfile, style: Theme.of(context).textTheme.headline4),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(

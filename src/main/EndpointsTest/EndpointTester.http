@@ -62,6 +62,7 @@ Content-Type: application/json
     client.global.set("id", response.body.central.id)
 %}
 
+
 ### Listar Todos os clientes da central
 GET localhost:8080/api/central/client
 Authorization: Bearer {{token}}
@@ -73,7 +74,7 @@ Content-Type: application/json
 
 {
     "name": "Bruno",
-    "email": "bruno.y.l.imasdai@gmail.com",
+    "email": "bruno.y.l.imai@gmail.com",
     "password": "bruno1234",
     "cellphone": "11999999999",
     "address": "Rua dos bobos, n 0",

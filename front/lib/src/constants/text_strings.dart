@@ -12,6 +12,7 @@ const String fullName = "Nome completo";
 const String address = "Endereço";
 const String addressComplement = "Complemento";
 const String city = "Cidade";
+const String state = "Estado";
 const String neighborhood = "Bairro";
 const String central = "Nome da Empresa";
 const String cellphone = "Celular";
@@ -56,11 +57,14 @@ const String number = "Número";
 //Forget Password
 const String resetViaEmail = "Mude sua senha com a verificação do email";
 const String forgetPasswordSubTitle = "Coloque seu email cadastrado para receber o código";
+const String updatePasswordTitle = "Alteração de senha";
+const String updatePasswordSubTitle = "Coloque sua nova senha e a confirmação dela";
 
 //OTP Screen
 const String otpTitle = "CÓDIGO";
 const String otpSubTitle = "de Verificação";
 const String otpMessage = "Insira o código enviado por ";
+const String code = "Código ";
 
 //Initial logged screen
 const String homePageTitle = "Olá, ";
@@ -81,7 +85,7 @@ const String profile = "Perfil";
 const String editProfile = "Editar perfil";
 const String logout = "Sair";
 const String profileHeading = "Nome usuário";
-const String profileSubHeading = "email usuário";
+const String profileSubHeading = "Email usuário";
 const String settings = "Configurações";
 const String information = "Informações";
 const String userManagement = "Configurações do usuário";
@@ -90,3 +94,10 @@ const String userManagement = "Configurações do usuário";
 const String delete = "Deletar";
 const String joined = "Cliente desde ";
 const String joinedAt = "data entrada da central no sistema";
+
+//Update client screen
+const String editClient = "Editar cliente";
+
+
+//Client List Screen
+const String clientListSubTitle = "Econtre seus clientes";
