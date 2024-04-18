@@ -73,9 +73,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
               entryDate: item['entryDate'],
               cpf: item['cpf'],
               cellphone: item['cellphone'],
-              address: item['address']);
+              address: item['address'],
+              complement: item['complement']
+          );
           clientsList.add(client);
-          print(client);
         }
 
         setState(() {
@@ -83,7 +84,6 @@ class _ClientListScreenState extends State<ClientListScreen> {
           filteredClientList = clientsList;
         });
 
-        print(clientList);
 
         return clientList;
       } else {
