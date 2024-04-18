@@ -7,16 +7,16 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
 
-class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key, required this.emailSend,});
+class TokenScreen extends StatefulWidget {
+  const TokenScreen({super.key, required this.emailSend,});
   final String emailSend;
 
   @override
-  _OTPScreenState createState() => _OTPScreenState();
+  _TokenScreenState createState() => _TokenScreenState();
 
 }
 
-class _OTPScreenState extends State<OTPScreen>{
+class _TokenScreenState extends State<TokenScreen>{
   final TextEditingController codeController = TextEditingController();
   final _codeFormKey = GlobalKey<FormState>();
   

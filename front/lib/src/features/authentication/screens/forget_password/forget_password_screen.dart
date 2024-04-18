@@ -7,7 +7,7 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
-import 'otp_screen.dart';
+import 'token_screen.dart';
 
 class ForgetPasswordMailScreen extends StatefulWidget {
   const ForgetPasswordMailScreen({super.key});
@@ -111,7 +111,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                                     if (!mounted) return;
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => OTPScreen(emailSend: emailSend,)),
+                                      MaterialPageRoute(builder: (context) => TokenScreen(emailSend: emailSend,)),
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Token enviado com sucesso!')),
