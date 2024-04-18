@@ -48,7 +48,6 @@ class _LoginFormState extends State<LoginForm> {
           CentralLoginRequest(email: email, password: password);
       String requestBody = jsonEncode(centralLoginRequest.toJson());
       try {
-        print("Fiz o post");
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/central/login'),
           headers: {
@@ -70,7 +69,14 @@ class _LoginFormState extends State<LoginForm> {
           print('Login failed. Status code: ${response.statusCode}');
 
           error = response.body;
-          print(error);
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertPopUp(
+                  errorDescription: error);
+            },
+          );
         }
       } catch (e) {
         // Handle any error that occurred during the HTTP request
@@ -129,7 +135,6 @@ class _LoginFormState extends State<LoginForm> {
                   if (_loginFormKey.currentState!.validate()) {
                     centralLogin(() {
                       if (!mounted) {
-                        print("mounted");
                         return;
                       }
                       Navigator.push(
@@ -141,10 +146,6 @@ class _LoginFormState extends State<LoginForm> {
                         const SnackBar(content: Text('Login Realizado')),
                       );
                     });
-                  } else {
-                    print("Popup");
-                    AlertPopUp(
-                        errorDescription: error);
                   }
                 },
                 child: Text(login.toUpperCase()),

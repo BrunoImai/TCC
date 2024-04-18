@@ -64,7 +64,15 @@ class _TokenScreenState extends State<TokenScreen>{
           onSuccess.call();
           print("Token validated");
         } else {
-          print('Token failed. Status code: ${response.statusCode}');
+          // Registration failed
+          print('Login failed. Status code: ${response.statusCode}');
+
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: response.body);
+              });
         }
       } catch (e) {
         // Handle any error that occurred during the HTTP request

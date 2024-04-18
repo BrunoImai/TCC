@@ -166,9 +166,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
           body: requestBody,
         );
 
-        final jsonData = json.decode(response.body);
-
         if (response.statusCode == 200 || response.statusCode == 201) {
+          final jsonData = json.decode(response.body);
           // Registration successful
           final token = jsonData['token'];
           final central = CentralResponse.fromJson(jsonData['central']);
@@ -178,7 +177,16 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
           onSuccess.call();
           print('Registration successful!');
         } else {
-          print('Registration failed. Status code: ${response.statusCode}');
+          // Registration failed
+          print('Login failed. Status code: ${response.statusCode}');
+
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: response.body);
+              });
+
         }
       } catch (e) {
         print('Error occurred: $e');

@@ -64,7 +64,15 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
           onSuccess.call();
           print("Email enviado");
         } else {
-          print('Email failed. Status code: ${response.statusCode}');
+          // Registration failed
+          print('Login failed. Status code: ${response.statusCode}');
+
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: response.body);
+              });
         }
       } catch (e) {
         print('Error occurred: $e');

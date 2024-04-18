@@ -17,5 +17,7 @@ interface CentralRepository : JpaRepository<Central, Long> {
 //    @Query("select u from Central u where u.email = :email")
     fun findByEmail(email: String): Central?
 
+    fun findByCnpj(cnpj: String): Central?
+
     fun findByNewPasswordCode(code: String): Central?
 }

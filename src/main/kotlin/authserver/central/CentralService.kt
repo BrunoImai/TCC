@@ -47,15 +47,18 @@ class CentralService(
     fun createCentral(req: CentralRequest): CentralLoginResponse {
         val currentDate = LocalDate.now()
 
+        if (centralRepository.findByEmail(req.email!!) != null) throw IllegalStateException("Email já cadastrado!")
+        if (centralRepository.findByCnpj(req.cnpj!!) != null) throw IllegalStateException("CNPJ já cadastrado!")
+
         // Convert LocalDate to Date
         val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
         log.info("entrou")
         val central = Central(
-            email = req.email!!,
+            email = req.email,
             password = PasswordUtil.hashPassword(req.password!!),
             name = req.name!!,
             creationDate = date,
-            cnpj = req.cnpj!!,
+            cnpj = req.cnpj,
             cellphone = req.cellphone!!
         )
         val userRole = rolesRepository.findByName("CENTRAL")
@@ -154,6 +157,7 @@ class CentralService(
 
     fun validateCode(email: String, code: String): Boolean {
         val central = centralRepository.findByEmail(email) ?: throw IllegalStateException("Email invalido")
+        if(centralRepository.findByNewPasswordCode(code) == null) throw IllegalStateException("Token invalido")
         return if (central.newPasswordCode == code) {
             central.newPasswordCode = null
             true
@@ -185,6 +189,9 @@ class CentralService(
 
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+
+        if (clientRepository.findByEmail(req.email) != null) throw IllegalStateException("Email do cliente já cadastrado!")
+        if (clientRepository.findByCpf(req.cpf) != null) throw IllegalStateException("CPF do cliente já cadastrado!")
 
         val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
 

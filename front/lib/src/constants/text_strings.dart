@@ -100,4 +100,4 @@ const String editClient = "Editar cliente";
 
 
 //Client List Screen
-const String clientListSubTitle = "Econtre seus clientes";
+const String clientListSubTitle = "Encontre seus clientes!";
