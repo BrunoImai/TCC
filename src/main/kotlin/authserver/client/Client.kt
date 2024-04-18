@@ -19,6 +19,9 @@ class Client(
     @Column(nullable = false)
     var address: String,
 
+    @Column
+    var complement: String,
+
     @Column(nullable = false)
     var name: String = "",
 
@@ -38,5 +41,5 @@ class Client(
     @OneToMany(mappedBy = "client", cascade = [CascadeType.ALL], orphanRemoval = true)
     var assistances: MutableSet<Assistance> = HashSet()
 ) {
-    fun toResponse() = ClientResponse(id!!, name, email, cpf, address, cellphone, assistances, entryDate)
+    fun toResponse() = ClientResponse(id!!, name, cpf, address, complement, cellphone, email, assistances, entryDate)
 }

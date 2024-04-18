@@ -1,5 +1,6 @@
 package authserver.central
 
+import authserver.central.requests.CentralPasswordChange
 import authserver.client.Client
 import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
@@ -7,7 +8,6 @@ import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -52,6 +52,22 @@ class CentralController(val service: CentralService) {
         service.updateCentral(id, req)
             .let { ResponseEntity.ok(it) }
 
+    @PostMapping("/login/sendToken")
+    fun sendToken(@RequestParam("email") email: String) =
+        service.generatePasswordCode(email)
+            .let { ResponseEntity.ok(it) }
+
+    @PostMapping("/login/validateToken")
+    fun validateToken(@RequestParam("email") email: String, @RequestParam("code") code: String) =
+        service.validateCode(email, code)
+            .let { ResponseEntity.ok(it) }
+
+    @PostMapping("/login/resetPassword")
+    fun resetPassword(@RequestBody CentralRequest: CentralPasswordChange) =
+        service.resetPassword(CentralRequest)
+            .let { ResponseEntity.ok(it) }
+
+
     // Client
 
     @GetMapping("/client/{id}")
@@ -70,7 +86,10 @@ class CentralController(val service: CentralService) {
     fun createClient(@Valid @RequestBody req: ClientRequest) =
         service.createClient(req)
             .toResponse()
-            .let { ResponseEntity.status(CREATED).body(it) }
+            .let {
+                ResponseEntity.status(CREATED).body(it)
+
+            }
 
     @PutMapping("/client/{id}")
     fun updateClient(@PathVariable("id") id: Long, @Valid @RequestBody client: Client) =

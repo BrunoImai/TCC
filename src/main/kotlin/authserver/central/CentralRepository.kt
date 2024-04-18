@@ -14,5 +14,8 @@ interface CentralRepository : JpaRepository<Central, Long> {
     )
     fun findAllByRole(role: String): List<Central>
 
+//    @Query("select u from Central u where u.email = :email")
     fun findByEmail(email: String): Central?
+
+    fun findByNewPasswordCode(code: String): Central?
 }

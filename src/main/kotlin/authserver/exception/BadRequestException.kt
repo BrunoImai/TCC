@@ -8,3 +8,4 @@ class BadRequestException(
     message: String = BAD_REQUEST.reasonPhrase,
     cause: Throwable? = null
 ): IllegalArgumentException(message, cause)
+

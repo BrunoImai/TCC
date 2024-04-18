@@ -1,8 +1,11 @@
 package authserver.central
 
+import authserver.central.requests.CentralPasswordChange
+import authserver.central.requests.CentralRequest
+import authserver.central.requests.CentralUpdateRequest
 import authserver.security.Jwt
 import authserver.security.CentralToken
-import br.pucpr.authserver.users.requests.CentralRequest
+
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
@@ -10,6 +13,10 @@ import authserver.central.role.RolesRepository
 import authserver.client.Client
 import authserver.client.ClientRepository
 import authserver.client.requests.ClientRequest
+import authserver.utils.PasswordUtil
+import com.amazonaws.regions.Regions
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder
+import com.amazonaws.services.simpleemail.model.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -44,7 +51,7 @@ class CentralService(
         log.info("entrou")
         val central = Central(
             email = req.email!!,
-            password = req.password!!,
+            password = PasswordUtil.hashPassword(req.password!!),
             name = req.name!!,
             creationDate = date,
             cnpj = req.cnpj!!,
@@ -71,13 +78,14 @@ class CentralService(
 
     fun centralLogin(credentials: LoginRequest): CentralLoginResponse? {
         val central = centralRepository.findByEmail(credentials.email!!) ?: return null
-        if (central.password != credentials.password) return null
+        if (!PasswordUtil.verifyPassword(credentials.password!!, central.password)) return null
         log.info("Central logged in. id={} name={}", central.id, central.name)
         return CentralLoginResponse(
             token = jwt.createToken(central),
             central.toResponse()
         )
     }
+
 
     fun centralSelfDelete(id: Long): Boolean {
         val central = centralRepository.findByIdOrNull(id) ?: return false
@@ -97,16 +105,68 @@ class CentralService(
             central.cnpj = centralUpdated.cnpj!!
             central.cellphone = centralUpdated.cellphone!!
             return centralRepository.save(central)
-        } else if (central.password == centralUpdated.oldPassword) {
+        } else if (PasswordUtil.verifyPassword(centralUpdated.oldPassword!!, central.password)) {
             central.email = centralUpdated.email!!
             central.name = centralUpdated.name!!
             central.cnpj = centralUpdated.cnpj!!
             central.cellphone = centralUpdated.cellphone!!
-            central.password = centralUpdated.newPassword!!
+            central.password = PasswordUtil.hashPassword(centralUpdated.newPassword)
             return centralRepository.save(central)
         } else {
             throw IllegalStateException("Old password is incorrect!")
         }
+    }
+
+    fun sendEmail(to: String, subject: String, bodyHtml: String) {
+        val client = AmazonSimpleEmailServiceClientBuilder.standard()
+            .withRegion(Regions.SA_EAST_1) // Specify the AWS region
+            .build()
+
+        val request = SendEmailRequest().apply {
+            source = "equipe.a.g.e.oficial@gmail.com"
+            destination = Destination().withToAddresses(to)
+            message = Message().apply {
+                body = Body().withHtml(Content().withData(bodyHtml))
+            }
+            message.subject = Content().withData(subject)
+        }
+
+        try {
+            client.sendEmail(request)
+            log.info("Email sent successfully to $to")
+        } catch (e: Exception) {
+            log.error("Failed to send email: ${e.message}")
+        }
+    }
+
+    fun generatePasswordCode(email: String) {
+        val central = centralRepository.findByEmail(email) ?: throw IllegalStateException("Central not found!")
+        val newPasswordCode = UUID.randomUUID().toString().substring(0, 6)
+        central.newPasswordCode = newPasswordCode
+        sendEmail(
+            to = email,
+            subject = "AGE - Recuperação de senha",
+            bodyHtml = "Olá, ${central.name}! <br> Seu código de recuperação de senha é: <b>$newPasswordCode</b>"
+        )
+        centralRepository.save(central)
+    }
+
+    fun validateCode(email: String, code: String): Boolean {
+        val central = centralRepository.findByEmail(email) ?: throw IllegalStateException("Central not found!")
+        return if (central.newPasswordCode == code) {
+            central.newPasswordCode = null
+            true
+        } else {
+            false
+        }
+    }
+
+    fun resetPassword(centralPasswordChange: CentralPasswordChange): Boolean {
+        val central = centralRepository.findByNewPasswordCode(centralPasswordChange.token!!) ?: throw IllegalStateException("Central not found!")
+        central.password = PasswordUtil.hashPassword(centralPasswordChange.password!!)
+        central.newPasswordCode = null
+        centralRepository.save(central)
+        return true
     }
 
     //CLIENT
@@ -132,7 +192,10 @@ class CentralService(
             name = req.name,
             entryDate = date,
             central = central,
-            address = req.address
+            address = req.address,
+            cellphone = req.cellphone,
+            cpf = req.cpf,
+            complement = req.complement
         )
 
         return clientRepository.save(client)

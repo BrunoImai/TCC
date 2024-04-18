@@ -3,9 +3,23 @@ POST localhost:8080/api/central
 Content-Type: application/json
 
 {
-  "name": "Central 1",
-  "email": "Central@gmail.com2",
-  "password": "central0000"
+  "name": "Central Bruno",
+  "email": "bruno.y.l.imai@gmail.com",
+  "password": "central0000",
+    "cellphone": "11999999999",
+  "cnpj": "12348678902234"
+}
+
+### Create a new Central
+POST localhost:8080/api/central
+Content-Type: application/json
+
+{
+  "name": "aaaaaa",
+  "email": "batata1@gmail.com",
+  "password": "12345678",
+  "cellphone": "11999999999",
+  "cnpj": "12312678902234"
 }
 
 ### Login como Central
@@ -13,14 +27,40 @@ POST localhost:8080/api/central/login
 Content-Type: application/json
 
 {
-  "email": "Central@gmail.com2",
-  "password": "central0000"
+  "email": "teste@gmail.com",
+  "password": "12345678"
 }
 > {%
     client.global.set("token", response.body.token)
     client.global.set("id", response.body.central.id)
 %}
 
+### Login como Central
+POST localhost:8080/api/central/login
+Content-Type: application/json
+
+{
+  "email": "batata1@gmail.com",
+  "password": "12345678"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.central.id)
+%}
+
+
+### Login como Central
+POST localhost:8080/api/central/login
+Content-Type: application/json
+
+{
+  "email": "bruno.y.l.imai@gmail.com",
+  "password": "central0000"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.central.id)
+%}
 
 ### Listar Todos os clientes da central
 GET localhost:8080/api/central/client
@@ -33,45 +73,27 @@ Content-Type: application/json
 
 {
     "name": "Bruno",
-    "email": "bruno.y.l.imai@gmail.com",
+    "email": "bruno.y.l.imasdai@gmail.com",
     "password": "bruno1234",
     "cellphone": "11999999999",
     "address": "Rua dos bobos, n 0",
     "cpf": "12345678901"
 }
 
+### Esqueci a senha
+POST localhost:8080/api/central/login/sendToken?email=bruno.y.l.imai@gmail.com
+
+### Validar o token
+POST localhost:8080/api/central/login/validateToken?email=bruno.y.l.imai@gmail.com&code=320cce
+
+### Alterar a senha
+POST localhost:8080/api/central/login/resetPassword
+Content-Type: application/json
+
+{
+    "password": "NovaSenha1234",
+    "token": "320cce"
+}
 
 ### Lista o usuário 2
 GET localhost:8080/api/central/client/2
-
-
-### Exclui o usuário
-DELETE localhost:8080/api/users/2
-Authorization: Bearer {{token}}
-
-### Exclui o evento 2
-DELETE localhost:8080/api/users/events/2
-Authorization: Bearer {{token}}
-
-### Cria categoria
-POST localhost:8080/api/events/category
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "name": "Rpg"
-}
-
-### Cria evento
-POST localhost:8080/api/users/events
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "name": "Rpg",
-  "local": "Minha casa",
-  "hour": "12:00",
-  "description": "Traga os dados",
-  "creatorId": 102,
-  "categoryId": 56
-}

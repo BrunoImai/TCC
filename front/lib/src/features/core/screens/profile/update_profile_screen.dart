@@ -16,7 +16,6 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/login/login_screen.dart';
 import '../../../authentication/screens/signup/central.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 

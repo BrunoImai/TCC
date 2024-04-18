@@ -14,6 +14,8 @@ data class ClientRequest(
     @field:NotBlank(message = "Address is mandatory")
     val address: String,
 
+    val complement: String,
+
     @field:NotBlank(message = "Cellphone is mandatory")
     val cellphone: String,
 

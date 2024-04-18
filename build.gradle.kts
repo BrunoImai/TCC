@@ -14,7 +14,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 
 group = "age.server"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.4-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -46,9 +46,13 @@ dependencies {
 
     implementation ("software.amazon.awssdk:ses:2.25.22")
 
+    implementation("com.amazonaws:aws-java-sdk-ses:1.12.701")
+
     runtimeOnly("io.kotest:kotest-assertions-core:5.6.2")
 
     implementation ("software.amazon.awssdk:ses:2.25.26")
+
+    implementation("de.mkammerer:argon2-jvm:2.11")
 }
 
 tasks.test {

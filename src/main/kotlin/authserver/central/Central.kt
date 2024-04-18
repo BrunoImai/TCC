@@ -18,7 +18,7 @@ class Central(
     @Column(nullable = false)
     var creationDate: Date,
 
-    @Column(length = 50)
+    @Column(length = 2000)
     var password: String,
 
     @Column(nullable = false)
@@ -32,6 +32,9 @@ class Central(
 
     @Column
     var cellphone: String = "",
+
+    @Column
+    var newPasswordCode: String? = null,
 
     @ManyToMany
     @JoinTable(

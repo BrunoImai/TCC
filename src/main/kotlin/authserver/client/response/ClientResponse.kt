@@ -12,11 +12,12 @@ data class ClientResponse(
     val name: String,
 
     @field:NotBlank(message = "CPF is mandatory")
-    @field:Size(min = 11, max = 11, message = "CPF must be 11 characters long")
     val cpf: String,
 
     @field:NotBlank(message = "Address is mandatory")
     val address: String,
+
+    val complement: String,
 
     @field:NotBlank(message = "Cellphone is mandatory")
     val cellphone: String,

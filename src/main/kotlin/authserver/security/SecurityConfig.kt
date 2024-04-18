@@ -39,7 +39,7 @@ class SecurityConfig(private val jwtTokenFilter: JwtTokenFilter) {
                 requests
                     .requestMatchers(HttpMethod.GET).permitAll()
                     .requestMatchers("/error/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/central/login", "/central").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/central/login/**", "/central").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated()
             }
