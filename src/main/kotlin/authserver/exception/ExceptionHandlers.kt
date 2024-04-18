@@ -13,4 +13,13 @@ class ExceptionHandlers {
         ex.bindingResult.allErrors
             .joinToString("\n") { "'${(it as FieldError).field}': ${it.defaultMessage}"}
             .let { ResponseEntity.badRequest().body(it) }
+
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(ex: IllegalStateException) =
+        ResponseEntity.badRequest().body(ex.message)
+
+    @ExceptionHandler(InvalidCredentialException::class)
+    fun handleInvalidCredentialException(ex: InvalidCredentialException) =
+        ResponseEntity.status(409).body(ex.message)
+
 }

@@ -39,8 +39,10 @@ class CentralController(val service: CentralService) {
     @PostMapping("/login")
     fun login(@Valid @RequestBody credentials: LoginRequest) =
         service.centralLogin(credentials)
-            ?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+            ?.let {
+                ResponseEntity.ok(it)
+            }
+
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =

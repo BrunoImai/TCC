@@ -25,8 +25,7 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
   bool _isVisible = false;
-
-
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +44,11 @@ class _LoginFormState extends State<LoginForm> {
         return;
       }
 
-      CentralLoginRequest centralLoginRequest = CentralLoginRequest(email: email, password: password);
+      CentralLoginRequest centralLoginRequest =
+          CentralLoginRequest(email: email, password: password);
       String requestBody = jsonEncode(centralLoginRequest.toJson());
       try {
+        print("Fiz o post");
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/central/login'),
           headers: {
@@ -56,9 +57,10 @@ class _LoginFormState extends State<LoginForm> {
           body: requestBody,
         );
 
-        final jsonData = json.decode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
+          final jsonData = json.decode(response.body);
           final token = jsonData['token'];
+
           final central = CentralResponse.fromJson(jsonData['central']);
 
           CentralManager.instance.loggedUser = LoggedCentral(token, central);
@@ -66,17 +68,20 @@ class _LoginFormState extends State<LoginForm> {
         } else {
           // Registration failed
           print('Login failed. Status code: ${response.statusCode}');
+
+          error = response.body;
+          print(error);
         }
       } catch (e) {
         // Handle any error that occurred during the HTTP request
         print('Error occurred: $e');
       }
     }
+
     return Form(
       key: _loginFormKey,
       child: Container(
-        padding:
-        const EdgeInsets.symmetric(vertical: formHeight - 10),
+        padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,8 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: email,
                   hintText: email,
-                  border: OutlineInputBorder()
-              ),
+                  border: OutlineInputBorder()),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -104,8 +108,9 @@ class _LoginFormState extends State<LoginForm> {
                       _isVisible = !_isVisible;
                     });
                   },
-                  icon: _isVisible ? const Icon(Icons.visibility) :
-                  const Icon(Icons.visibility_off),
+                  icon: _isVisible
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off),
                 ),
               ),
             ),
@@ -113,7 +118,8 @@ class _LoginFormState extends State<LoginForm> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () => Get.to(() => const ForgetPasswordMailScreen()),
+                  onPressed: () =>
+                      Get.to(() => const ForgetPasswordMailScreen()),
                   child: const Text(forgetPassword)),
             ),
             SizedBox(
@@ -122,17 +128,25 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () {
                   if (_loginFormKey.currentState!.validate()) {
                     centralLogin(() {
-                  if (!mounted) return;
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CompanyHomeScreen()),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Login Realizado')),
-                   );
-                 });
-                }
-              },
+                      if (!mounted) {
+                        print("mounted");
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CompanyHomeScreen()),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login Realizado')),
+                      );
+                    });
+                  } else {
+                    print("Popup");
+                    AlertPopUp(
+                        errorDescription: error);
+                  }
+                },
                 child: Text(login.toUpperCase()),
               ),
             ),
