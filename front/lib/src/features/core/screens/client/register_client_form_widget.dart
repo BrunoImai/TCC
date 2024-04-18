@@ -152,7 +152,8 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
           email: email,
           cpf: cpf,
           cellphone: cellphone,
-          address: fullAddress
+          address: fullAddress,
+          complement: addressComplement,
       );
 
       String requestBody = jsonEncode(clientRequest.toJson());

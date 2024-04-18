@@ -52,6 +52,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
     emailController.text = widget.client.email;
     cpfController.text = widget.client.cpf;
     cellphoneController.text = widget.client.cellphone;
+    addressComplementController.text = widget.client.complement;
 
     List<String> addressParts = widget.client.address.split(', ');
     addressController.text = addressParts[0];
@@ -199,6 +200,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
         cpf: cpf,
         cellphone: cellphone,
         address: fullAddress,
+        complement: addressComplement,
       );
 
       String requestBody = jsonEncode(updateClientRequest.toJson());
@@ -413,8 +415,8 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                           icon: const Icon(Icons.edit),
                           onPressed: () {
                             setState(() {
-                              _clearFieldNumber = true;
-                              if (_clearFieldNumber) {
+                              _clearFieldAddressComplement = true;
+                              if (_clearFieldAddressComplement) {
                                 addressComplementController.clear();
                               }
                             });

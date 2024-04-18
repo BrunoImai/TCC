@@ -5,6 +5,7 @@ class ClientRequest {
   final String cpf;
   final String cellphone;
   final String address;
+  final String complement;
 
 
   ClientRequest({
@@ -12,7 +13,8 @@ class ClientRequest {
     required this.email,
     required this.cpf,
     required this.cellphone,
-    required this.address
+    required this.address,
+    required this.complement
   });
 
   Map<String, dynamic> toJson() {
@@ -21,7 +23,8 @@ class ClientRequest {
       'cellphone': cellphone,
       'email': email,
       'cpf': cpf,
-      'address': address
+      'address': address,
+      'complement': complement
     };
   }
 }
@@ -65,9 +68,10 @@ class  UpdateClientRequest {
   final String cpf;
   final String cellphone;
   final String address;
+  final String complement;
 
   UpdateClientRequest({required this.name, required this.email, required this.cpf,
-    required this.cellphone, required this.address});
+    required this.cellphone, required this.address, required this.complement});
 
   Map<String, dynamic> toJson() {
     return {
@@ -76,6 +80,7 @@ class  UpdateClientRequest {
       'cpf': cpf,
       'cellphone': cellphone,
       'address': address,
+      'complement': complement
     };
   }
 }
@@ -88,9 +93,10 @@ class ClientsList {
   final String cpf;
   final String cellphone;
   final String address;
+  final String complement;
 
   ClientsList({required this.id, required this.name, required this.email, required this.entryDate, required this.cpf,
-    required this.cellphone, required this.address});
+    required this.cellphone, required this.address, required this.complement});
 
   Map<String, dynamic> toJson() {
     return {
@@ -101,6 +107,7 @@ class ClientsList {
       'cpf': cpf,
       'cellphone': cellphone,
       'address': address,
+      'complement': complement
     };
   }
 }

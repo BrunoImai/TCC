@@ -1,19 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:tcc_front/src/features/authentication/screens/signup/central.dart';
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
-
+import 'package:http/http.dart' as http;
+import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
-import 'otp_screen.dart';
+import '../login/login_screen.dart';
+
 
 class UpdatePasswordScreen extends StatefulWidget {
-  const UpdatePasswordScreen({super.key});
+  final String code;
+  const UpdatePasswordScreen({super.key, required this.code});
 
   @override
   _UpdatePasswordScreen createState() => _UpdatePasswordScreen();
@@ -64,8 +70,50 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    String newPassword = passwordController.text;
+    print(widget.code);
+
+
+    Future<void> resetPassword(VoidCallback onSuccess) async {
+      if (newPassword.isEmpty) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'Todos os campos são obrigatórios.');
+          },
+        );
+        return;
+      }
+
+      ResetCentralPassword resetCentralPassword = ResetCentralPassword(password: newPassword, token: widget.code);
+
+      String requestBody = jsonEncode(resetCentralPassword.toJson());
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:8080/api/central/login/resetPassword'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          onSuccess.call();
+          print("Token validated");
+        } else {
+          print('Update failed. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle any error that occurred during the HTTP request
+        print('Error occurred: $e');
+      }
+    }
     return SafeArea(
       child: Scaffold(
         appBar: const WelcomeAppBar(),
@@ -270,7 +318,39 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                               onPressed: () {
+                                String password = passwordController.text;
+                                String confirmPassword = confirmPasswordController.text;
 
+                                if (password.isEmpty) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const AlertPopUp(
+                                          errorDescription: 'Todos os campos são obrigatórios.');
+                                    },
+                                  );
+                                  return;
+                                }
+
+                                if (password != confirmPassword) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const AlertPopUp(
+                                          errorDescription: 'As senhas não coincidem ');
+                                    },
+                                  );
+                                } else {
+                                  resetPassword(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const LoginScreen()));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Senha alterada')),
+                                    );
+                                  });
+                                }
                               },
                               child: Text(next.toUpperCase())
                           )

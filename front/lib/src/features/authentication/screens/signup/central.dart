@@ -97,3 +97,17 @@ class  UpdateCentralRequest {
     };
   }
 }
+
+class ResetCentralPassword {
+  final String password;
+  final String token;
+
+  ResetCentralPassword({required this.password, required this.token});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'password': password,
+      'token': token,
+    };
+  }
+}

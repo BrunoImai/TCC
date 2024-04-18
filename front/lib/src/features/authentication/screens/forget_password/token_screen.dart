@@ -7,25 +7,26 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../../commom_widgets/authentication_appbar.dart';
 
-class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key, required this.email,});
-  final String email;
+class TokenScreen extends StatefulWidget {
+  const TokenScreen({super.key, required this.emailSend,});
+  final String emailSend;
 
   @override
-  _OTPScreenState createState() => _OTPScreenState();
+  _TokenScreenState createState() => _TokenScreenState();
 
 }
 
-class _OTPScreenState extends State<OTPScreen>{
-  final TextEditingController otpController = TextEditingController();
-  final _otpFormKey = GlobalKey<FormState>();
+class _TokenScreenState extends State<TokenScreen>{
+  final TextEditingController codeController = TextEditingController();
+  final _codeFormKey = GlobalKey<FormState>();
+  
 
   @override
   Widget build(BuildContext context) {
     Future<void> validateToken(VoidCallback onSuccess) async {
-      String otp = otpController.text;
+      String code = codeController.text;
 
-      if (otp.isEmpty) {
+      if (code.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -36,7 +37,7 @@ class _OTPScreenState extends State<OTPScreen>{
         return;
       }
 
-      if (otp.length != 6) {
+      if (code.length != 6) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -48,10 +49,12 @@ class _OTPScreenState extends State<OTPScreen>{
         return;
       }
 
+      print(code);
+      print(widget.emailSend);
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/login/validateToken?email=$email'),
+          Uri.parse('http://localhost:8080/api/central/login/validateToken?email=${widget.emailSend}&code=$code'),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -85,10 +88,11 @@ class _OTPScreenState extends State<OTPScreen>{
             const Text("$otpMessage equipe.a.g.e.oficial@gmail.com", textAlign: TextAlign.center),
             const SizedBox(height: 20.0),
             Form(
-              key: _otpFormKey,
+              key: _codeFormKey,
               child: Column(
                 children: [
                   TextFormField(
+                    controller: codeController,
                     decoration: const InputDecoration(
                         label: Text(code),
                         hintText: code,
@@ -99,12 +103,13 @@ class _OTPScreenState extends State<OTPScreen>{
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
-                            if (_otpFormKey.currentState!.validate()) {
+                            String code = codeController.text;
+                            if (_codeFormKey.currentState!.validate()) {
                               validateToken(() {
                                 if (!mounted) return;
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const UpdatePasswordScreen()),
+                                  MaterialPageRoute(builder: (context) => UpdatePasswordScreen(code: code)),
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('Token validado com sucesso!')),
