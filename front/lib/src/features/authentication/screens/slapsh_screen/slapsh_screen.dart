@@ -24,7 +24,7 @@ class SplashScreen extends StatelessWidget {
       body: Stack(
         children: [
           FadeInAnimation(
-            durationInMs: 2000,
+            durationInMs: 1000,
             animate: AnimatePosition(
               topAfter: MediaQuery.of(context).size.height / 2 - defaultSize * 6,
               leftAfter: MediaQuery.of(context).size.width / 2 - defaultSize * 8.5,
@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
             child: const Image(image: AssetImage(splashTopIcon)),
           ),
           FadeInAnimation(
-            durationInMs: 2000,
+            durationInMs: 1000,
             animate: AnimatePosition(
                 topBefore: 80,
                 topAfter: 80,
