@@ -2,7 +2,9 @@ package authserver.worker
 
 import authserver.assistance.Assistance
 import authserver.central.Central
+import authserver.worker.response.WorkerResponse
 import jakarta.persistence.*
+import jakarta.validation.constraints.Email
 import java.util.*
 
 @Entity
@@ -14,8 +16,14 @@ class Worker(
     @Column(nullable = false)
     var entryDate: Date,
 
-    @Column(length = 50)
+    @Email
+    var email: String,
+
+    @Column(length = 2000)
     var password: String,
+
+    @Column
+    var cellphone: String,
 
     @Column(nullable = false)
     var name: String = "",
@@ -30,5 +38,5 @@ class Worker(
     @ManyToMany(mappedBy = "responsibleWorkers")
     var currentAssistances: MutableSet<Assistance> = HashSet()
 ) {
-//    fun toResponse() = WorkerResponse(id!!, name, email, creationDate, description)
+    fun toResponse() = WorkerResponse(id!!, name, email, cpf, cellphone, entryDate)
 }

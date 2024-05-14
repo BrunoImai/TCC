@@ -44,6 +44,9 @@ class Central(
     )
     val roles: MutableSet<Role> = mutableSetOf(),
 
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    var assistanceQueue: MutableList<Assistance> = mutableListOf(),
+
     @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
     var workers: MutableSet<Worker> = mutableSetOf(),
 

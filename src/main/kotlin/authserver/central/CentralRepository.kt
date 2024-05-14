@@ -1,5 +1,6 @@
 package authserver.central
 
+import authserver.assistance.Assistance
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -20,4 +21,7 @@ interface CentralRepository : JpaRepository<Central, Long> {
     fun findByCnpj(cnpj: String): Central?
 
     fun findByNewPasswordCode(code: String): Central?
+
+    @Query("select c.assistanceQueue from Central c where c.id = :id")
+    fun findAssistanceQueueById(id: Long): List<Assistance>
 }

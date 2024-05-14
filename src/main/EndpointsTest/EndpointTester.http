@@ -1,4 +1,4 @@
-### Create a new Central
+### Create a new Central 1
 POST localhost:8080/api/central
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
   "cnpj": "12348678902234"
 }
 
-### Create a new Central
+### Create a new Central 2
 POST localhost:8080/api/central
 Content-Type: application/json
 
@@ -22,34 +22,7 @@ Content-Type: application/json
   "cnpj": "12312678902234"
 }
 
-### Login como Central
-POST localhost:8080/api/central/login
-Content-Type: application/json
-
-{
-  "email": "teste@gmail.com",
-  "password": "12345678"
-}
-> {%
-    client.global.set("token", response.body.token)
-    client.global.set("id", response.body.central.id)
-%}
-
-### Login como Central
-POST localhost:8080/api/central/login
-Content-Type: application/json
-
-{
-  "email": "batata1@gmaisadadssaddsl.com",
-  "password": "12345678"
-}
-> {%
-    client.global.set("token", response.body.token)
-    client.global.set("id", response.body.central.id)
-%}
-
-
-### Login como Central
+### Login como Central 1
 POST localhost:8080/api/central/login
 Content-Type: application/json
 
@@ -74,17 +47,17 @@ Content-Type: application/json
 
 {
     "name": "Bruno",
-    "email": "bruno.y.l.imai@gmail.com",
-    "password": "bruno1234",
-    "cellphone": "11999999999",
+    "cpf": "12345678901",
     "address": "Rua dos bobos, n 0",
-    "cpf": "12345678901"
+    "complement": "Sobrado 2",
+    "cellphone": "11999999999",
+    "email": "bruno.y.l.imai@gmail.com"
 }
 
-### Esqueci a senha
+### Esqueci a senha central 1
 POST localhost:8080/api/central/login/sendToken?email=bruno.y.l.imai@gmail.com
 
-### Validar o token
+### Validar o token central 1
 POST localhost:8080/api/central/login/validateToken?email=bruno.y.l.imai@gmail.com&code=320cce
 
 ### Alterar a senha
@@ -96,5 +69,66 @@ Content-Type: application/json
     "token": "320cce"
 }
 
+### Criar novo Worker
+POST localhost:8080/api/central/worker
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Bruno",
+    "email": "teste@gmail.com",
+    "password": "12345678",
+    "cellphone": "11999999999",
+    "cpf": "12345678901",
+    "address": "Rua dos bobos, n 0"
+}
+
+### Lista todos os Workers
+GET localhost:8080/api/central/worker
+Authorization: Bearer {{token}}
+
+### Lista um Worker
+GET localhost:8080/api/central/worker/52
+Authorization: Bearer {{token}}
+
+### Atualiza um Worker
+PUT localhost:8080/api/central/worker/52
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Cleiton",
+    "email": "teste@gmail.com",
+    "password": "12345678",
+    "cellphone": "11999999999",
+    "cpf": "12345678901",
+    "address": "Rua dos bobos, n 0"
+}
+
+### Deleta um Worker
+DELETE localhost:8080/api/central/worker/52
+Authorization: Bearer {{token}}
+
+
 ### Lista o usuário 2
-GET localhost:8080/api/central/client/2
+GET localhost:8080/api/central/client/1
+Authorization: Bearer {{token}}
+
+### lista todos os usuários
+GET localhost:8080/api/central/client
+Authorization: Bearer {{token}}
+
+### Cadastra um novo serviço
+POST localhost:8080/api/central/assistance
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "description": "Concerto maquina de lavar",
+  "name": "Concerto",
+  "address": "marechal cardoso junior 563",
+  "cpf": "12345678901",
+  "hoursToFinish": 2,
+  "workersIds": []
+}
+

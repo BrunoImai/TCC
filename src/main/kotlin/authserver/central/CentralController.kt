@@ -1,23 +1,28 @@
 package authserver.central
 
+import authserver.assistance.request.AssistanceRequest
 import authserver.central.requests.CentralPasswordChange
-import authserver.client.Client
 import authserver.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
+import authserver.maps.AddressRequest
+import authserver.maps.AddressResponse
+import authserver.worker.requests.WorkerRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/central")
-class CentralController(val service: CentralService) {
+class CentralController(
+    val service: CentralService,
+    private val centralService: CentralService
+) {
 
     // CENTRAL
     @Operation(
@@ -69,6 +74,11 @@ class CentralController(val service: CentralService) {
         service.resetPassword(CentralRequest)
             .let { ResponseEntity.ok(it) }
 
+    @PostMapping("/assistance")
+    fun addAssistance(@Valid @RequestBody assistance: AssistanceRequest) =
+        service.createAssistance(assistance)
+            .let { ResponseEntity.ok(it) }
+
 
     // Client
 
@@ -103,4 +113,38 @@ class CentralController(val service: CentralService) {
     fun deleteClient(@PathVariable("id") id: Long) =
         if (service.deleteClient(id)) ResponseEntity.ok()
         else ResponseEntity.notFound()
+
+    // Worker
+
+    @GetMapping("/worker/{id}")
+    fun getWorker(@PathVariable("id") id: Long) =
+        service.getWorker(id)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/worker")
+    fun listWorkers() =
+        service.listWorkers()
+            .map { it.toResponse() }
+
+    @PostMapping("/worker")
+    fun createWorker(@Valid @RequestBody req: WorkerRequest) =
+        service.createWorker(req)
+            .toResponse()
+            .let {
+                ResponseEntity.status(CREATED).body(it)
+            }
+
+    @PutMapping("/worker/{id}")
+    fun updateWorker(@PathVariable("id") id: Long, @Valid @RequestBody worker: WorkerRequest) =
+        service.updateWorker(id, worker)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/worker/{id}")
+    fun deleteWorker(@PathVariable("id") id: Long) =
+        if (service.deleteWorker(id)) ResponseEntity.ok()
+        else ResponseEntity.notFound()
+
 }

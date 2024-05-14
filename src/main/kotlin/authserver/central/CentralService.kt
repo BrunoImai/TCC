@@ -1,5 +1,8 @@
 package authserver.central
 
+import authserver.assistance.Assistance
+import authserver.assistance.AssistanceRepository
+import authserver.assistance.request.AssistanceRequest
 import authserver.central.requests.CentralPasswordChange
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
@@ -14,7 +17,12 @@ import authserver.client.Client
 import authserver.client.ClientRepository
 import authserver.client.requests.ClientRequest
 import authserver.exception.InvalidCredentialException
+import authserver.maps.AddressResponse
+import authserver.maps.MapResponse
 import authserver.utils.PasswordUtil
+import authserver.worker.Worker
+import authserver.worker.WorkerRepository
+import authserver.worker.requests.WorkerRequest
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder
 import com.amazonaws.services.simpleemail.model.*
@@ -22,6 +30,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -30,8 +39,12 @@ import java.util.*
 class CentralService(
     val centralRepository: CentralRepository,
     val rolesRepository: RolesRepository,
+    val workerRepository: WorkerRepository,
+    val assistanceRepository: AssistanceRepository,
     val jwt: Jwt,
-    val request: HttpServletRequest, private val clientRepository: ClientRepository,
+    val request: HttpServletRequest,
+    private val clientRepository: ClientRepository,
+
 ) {
 
     fun getCentralIdFromToken(): Long {
@@ -232,6 +245,107 @@ class CentralService(
         val central = getCentralById(centralId) ?: throw IllegalStateException("Central não encontrada")
         return clientRepository.findAllByCentral(central)
     }
+
+    // WORKER
+
+    fun createWorker(req: WorkerRequest): Worker {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+
+        if (workerRepository.findByEmail(req.email) != null) throw IllegalStateException("Email do funcionário já cadastrado!")
+        if (workerRepository .findByCpf(req.cpf) != null) throw IllegalStateException("CPF do funcionário já cadastrado!")
+
+        val currentDate = LocalDate.now()
+        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val worker = Worker(
+            email = req.email,
+            name = req.name,
+            cpf = req.cpf,
+            entryDate = date,
+            central = central,
+            cellphone = req.cellphone,
+            password = PasswordUtil.hashPassword(req.password),
+        )
+
+        return workerRepository.save(worker)
+    }
+
+    fun getWorker(workerId: Long): Worker? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        if (worker.central != central) throw IllegalStateException("Funcionário não encontrado")
+        return worker
+    }
+
+    fun listWorkers(): List<Worker> {
+        val centralId = getCentralIdFromToken()
+        val central = getCentralById(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return workerRepository.findAllByCentral(central)
+    }
+
+    fun deleteWorker(workerId: Long): Boolean {
+        val worker = getWorker(workerId) ?: return false
+
+        log.warn("Worker deleted. id={} name={}", worker.id, worker.name)
+        workerRepository.delete(worker)
+        return true
+    }
+
+    fun updateWorker(id: Long, workerUpdated: WorkerRequest): Worker {
+        val worker = getWorker(id) ?: throw IllegalStateException("Funcionário não encontrado")
+        worker.email = workerUpdated.email
+        worker.name = workerUpdated.name
+        worker.cpf = workerUpdated.cpf
+        worker.cellphone = workerUpdated.cellphone
+        return workerRepository.save(worker)
+    }
+
+    // Assistance
+
+    fun createAssistance(req: AssistanceRequest): Assistance {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val client = clientRepository.findByCpf(req.cpf) ?: throw IllegalStateException("Cliente não encontrado")
+        val workers = mutableListOf<Worker>()
+
+        for (workerId in req.workersIds) {
+            val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+            if (worker.central != central) throw IllegalStateException("Funcionário não encontrado")
+            workers.add(worker)
+        }
+
+        val currentDate = LocalDate.now()
+        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val assistance = Assistance(
+            orderDate = date,
+            description = req.description,
+            name = req.name,
+            adress = req.address,
+            cpf = req.cpf,
+            hoursToFinish = req.hoursToFinish,
+            responsibleCentral = central,
+            client = client,
+            responsibleWorkers = workers.toMutableSet()
+        )
+
+        client.assistances.add(assistance)
+        clientRepository.save(client)
+        central.assistanceQueue.add(assistance)
+        centralRepository.save(central)
+
+        return assistanceRepository.save(assistance)
+    }
+
+    fun listAllAssistancesAdressByCentralId(): List<String> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return assistanceRepository.findAllByResponsibleCentral(central).map { it.adress }
+    }
+
+
 
     companion object {
         val log = LoggerFactory.getLogger(CentralService::class.java)

@@ -17,6 +17,7 @@ group = "age.server"
 version = "0.0.4-SNAPSHOT"
 
 repositories {
+    google()
     mavenCentral()
 }
 
@@ -53,6 +54,10 @@ dependencies {
     implementation ("software.amazon.awssdk:ses:2.25.26")
 
     implementation("de.mkammerer:argon2-jvm:2.11")
+
+    implementation ("com.google.android.gms:play-services-maps:17.0.1")
+    implementation ("com.google.android.gms:play-services-location:17.1.0")
+
 }
 
 tasks.test {
