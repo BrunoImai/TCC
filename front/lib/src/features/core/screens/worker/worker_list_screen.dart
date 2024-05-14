@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tcc_front/src/features/core/screens/worker/update_worker_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -183,7 +184,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => UpdateWorkerScreen(worker: worker));
+                                  Get.to(() => UpdateWorkerScreen(worker: worker));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),

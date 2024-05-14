@@ -32,6 +32,8 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
+  final TextEditingController currentPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -47,10 +49,50 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
   bool _clearFieldEmail = false;
   bool _clearFieldCpf = false;
   bool _clearFieldCellphone = false;
+  bool _clearFieldCurrentPassword = false;
+  bool _showNewPassword = false;
 
   bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
+  }
+
+  final FocusNode _passwordFocusNode = FocusNode();
+  bool _isVisiblePassword = false;
+  bool _isVisibleConfirmPassword = false;
+  bool _isPasswordEightCharacters = false;
+  bool _hasPasswordOneNumber = false;
+  bool _hasPasswordUppercase = false;
+  bool _hasPasswordLowercase = false;
+  bool _hasPasswordSpecialCharacters = false;
+
+  onPasswordChanged(String password) {
+    final numericRegex = RegExp(r'[0-9]');
+    final upperRegex = RegExp(r'[A-Z]');
+    final lowerRegex = RegExp(r'[a-z]');
+    final specialRegex = RegExp(r'[@$!%*?&]');
+
+    setState(() {
+      _isPasswordEightCharacters = false;
+      if (password.length >= 8)
+        _isPasswordEightCharacters = true;
+
+      _hasPasswordOneNumber = false;
+      if (numericRegex.hasMatch(password))
+        _hasPasswordOneNumber = true;
+
+      _hasPasswordUppercase = false;
+      if (upperRegex.hasMatch(password))
+        _hasPasswordUppercase = true;
+
+      _hasPasswordLowercase = false;
+      if (lowerRegex.hasMatch(password))
+        _hasPasswordLowercase = true;
+
+      _hasPasswordSpecialCharacters = false;
+      if (specialRegex.hasMatch(password))
+        _hasPasswordSpecialCharacters = true;
+    });
   }
   
 
@@ -61,11 +103,14 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
       String cellphone = cellphoneController.text;
       String email = emailController.text;
       String cpf = cpfController.text;
+      String currentPassword = currentPasswordController.text;
+      String? newPassword = newPasswordController.text;
 
       if (workerName.isEmpty ||
           cellphone.isEmpty ||
           email.isEmpty ||
-          cpf.isEmpty) {
+          cpf.isEmpty ||
+          currentPassword.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -122,12 +167,18 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
         return;
       }
 
+      if (newPassword == "") {
+        newPassword = null;
+      }
+
 
       UpdateWorkerRequest updateWorkerRequest = UpdateWorkerRequest(
         name: workerName,
         email: email,
         cpf: cpf,
         cellphone: cellphone,
+        oldPassword: currentPassword,
+        newPassword : newPassword
       );
 
       String requestBody = jsonEncode(updateWorkerRequest.toJson());
@@ -276,10 +327,191 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                       ),
                     ),
                     const SizedBox(height: formHeight - 20),
+                    TextFormField(
+                      controller: currentPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: currentPassword,
+                        prefixIcon: const Icon(Icons.fingerprint),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            setState(() {
+                              _showNewPassword = true;
+                              _clearFieldCurrentPassword = true;
+                              currentPasswordController.clear();
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: formHeight - 20),
+                    Visibility(
+                      visible: _showNewPassword,
+                      child: TextFormField(
+                        controller: newPasswordController,
+                        onChanged: (newPasswordController) => onPasswordChanged(newPasswordController),
+                        obscureText: true,
+                        focusNode: _passwordFocusNode,
+                        onTap: () {
+                          setState(() {
+                            _isPasswordEightCharacters = false;
+                            _hasPasswordOneNumber = false;
+                            _hasPasswordLowercase = false;
+                            _hasPasswordUppercase = false;
+                            _hasPasswordSpecialCharacters = false;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: newPassword,
+                          prefixIcon: const Icon(Icons.fingerprint),
+                          suffixIcon: IconButton(
+                            icon: const Icon(LineAwesomeIcons.angle_up),
+                            onPressed: () {
+                              setState(() {
+                                _showNewPassword = false;
+                                newPasswordController.clear();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: formHeight - 29),
+                    Visibility(
+                      visible: _passwordFocusNode.hasFocus,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: formHeight - 20),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
+                                    border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check, color: whiteColor, size: 10,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: formHeight - 25),
+                              Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
+                            ],
+                          ),
+                          const SizedBox(height: formHeight - 29),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
+                                    border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: const Center(
+                                    child: Icon(
+                                      Icons.check,
+                                      color: whiteColor,
+                                      size: 10,
+                                    )
+                                ),
+                              ),
+                              const SizedBox(width: formHeight - 25),
+                              Text(numberCharacter, style: Theme.of(context).textTheme.overline)
+                            ],
+                          ),
+                          const SizedBox(height: formHeight - 29),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
+                                    border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: whiteColor,
+                                    size: 10,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: formHeight - 25),
+                              Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
+                            ],
+                          ),
+                          const SizedBox(height: formHeight - 29),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
+                                    border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: whiteColor,
+                                    size: 10,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: formHeight - 25),
+                              Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
+                            ],
+                          ),
+                          const SizedBox(height: formHeight - 29),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
+                                    border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: whiteColor,
+                                    size: 10,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: formHeight - 25),
+                              Text(specialCharacter, style: Theme.of(context).textTheme.overline)
+                            ],
+                          ),
+                          const SizedBox(height: formHeight - 29)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: formHeight),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          String currentPassword = currentPasswordController.text;
+                          String newPassword = newPasswordController.text;
 
                           if (central.isEmpty ||
                               cellphone.isEmpty ||
@@ -347,7 +579,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                               titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                               content: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text("Tem certeza que deseja excluir esse workere?"),
+                                child: Text("Tem certeza que deseja excluir esse funcionário?"),
                               ),
                               confirm: Expanded(
                                 child: ElevatedButton(

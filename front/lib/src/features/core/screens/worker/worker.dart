@@ -62,9 +62,11 @@ class  UpdateWorkerRequest {
   final String email;
   final String cpf;
   final String cellphone;
+  final String oldPassword;
+  final String? newPassword;
 
   UpdateWorkerRequest({required this.name, required this.email, required this.cpf,
-    required this.cellphone});
+    required this.cellphone, required this.oldPassword, required this.newPassword});
 
   Map<String, dynamic> toJson() {
     return {
@@ -72,6 +74,8 @@ class  UpdateWorkerRequest {
       'email': email,
       'cpf': cpf,
       'cellphone': cellphone,
+      'oldPassword' : oldPassword,
+      'newPassword' : newPassword
     };
   }
 }

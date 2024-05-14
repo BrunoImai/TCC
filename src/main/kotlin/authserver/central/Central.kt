@@ -18,7 +18,7 @@ class Central(
     @Column(nullable = false)
     var creationDate: Date,
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     var password: String,
 
     @Column(nullable = false)
