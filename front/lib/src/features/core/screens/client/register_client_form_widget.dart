@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tcc_front/src/features/core/screens/client/list_client_screen.dart';
+import 'package:tcc_front/src/features/core/screens/client/client_list_screen.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';

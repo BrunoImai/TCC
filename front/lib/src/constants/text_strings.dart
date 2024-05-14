@@ -75,6 +75,8 @@ const String controlCenter = "Central de Controle";
 const String yourComissions = "Suas comissões";
 const String registerClient = "Registrar um novo cliente";
 const String clients = "Clientes cadastrados";
+const String registerWorker = "Registrar um novo funcionário";
+const String workers = "Funcionários cadastrados";
 const String registerService = "Registrar um novo serviço";
 const String serviceHistory = "Histórico de serviços";
 const String dashboards = "Dashboards";
@@ -101,3 +103,14 @@ const String editClient = "Editar cliente";
 
 //Client List Screen
 const String clientListSubTitle = "Encontre seus clientes!";
+
+
+//Worker List Screen
+const String workerListSubTitle = "Encontre seus funcionários!";
+
+//Update worker screen
+const String editWorker = "Editar funcionário";
+
+//Register Worker Screen
+const String registerWorkerTilte = "Mais um funcionário A.G.E";
+const String registerWorkerSubTitle = "Cadastre seu novo funcionário";

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
 
-import '../features/core/screens/client/list_client_screen.dart';
+import '../features/core/screens/client/client_list_screen.dart';
 
 class AlertPopUp extends StatelessWidget {
   const AlertPopUp({super.key, required this.errorDescription});
