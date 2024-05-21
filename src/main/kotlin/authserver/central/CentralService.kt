@@ -23,6 +23,7 @@ import authserver.utils.PasswordUtil
 import authserver.worker.Worker
 import authserver.worker.WorkerRepository
 import authserver.worker.requests.WorkerRequest
+import authserver.worker.requests.WorkerUpdateRequest
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder
 import com.amazonaws.services.simpleemail.model.*
@@ -293,13 +294,25 @@ class CentralService(
         return true
     }
 
-    fun updateWorker(id: Long, workerUpdated: WorkerRequest): Worker {
+    fun updateWorker(id: Long, workerUpdated: WorkerUpdateRequest): Worker {
         val worker = getWorker(id) ?: throw IllegalStateException("Funcionário não encontrado")
-        worker.email = workerUpdated.email
-        worker.name = workerUpdated.name
-        worker.cpf = workerUpdated.cpf
-        worker.cellphone = workerUpdated.cellphone
-        return workerRepository.save(worker)
+
+        if (workerUpdated.newPassword == null) {
+            worker.email = workerUpdated.email!!
+            worker.name = workerUpdated.name!!
+            worker.cpf = workerUpdated.cpf!!
+            worker.cellphone = workerUpdated.cellphone!!
+            return workerRepository.save(worker)
+        } else if (PasswordUtil.verifyPassword(workerUpdated.oldPassword!!, worker.password)) {
+            worker.email = workerUpdated.email!!
+            worker.name = workerUpdated.name!!
+            worker.cpf = workerUpdated.cpf!!
+            worker.cellphone = workerUpdated.cellphone!!
+            worker.password = PasswordUtil.hashPassword(workerUpdated.newPassword)
+            return workerRepository.save(worker)
+        } else {
+            throw IllegalStateException("As senhas não conferem!")
+        }
     }
 
     // Assistance

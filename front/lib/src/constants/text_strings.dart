@@ -110,6 +110,7 @@ const String workerListSubTitle = "Encontre seus funcionários!";
 
 //Update worker screen
 const String editWorker = "Editar funcionário";
+const String joinedWorker = "Funcionário desde ";
 
 //Register Worker Screen
 const String registerWorkerTilte = "Mais um funcionário A.G.E";

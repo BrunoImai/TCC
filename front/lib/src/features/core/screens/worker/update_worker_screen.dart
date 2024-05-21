@@ -183,6 +183,9 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
 
       String requestBody = jsonEncode(updateWorkerRequest.toJson());
 
+      print(requestBody);
+      print(widget.worker.id);
+
       try {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/worker/${widget.worker.id}'),
@@ -563,7 +566,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                       children: [
                         Text.rich(
                           TextSpan(
-                            text: joined,
+                            text: joinedWorker,
                             style: const TextStyle(fontSize: 12),
                             children: [
                               TextSpan(

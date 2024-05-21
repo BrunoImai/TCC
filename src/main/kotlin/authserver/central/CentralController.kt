@@ -9,6 +9,7 @@ import authserver.central.requests.CentralUpdateRequest
 import authserver.maps.AddressRequest
 import authserver.maps.AddressResponse
 import authserver.worker.requests.WorkerRequest
+import authserver.worker.requests.WorkerUpdateRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
@@ -137,7 +138,7 @@ class CentralController(
             }
 
     @PutMapping("/worker/{id}")
-    fun updateWorker(@PathVariable("id") id: Long, @Valid @RequestBody worker: WorkerRequest) =
+    fun updateWorker(@PathVariable("id") id: Long, @Valid @RequestBody worker: WorkerUpdateRequest) =
         service.updateWorker(id, worker)
             .toResponse()
             .let { ResponseEntity.ok(it) }
