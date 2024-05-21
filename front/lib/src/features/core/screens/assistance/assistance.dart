@@ -1,104 +1,109 @@
 
 class AssistanceRequest {
+  final String description;
   final String name;
-  final String email;
+  final String address;
   final String cpf;
-  final String cellphone;
-  final String password;
+  final String hoursToFinish;
+  final String workersIds;
 
 
   AssistanceRequest({
+    required this.description,
     required this.name,
-    required this.email,
+    required this.address,
     required this.cpf,
-    required this.cellphone,
-    required this.password
+    required this.hoursToFinish,
+    required this.workersIds
   });
 
   Map<String, dynamic> toJson() {
     return {
+      'description': description,
       'name': name,
-      'cellphone': cellphone,
-      'email': email,
+      'address': address,
       'cpf': cpf,
-      'password': password
+      'hoursToFinish': hoursToFinish,
+      'workersIds': workersIds
     };
   }
 }
 
-class  WorkerResponse{
-  final num id;
+class  AssistanceResponse{
+  final String description;
   final String name;
-  final String email;
-  final String entryDate;
+  final String address;
   final String cpf;
-  final String cellphone;
+  final String hoursToFinish;
+  final String workersIds;
 
-  WorkerResponse(this.id, this.name, this.email, this.entryDate, this.cpf, this.cellphone);
 
+  AssistanceResponse(this.description, this.name, this.address, this.cpf,this.hoursToFinish, this.workersIds);
 
-  factory WorkerResponse.fromJson(Map<String, dynamic> json) {
-    return WorkerResponse(
-      json['id'] as num,
+  factory AssistanceResponse.fromJson(Map<String, dynamic> json) {
+    return AssistanceResponse(
+      json['description'] as String,
       json['name'] as String,
-      json['email'] as String,
-      json['entryDate'] as String,
+      json['address'] as String,
       json['cpf'] as String,
-      json['cellphone'] as String
+      json['hoursToFinish'] as String,
+      json['workersIds'] as String
     );
   }
 }
 
-class WorkerInformations {
+class AssistanceInformations {
   String id;
-  WorkersList worker;
+  AssistancesList assistance;
 
-  WorkerInformations(this.id, this.worker);
+  AssistanceInformations(this.id, this.assistance);
 
 }
 
 class  UpdateAssistanceRequest {
+  final String description;
   final String name;
-  final String email;
+  final String address;
   final String cpf;
-  final String cellphone;
-  final String oldPassword;
-  final String? newPassword;
+  final String hoursToFinish;
+  final String workersIds;
 
-  UpdateAssistanceRequest({required this.name, required this.email, required this.cpf,
-    required this.cellphone, required this.oldPassword, required this.newPassword});
+  UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.cpf,
+    required this.hoursToFinish, required this.workersIds});
 
   Map<String, dynamic> toJson() {
     return {
+      'description': description,
       'name': name,
-      'email': email,
+      'address': address,
       'cpf': cpf,
-      'cellphone': cellphone,
-      'oldPassword' : oldPassword,
-      'newPassword' : newPassword
+      'hoursToFinish': hoursToFinish,
+      'workersIds': workersIds
     };
   }
 }
 
-class WorkersList {
+class AssistancesList {
   final num id;
+  final String description;
   final String name;
-  final String email;
-  final String entryDate;
+  final String address;
   final String cpf;
-  final String cellphone;
+  final String hoursToFinish;
+  final String workersIds;
 
-  WorkersList({required this.id, required this.name, required this.email, required this.entryDate, required this.cpf,
-    required this.cellphone});
+  AssistancesList({required this.id, required this.description, required this.name, required this.address, required this.cpf,
+    required this.hoursToFinish, required this.workersIds});
 
   Map<String, dynamic> toJson() {
     return {
       'id' : id,
+      'description': description,
       'name': name,
-      'email': email,
-      'entryDate' : entryDate,
+      'address': address,
       'cpf': cpf,
-      'cellphone': cellphone,
+      'hoursToFinish': hoursToFinish,
+      'workersIds': workersIds
     };
   }
 }

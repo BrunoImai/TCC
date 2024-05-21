@@ -44,6 +44,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
+  String error = "";
 
   @override
   void initState() {
@@ -101,6 +102,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
       String city = cityController.text;
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
+
 
       if (clientName.isEmpty ||
           cellphone.isEmpty ||
@@ -220,6 +222,16 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
           print('Registration successful!');
         } else {
           print('Registration failed. Status code: ${response.statusCode}');
+
+          error = response.body;
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertPopUp(
+                  errorDescription: error);
+            },
+          );
         }
       } catch (e) {
         print('Error occurred: $e');
@@ -491,9 +503,9 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                       child: ElevatedButton(
                         onPressed: () {
 
-                          if (central.isEmpty ||
-                              cellphone.isEmpty ||
+                          if (cellphone.isEmpty ||
                               email.isEmpty ||
+                              cpf.isEmpty ||
                               currentPassword.isEmpty) {
                             showDialog(
                               context: context,
