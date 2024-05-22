@@ -19,7 +19,7 @@ class Worker(
     @Email
     var email: String,
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     var password: String,
 
     @Column

@@ -11,6 +11,7 @@ import '../../client/client_list_screen.dart';
 import '../../client/register_client_screen.dart';
 import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
+import '../../assistance/register_assistance_screen.dart';
 
 class CompanyCentralControl extends StatelessWidget {
   const CompanyCentralControl({
@@ -150,7 +151,7 @@ class CompanyCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(() => const RegisterAssistanceScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

@@ -1,5 +1,5 @@
 
-class WorkerRequest {
+class AssistanceRequest {
   final String name;
   final String email;
   final String cpf;
@@ -7,7 +7,7 @@ class WorkerRequest {
   final String password;
 
 
-  WorkerRequest({
+  AssistanceRequest({
     required this.name,
     required this.email,
     required this.cpf,
@@ -57,7 +57,7 @@ class WorkerInformations {
 
 }
 
-class  UpdateWorkerRequest {
+class  UpdateAssistanceRequest {
   final String name;
   final String email;
   final String cpf;
@@ -65,7 +65,7 @@ class  UpdateWorkerRequest {
   final String oldPassword;
   final String? newPassword;
 
-  UpdateWorkerRequest({required this.name, required this.email, required this.cpf,
+  UpdateAssistanceRequest({required this.name, required this.email, required this.cpf,
     required this.cellphone, required this.oldPassword, required this.newPassword});
 
   Map<String, dynamic> toJson() {

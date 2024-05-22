@@ -12,20 +12,20 @@ import '../../../../constants/sizes.dart';
 import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import 'worker.dart';
+import 'assistance.dart';
 
-class RegisterWorkerFormWidget extends StatefulWidget {
-  const RegisterWorkerFormWidget({
+class RegisterAssistanceFormWidget extends StatefulWidget {
+  const RegisterAssistanceFormWidget({
     super.key,
   });
 
   @override
-  _RegisterWorkerFormWidget createState() => _RegisterWorkerFormWidget();
+  _RegisterAssistanceFormWidget createState() => _RegisterAssistanceFormWidget();
 
 }
 
-class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
-  final TextEditingController workerController = TextEditingController();
+class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> {
+  final TextEditingController assistanceController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
@@ -78,13 +78,13 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
   @override
   Widget build(BuildContext context) {
     Future<void> registerWorker(VoidCallback onSuccess) async {
-      String worker = workerController.text;
+      String assistance = assistanceController.text;
       String cellphone = cellphoneController.text;
       String email = emailController.text;
       String cpf = cpfController.text;
       String password = passwordController.text;
 
-      if (worker.isEmpty ||
+      if (assistance.isEmpty ||
           cellphone.isEmpty ||
           email.isEmpty ||
           cpf.isEmpty ||
@@ -99,7 +99,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
         return;
       }
 
-      if (worker.length == 1) {
+      if (assistance.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -147,20 +147,20 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
 
 
 
-      WorkerRequest workerRequest = WorkerRequest(
-          name: worker,
+      AssistanceRequest assistanceRequest = AssistanceRequest(
+          name: assistance,
           email: email,
           cpf: cpf,
           cellphone: cellphone,
           password: password,
       );
 
-      String requestBody = jsonEncode(workerRequest.toJson());
+      String requestBody = jsonEncode(assistanceRequest.toJson());
       print(requestBody);
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/worker'),
+          Uri.parse('http://localhost:8080/api/central/assistance'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -194,7 +194,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: workerController,
+              controller: assistanceController,
               decoration: const InputDecoration(
                   label: Text(fullName),
                   prefixIcon: Icon(Icons.person_outline_rounded)
