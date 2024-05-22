@@ -7,7 +7,7 @@ import authserver.central.requests.CentralPasswordChange
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
 import authserver.security.Jwt
-import authserver.security.CentralToken
+import authserver.security.UserToken
 
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
@@ -17,8 +17,6 @@ import authserver.client.Client
 import authserver.client.ClientRepository
 import authserver.client.requests.ClientRequest
 import authserver.exception.InvalidCredentialException
-import authserver.maps.AddressResponse
-import authserver.maps.MapResponse
 import authserver.utils.PasswordUtil
 import authserver.worker.Worker
 import authserver.worker.WorkerRepository
@@ -30,7 +28,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -51,7 +48,7 @@ class CentralService(
         val authentication = jwt.extract(request)
 
         return authentication?.let {
-            val central = it.principal as CentralToken
+            val central = it.principal as UserToken
             central.id
         } ?: throw IllegalStateException("Central não está autenticada!")
     }
@@ -82,7 +79,7 @@ class CentralService(
         val newCentral = centralRepository.save(central)
 
         return CentralLoginResponse(
-            token = jwt.createToken(central),
+            token = jwt.createCentralToken(central),
             newCentral.toResponse()
         )
     }
@@ -98,7 +95,7 @@ class CentralService(
         if (!PasswordUtil.verifyPassword(credentials.password!!, central.password)) throw InvalidCredentialException("Credenciais inválidas!")
         log.info("Central logged in. id={} name={}", central.id, central.name)
         return CentralLoginResponse(
-            token = jwt.createToken(central),
+            token = jwt.createCentralToken(central),
             central.toResponse()
         )
     }
@@ -330,11 +327,6 @@ class CentralService(
             client = client,
             responsibleWorkers = workers.toMutableSet()
         )
-
-        client.assistances.add(assistance)
-        clientRepository.save(client)
-        central.assistanceQueue.add(assistance)
-        centralRepository.save(central)
 
         return assistanceRepository.save(assistance)
     }

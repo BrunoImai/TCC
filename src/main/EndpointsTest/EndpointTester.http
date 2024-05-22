@@ -126,9 +126,24 @@ Content-Type: application/json
 {
   "description": "Concerto maquina de lavar",
   "name": "Concerto",
-  "address": "marechal cardoso junior 563",
+  "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420",
   "cpf": "12345678901",
   "hoursToFinish": 2,
   "workersIds": []
 }
+
+### Cadastra um novo serviço
+POST localhost:8080/api/central/assistance
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "description": "Concerto churrasqueira",
+  "name": "Concerto",
+  "address": "Av. Com. Franco, 4680 - Guabirotuba, Curitiba - PR, 81530-440",
+  "cpf": "12345678901",
+  "hoursToFinish": 2,
+  "workersIds": []
+}
+
 

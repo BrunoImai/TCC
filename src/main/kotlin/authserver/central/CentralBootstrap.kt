@@ -18,19 +18,23 @@ class CentralBootstrap(
 ) : ApplicationListener<ContextRefreshedEvent> {
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         val adminRole = Role(name = "ADMIN")
+        val centralRole = Role(name = "CENTRAL")
+
+        // Ensure roles are saved before they are used in any relationships
         if (rolesRepository.count() == 0L) {
             rolesRepository.save(adminRole)
-            rolesRepository.save(Role(name = "CENTRAL"))
+            rolesRepository.save(centralRole)
         }
+
         if (userRepository.count() == 0L) {
             val admin = Central(
                 email = "admin@authserver.com",
                 password = "admin",
                 name = "Auth Server Administrator",
                 creationDate = Date.from(LocalDate.now()
-                                   .atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant())
             )
-            admin.roles.add(adminRole)
+            admin.roles.add(adminRole)  // adminRole is now a managed entity
             userRepository.save(admin)
         }
     }

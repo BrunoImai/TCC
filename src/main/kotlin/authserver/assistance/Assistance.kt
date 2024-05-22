@@ -29,7 +29,7 @@ class Assistance(
     @Column(nullable = false)
     var assistanceStatus: AssistanceStatus = AssistanceStatus.EM_ANDAMENTO,
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     var cpf: String = "",
 
     @Column

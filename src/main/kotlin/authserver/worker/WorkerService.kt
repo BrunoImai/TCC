@@ -4,11 +4,16 @@ import authserver.assistance.Assistance
 import authserver.assistance.AssistanceRepository
 import authserver.assistance.response.AssistanceResponse
 import authserver.central.CentralRepository
-import authserver.central.CentralService
+import authserver.central.CentralService.Companion.log
+import authserver.central.responses.CentralLoginResponse
+import authserver.exception.InvalidCredentialException
 import authserver.maps.AddressResponse
 import authserver.maps.MapResponse
-import authserver.security.CentralToken
+import authserver.security.UserToken
 import authserver.security.Jwt
+import authserver.utils.PasswordUtil
+import authserver.worker.response.WorkerLoginResponse
+import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -28,7 +33,7 @@ class WorkerService (
         val authentication = jwt.extract(request)
 
         return authentication?.let {
-            val worker = it.principal as CentralToken
+            val worker = it.principal as UserToken
             worker.id
         } ?: throw IllegalStateException("Funcionario não está autenticada!")
     }
@@ -57,6 +62,16 @@ class WorkerService (
             closestAssistance.cpf,
             closestAssistance.hoursToFinish,
             closestAssistance.responsibleWorkers.map{ it.id!! }
+        )
+    }
+
+    fun login(credentials: LoginRequest): WorkerLoginResponse? {
+        val worker = workerRepository.findByEmail(credentials.email!!) ?: throw InvalidCredentialException("Credenciais inválidas!")
+        if (!PasswordUtil.verifyPassword(credentials.password!!, worker.password)) throw InvalidCredentialException("Credenciais inválidas!")
+        log.info("Central logged in. id={} name={}", worker.id, worker.name)
+        return WorkerLoginResponse(
+            token = jwt.createWorkerToken(worker),
+            worker.toResponse()
         )
     }
 
