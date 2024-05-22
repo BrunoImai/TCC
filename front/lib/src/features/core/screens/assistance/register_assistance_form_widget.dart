@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
-
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -21,85 +19,111 @@ class RegisterAssistanceFormWidget extends StatefulWidget {
 
   @override
   _RegisterAssistanceFormWidget createState() => _RegisterAssistanceFormWidget();
-
 }
 
 class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> {
-  final TextEditingController assistanceController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController cpfController = TextEditingController();
-  final TextEditingController cellphoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController assistanceNameController = TextEditingController();
+  final TextEditingController cepController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController addressComplementController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController neighborhoodController = TextEditingController();
+  final TextEditingController clientCpfController = TextEditingController();
+  final TextEditingController hoursToFinishController = TextEditingController();
+  final TextEditingController workersIdsController = TextEditingController();
 
-  bool isValidEmail(String email) {
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(email);
+  bool _isAddressFieldEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    clientCpfController.addListener(_onCpfChanged);
   }
 
-  final FocusNode _passwordFocusNode = FocusNode();
-  bool _isVisiblePassword = false;
-  bool _isVisibleConfirmPassword = false;
-  bool _isPasswordEightCharacters = false;
-  bool _hasPasswordOneNumber = false;
-  bool _hasPasswordUppercase = false;
-  bool _hasPasswordLowercase = false;
-  bool _hasPasswordSpecialCharacters = false;
+  void _onCpfChanged() {
+    String cpf = clientCpfController.text;
+    if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
+      _fetchClientDataByCpf(cpf);
+    }
+  }
 
-  onPasswordChanged(String password) {
-    final numericRegex = RegExp(r'[0-9]');
-    final upperRegex = RegExp(r'[A-Z]');
-    final lowerRegex = RegExp(r'[a-z]');
-    final specialRegex = RegExp(r'[@$!%*?&]');
+  Future<void> _fetchClientDataByCpf(String cpf) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/client/byCpf/$cpf'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
+        },
+      );
 
-    setState(() {
-      _isPasswordEightCharacters = false;
-      if (password.length >= 8)
-        _isPasswordEightCharacters = true;
+      if (response.statusCode == 200) {
+        final clientData = jsonDecode(response.body);
 
-      _hasPasswordOneNumber = false;
-      if (numericRegex.hasMatch(password))
-        _hasPasswordOneNumber = true;
+        setState(() {
+          cepController.text = clientData['address'].split(', ')[3];
+          addressController.text = clientData['address'].split(', ')[0];
+          numberController.text = clientData['address'].split(', ')[1].split(' - ')[0];
+          neighborhoodController.text = clientData['address'].split(', ')[1].split(' - ')[1];
+          cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
+          stateController.text = clientData['address'].split(', ')[2].split(' - ')[1];
+          addressComplementController.text = clientData['complement'];
 
-      _hasPasswordUppercase = false;
-      if (upperRegex.hasMatch(password))
-        _hasPasswordUppercase = true;
-
-      _hasPasswordLowercase = false;
-      if (lowerRegex.hasMatch(password))
-        _hasPasswordLowercase = true;
-
-      _hasPasswordSpecialCharacters = false;
-      if (specialRegex.hasMatch(password))
-        _hasPasswordSpecialCharacters = true;
-    });
+          _isAddressFieldEnabled = false;
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(errorDescription: 'Cliente não encontrado.');
+          },
+        );
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Future<void> registerWorker(VoidCallback onSuccess) async {
-      String assistance = assistanceController.text;
-      String cellphone = cellphoneController.text;
-      String email = emailController.text;
-      String cpf = cpfController.text;
-      String password = passwordController.text;
+      String description = descriptionController.text;
+      String assistanceName = assistanceNameController.text;
+      String cep = cepController.text;
+      String address = addressController.text;
+      String number = numberController.text;
+      String addressComplement = addressComplementController.text;
+      String city = cityController.text;
+      String state = stateController.text.toUpperCase();
+      String neighborhood = neighborhoodController.text;
+      String clientCpf = clientCpfController.text;
+      String hoursToFinish = hoursToFinishController.text;
+      String workersIds = workersIdsController.text;
 
-      if (assistance.isEmpty ||
-          cellphone.isEmpty ||
-          email.isEmpty ||
-          cpf.isEmpty ||
-          password.isEmpty) {
+      if (description.isEmpty ||
+          assistanceName.isEmpty ||
+          clientCpf.isEmpty ||
+          cep.isEmpty ||
+          address.isEmpty ||
+          number.isEmpty ||
+          city.isEmpty ||
+          state.isEmpty ||
+          neighborhood.isEmpty ||
+          hoursToFinish.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Todos os campos são obrigatórios.');
+                errorDescription: 'Os campos nome, descrição, clientCpf do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
           },
         );
         return;
       }
 
-      if (assistance.length == 1) {
+      if (assistanceName.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -110,49 +134,50 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return;
       }
 
-      if (!isValidEmail(email)) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O email inserido é inválido.');
-          },
-        );
-        return;
-      }
-
-      if (cpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
+      if (clientCpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número do CPF deve conter exatamente 11 dígitos.');
+                'O número do clientCpf deve conter exatamente 11 dígitos.');
           },
         );
         return;
       }
 
-      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
+      if (cepController.text.replaceAll(RegExp(r'\D'), '').length != 8) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription:
-                'O número de celular deve conter 11 dígitos, incluindo o DDD.');
+                errorDescription: 'O CEP deve conter 8 dígitos');
           },
         );
         return;
       }
 
+      if (state.length != 2 || !RegExp(r'^[a-zA-Z]{2}$').hasMatch(state)) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+              errorDescription: 'Insira a sigla do seu estado, com duas letras.',
+            );
+          },
+        );
+        return;
+      }
 
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
 
       AssistanceRequest assistanceRequest = AssistanceRequest(
-          name: assistance,
-          email: email,
-          cpf: cpf,
-          cellphone: cellphone,
-          password: password,
+          description: description,
+          name: assistanceName,
+          address: fullAddress,
+          cpf: clientCpf,
+          hoursToFinish: hoursToFinish,
+          workersIds: workersIds
       );
 
       String requestBody = jsonEncode(assistanceRequest.toJson());
@@ -171,7 +196,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         if (response.statusCode == 200 || response.statusCode == 201) {
           onSuccess.call();
           print('Registration successful!');
-        }  else {
+        } else {
           // Registration failed
           print('Registration failed. Status code: ${response.statusCode}');
 
@@ -194,219 +219,118 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: assistanceController,
+              controller: assistanceNameController,
               decoration: const InputDecoration(
-                  label: Text(fullName),
-                  prefixIcon: Icon(Icons.person_outline_rounded)
+                  label: Text(assistanceName),
+                  prefixIcon: Icon(Icons.work)
               ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              controller: emailController,
+              controller: descriptionController,
               decoration: const InputDecoration(
-                  label: Text(email),
+                  label: Text(description),
                   prefixIcon: Icon(Icons.email_outlined)
               ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              controller: cpfController,
+              controller: clientCpfController,
               inputFormatters: [
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cpf),
+                  label: Text(clientCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              controller: cellphoneController,
+              controller: cepController,
               inputFormatters: [
-                MaskTextInputFormatter(mask: '(##) #####-####',),
+                MaskTextInputFormatter(mask: '#####-###',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cellphone),
-                  prefixIcon: Icon(Icons.phone_android)
+                  label: Text(cep),
+                  prefixIcon: Icon(Icons.local_post_office)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: addressController,
+              decoration: const InputDecoration(
+                  label: Text(address),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: numberController,
+              decoration: const InputDecoration(
+                  label: Text(number),
+                  prefixIcon: Icon(Icons.numbers)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: addressComplementController,
+              decoration: const InputDecoration(
+                  label: Text(addressComplement),
+                  prefixIcon: Icon(Icons.home_rounded)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: neighborhoodController,
+              decoration: const InputDecoration(
+                  label: Text(neighborhood),
+                  prefixIcon: Icon(Icons.holiday_village_rounded)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: cityController,
+              decoration: const InputDecoration(
+                  label: Text(city),
+                  prefixIcon: Icon(Icons.location_on)),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: stateController,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                LengthLimitingTextInputFormatter(2),
+              ],
+              decoration: const InputDecoration(
+                  label: Text(state),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
+              enabled: _isAddressFieldEnabled,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: hoursToFinishController,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                LengthLimitingTextInputFormatter(2),
+              ],
+              decoration: const InputDecoration(
+                  label: Text(hoursToFinish),
+                  prefixIcon: Icon(Icons.access_time)
               ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
-              controller: passwordController,
-              onChanged: (passwordController) => onPasswordChanged(passwordController),
-              obscureText: !_isVisiblePassword,
-              focusNode: _passwordFocusNode,
-              onTap: () {
-                setState(() {
-                  _isPasswordEightCharacters = false;
-                  _hasPasswordOneNumber = false;
-                  _hasPasswordLowercase = false;
-                  _hasPasswordUppercase = false;
-                  _hasPasswordSpecialCharacters = false;
-                });
-              },
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.fingerprint),
-                labelText: password,
-                hintText: password,
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isVisiblePassword = !_isVisiblePassword;
-                    });
-                  },
-                  icon: _isVisiblePassword ? const Icon(Icons.visibility) :
-                  const Icon(Icons.visibility_off),
-                ),
-              ),
-            ),
-            const SizedBox(height: formHeight - 29),
-            Visibility(
-              visible: _passwordFocusNode.hasFocus,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: formHeight - 20),
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                            color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
-                            border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.check, color: whiteColor, size: 10,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: formHeight - 25),
-                      Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
-                    ],
-                  ),
-                  const SizedBox(height: formHeight - 29),
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                            color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
-                            border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: const Center(
-                            child: Icon(
-                              Icons.check,
-                              color: whiteColor,
-                              size: 10,
-                            )
-                        ),
-                      ),
-                      const SizedBox(width: formHeight - 25),
-                      Text(numberCharacter, style: Theme.of(context).textTheme.overline)
-                    ],
-                  ),
-                  const SizedBox(height: formHeight - 29),
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                            color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
-                            border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.check,
-                            color: whiteColor,
-                            size: 10,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: formHeight - 25),
-                      Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
-                    ],
-                  ),
-                  const SizedBox(height: formHeight - 29),
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                            color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
-                            border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.check,
-                            color: whiteColor,
-                            size: 10,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: formHeight - 25),
-                      Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
-                    ],
-                  ),
-                  const SizedBox(height: formHeight - 29),
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                            color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
-                            border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.check,
-                            color: whiteColor,
-                            size: 10,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: formHeight - 25),
-                      Text(specialCharacter, style: Theme.of(context).textTheme.overline)
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: formHeight - 20),
-            TextFormField(
-              controller: confirmPasswordController,
-              onChanged: (confirmPasswordController) => onPasswordChanged(confirmPasswordController),
-              obscureText: !_isVisibleConfirmPassword,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.fingerprint),
-                labelText: confirmPassword,
-                hintText: confirmPassword,
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isVisibleConfirmPassword = !_isVisibleConfirmPassword;
-                    });
-                  },
-                  icon: _isVisibleConfirmPassword ? const Icon(Icons.visibility) :
-                  const Icon(Icons.visibility_off),
-                ),
+              controller: workersIdsController,
+              decoration: const InputDecoration(
+                  label: Text(workersIds),
+                  prefixIcon: Icon(Icons.group)
               ),
             ),
             const SizedBox(height: formHeight - 10),
@@ -414,42 +338,15 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  String password = passwordController.text;
-                  String confirmPassword = confirmPasswordController.text;
-
-                  if (central.isEmpty ||
-                      cellphone.isEmpty ||
-                      email.isEmpty ||
-                      password.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertPopUp(
-                            errorDescription: 'Todos os campos são obrigatórios.');
-                      },
+                  registerWorker(() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CompanyHomeScreen()));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Cadastro Realizado')),
                     );
-                    return;
-                  }
-
-                  if (password != confirmPassword) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertPopUp(
-                            errorDescription: 'As senhas não coincidem ');
-                      },
-                    );
-                  } else {
-                    registerWorker(() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CompanyHomeScreen()));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Cadastro Realizado')),
-                      );
-                    });
-                  }
+                  });
                 },
                 child: Text(signUp.toUpperCase()),
               ),

@@ -90,6 +90,14 @@ class CentralController(
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
 
+    @GetMapping("/client/byCpf/{cpf}")
+    fun getClientByCpf(@PathVariable("cpf") cpf: String) =
+        service.getClientByCpf(cpf)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+
     @GetMapping("/client")
     fun listClients() =
         service.listClients()

@@ -115,3 +115,13 @@ const String joinedWorker = "Funcionário desde ";
 //Register Worker Screen
 const String registerWorkerTilte = "Mais um funcionário A.G.E";
 const String registerWorkerSubTitle = "Cadastre seu novo funcionário";
+
+//Register Assistance Screen
+const String registerAssistanceTilte = "Mais um serviço A.G.E";
+const String registerAssistanceSubTitle = "Cadastre seu novo serviço";
+const String assistanceName = "Nome do serviço";
+const String description = "Descrição";
+const String clientCpf = "CPF do cliente";
+const String hoursToFinish = "Tempo para finalização do serviço";
+const String workersIds = "Funcionário alocado para o serviço";
+

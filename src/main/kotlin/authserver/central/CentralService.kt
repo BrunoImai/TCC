@@ -195,6 +195,13 @@ class CentralService(
         return client
     }
 
+    fun getClientByCpf(cpf: String): Client? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return clientRepository.findByCpf(cpf)?.takeIf { it.central == central }
+    }
+
+
     fun createClient(req: ClientRequest): Client {
         val currentDate = LocalDate.now()
 
