@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -10,6 +13,7 @@ import '../../../../constants/sizes.dart';
 import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../worker/worker.dart';
 import 'assistance.dart';
 
 class RegisterAssistanceFormWidget extends StatefulWidget {
@@ -32,21 +36,73 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
-  final TextEditingController hoursToFinishController = TextEditingController();
-  final TextEditingController workersIdsController = TextEditingController();
+
 
   bool _isAddressFieldEnabled = true;
+  bool _isWorkerExpanded = false;
+  bool _isPeriodExpanded = false;
+  List<WorkersList> workers = [];
+  List<WorkersList> selectedWorkers = [];
+  String? selectedPeriod;
 
   @override
   void initState() {
     super.initState();
     clientCpfController.addListener(_onCpfChanged);
+    fetchWorkers();
   }
 
   void _onCpfChanged() {
     String cpf = clientCpfController.text;
     if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
       _fetchClientDataByCpf(cpf);
+    }
+  }
+
+  Future<void> fetchWorkers() async {
+    try {
+      final workersList = await getAllWorkers();
+      setState(() {
+        workers = workersList;
+      });
+    } catch (e) {
+      print('Error fetching workers: $e');
+    }
+  }
+
+  Future<List<WorkersList>> getAllWorkers() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/worker'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<WorkersList> workersList = jsonData.map((item) {
+          return WorkersList(
+            id: item['id'],
+            name: item['name'],
+            email: item['email'],
+            entryDate: item['entryDate'],
+            cpf: item['cpf'],
+            cellphone: item['cellphone'],
+          );
+        }).toList();
+
+        return workersList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load worker list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de workers');
     }
   }
 
@@ -87,6 +143,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     Future<void> registerWorker(VoidCallback onSuccess) async {
@@ -100,8 +157,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
       String clientCpf = clientCpfController.text;
-      String hoursToFinish = hoursToFinishController.text;
-      String workersIds = workersIdsController.text;
+      List<String> workersIds = selectedWorkers.map((worker) => worker.id.toString()).toList();
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
@@ -111,13 +167,12 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           number.isEmpty ||
           city.isEmpty ||
           state.isEmpty ||
-          neighborhood.isEmpty ||
-          hoursToFinish.isEmpty) {
+          neighborhood.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome, descrição, clientCpf do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
           },
         );
         return;
@@ -140,7 +195,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número do clientCpf deve conter exatamente 11 dígitos.');
+                'O número de CPF deve conter exatamente 11 dígitos.');
           },
         );
         return;
@@ -176,8 +231,8 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           name: assistanceName,
           address: fullAddress,
           cpf: clientCpf,
-          hoursToFinish: hoursToFinish,
-          workersIds: workersIds
+          period: selectedPeriod,
+          workersIds: selectedWorkers
       );
 
       String requestBody = jsonEncode(assistanceRequest.toJson());
@@ -314,25 +369,136 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               enabled: _isAddressFieldEnabled,
             ),
             const SizedBox(height: formHeight - 20),
-            TextFormField(
-              controller: hoursToFinishController,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                LengthLimitingTextInputFormatter(2),
-              ],
-              decoration: const InputDecoration(
-                  label: Text(hoursToFinish),
-                  prefixIcon: Icon(Icons.access_time)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isPeriodExpanded = !_isPeriodExpanded;
+                });
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Período',
+                  prefixIcon: Icon(Icons.access_time),
+                  suffixIcon: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Icon(
+                      _isPeriodExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPeriodExpanded
+                    ),
+                  ),
+                ),
+                child: Text(selectedPeriod ?? ''), // Show selected period
               ),
             ),
+
+            // Show the menu options if expanded
+            if (_isPeriodExpanded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Text('Matutino', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPeriod = 'Matutino';
+                        _isPeriodExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Vespertino', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPeriod = 'Vespertino';
+                        _isPeriodExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Noturno', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPeriod = 'Noturno';
+                        _isPeriodExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                ],
+              ),
+
             const SizedBox(height: formHeight - 20),
-            TextFormField(
-              controller: workersIdsController,
-              decoration: const InputDecoration(
-                  label: Text(workersIds),
-                  prefixIcon: Icon(Icons.group)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isWorkerExpanded = !_isWorkerExpanded;
+                });
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  label: const Text('Funcionários'),
+                  prefixIcon: const Icon(Icons.person_search),
+                  suffixIcon: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: IconButton(
+                      icon: Icon(
+                        _isWorkerExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isWorkerExpanded = !_isWorkerExpanded;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                child: Text(
+                  selectedWorkers.isEmpty
+                      ? ''
+                      : selectedWorkers.map((worker) => worker.name).join(', '),
+                ),
               ),
             ),
+            const SizedBox(height: 2),
+            if (_isWorkerExpanded)
+              Column(
+                children: workers.map((worker) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (selectedWorkers.contains(worker)) {
+                          selectedWorkers.remove(worker);
+                        } else {
+                          selectedWorkers.add(worker);
+                        }
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                              color: selectedWorkers.contains(worker) ? Colors.green : Colors.transparent,
+                              border: Border.all(color: selectedWorkers.contains(worker) ? Colors.transparent : primaryColor),
+                              borderRadius: BorderRadius.circular(50)
+                          ),
+                          child: selectedWorkers.contains(worker)
+                              ? const Center(
+                              child: Icon(
+                                Icons.check,
+                                color: whiteColor,
+                                size: 10,
+                              )
+                          )
+                              : null,
+                        ),
+                        const SizedBox(width: formHeight - 25),
+                        Text(worker.name, style: Theme.of(context).textTheme.bodyText2),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             const SizedBox(height: formHeight - 10),
             SizedBox(
               width: double.infinity,
@@ -344,7 +510,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                         MaterialPageRoute(
                             builder: (context) => const CompanyHomeScreen()));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cadastro Realizado')),
+                      const SnackBar(content: Text('Serviço adicionado!')),
                     );
                   });
                 },
@@ -357,3 +523,5 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
     );
   }
 }
+
+

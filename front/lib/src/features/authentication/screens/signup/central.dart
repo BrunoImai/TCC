@@ -26,11 +26,11 @@ class CentralRequest {
   }
 }
 
-class CentralLoginRequest {
+class LoginRequest {
   final String email;
   final String password;
 
-  CentralLoginRequest({
+  LoginRequest({
     required this.email,
     required this.password
   });

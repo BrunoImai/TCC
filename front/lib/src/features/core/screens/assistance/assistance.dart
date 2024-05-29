@@ -1,11 +1,13 @@
 
+import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
+
 class AssistanceRequest {
   final String description;
   final String name;
   final String address;
   final String cpf;
-  final String hoursToFinish;
-  final String workersIds;
+  final String? period;
+  final List<WorkersList> workersIds;
 
 
   AssistanceRequest({
@@ -13,7 +15,7 @@ class AssistanceRequest {
     required this.name,
     required this.address,
     required this.cpf,
-    required this.hoursToFinish,
+    required this.period,
     required this.workersIds
   });
 
@@ -23,7 +25,7 @@ class AssistanceRequest {
       'name': name,
       'address': address,
       'cpf': cpf,
-      'hoursToFinish': hoursToFinish,
+      'period': period,
       'workersIds': workersIds
     };
   }
@@ -34,11 +36,11 @@ class  AssistanceResponse{
   final String name;
   final String address;
   final String cpf;
-  final String hoursToFinish;
+  final String period;
   final String workersIds;
 
 
-  AssistanceResponse(this.description, this.name, this.address, this.cpf,this.hoursToFinish, this.workersIds);
+  AssistanceResponse(this.description, this.name, this.address, this.cpf,this.period, this.workersIds);
 
   factory AssistanceResponse.fromJson(Map<String, dynamic> json) {
     return AssistanceResponse(
@@ -46,7 +48,7 @@ class  AssistanceResponse{
       json['name'] as String,
       json['address'] as String,
       json['cpf'] as String,
-      json['hoursToFinish'] as String,
+      json['period'] as String,
       json['workersIds'] as String
     );
   }
@@ -65,11 +67,11 @@ class  UpdateAssistanceRequest {
   final String name;
   final String address;
   final String cpf;
-  final String hoursToFinish;
+  final String period;
   final String workersIds;
 
   UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.cpf,
-    required this.hoursToFinish, required this.workersIds});
+    required this.period, required this.workersIds});
 
   Map<String, dynamic> toJson() {
     return {
@@ -77,7 +79,7 @@ class  UpdateAssistanceRequest {
       'name': name,
       'address': address,
       'cpf': cpf,
-      'hoursToFinish': hoursToFinish,
+      'period': period,
       'workersIds': workersIds
     };
   }
@@ -89,11 +91,11 @@ class AssistancesList {
   final String name;
   final String address;
   final String cpf;
-  final String hoursToFinish;
-  final String workersIds;
+  final String period;
+  final List<num> workersIds;
 
   AssistancesList({required this.id, required this.description, required this.name, required this.address, required this.cpf,
-    required this.hoursToFinish, required this.workersIds});
+    required this.period, required this.workersIds});
 
   Map<String, dynamic> toJson() {
     return {
@@ -102,7 +104,7 @@ class AssistancesList {
       'name': name,
       'address': address,
       'cpf': cpf,
-      'hoursToFinish': hoursToFinish,
+      'period': period,
       'workersIds': workersIds
     };
   }

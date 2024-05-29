@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
+import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 
 import '../features/core/screens/client/client_list_screen.dart';
 
@@ -29,7 +30,12 @@ class AlertPopUp extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const ClientListScreen()));
-            } else {Navigator.of(context).pop();}
+            } else if (errorDescription == 'Cliente não encontrado.') {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterClientScreen()));
+            }else {Navigator.of(context).pop();}
           },
           child: const Text(
             'OK',
