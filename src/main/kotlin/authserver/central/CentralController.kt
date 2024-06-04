@@ -78,6 +78,7 @@ class CentralController(
     @PostMapping("/assistance")
     fun addAssistance(@Valid @RequestBody assistance: AssistanceRequest) =
         service.createAssistance(assistance)
+            .toResponse()
             .let { ResponseEntity.ok(it) }
 
 

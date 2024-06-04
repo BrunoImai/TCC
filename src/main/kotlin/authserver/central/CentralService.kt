@@ -340,9 +340,9 @@ class CentralService(
             orderDate = date,
             description = req.description,
             name = req.name,
-            adress = req.address,
+            address = req.address,
             cpf = req.cpf,
-            hoursToFinish = req.hoursToFinish,
+            period = req.period,
             responsibleCentral = central,
             client = client,
             responsibleWorkers = workers.toMutableSet()
@@ -351,10 +351,10 @@ class CentralService(
         return assistanceRepository.save(assistance)
     }
 
-    fun listAllAssistancesAdressByCentralId(): List<String> {
+    fun listAllAssistancesAddressByCentralId(): List<String> {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        return assistanceRepository.findAllByResponsibleCentral(central).map { it.adress }
+        return assistanceRepository.findAllByResponsibleCentral(central).map { it.address }
     }
 
 

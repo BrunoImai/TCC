@@ -7,7 +7,7 @@ class AssistanceRequest {
   final String address;
   final String cpf;
   final String? period;
-  final List<WorkersList> workersIds;
+  final List<num> workersIds;
 
 
   AssistanceRequest({

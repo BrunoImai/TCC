@@ -1,8 +1,6 @@
 package authserver.client.response
 
-import authserver.assistance.Assistance
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Size
 import java.util.*
 
 data class ClientResponse(
@@ -25,7 +23,7 @@ data class ClientResponse(
     @field:NotBlank(message = "Email is mandatory")
     val email: String,
 
-    val assistances: MutableSet<Assistance> = HashSet(),
+    val assistances: Set<Long?> = HashSet(),
 
     val entryDate: Date
 )

@@ -1,5 +1,6 @@
 package authserver.assistance
 
+import authserver.assistance.response.AssistanceResponse
 import authserver.central.Central
 import jakarta.persistence.*
 import authserver.client.Client
@@ -23,7 +24,7 @@ class Assistance(
     var name: String = "",
 
     @Column(nullable = false)
-    var adress: String = "",
+    var address: String = "",
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,7 +34,7 @@ class Assistance(
     var cpf: String = "",
 
     @Column
-    var hoursToFinish: Float,
+    var period: String = "",
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "central_id")
@@ -51,5 +52,5 @@ class Assistance(
     )
     var responsibleWorkers: MutableSet<Worker> = HashSet()
 ) {
-//    fun toResponse() = WorkerResponse(id!!, name, email, creationDate,description)
+    fun toResponse() = AssistanceResponse(id!!, description, name, address, cpf, period, responsibleWorkers.map { it.id }.toSet())
 }

@@ -157,7 +157,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
       String clientCpf = clientCpfController.text;
-      List<String> workersIds = selectedWorkers.map((worker) => worker.id.toString()).toList();
+      List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
@@ -232,7 +232,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           address: fullAddress,
           cpf: clientCpf,
           period: selectedPeriod,
-          workersIds: selectedWorkers
+          workersIds: workersIds
       );
 
       String requestBody = jsonEncode(assistanceRequest.toJson());
