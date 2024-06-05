@@ -125,3 +125,5 @@ const String clientCpf = "CPF do Cliente";
 const String period = "Período";
 const String workersIds = "Funcionário alocado para o serviço";
 
+//Update assistance screen
+const String editAssistance = "Editar serviço";

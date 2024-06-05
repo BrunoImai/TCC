@@ -82,6 +82,7 @@ class CentralController(
             .let { ResponseEntity.ok(it) }
 
 
+
     // Client
 
     @GetMapping("/client/{id}")

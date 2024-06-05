@@ -32,25 +32,30 @@ class AssistanceRequest {
 }
 
 class  AssistanceResponse{
+  final num id;
+  final String orderDate;
   final String description;
   final String name;
   final String address;
   final String cpf;
   final String period;
-  final String workersIds;
+  final List<num> workersIds;
 
 
-  AssistanceResponse(this.description, this.name, this.address, this.cpf,this.period, this.workersIds);
+  AssistanceResponse({required this.id, required this.orderDate, required this.description, required this.name, required this.address, required this.cpf,
+    required this.period, required this.workersIds});
 
-  factory AssistanceResponse.fromJson(Map<String, dynamic> json) {
-    return AssistanceResponse(
-      json['description'] as String,
-      json['name'] as String,
-      json['address'] as String,
-      json['cpf'] as String,
-      json['period'] as String,
-      json['workersIds'] as String
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'id' : id,
+      'orderDate': orderDate,
+      'description': description,
+      'name': name,
+      'address': address,
+      'cpf': cpf,
+      'period': period,
+      'workersIds': workersIds
+    };
   }
 }
 
@@ -67,8 +72,8 @@ class  UpdateAssistanceRequest {
   final String name;
   final String address;
   final String cpf;
-  final String period;
-  final String workersIds;
+  final String? period;
+  final List<num> workersIds;
 
   UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.cpf,
     required this.period, required this.workersIds});
@@ -90,12 +95,12 @@ class AssistancesList {
   final String description;
   final String name;
   final String address;
-  final String cpf;
+  final String clientName;
   final String period;
-  final List<num> workersIds;
+  final List<String> workersNames;
 
-  AssistancesList({required this.id, required this.description, required this.name, required this.address, required this.cpf,
-    required this.period, required this.workersIds});
+  AssistancesList({required this.id, required this.description, required this.name, required this.address, required this.clientName,
+    required this.period, required this.workersNames});
 
   Map<String, dynamic> toJson() {
     return {
@@ -103,9 +108,9 @@ class AssistancesList {
       'description': description,
       'name': name,
       'address': address,
-      'cpf': cpf,
+      'clientName': clientName,
       'period': period,
-      'workersIds': workersIds
+      'workersIds': workersNames
     };
   }
 }
