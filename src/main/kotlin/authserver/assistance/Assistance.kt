@@ -1,5 +1,6 @@
 package authserver.assistance
 
+import authserver.assistance.response.AssistanceResponse
 import authserver.central.Central
 import jakarta.persistence.*
 import authserver.client.Client
@@ -14,7 +15,10 @@ class Assistance(
     var id: Long? = null,
 
     @Column(nullable = false)
-    var orderDate: Date,
+    var startDate: Date,
+
+    @Column
+    var endDate: Date? = null,
 
     @Column(nullable = false)
     var description: String,
@@ -25,9 +29,12 @@ class Assistance(
     @Column(nullable = false)
     var adress: String = "",
 
+    @Column(nullable = false)
+    var priority: Int = 0,
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var assistanceStatus: AssistanceStatus = AssistanceStatus.EM_ANDAMENTO,
+    var assistanceStatus: AssistanceStatus = AssistanceStatus.AGUARDANDO,
 
     @Column(nullable = false)
     var cpf: String = "",
@@ -51,5 +58,12 @@ class Assistance(
     )
     var responsibleWorkers: MutableSet<Worker> = HashSet()
 ) {
-//    fun toResponse() = WorkerResponse(id!!, name, email, creationDate,description)
+    fun toResponse() = AssistanceResponse(
+        description,
+        name,
+        adress,
+        cpf,
+    hoursToFinish,
+responsibleWorkers.map { it.id!! }
+    )
 }

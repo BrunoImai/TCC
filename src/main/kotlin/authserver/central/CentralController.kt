@@ -75,11 +75,33 @@ class CentralController(
         service.resetPassword(CentralRequest)
             .let { ResponseEntity.ok(it) }
 
+    // Assistance
+
     @PostMapping("/assistance")
     fun addAssistance(@Valid @RequestBody assistance: AssistanceRequest) =
         service.createAssistance(assistance)
             .let { ResponseEntity.ok(it) }
 
+    @GetMapping("/assistance")
+    fun getAssistances() =
+        service.listAllAssistancesAdressByCentralId()
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/assistance/{id}")
+    fun getAssistance(@PathVariable("id") id: Long) =
+        service.getAssistance(id)
+            ?.toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @PutMapping("/assistance/{id}")
+    fun updateAssistance(@PathVariable("id") id: Long, @Valid @RequestBody assistance: AssistanceRequest) =
+        service.updateAssistance(id, assistance)
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/assistance/{id}")
+    fun deleteAssistance(@PathVariable("id") id: Long) =
+        if (service.deleteAssistance(id)) ResponseEntity.ok()
+        else ResponseEntity.notFound()
 
     // Client
 

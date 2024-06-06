@@ -15,6 +15,7 @@ import authserver.utils.PasswordUtil
 import authserver.worker.response.WorkerLoginResponse
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
+import org.example.authserver.utils.AssistanceStatus
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -40,28 +41,52 @@ class WorkerService (
 
     fun getClosestAssistance(currentLocation: String): AssistanceResponse {
         val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionario não encontrado")
+
+        val priorityAssistances = listAllAssistanceQueueByCentralId().filter { it.priority > 2 }
+        if (priorityAssistances.isNotEmpty()) {
+            val assistance = priorityAssistances.minByOrNull { it.startDate }!!
+            assistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
+            worker.currentAssistances.add(assistance)
+            workerRepository.save(worker)
+            assistance.responsibleWorkers.add(worker)
+            assistanceRepository.save(assistance)
+            return AssistanceResponse (
+                assistance.description,
+                assistance.name,
+                assistance.adress,
+                assistance.cpf,
+                assistance.hoursToFinish,
+                assistance.responsibleWorkers.map { it.id!! }
+            )
+        }
         val restTemplate = RestTemplate()
         val responses = listAllAssistanceQueueByCentralId().map { assistance ->
             val url = buildUrl(currentLocation, assistance.adress)
             restTemplate.getForObject(url, MapResponse::class.java)
         }
 
+
+
         val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
         val closestAssistanceAdress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
         val closestAssistance = assistanceRepository.findByAdress(closestAssistanceAdress.address) ?: throw IllegalStateException("Serviço não encontrado")
+
+        closestAssistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
 
         worker.currentAssistances.add(closestAssistance)
         workerRepository.save(worker)
         closestAssistance.responsibleWorkers.add(worker)
         assistanceRepository.save(closestAssistance)
 
-        return AssistanceResponse(
+
+
+        return AssistanceResponse (
             closestAssistance.description,
             closestAssistance.name,
             closestAssistance.adress,
             closestAssistance.cpf,
             closestAssistance.hoursToFinish,
-            closestAssistance.responsibleWorkers.map{ it.id!! }
+            closestAssistance.responsibleWorkers.map { it.id!! }
         )
     }
 
@@ -86,8 +111,8 @@ class WorkerService (
     // Maps
 //    fun getClosestAssist(currentLocation: String): AddressResponse {
 //        val restTemplate = RestTemplate()
-//        val responses = listAllAssistanceQueueAdressByCentralId().map { address ->
-//            val url = buildUrl(currentLocation, address)
+//        val responses = listAllAssistanceQueueByCentralId().map { assistance ->
+//            val url = buildUrl(currentLocation, assistance.adress)
 //            restTemplate.getForObject(url, MapResponse::class.java)
 //        }
 //

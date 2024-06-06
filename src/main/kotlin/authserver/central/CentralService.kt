@@ -330,17 +330,17 @@ class CentralService(
         val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
 
         val assistance = Assistance(
-            orderDate = date,
+            startDate = date,
             description = req.description,
             name = req.name,
             adress = req.address,
             cpf = req.cpf,
-            hoursToFinish = req.hoursToFinish,
+            hoursToFinish = 0.0f,
             responsibleCentral = central,
             client = client,
             responsibleWorkers = workers.toMutableSet()
         )
-
+        central.assistanceQueue.add(assistance)
         return assistanceRepository.save(assistance)
     }
 
@@ -348,6 +348,33 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         return assistanceRepository.findAllByResponsibleCentral(central).map { it.adress }
+    }
+
+    fun getAssistance(assistanceId: Long): Assistance? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val assistance = assistanceRepository.findByIdOrNull(assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+        if (assistance.responsibleCentral != central) throw IllegalStateException("Assistência não encontrada")
+        return assistance
+    }
+
+    fun updateAssistance(assistanceId: Long, assistance: AssistanceRequest): Assistance {
+        val assistanceToUpdate = getAssistance(assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+        assistanceToUpdate.name = assistance.name
+        assistanceToUpdate.description = assistance.description
+        assistanceToUpdate.adress = assistance.address
+        assistanceToUpdate.cpf = assistance.cpf
+        assistanceToUpdate.hoursToFinish = assistance.hoursToFinish
+        return assistanceRepository.save(assistanceToUpdate)
+    }
+
+    fun deleteAssistance(assistanceId: Long): Boolean {
+        val assistance = getAssistance(assistanceId) ?: return false
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        log.warn("Assistance deleted. id={} name={}", assistance.id, assistance.name)
+        assistanceRepository.delete(assistance)
+        return true
     }
 
 

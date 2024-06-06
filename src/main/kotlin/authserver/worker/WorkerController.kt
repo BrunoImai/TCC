@@ -18,6 +18,6 @@ class WorkerController(
                 ResponseEntity.ok(it)
             }
 
-    @PostMapping("/assistance/closest")
+    @GetMapping("/assistance/closest")
     fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) = service.getClosestAssistance(coordinate)
 }
