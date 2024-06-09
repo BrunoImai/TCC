@@ -195,6 +195,13 @@ class CentralService(
         return client
     }
 
+    fun getClientByCpf(cpf: String): Client? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return clientRepository.findByCpf(cpf)?.takeIf { it.central == central }
+    }
+
+
     fun createClient(req: ClientRequest): Client {
         val currentDate = LocalDate.now()
 
@@ -333,9 +340,9 @@ class CentralService(
             startDate = date,
             description = req.description,
             name = req.name,
-            adress = req.address,
+            address = req.address,
             cpf = req.cpf,
-            hoursToFinish = 0.0f,
+            period = req.period,
             responsibleCentral = central,
             client = client,
             responsibleWorkers = workers.toMutableSet()
@@ -344,10 +351,10 @@ class CentralService(
         return assistanceRepository.save(assistance)
     }
 
-    fun listAllAssistancesAdressByCentralId(): List<String> {
+    fun listAllAssistancesAddressByCentralId(): List<String> {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        return assistanceRepository.findAllByResponsibleCentral(central).map { it.adress }
+        return assistanceRepository.findAllByResponsibleCentral(central).map { it.address }
     }
 
     fun getAssistance(assistanceId: Long): Assistance? {

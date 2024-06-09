@@ -47,7 +47,7 @@ const String numberCharacter = "Contém pelo menos um número";
 const String specialCharacter = "Contém pelo menos um carácter especial";
 
 //Register Client Screen
-const String registerClientTilte = "Mais um cliente A.G.E";
+const String registerClientTitle = "Mais um cliente A.G.E";
 const String registerClientSubTitle = "Cadastre seu novo cliente";
 const String cep = "CEP";
 const String complement = "Complemento";
@@ -115,3 +115,15 @@ const String joinedWorker = "Funcionário desde ";
 //Register Worker Screen
 const String registerWorkerTilte = "Mais um funcionário A.G.E";
 const String registerWorkerSubTitle = "Cadastre seu novo funcionário";
+
+//Register Assistance Screen
+const String registerAssistanceTitle = "Mais um serviço A.G.E";
+const String registerAssistanceSubTitle = "Cadastre seu novo serviço";
+const String assistanceName = "Nome do serviço";
+const String description = "Descrição";
+const String clientCpf = "CPF do Cliente";
+const String period = "Período";
+const String workersIds = "Funcionário alocado para o serviço";
+
+//Update assistance screen
+const String editAssistance = "Editar serviço";

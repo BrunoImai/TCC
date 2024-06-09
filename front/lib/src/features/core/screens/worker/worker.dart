@@ -57,6 +57,13 @@ class WorkerInformations {
 
 }
 
+class LoggedWorker {
+  String token;
+  WorkerResponse worker;
+
+  LoggedWorker(this.token, this.worker);
+}
+
 class  UpdateWorkerRequest {
   final String name;
   final String email;

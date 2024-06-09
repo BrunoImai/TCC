@@ -80,6 +80,7 @@ class CentralController(
     @PostMapping("/assistance")
     fun addAssistance(@Valid @RequestBody assistance: AssistanceRequest) =
         service.createAssistance(assistance)
+            .toResponse()
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/assistance")
@@ -103,6 +104,7 @@ class CentralController(
         if (service.deleteAssistance(id)) ResponseEntity.ok()
         else ResponseEntity.notFound()
 
+
     // Client
 
     @GetMapping("/client/{id}")
@@ -111,6 +113,14 @@ class CentralController(
             ?.toResponse()
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/client/byCpf/{cpf}")
+    fun getClientByCpf(@PathVariable("cpf") cpf: String) =
+        service.getClientByCpf(cpf)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
 
     @GetMapping("/client")
     fun listClients() =

@@ -54,7 +54,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
       String number = numberController.text;
       String addressComplement = addressComplementController.text;
       String city = cityController.text;
-      String state = stateController.text.toUpperCase();;
+      String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
 
       if (client.isEmpty ||
@@ -299,6 +299,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+
                   registerClient(() {
                     Navigator.push(
                         context,

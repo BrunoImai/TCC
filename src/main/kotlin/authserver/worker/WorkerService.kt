@@ -5,7 +5,6 @@ import authserver.assistance.AssistanceRepository
 import authserver.assistance.response.AssistanceResponse
 import authserver.central.CentralRepository
 import authserver.central.CentralService.Companion.log
-import authserver.central.responses.CentralLoginResponse
 import authserver.exception.InvalidCredentialException
 import authserver.maps.AddressResponse
 import authserver.maps.MapResponse
@@ -53,23 +52,21 @@ class WorkerService (
             return AssistanceResponse (
                 assistance.description,
                 assistance.name,
-                assistance.adress,
+                assistance.address,
                 assistance.cpf,
-                assistance.hoursToFinish,
+                assistance.period,
                 assistance.responsibleWorkers.map { it.id!! }
             )
         }
         val restTemplate = RestTemplate()
         val responses = listAllAssistanceQueueByCentralId().map { assistance ->
-            val url = buildUrl(currentLocation, assistance.adress)
+            val url = buildUrl(currentLocation, assistance.address)
             restTemplate.getForObject(url, MapResponse::class.java)
         }
 
-
-
         val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
-        val closestAssistanceAdress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
-        val closestAssistance = assistanceRepository.findByAdress(closestAssistanceAdress.address) ?: throw IllegalStateException("Serviço não encontrado")
+        val closestAssistanceAddress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
+        val closestAssistance = assistanceRepository.findByAddress(closestAssistanceAddress.address) ?: throw IllegalStateException("Serviço não encontrado")
 
         closestAssistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
 
@@ -78,15 +75,14 @@ class WorkerService (
         closestAssistance.responsibleWorkers.add(worker)
         assistanceRepository.save(closestAssistance)
 
-
-
-        return AssistanceResponse (
+        return AssistanceResponse(
+            closestAssistance.id!!,
             closestAssistance.description,
             closestAssistance.name,
-            closestAssistance.adress,
+            closestAssistance.address,
             closestAssistance.cpf,
-            closestAssistance.hoursToFinish,
-            closestAssistance.responsibleWorkers.map { it.id!! }
+            closestAssistance.period,
+            closestAssistance.responsibleWorkers.map{ it.id!! }.toSet()
         )
     }
 

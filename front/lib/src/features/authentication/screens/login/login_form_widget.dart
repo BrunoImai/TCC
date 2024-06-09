@@ -7,10 +7,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:tcc_front/src/features/authentication/screens/signup/central_manager.dart';
 import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../../../core/screens/worker/worker.dart';
 import '../signup/central.dart';
 
 class LoginForm extends StatefulWidget {
@@ -26,10 +28,11 @@ class _LoginFormState extends State<LoginForm> {
   final _loginFormKey = GlobalKey<FormState>();
   bool _isVisible = false;
   String error = "";
+  bool isCentral = true;
 
   @override
   Widget build(BuildContext context) {
-    Future<void> centralLogin(VoidCallback onSuccess) async {
+    Future<void> userLogin(VoidCallback onSuccess) async {
       String email = emailController.text;
       String password = passwordController.text;
 
@@ -44,8 +47,8 @@ class _LoginFormState extends State<LoginForm> {
         return;
       }
 
-      CentralLoginRequest centralLoginRequest =
-          CentralLoginRequest(email: email, password: password);
+      LoginRequest centralLoginRequest =
+          LoginRequest(email: email, password: password);
       String requestBody = jsonEncode(centralLoginRequest.toJson());
       try {
         final response = await http.post(
@@ -66,7 +69,7 @@ class _LoginFormState extends State<LoginForm> {
           onSuccess.call();
         } else {
           // Registration failed
-          print('Login failed. Status code: ${response.statusCode}');
+          print('userLogin failed. Status code: ${response.statusCode}');
 
           error = response.body;
 
@@ -82,6 +85,42 @@ class _LoginFormState extends State<LoginForm> {
         // Handle any error that occurred during the HTTP request
         print('Error occurred: $e');
       }
+
+      /*try {
+        final response = await http.post(
+          Uri.parse('http://localhost:8080/api/worker/login'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final jsonData = json.decode(response.body);
+          final token = jsonData['token'];
+
+          final worker = WorkerResponse.fromJson(jsonData['worker']);
+
+          WorkerManager.instance.loggedUser = LoggedWorker(token, worker);
+          onSuccess.call();
+        } else {
+          // Registration failed
+          print('userLogin failed. Status code: ${response.statusCode}');
+
+          error = response.body;
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertPopUp(
+                  errorDescription: error);
+            },
+          );
+        }
+      } catch (e) {
+        // Handle any error that occurred during the HTTP request
+        print('Error occurred: $e');
+      }*/
     }
 
     return Form(
@@ -133,7 +172,7 @@ class _LoginFormState extends State<LoginForm> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_loginFormKey.currentState!.validate()) {
-                    centralLogin(() {
+                    userLogin(() {
                       if (!mounted) {
                         return;
                       }

@@ -14,5 +14,7 @@ class WorkerManager {
   }
 
   WorkerInformations? clientInformations;
+
+  LoggedWorker? loggedUser;
 }
 

@@ -1,104 +1,116 @@
 
+import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
+
 class AssistanceRequest {
+  final String description;
   final String name;
-  final String email;
+  final String address;
   final String cpf;
-  final String cellphone;
-  final String password;
+  final String? period;
+  final List<num> workersIds;
 
 
   AssistanceRequest({
+    required this.description,
     required this.name,
-    required this.email,
+    required this.address,
     required this.cpf,
-    required this.cellphone,
-    required this.password
+    required this.period,
+    required this.workersIds
   });
 
   Map<String, dynamic> toJson() {
     return {
+      'description': description,
       'name': name,
-      'cellphone': cellphone,
-      'email': email,
+      'address': address,
       'cpf': cpf,
-      'password': password
+      'period': period,
+      'workersIds': workersIds
     };
   }
 }
 
-class  WorkerResponse{
+class  AssistanceResponse{
   final num id;
+  final String orderDate;
+  final String description;
   final String name;
-  final String email;
-  final String entryDate;
+  final String address;
   final String cpf;
-  final String cellphone;
+  final String period;
+  final List<num> workersIds;
 
-  WorkerResponse(this.id, this.name, this.email, this.entryDate, this.cpf, this.cellphone);
 
-
-  factory WorkerResponse.fromJson(Map<String, dynamic> json) {
-    return WorkerResponse(
-      json['id'] as num,
-      json['name'] as String,
-      json['email'] as String,
-      json['entryDate'] as String,
-      json['cpf'] as String,
-      json['cellphone'] as String
-    );
-  }
-}
-
-class WorkerInformations {
-  String id;
-  WorkersList worker;
-
-  WorkerInformations(this.id, this.worker);
-
-}
-
-class  UpdateAssistanceRequest {
-  final String name;
-  final String email;
-  final String cpf;
-  final String cellphone;
-  final String oldPassword;
-  final String? newPassword;
-
-  UpdateAssistanceRequest({required this.name, required this.email, required this.cpf,
-    required this.cellphone, required this.oldPassword, required this.newPassword});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'email': email,
-      'cpf': cpf,
-      'cellphone': cellphone,
-      'oldPassword' : oldPassword,
-      'newPassword' : newPassword
-    };
-  }
-}
-
-class WorkersList {
-  final num id;
-  final String name;
-  final String email;
-  final String entryDate;
-  final String cpf;
-  final String cellphone;
-
-  WorkersList({required this.id, required this.name, required this.email, required this.entryDate, required this.cpf,
-    required this.cellphone});
+  AssistanceResponse({required this.id, required this.orderDate, required this.description, required this.name, required this.address, required this.cpf,
+    required this.period, required this.workersIds});
 
   Map<String, dynamic> toJson() {
     return {
       'id' : id,
+      'orderDate': orderDate,
+      'description': description,
       'name': name,
-      'email': email,
-      'entryDate' : entryDate,
+      'address': address,
       'cpf': cpf,
-      'cellphone': cellphone,
+      'period': period,
+      'workersIds': workersIds
+    };
+  }
+}
+
+class AssistanceInformations {
+  String id;
+  AssistancesList assistance;
+
+  AssistanceInformations(this.id, this.assistance);
+
+}
+
+class  UpdateAssistanceRequest {
+  final String description;
+  final String name;
+  final String address;
+  final String cpf;
+  final String? period;
+  final List<num> workersIds;
+
+  UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.cpf,
+    required this.period, required this.workersIds});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'description': description,
+      'name': name,
+      'address': address,
+      'cpf': cpf,
+      'period': period,
+      'workersIds': workersIds
+    };
+  }
+}
+
+class AssistancesList {
+  final num id;
+  final String description;
+  final String name;
+  final String address;
+  final String clientName;
+  final String period;
+  final List<String> workersNames;
+
+  AssistancesList({required this.id, required this.description, required this.name, required this.address, required this.clientName,
+    required this.period, required this.workersNames});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id' : id,
+      'description': description,
+      'name': name,
+      'address': address,
+      'clientName': clientName,
+      'period': period,
+      'workersIds': workersNames
     };
   }
 }

@@ -27,7 +27,7 @@ class Assistance(
     var name: String = "",
 
     @Column(nullable = false)
-    var adress: String = "",
+    var address: String = "",
 
     @Column(nullable = false)
     var priority: Int = 0,
@@ -40,7 +40,7 @@ class Assistance(
     var cpf: String = "",
 
     @Column
-    var hoursToFinish: Float,
+    var period: String = "",
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "central_id")
@@ -58,12 +58,5 @@ class Assistance(
     )
     var responsibleWorkers: MutableSet<Worker> = HashSet()
 ) {
-    fun toResponse() = AssistanceResponse(
-        description,
-        name,
-        adress,
-        cpf,
-    hoursToFinish,
-responsibleWorkers.map { it.id!! }
-    )
+    fun toResponse() = AssistanceResponse(id!!, description, name, address, cpf, period, responsibleWorkers.map { it.id }.toSet())
 }
