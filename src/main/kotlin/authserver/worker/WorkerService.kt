@@ -50,12 +50,13 @@ class WorkerService (
             assistance.responsibleWorkers.add(worker)
             assistanceRepository.save(assistance)
             return AssistanceResponse (
+                assistance.id!!,
                 assistance.description,
                 assistance.name,
                 assistance.address,
                 assistance.cpf,
                 assistance.period,
-                assistance.responsibleWorkers.map { it.id!! }
+                assistance.responsibleWorkers.map { it.id!! }.toSet()
             )
         }
         val restTemplate = RestTemplate()
