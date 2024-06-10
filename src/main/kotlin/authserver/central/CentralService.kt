@@ -369,9 +369,9 @@ class CentralService(
         val assistanceToUpdate = getAssistance(assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
         assistanceToUpdate.name = assistance.name
         assistanceToUpdate.description = assistance.description
-        assistanceToUpdate.adress = assistance.address
+        assistanceToUpdate.address = assistance.address
         assistanceToUpdate.cpf = assistance.cpf
-        assistanceToUpdate.hoursToFinish = assistance.hoursToFinish
+        assistanceToUpdate.period = assistance.period
         return assistanceRepository.save(assistanceToUpdate)
     }
 
