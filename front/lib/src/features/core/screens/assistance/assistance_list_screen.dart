@@ -138,12 +138,13 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
 
           final assistance = AssistancesList(
               id: item['id'],
+              startDate: item['startDate'],
               description: item['description'],
               name: item['name'],
               address: item['address'],
-              clientName: clientName,
+              clientCpf: clientCpf,
               period: item['period'],
-              workersNames: workerNames
+              workersIds: workerNames
           );
           assistancesList.add(assistance);
         }
@@ -275,7 +276,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.clientName,
+                                    assistance.clientCpf,
                                     style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -321,7 +322,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.workersNames.join(', '),
+                                    assistance.workersIds.join(', '),
                                     style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
