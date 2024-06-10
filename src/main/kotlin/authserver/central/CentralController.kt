@@ -85,7 +85,8 @@ class CentralController(
 
     @GetMapping("/assistance")
     fun getAssistances() =
-        service.listAllAssistancesAddressByCentralId()
+        service.listAllAssistancesByCentralId()
+            .map{ it.toResponse() }
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/assistance/{id}")

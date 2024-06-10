@@ -357,6 +357,12 @@ class CentralService(
         return assistanceRepository.findAllByResponsibleCentral(central).map { it.address }
     }
 
+    fun listAllAssistancesByCentralId(): List<Assistance> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return assistanceRepository.findAllByResponsibleCentral(central)
+    }
+
     fun getAssistance(assistanceId: Long): Assistance? {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
