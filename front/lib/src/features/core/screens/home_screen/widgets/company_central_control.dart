@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tcc_front/src/features/core/screens/assistance/assistance_list_screen.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
@@ -181,7 +182,7 @@ class CompanyCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(() => const AssistanceListScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

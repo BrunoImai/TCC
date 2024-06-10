@@ -27,7 +27,7 @@ import '../worker/worker.dart';
 
 class UpdateAssistanceScreen extends StatefulWidget {
   const UpdateAssistanceScreen({super.key, required this.assistance});
-  final AssistanceResponse assistance;
+  final AssistancesList assistance;
   
   @override
   _UpdateAssistanceScreenState createState() => _UpdateAssistanceScreenState();
@@ -59,7 +59,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   void initState() {
     super.initState();
     assistanceNameController.text = widget.assistance.name;
-    clientCpfController.text = widget.assistance.cpf;
+    clientCpfController.text = widget.assistance.clientCpf;
     //addressComplementController.text = widget.assistance.complement;
 
     List<String> addressParts = widget.assistance.address.split(', ');
@@ -565,7 +565,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             style: const TextStyle(fontSize: 12),
                             children: [
                               TextSpan(
-                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.assistance.orderDate)),
+                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.assistance.startDate)),
                                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
                             ],
                           ),

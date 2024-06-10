@@ -510,7 +510,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                         MaterialPageRoute(
                             builder: (context) => const CompanyHomeScreen()));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Serviço adicionado!')),
+                      const SnackBar(content: Text('Serviço cadastrado!')),
                     );
                   });
                 },
