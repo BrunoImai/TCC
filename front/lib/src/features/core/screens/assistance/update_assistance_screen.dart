@@ -28,7 +28,7 @@ import '../worker/worker.dart';
 class UpdateAssistanceScreen extends StatefulWidget {
   const UpdateAssistanceScreen({super.key, required this.assistance});
   final AssistanceResponse assistance;
-  
+
   @override
   _UpdateAssistanceScreenState createState() => _UpdateAssistanceScreenState();
 }
@@ -45,8 +45,6 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
 
-
-
   bool _isAddressFieldEnabled = true;
   bool _isWorkerExpanded = false;
   bool _isPeriodExpanded = false;
@@ -58,7 +56,20 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   @override
   void initState() {
     super.initState();
+    clientCpfController.addListener(_onCpfChanged);
+
+    fetchWorkers().then((_) {
+      List<num> assistanceWorkers = widget.assistance.workersIds.map((id) => num.parse(id)).toList();
+      for (num workerId in assistanceWorkers) {
+        WorkersList? worker = workers.firstWhereOrNull((w) => w.id == workerId);
+        if (worker != null) {
+          selectedWorkers.add(worker);
+        }
+      }
+    });
+
     assistanceNameController.text = widget.assistance.name;
+    descriptionController.text = widget.assistance.description;
     clientCpfController.text = widget.assistance.clientCpf;
     //addressComplementController.text = widget.assistance.complement;
 
@@ -75,16 +86,105 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     List<String> cityStateList = cityState.split(' - ');
     cityController.text = cityStateList[0];
     stateController.text = cityStateList[1];
+
+    selectedPeriod = widget.assistance.period;
   }
 
-  bool _clearFieldassistanceName = false;
+  bool _clearFieldAssistanceName = false;
   bool _clearFieldCpf = false;
+  bool _clearFieldDescription = false;
 
-  bool isValidEmail(String email) {
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(email);
+
+  void _onCpfChanged() {
+    String cpf = clientCpfController.text;
+    if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
+      _fetchClientDataByCpf(cpf);
+    }
   }
-  
+
+  Future<void> fetchWorkers() async {
+    try {
+      final workersList = await getAllWorkers();
+      setState(() {
+        workers = workersList;
+      });
+    } catch (e) {
+      print('Error fetching workers: $e');
+    }
+  }
+
+  Future<List<WorkersList>> getAllWorkers() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/worker'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<WorkersList> workersList = jsonData.map((item) {
+          return WorkersList(
+            id: item['id'],
+            name: item['name'],
+            email: item['email'],
+            entryDate: item['entryDate'],
+            cpf: item['cpf'],
+            cellphone: item['cellphone'],
+          );
+        }).toList();
+
+        return workersList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load worker list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de workers');
+    }
+  }
+
+  Future<void> _fetchClientDataByCpf(String cpf) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/client/byCpf/$cpf'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final clientData = jsonDecode(response.body);
+
+        setState(() {
+          cepController.text = clientData['address'].split(', ')[3];
+          addressController.text = clientData['address'].split(', ')[0];
+          numberController.text = clientData['address'].split(', ')[1].split(' - ')[0];
+          neighborhoodController.text = clientData['address'].split(', ')[1].split(' - ')[1];
+          cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
+          stateController.text = clientData['address'].split(', ')[2].split(' - ')[1];
+          addressComplementController.text = clientData['complement'];
+
+          _isAddressFieldEnabled = false;
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(errorDescription: 'Cliente não encontrado.');
+          },
+        );
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +201,8 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
 
-      if (assistanceName.isEmpty ||
-          description.isEmpty ||
+      if (description.isEmpty ||
+          assistanceName.isEmpty ||
           clientCpf.isEmpty ||
           cep.isEmpty ||
           address.isEmpty ||
@@ -114,7 +214,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome completo, celular, email, cpf, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
           },
         );
         return;
@@ -131,29 +231,17 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         return;
       }
 
-      if (!isValidEmail(email)) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O email inserido é inválido.');
-          },
-        );
-        return;
-      }
-
       if (clientCpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número do CPF deve conter exatamente 11 dígitos.');
+                'O número de CPF deve conter exatamente 11 dígitos.');
           },
         );
         return;
       }
-
 
       if (cepController.text.replaceAll(RegExp(r'\D'), '').length != 8) {
         showDialog(
@@ -178,8 +266,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         return;
       }
 
-
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
 
       UpdateAssistanceRequest updateAssistanceRequest = UpdateAssistanceRequest(
         description: description,
@@ -187,7 +274,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         address: fullAddress,
         cpf: clientCpf,
         //complement: addressComplement,
-        period: period, 
+        period: period,
         workersIds: workersIds
       );
 
@@ -224,7 +311,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       }
     }
 
-    Future<void> deleteassistance() async {
+    Future<void> deleteAssistance() async {
 
       final response = await http.delete(
         Uri.parse('http://localhost:8080/api/central/assistance/${widget.assistance.id}'),
@@ -257,7 +344,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                   SizedBox(
                     width: 120,
                     height: 120,
-                    child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
+                    child: Icon(Icons.work, color: primaryColor, size: 100),
                   ),
                 ],
               ),
@@ -268,15 +355,34 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                     TextFormField(
                       controller: assistanceNameController,
                       decoration: InputDecoration(
-                        labelText: fullName,
+                        labelText: assistanceName,
                         prefixIcon: const Icon(LineAwesomeIcons.user),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
                             setState(() {
-                              _clearFieldassistanceName = true;
-                              if (_clearFieldassistanceName) {
+                              _clearFieldAssistanceName = true;
+                              if (_clearFieldAssistanceName) {
                                 assistanceNameController.clear();
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: formHeight - 20),
+                    TextFormField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                        labelText: description,
+                        prefixIcon: const Icon(Icons.add),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            setState(() {
+                              _clearFieldDescription = true;
+                              if (_clearFieldDescription) {
+                                descriptionController.clear();
                               }
                             });
                           },
@@ -299,6 +405,13 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               _clearFieldCpf = true;
                               if (_clearFieldCpf) {
                                 clientCpfController.clear();
+                                cepController.clear();
+                                addressController.clear();
+                                numberController.clear();
+                                addressComplementController.clear();
+                                neighborhoodController.clear();
+                                cityController.clear();
+                                stateController.clear();
                               }
                             });
                           },
@@ -315,7 +428,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           label: Text(cep),
                           prefixIcon: Icon(Icons.local_post_office)
                       ),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -333,7 +446,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           label: Text(number),
                           prefixIcon: Icon(Icons.numbers)
                       ),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -342,7 +455,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           label: Text(addressComplement),
                           prefixIcon: Icon(Icons.home_rounded)
                       ),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -351,7 +464,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           label: Text(neighborhood),
                           prefixIcon: Icon(Icons.holiday_village_rounded)
                       ),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -359,7 +472,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                       decoration: const InputDecoration(
                           label: Text(city),
                           prefixIcon: Icon(Icons.location_on)),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -372,7 +485,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           label: Text(state),
                           prefixIcon: Icon(Icons.location_on)
                       ),
-                      enabled: _isAddressFieldEnabled,
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight - 20),
                     GestureDetector(
@@ -388,15 +501,13 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           suffixIcon: MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: Icon(
-                              _isPeriodExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPeriodExpanded
+                              _isPeriodExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
                             ),
                           ),
                         ),
-                        child: Text(selectedPeriod ?? ''), // Show selected period
+                        child: Text(selectedPeriod ?? ''),
                       ),
                     ),
-
-                    // Show the menu options if expanded
                     if (_isPeriodExpanded)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,7 +541,6 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           ),
                         ],
                       ),
-
                     const SizedBox(height: formHeight - 20),
                     GestureDetector(
                       onTap: () {
@@ -446,10 +556,13 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             cursor: SystemMouseCursors.click,
                             child: IconButton(
                               icon: Icon(
-                                _isWorkerExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down,
+                                _isWorkerExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
                               ),
                               onPressed: () {
                                 setState(() {
+                                  if (!_isWorkerExpanded) {
+                                    selectedWorkers.clear();
+                                  }
                                   _isWorkerExpanded = !_isWorkerExpanded;
                                 });
                               },
@@ -505,37 +618,11 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                           );
                         }).toList(),
                       ),
-                    const SizedBox(height: formHeight),
+                    const SizedBox(height: formHeight - 10),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-
-                          if (cellphone.isEmpty ||
-                              email.isEmpty ||
-                              clientCpf.isEmpty ||
-                              currentPassword.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'Todos os campos são obrigatórios.');
-                              },
-                            );
-                            return;
-                          }
-
-
-                          if (newPassword.isNotEmpty &&
-                              currentPassword == newPassword) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'A nova senha não pode ser igual a antiga');
-                              },
-                            );
-                          } else {
                             updateassistance(() {
                               Navigator.push(
                                   context,
@@ -546,13 +633,12 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 const SnackBar(content: Text('Atualização Realizada')),
                               );
                             });
-                          }
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColor,
                             side: BorderSide.none,
                             shape: const StadiumBorder()),
-                        child: Text(editProfile.toUpperCase(),style: const TextStyle(color: darkColor)),
+                        child: Text(editAssistance.toUpperCase(),style: const TextStyle(color: darkColor)),
                       ),
                     ),
                     const SizedBox(height: formHeight),
@@ -577,12 +663,12 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                               content: const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text("Tem certeza que deseja excluir esse assistancee?"),
+                                child: Text("Tem certeza que deseja excluir esse serviço?"),
                               ),
                               confirm: Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    deleteassistance();
+                                    deleteAssistance();
                                     Get.to(const CompanyHomeScreen());
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),

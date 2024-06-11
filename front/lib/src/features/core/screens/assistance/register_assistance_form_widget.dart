@@ -146,7 +146,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
 
   @override
   Widget build(BuildContext context) {
-    Future<void> registerWorker(VoidCallback onSuccess) async {
+    Future<void> registerAssistance(VoidCallback onSuccess) async {
       String description = descriptionController.text;
       String assistanceName = assistanceNameController.text;
       String cep = cepController.text;
@@ -224,7 +224,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
 
       AssistanceRequest assistanceRequest = AssistanceRequest(
           description: description,
@@ -285,7 +285,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               controller: descriptionController,
               decoration: const InputDecoration(
                   label: Text(description),
-                  prefixIcon: Icon(Icons.email_outlined)
+                  prefixIcon: Icon(Icons.add)
               ),
             ),
             const SizedBox(height: formHeight - 20),
@@ -424,7 +424,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   ),
                 ],
               ),
-
             const SizedBox(height: formHeight - 20),
             GestureDetector(
               onTap: () {
@@ -504,7 +503,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  registerWorker(() {
+                  registerAssistance(() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
