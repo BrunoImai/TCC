@@ -188,7 +188,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> updateassistance(VoidCallback onSuccess) async {
+    Future<void> updateAssistance(VoidCallback onSuccess) async {
       String assistanceName = assistanceNameController.text;
       String clientCpf = clientCpfController.text;
       String cep = cepController.text;
@@ -274,7 +274,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         address: fullAddress,
         cpf: clientCpf,
         //complement: addressComplement,
-        period: period,
+        period: selectedPeriod,
         workersIds: workersIds
       );
 
@@ -623,7 +623,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                            updateassistance(() {
+                            updateAssistance(() {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -670,12 +670,17 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                   onPressed: () {
                                     deleteAssistance();
                                     Get.to(const CompanyHomeScreen());
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Serviço excluído com sucesso!')),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                   child: const Text("Sim"),
                                 ),
                               ),
-                              cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
+                              cancel: OutlinedButton(
+                                  onPressed: () => Get.back(), child: const Text("Não")
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(

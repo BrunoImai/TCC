@@ -589,6 +589,9 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                   onPressed: () {
                                     deleteWorker();
                                     Get.to(const CompanyHomeScreen());
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Funcionário excluído com sucesso!')),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                   child: const Text("Sim"),

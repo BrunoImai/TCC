@@ -98,6 +98,7 @@ class CentralController(
     @PutMapping("/assistance/{id}")
     fun updateAssistance(@PathVariable("id") id: Long, @Valid @RequestBody assistance: AssistanceRequest) =
         service.updateAssistance(id, assistance)
+            .toResponse()
             .let { ResponseEntity.ok(it) }
 
     @DeleteMapping("/assistance/{id}")
