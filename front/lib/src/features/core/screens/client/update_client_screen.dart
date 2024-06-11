@@ -26,7 +26,7 @@ import '../../../authentication/screens/signup/central_manager.dart';
 
 class UpdateClientScreen extends StatefulWidget {
   const UpdateClientScreen({super.key, required this.client});
-  final ClientsList client;
+  final ClientResponse client;
   
   @override
   _UpdateClientScreenState createState() => _UpdateClientScreenState();

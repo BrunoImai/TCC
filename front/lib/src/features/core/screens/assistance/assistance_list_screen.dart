@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
+import 'package:tcc_front/src/features/core/screens/assistance/update_assistance_screen.dart';
+import 'package:tcc_front/src/features/core/screens/client/client.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
@@ -26,12 +29,12 @@ class AssistanceListScreen extends StatefulWidget {
 
 class _AssistancesListScreenState extends State<AssistanceListScreen> {
   bool searchBarInUse = false;
-  late Future<List<AssistancesList>> futureData;
+  late Future<List<AssistanceInformations>> futureData;
 
   TextEditingController searchController = TextEditingController();
 
-  late List<AssistancesList> assistanceList;
-  late List<AssistancesList> filteredAssistancesList;
+  late List<AssistanceInformations> assistanceList;
+  late List<AssistanceInformations> filteredAssistancesList;
 
   @override
   void initState() {
@@ -45,35 +48,42 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
 
   void _onSearchChanged() {
     setState(() {
-      filteredAssistancesList = assistanceList.where((assistance) {
-        final name = assistance.name.toLowerCase();
+      filteredAssistancesList = assistanceList.where((data) {
+        final name = data.assistance.name.toLowerCase();
         final query = searchController.text.toLowerCase();
         return name.contains(query);
       }).toList();
     });
   }
 
-  Future<String> getClientNameByCpf(String cpf) async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/client/$cpf'),
-        headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-        },
-      );
+  Future<ClientResponse?> getClientByCpf(String cpf) async {
+    final response = await http.get(
+      Uri.parse('http://localhost:8080/api/central/client/byCpf/$cpf'),
+      headers: {
+        'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        return jsonData['name'];
-      } else {
-        print('Failed to load client name. Status code: ${response.statusCode}');
-        return 'Unknown';
-      }
-    } catch (e) {
-      print('Error fetching client name: $e');
-      return 'Unknown';
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      print(jsonData);
+      return ClientResponse(
+        id: jsonData['id'],
+        name: jsonData['name'],
+        email: jsonData['email'],
+        entryDate: jsonData['entryDate'],
+        cpf: jsonData['cpf'],
+        cellphone: jsonData['cellphone'],
+        address: jsonData['address'],
+        complement: jsonData['complement'],
+      );
+    } else {
+      print('Failed to load client. Status code: ${response.statusCode}');
+      return null;
     }
   }
+
+
 
   Future<List<WorkersList>> getAllWorkers() async {
     try {
@@ -111,7 +121,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
     }
   }
 
-  Future<List<AssistancesList>> getAllAssistances() async {
+  Future<List<AssistanceInformations>> getAllAssistances() async {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/central/assistance'),
@@ -123,30 +133,37 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
-
+        print(jsonData);
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
+        print(workerIdToNameMap);
 
-        final List<AssistancesList> assistancesList = [];
+        final List<AssistanceInformations> assistancesList = [];
         for (var item in jsonData) {
-          final clientName = await getClientNameByCpf(item['cpf']);
+          final client = await getClientByCpf(item['cpf']);
 
           final workerNames = (item['workersIds'] as List<dynamic>)
-              .map((id) => workerIdToNameMap[id.toString()] ?? 'Unknown')
+              .map((id) => workerIdToNameMap[id] ?? 'Unknown')
               .toList();
 
-          final assistance = AssistancesList(
-              id: item['id'],
+          final workersIds = (item['workersIds'] as List<dynamic>)
+              .map((id) => id.toString()).toList();
+
+
+          final assistance = AssistanceResponse(
+              id: item['id'].toString(),
               startDate: item['startDate'],
               description: item['description'],
               name: item['name'],
               address: item['address'],
-              clientCpf: clientCpf,
+              clientCpf: item['cpf'],
               period: item['period'],
-              workersIds: workerNames
+              workersIds: workersIds
           );
-          assistancesList.add(assistance);
+          final assistanceInformations = AssistanceInformations(
+              assistance.id, workerNames, client!.name, assistance);
+          assistancesList.add(assistanceInformations);
         }
 
         setState(() {
@@ -167,7 +184,6 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
       throw Exception('Falha ao carregar a lista de clientes');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +239,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               child: ListView.builder(
                 itemCount: filteredAssistancesList.length,
                 itemBuilder: (context, index) {
-                  final assistance = filteredAssistancesList[index];
+                  final data = filteredAssistancesList[index];
                   return Card(
                     elevation: 3,
                     color: cardBgColor,
@@ -247,7 +263,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.name,
+                                    data.assistance.name,
                                     style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -256,7 +272,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => UpdateClientScreen(assistance: assistance));
+                                  Get.to(() => UpdateAssistanceScreen(assistance: data.assistance));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),
@@ -276,7 +292,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.clientCpf,
+                                    data.clientName,
                                     style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -299,7 +315,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.address,
+                                    data.assistance.address,
                                     style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -322,7 +338,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    assistance.workersIds.join(', '),
+                                    data.workersName.join(', '),
                                     style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,

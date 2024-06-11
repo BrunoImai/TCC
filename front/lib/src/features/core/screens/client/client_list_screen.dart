@@ -24,12 +24,12 @@ class ClientListScreen extends StatefulWidget {
 
 class _ClientListScreenState extends State<ClientListScreen> {
   bool searchBarInUse = false;
-  late Future<List<ClientsList>> futureData;
+  late Future<List<ClientResponse>> futureData;
 
   TextEditingController searchController = TextEditingController();
 
-  late List<ClientsList> clientList;
-  late List<ClientsList> filteredClientList;
+  late List<ClientResponse> clientList;
+  late List<ClientResponse> filteredClientList;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
     });
   }
 
-  Future<List<ClientsList>> getAllClients() async {
+  Future<List<ClientResponse>> getAllClients() async {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/central/client'),
@@ -64,9 +64,9 @@ class _ClientListScreenState extends State<ClientListScreen> {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
 
-        final List<ClientsList> clientsList = [];
+        final List<ClientResponse> clientsList = [];
         for (var item in jsonData) {
-          final client = ClientsList(
+          final client = ClientResponse(
               id: item['id'],
               name: item['name'],
               email: item['email'],

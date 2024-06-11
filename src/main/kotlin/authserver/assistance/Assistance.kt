@@ -58,5 +58,5 @@ class Assistance(
     )
     var responsibleWorkers: MutableSet<Worker> = HashSet()
 ) {
-    fun toResponse() = AssistanceResponse(id!!, description, name, address, cpf, period, responsibleWorkers.map { it.id }.toSet())
+    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, cpf, period, responsibleWorkers.map { it.id }.toSet())
 }

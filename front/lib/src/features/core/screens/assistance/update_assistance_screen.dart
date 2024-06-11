@@ -27,7 +27,7 @@ import '../worker/worker.dart';
 
 class UpdateAssistanceScreen extends StatefulWidget {
   const UpdateAssistanceScreen({super.key, required this.assistance});
-  final AssistancesList assistance;
+  final AssistanceResponse assistance;
   
   @override
   _UpdateAssistanceScreenState createState() => _UpdateAssistanceScreenState();

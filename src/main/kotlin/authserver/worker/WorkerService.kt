@@ -52,6 +52,7 @@ class WorkerService (
             return AssistanceResponse (
                 assistance.id!!,
                 assistance.description,
+                assistance.startDate,
                 assistance.name,
                 assistance.address,
                 assistance.cpf,
@@ -79,6 +80,7 @@ class WorkerService (
         return AssistanceResponse(
             closestAssistance.id!!,
             closestAssistance.description,
+            closestAssistance.startDate,
             closestAssistance.name,
             closestAssistance.address,
             closestAssistance.cpf,
