@@ -384,8 +384,9 @@ class CentralService(
     fun deleteAssistance(assistanceId: Long): Boolean {
         val assistance = getAssistance(assistanceId) ?: return false
         val centralId = getCentralIdFromToken()
-        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         log.warn("Assistance deleted. id={} name={}", assistance.id, assistance.name)
+        central.assistanceQueue.remove(assistance)
         assistanceRepository.delete(assistance)
         return true
     }

@@ -178,8 +178,8 @@ class CentralController(
             .let { ResponseEntity.ok(it) }
 
     @DeleteMapping("/worker/{id}")
-    fun deleteWorker(@PathVariable("id") id: Long) =
-        if (service.deleteWorker(id)) ResponseEntity.ok()
-        else ResponseEntity.notFound()
+    fun deleteWorker(@PathVariable("id") id: Long): ResponseEntity<Void> =
+        if (service.deleteWorker(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
 
 }

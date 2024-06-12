@@ -75,7 +75,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "Bruno",
+    "name": "Jeferson",
     "email": "teste@gmail.com",
     "password": "12345678",
     "cellphone": "11999999999",
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 
 ### Deleta um Worker
-DELETE localhost:8080/api/central/worker/52
+DELETE localhost:8080/api/central/worker/2
 Authorization: Bearer {{token}}
 
 
@@ -128,8 +128,9 @@ Content-Type: application/json
   "name": "Concerto",
   "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420, Brazil",
   "cpf": "12345678901",
-  "hoursToFinish": 2,
-  "workersIds": []
+  "period": "Manha",
+  "workersIds": [1]
+
 }
 
 ### Cadastra serviço 2
@@ -142,8 +143,8 @@ Content-Type: application/json
   "name": "Concerto",
   "address": "Av. Com. Franco, 4680 - Uberaba, Curitiba - PR, 81530-440, Brazil",
   "cpf": "12345678901",
-  "hoursToFinish": 2,
-  "workersIds": []
+  "period": "Manha",
+  "workersIds": [1]
 }
 
 ### Cadastra serviço 3
@@ -156,10 +157,12 @@ Content-Type: application/json
   "name": "Concerto",
   "address": "Av. Getúlio Vargas, 573 - Centro, Piraquara - PR, 83301-010, Brazil",
   "cpf": "12345678901",
-  "hoursToFinish": 2,
-  "workersIds": []
+  "period": "Manha",
+  "workersIds": [1]
 }
-
+### Lista todos os serviços
+GET localhost:8080/api/central/assistance
+Authorization: Bearer {{token}}
 
 
 ### worker login
@@ -189,3 +192,6 @@ Authorization: Bearer {{token}}
 GET localhost:8080/api/worker/assistance/closest?coordinate=-25.443821705838275, -49.05548752620021
 Authorization: Bearer {{token}}
 
+### deleta servico 1
+DELETE localhost:8080/api/central/assistance/52
+Authorization: Bearer {{token}}
