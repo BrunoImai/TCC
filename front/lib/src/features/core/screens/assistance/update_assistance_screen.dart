@@ -50,7 +50,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   bool _isPeriodExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
-  String? selectedPeriod;
+  String selectedPeriod = "";
   String error = "";
 
   @override
@@ -209,12 +209,13 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
           number.isEmpty ||
           city.isEmpty ||
           state.isEmpty ||
-          neighborhood.isEmpty) {
+          neighborhood.isEmpty ||
+          selectedPeriod.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
           },
         );
         return;
@@ -273,7 +274,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         name: assistanceName,
         address: fullAddress,
         cpf: clientCpf,
-        //complement: addressComplement,
+        complement: addressComplement,
         period: selectedPeriod,
         workersIds: workersIds
       );
@@ -324,6 +325,9 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         setState(() {
           Navigator.pop(context, true);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Serviço excluído com sucesso!')),
+          );
         });
       }
     }

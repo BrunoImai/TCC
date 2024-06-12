@@ -12,6 +12,8 @@ data class AssistanceRequest(
     @field:NotBlank(message = "Address is mandatory")
     val address: String,
 
+    val complement: String? = null,
+
     @field:NotBlank(message = "CPF is mandatory")
     val cpf: String,
 

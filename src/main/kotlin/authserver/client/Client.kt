@@ -20,7 +20,7 @@ class Client(
     var address: String,
 
     @Column
-    var complement: String,
+    var complement: String? = null,
 
     @Column(nullable = false)
     var name: String = "",

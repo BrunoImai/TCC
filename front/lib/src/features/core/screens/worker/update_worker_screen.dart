@@ -201,6 +201,12 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
           print('Registration successful!');
         } else {
           print('Registration failed. Status code: ${response.statusCode}');
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: response.body);
+              });
         }
       } catch (e) {
         print('Error occurred: $e');
@@ -220,6 +226,9 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         setState(() {
           Navigator.pop(context, true);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Serviço excluído com sucesso!')),
+          );
         });
       }
     }
@@ -589,9 +598,6 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                   onPressed: () {
                                     deleteWorker();
                                     Get.to(const CompanyHomeScreen());
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Funcionário excluído com sucesso!')),
-                                    );
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                   child: const Text("Sim"),

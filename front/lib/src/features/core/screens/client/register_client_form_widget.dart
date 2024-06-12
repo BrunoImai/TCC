@@ -146,7 +146,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
 
       ClientRequest clientRequest = ClientRequest(
           name: client,

@@ -237,6 +237,12 @@ class CentralService(
 
     fun updateClient(id: Long, clientUpdated: ClientRequest): Client {
         val client = getClient(id) ?: throw IllegalStateException("Cliente não encontrado")
+
+        val existingClientWithSameCpf = clientRepository.findByCpf(clientUpdated.cpf!!)
+        if (existingClientWithSameCpf != null && existingClientWithSameCpf.id != id) {
+            throw IllegalStateException("Já existe outro cliente cadastrado com este CPF.")
+        }
+
         client.email = clientUpdated.email
         client.name = clientUpdated.name
         client.address = clientUpdated.address
@@ -301,6 +307,11 @@ class CentralService(
     fun updateWorker(id: Long, workerUpdated: WorkerUpdateRequest): Worker {
         val worker = getWorker(id) ?: throw IllegalStateException("Funcionário não encontrado")
 
+        val existingWorkerWithSameCpf = workerRepository.findByCpf(workerUpdated.cpf!!)
+        if (existingWorkerWithSameCpf != null && existingWorkerWithSameCpf.id != id) {
+            throw IllegalStateException("Já existe outro funcionário cadastrado com este CPF.")
+        }
+
         if (workerUpdated.newPassword == null) {
             worker.email = workerUpdated.email!!
             worker.name = workerUpdated.name!!
@@ -341,6 +352,7 @@ class CentralService(
             description = req.description,
             name = req.name,
             address = req.address,
+            complement = req.complement,
             cpf = req.cpf,
             period = req.period,
             responsibleCentral = central,

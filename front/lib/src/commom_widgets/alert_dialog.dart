@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
 import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_list_screen.dart';
 
 import '../features/core/screens/client/client_list_screen.dart';
 
@@ -35,7 +36,12 @@ class AlertPopUp extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const RegisterClientScreen()));
-            }else {Navigator.of(context).pop();}
+            }else if (errorDescription == 'Email já cadastrado!' || errorDescription ==  "CPF do funcionário já cadastrado!"){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WorkerListScreen()));
+            } else {Navigator.of(context).pop();}
           },
           child: const Text(
             'OK',

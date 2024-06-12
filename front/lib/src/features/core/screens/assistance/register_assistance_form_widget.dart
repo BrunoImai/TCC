@@ -43,7 +43,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
   bool _isPeriodExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
-  String? selectedPeriod;
+  String selectedPeriod = "";
 
   @override
   void initState() {
@@ -54,9 +54,24 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
 
   void _onCpfChanged() {
     String cpf = clientCpfController.text;
-    if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
+    if (cpf.isEmpty) {
+      _clearAddressFields();
+    } else if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
       _fetchClientDataByCpf(cpf);
     }
+  }
+
+  void _clearAddressFields() {
+    setState(() {
+      cepController.clear();
+      addressController.clear();
+      numberController.clear();
+      addressComplementController.clear();
+      cityController.clear();
+      stateController.clear();
+      neighborhoodController.clear();
+      _isAddressFieldEnabled = true;
+    });
   }
 
   Future<void> fetchWorkers() async {
@@ -167,12 +182,13 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           number.isEmpty ||
           city.isEmpty ||
           state.isEmpty ||
-          neighborhood.isEmpty) {
+          neighborhood.isEmpty ||
+          selectedPeriod.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade e estado são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
           },
         );
         return;
@@ -230,6 +246,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           description: description,
           name: assistanceName,
           address: fullAddress,
+          complement: addressComplement,
           cpf: clientCpf,
           period: selectedPeriod,
           workersIds: workersIds

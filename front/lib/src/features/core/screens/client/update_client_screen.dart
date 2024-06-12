@@ -194,7 +194,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
       }
 
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
 
       UpdateClientRequest updateClientRequest = UpdateClientRequest(
         name: clientName,

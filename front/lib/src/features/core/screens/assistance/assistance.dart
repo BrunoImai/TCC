@@ -5,8 +5,9 @@ class AssistanceRequest {
   final String description;
   final String name;
   final String address;
+  final String complement;
   final String cpf;
-  final String? period;
+  final String period;
   final List<num> workersIds;
 
 
@@ -14,6 +15,7 @@ class AssistanceRequest {
     required this.description,
     required this.name,
     required this.address,
+    required this.complement,
     required this.cpf,
     required this.period,
     required this.workersIds
@@ -46,11 +48,12 @@ class  UpdateAssistanceRequest {
   final String description;
   final String name;
   final String address;
+  final String complement;
   final String cpf;
   final String? period;
   final List<num> workersIds;
 
-  UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.cpf,
+  UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.complement,required this.cpf,
     required this.period, required this.workersIds});
 
   Map<String, dynamic> toJson() {

@@ -29,6 +29,9 @@ class Assistance(
     @Column(nullable = false)
     var address: String = "",
 
+    @Column
+    var complement: String? = null,
+
     @Column(nullable = false)
     var priority: Int = 0,
 
@@ -58,5 +61,5 @@ class Assistance(
     )
     var responsibleWorkers: MutableSet<Worker> = HashSet()
 ) {
-    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, cpf, period, responsibleWorkers.map { it.id }.toSet())
+    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet())
 }

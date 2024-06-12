@@ -55,6 +55,7 @@ class WorkerService (
                 assistance.startDate,
                 assistance.name,
                 assistance.address,
+                assistance.complement,
                 assistance.cpf,
                 assistance.period,
                 assistance.responsibleWorkers.map { it.id!! }.toSet()
@@ -83,6 +84,7 @@ class WorkerService (
             closestAssistance.startDate,
             closestAssistance.name,
             closestAssistance.address,
+            closestAssistance.complement,
             closestAssistance.cpf,
             closestAssistance.period,
             closestAssistance.responsibleWorkers.map{ it.id!! }.toSet()
