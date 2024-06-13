@@ -198,7 +198,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("${CentralManager.instance.loggedUser!.central.name},",style: Theme.of(context).textTheme.bodyText2,),
-                Text(clientListSubTitle, style: Theme.of(context).textTheme.headline2,),
+                Text(assitanceListSubTitle, style: Theme.of(context).textTheme.headline2,),
                 const SizedBox(height: homePadding,),
                 //Search Box
                 Container(
