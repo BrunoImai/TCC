@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,6 +8,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tcc_front/src/features/authentication/screens/signup/central.dart';
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/colors.dart';
@@ -75,7 +77,9 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     String newPassword = passwordController.text;
-    print(widget.code);
+    if (kDebugMode) {
+      print(widget.code);
+    }
 
 
     Future<void> resetPassword(VoidCallback onSuccess) async {
@@ -345,7 +349,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const LoginScreen()));
+                                            builder: (context) => const WhoAreYouScreen()));
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Senha alterada')),
                                     );

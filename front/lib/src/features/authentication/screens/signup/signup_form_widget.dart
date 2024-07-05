@@ -7,7 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
+import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
+import 'package:tcc_front/src/features/core/screens/home_screen_company/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
@@ -443,7 +444,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LoginScreen()));
+                              builder: (context) => const WhoAreYouScreen()));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Cadastro Realizado')),
                       );

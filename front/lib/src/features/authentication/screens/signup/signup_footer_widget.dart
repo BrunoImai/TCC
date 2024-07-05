@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
+import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 import '../../../../constants/text_strings.dart';
-import '../login/login_screen.dart';
+
 
 class SignUpFooterWidget extends StatelessWidget {
   const SignUpFooterWidget({
@@ -15,7 +15,7 @@ class SignUpFooterWidget extends StatelessWidget {
     return Column(
       children: [
         TextButton(
-          onPressed: () => Get.to(() => const LoginScreen()),
+          onPressed: () => Get.to(() => const WhoAreYouScreen()),
           child: Text.rich(TextSpan(children: [
             TextSpan(
               text: alreadyHaveAnAccount,

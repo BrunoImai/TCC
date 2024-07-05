@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/get_utils.dart';
 import 'package:tcc_front/src/commom_widgets/fade_in_animation/animation_design.dart';
 import 'package:tcc_front/src/commom_widgets/fade_in_animation/fade_in_animation_controller.dart';
 import 'package:tcc_front/src/commom_widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -10,13 +8,11 @@ import 'package:tcc_front/src/constants/images_strings.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/constants/text_strings.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
-import 'package:tcc_front/src/features/authentication/screens/signup/signup_screen.dart';
-import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 
 
-class WelcomeScreen extends StatelessWidget{
+class WhoAreYouScreen extends StatelessWidget{
 
-  const WelcomeScreen({Key ? key }) : super(key : key);
+  const WhoAreYouScreen({super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +53,16 @@ class WelcomeScreen extends StatelessWidget{
                   ),
                   Column(
                     children: [
-                      Text(welcomeTitle, style: Theme.of(context).textTheme.headline3,),
-                      Text(welcomeSubTitle, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center,),
+                      Text(whoAreYouTitle, style: Theme.of(context).textTheme.headline3,),
+                      Text(whoAreYouSubTitle, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center,),
                     ],
                   ),
                   Row(
                     children: [
                       Expanded(
                           child: OutlinedButton(
-                              onPressed: () => Get.to(() => const WhoAreYouScreen()),
-                              child: Text(login.toUpperCase())
+                              onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1,)),
+                              child: Text(employee.toUpperCase())
                           )
                       ),
                       const SizedBox(
@@ -74,8 +70,8 @@ class WelcomeScreen extends StatelessWidget{
                       ),
                       Expanded(
                           child: ElevatedButton(
-                              onPressed: ()=> Get.to(() => SignUpScreen()),
-                              child: Text(signUp.toUpperCase())
+                              onPressed: ()=> Get.to(() => const LoginScreen(whoAreYouTag: 2,)),
+                              child: Text(company.toUpperCase())
                           )
                       ),
                     ],

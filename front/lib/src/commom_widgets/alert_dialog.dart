@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/authentication/screens/login/login_screen.dart';
+import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_list_screen.dart';
 
@@ -25,7 +26,7 @@ class AlertPopUp extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const LoginScreen()));
+                      builder: (context) => const WhoAreYouScreen()));
             } else if (errorDescription == 'Email do cliente já cadastrado!' || errorDescription == 'CPF do cliente já cadastrado!') {
               Navigator.push(
                   context,

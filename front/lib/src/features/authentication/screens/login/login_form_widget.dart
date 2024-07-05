@@ -6,17 +6,19 @@ import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:tcc_front/src/features/authentication/screens/signup/central_manager.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/home_screen_company/company_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../../../core/screens/home_screen_employee/employee_home_screen.dart';
 import '../../../core/screens/worker/worker.dart';
 import '../signup/central.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  const LoginForm({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -48,81 +50,83 @@ class _LoginFormState extends State<LoginForm> {
       }
 
       LoginRequest centralLoginRequest =
-          LoginRequest(email: email, password: password);
+      LoginRequest(email: email, password: password);
       String requestBody = jsonEncode(centralLoginRequest.toJson());
-      try {
-        final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/login'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: requestBody,
-        );
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          final jsonData = json.decode(response.body);
-          final token = jsonData['token'];
-
-          final central = CentralResponse.fromJson(jsonData['central']);
-
-          CentralManager.instance.loggedUser = LoggedCentral(token, central);
-          onSuccess.call();
-        } else {
-          // Registration failed
-          print('userLogin failed. Status code: ${response.statusCode}');
-
-          error = response.body;
-
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertPopUp(
-                  errorDescription: error);
+      if (widget.whoAreYouTag == 1) {
+        try {
+          final response = await http.post(
+            Uri.parse('http://localhost:8080/api/central/login'),
+            headers: {
+              'Content-Type': 'application/json',
             },
+            body: requestBody,
           );
+
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            final jsonData = json.decode(response.body);
+            final token = jsonData['token'];
+
+            final central = CentralResponse.fromJson(jsonData['central']);
+
+            CentralManager.instance.loggedUser = LoggedCentral(token, central);
+            onSuccess.call();
+          } else {
+            // Registration failed
+            print('userLogin failed. Status code: ${response.statusCode}');
+
+            error = response.body;
+
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: error);
+              },
+            );
+          }
+        } catch (e) {
+          // Handle any error that occurred during the HTTP request
+          print('Error occurred: $e');
         }
-      } catch (e) {
-        // Handle any error that occurred during the HTTP request
-        print('Error occurred: $e');
+      } else {
+        try {
+          final response = await http.post(
+            Uri.parse('http://localhost:8080/api/worker/login'),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: requestBody,
+          );
+
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            final jsonData = json.decode(response.body);
+            final token = jsonData['token'];
+
+            final worker = WorkerResponse.fromJson(jsonData['worker']);
+
+            WorkerManager.instance.loggedUser = LoggedWorker(token, worker);
+            onSuccess.call();
+          } else {
+            // Registration failed
+            print('userLogin failed. Status code: ${response.statusCode}');
+
+            error = response.body;
+
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: error);
+              },
+            );
+          }
+        } catch (e) {
+          // Handle any error that occurred during the HTTP request
+          print('Error occurred: $e');
+        }
       }
-
-      /*try {
-        final response = await http.post(
-          Uri.parse('http://localhost:8080/api/worker/login'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: requestBody,
-        );
-
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          final jsonData = json.decode(response.body);
-          final token = jsonData['token'];
-
-          final worker = WorkerResponse.fromJson(jsonData['worker']);
-
-          WorkerManager.instance.loggedUser = LoggedWorker(token, worker);
-          onSuccess.call();
-        } else {
-          // Registration failed
-          print('userLogin failed. Status code: ${response.statusCode}');
-
-          error = response.body;
-
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertPopUp(
-                  errorDescription: error);
-            },
-          );
-        }
-      } catch (e) {
-        // Handle any error that occurred during the HTTP request
-        print('Error occurred: $e');
-      }*/
     }
-
     return Form(
       key: _loginFormKey,
       child: Container(
@@ -176,15 +180,25 @@ class _LoginFormState extends State<LoginForm> {
                       if (!mounted) {
                         return;
                       }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CompanyHomeScreen()),
-                      );
+
+                      if (widget.whoAreYouTag == 2) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CompanyHomeScreen()),
+                        );
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EmployeeHomeScreen()),
+                        );
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Login Realizado')),
                       );
                     });
+
                   }
                 },
                 child: Text(login.toUpperCase()),

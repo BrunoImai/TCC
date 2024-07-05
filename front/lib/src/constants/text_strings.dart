@@ -30,6 +30,12 @@ const String appTagLine = "Assitente de Gerência Empresarial";
 const String welcomeTitle = "Bem vindo ao A.G.E";
 const String welcomeSubTitle = "Gerenciando seu negócio";
 
+//Who are you screen
+const String whoAreYouTitle = "Quem é você?";
+const String whoAreYouSubTitle = "É hora de gerenciar o seu negócio";
+const String employee = "Técnico";
+const String company = "Empresa";
+
 //Login Screen
 const String loginTitle = "Bem vindo de volta,";
 const String loginSubTitle = "É hora de gerenciar o seu negócio";

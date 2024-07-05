@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/client/register_client_form_widget.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen/widgets/company_app_bar.dart';
+import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/register_assistance_form_widget.dart';
 
 import '../../../../commom_widgets/form_header_widget.dart';
