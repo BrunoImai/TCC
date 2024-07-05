@@ -14,7 +14,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../home_screen_company/widgets/company_app_bar.dart';
+import '../company_home_screen/widgets/company_app_bar.dart';
 import '../worker/worker.dart';
 
 

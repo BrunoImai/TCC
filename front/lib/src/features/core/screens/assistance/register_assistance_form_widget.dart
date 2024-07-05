@@ -6,7 +6,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';

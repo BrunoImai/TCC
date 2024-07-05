@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_employee/employee_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/profile/profile_screen.dart';
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
 
-class EmployeeHomeAppBar extends StatelessWidget implements PreferredSizeWidget{
-  const EmployeeHomeAppBar({
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
+  const HomeAppBar({
     super.key,
   });
 
@@ -27,7 +27,7 @@ class EmployeeHomeAppBar extends StatelessWidget implements PreferredSizeWidget{
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => Get.to(() => const EmployeeHomeScreen()),
+          onTap: () => Get.to(() => const CompanyHomeScreen()),
           child: Text(appName, style: Theme.of(context).textTheme.headline4),
         ),
       ),

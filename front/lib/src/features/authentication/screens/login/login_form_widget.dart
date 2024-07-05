@@ -6,13 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:tcc_front/src/features/authentication/screens/signup/central_manager.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../core/screens/home_screen_employee/employee_home_screen.dart';
+import '../../../core/screens/employee_home_screen/employee_home_screen.dart';
 import '../../../core/screens/worker/worker.dart';
 import '../signup/central.dart';
 

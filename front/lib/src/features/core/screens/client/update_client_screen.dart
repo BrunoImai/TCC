@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:tcc_front/src/features/core/screens/client/client.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../commom_widgets/form_header_widget.dart';

@@ -2,30 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_app_bar.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_central_control.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_search_bar.dart';
+import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_central_control.dart';
+import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_app_bar.dart';
+import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_search_bar.dart';
 
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 
-class CompanyHomeScreen extends StatefulWidget{
-  const CompanyHomeScreen({super.key});
+class EmployeeHomeScreen extends StatefulWidget{
+  const EmployeeHomeScreen({super.key});
 
   @override
-  State<CompanyHomeScreen> createState() => _CompanyHomeScreenState();
-
-
+  State<EmployeeHomeScreen> createState() => _EmployeeHomeScreenState();
 
 }
 
-class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
+class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: const EmployeeHomeAppBar(),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -41,13 +39,13 @@ class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const CompanySearchBar(),
+            const EmployeeSearchBar(),
             const SizedBox(height: homePadding,),
 
             //Control Center
             Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            const CompanyCentralControl(),
+            const EmployeeCentralControl(),
             const SizedBox(height: homePadding,),
 
             //

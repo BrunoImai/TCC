@@ -2,30 +2,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_app_bar.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_central_control.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_company/widgets/company_search_bar.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_employee/widgets/employee_app_bar.dart';
-import 'package:tcc_front/src/features/core/screens/home_screen_employee/widgets/employee_search_bar.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_app_bar.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_central_control.dart';
+import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_search_bar.dart';
 
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 
-class EmployeeHomeScreen extends StatefulWidget{
-  const EmployeeHomeScreen({super.key});
+class CompanyHomeScreen extends StatefulWidget{
+  const CompanyHomeScreen({super.key});
 
   @override
-  State<EmployeeHomeScreen> createState() => _EmployeeHomeScreenState();
+  State<CompanyHomeScreen> createState() => _CompanyHomeScreenState();
+
+
 
 }
 
-class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
+class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const EmployeeHomeAppBar(),
+      appBar: const HomeAppBar(),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -41,7 +41,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const EmployeeSearchBar(),
+            const CompanySearchBar(),
             const SizedBox(height: homePadding,),
 
             //Control Center
