@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
       LoginRequest(email: email, password: password);
       String requestBody = jsonEncode(centralLoginRequest.toJson());
 
-      if (widget.whoAreYouTag == 1) {
+      if (widget.whoAreYouTag == 2) {
         try {
           final response = await http.post(
             Uri.parse('http://localhost:8080/api/central/login'),

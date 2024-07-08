@@ -5,6 +5,7 @@ import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_central_control.dart';
 import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/employee_home_screen/widgets/employee_search_bar.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
@@ -32,7 +33,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
           children: [
 
             //Heading
-            Text(homePageTitle + CentralManager.instance.loggedUser!.central.name,
+            Text(homePageTitle + WorkerManager.instance.loggedUser!.worker.name,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(exploreTechnician, style: Theme.of(context).textTheme.headline2,),
