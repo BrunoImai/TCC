@@ -3,17 +3,17 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
-import 'package:tcc_front/src/features/core/screens/profile/update_profile_screen.dart';
-import 'package:tcc_front/src/features/core/screens/profile/widgets/profile_menu_widget.dart';
-
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/profile/worker_profile_menu_widget.dart';
+import '../../../../../constants/colors.dart';
+import '../../../../../constants/images_strings.dart';
+import '../../../../../constants/sizes.dart';
+import '../../../../../constants/text_strings.dart';
+import '../../../../authentication/screens/signup/central_manager.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/images_strings.dart';
-import '../../../../constants/sizes.dart';
-import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/signup/central_manager.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+
+class WorkerProfileScreen extends StatelessWidget {
+  const WorkerProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class ProfileScreen extends StatelessWidget {
               Text(CentralManager.instance.loggedUser!.central.name, style: Theme.of(context).textTheme.headline4),
               Text(CentralManager.instance.loggedUser!.central.email, style: Theme.of(context).textTheme.bodyText2),
               const SizedBox(height: 20),
-              SizedBox(
+              /*SizedBox(
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () => Get.to(() => const UpdateProfileScreen()),
@@ -65,16 +65,16 @@ class ProfileScreen extends StatelessWidget {
                       backgroundColor: primaryColor, side: BorderSide.none, shape: const StadiumBorder()),
                   child: const Text(editProfile, style: TextStyle(color: darkColor)),
                 ),
-              ),
+              ),*/
               const SizedBox(height: 30),
               const Divider(),
               const SizedBox(height: 10),
-              ProfileMenuWidget(title: settings, icon: LineAwesomeIcons.cog, onPress: () {}),
-              ProfileMenuWidget(title: information, icon: LineAwesomeIcons.info, onPress: () {}),
-              ProfileMenuWidget(title: userManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
+              WorkerProfileMenuWidget(title: settings, icon: LineAwesomeIcons.cog, onPress: () {}),
+              WorkerProfileMenuWidget(title: information, icon: LineAwesomeIcons.info, onPress: () {}),
+              WorkerProfileMenuWidget(title: userManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
               const Divider(),
               const SizedBox(height: 10),
-              ProfileMenuWidget(
+              WorkerProfileMenuWidget(
                   title: logout,
                   icon: LineAwesomeIcons.alternate_sign_out,
                   textColor: Colors.red,

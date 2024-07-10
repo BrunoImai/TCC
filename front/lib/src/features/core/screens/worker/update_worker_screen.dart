@@ -11,13 +11,13 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../central_home_screen/central_home_screen.dart';
 
 class UpdateWorkerScreen extends StatefulWidget {
   const UpdateWorkerScreen({super.key, required this.worker});
@@ -554,7 +554,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CompanyHomeScreen())
+                                      builder: (context) => const CentralHomeScreen())
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Atualização Realizada')),
@@ -597,7 +597,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     deleteWorker();
-                                    Get.to(const CompanyHomeScreen());
+                                    Get.to(const CentralHomeScreen());
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                   child: const Text("Sim"),

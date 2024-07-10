@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:tcc_front/src/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:tcc_front/src/features/authentication/screens/signup/central_manager.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../core/screens/employee_home_screen/employee_home_screen.dart';
+import '../../../core/screens/central_home_screen/central_home_screen.dart';
 import '../../../core/screens/worker/worker.dart';
+import '../../../core/screens/worker_home_screen/worker_home_screen.dart';
 import '../signup/central.dart';
 
 class LoginForm extends StatefulWidget {
@@ -185,13 +185,13 @@ class _LoginFormState extends State<LoginForm> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CompanyHomeScreen()),
+                              builder: (context) => const CentralHomeScreen()),
                         );
                       } else {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const EmployeeHomeScreen()),
+                                builder: (context) => const WorkerHomeScreen()),
                         );
                       }
                       ScaffoldMessenger.of(context).showSnackBar(

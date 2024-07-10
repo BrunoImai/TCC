@@ -14,8 +14,8 @@ import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
 import '../../assistance/register_assistance_screen.dart';
 
-class CompanyCentralControl extends StatelessWidget {
-  const CompanyCentralControl({
+class CentralCentralControl extends StatelessWidget {
+  const CentralCentralControl({
     super.key,
   });
 

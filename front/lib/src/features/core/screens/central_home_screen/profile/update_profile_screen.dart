@@ -11,13 +11,14 @@ import 'package:http/http.dart' as http;
 
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
 
-import '../../../../commom_widgets/alert_dialog.dart';
+import '../../../../../commom_widgets/alert_dialog.dart';
+import '../../../../../constants/colors.dart';
+import '../../../../../constants/images_strings.dart';
+import '../../../../../constants/sizes.dart';
+import '../../../../../constants/text_strings.dart';
+import '../../../../authentication/screens/signup/central.dart';
+import '../../../../authentication/screens/signup/central_manager.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/images_strings.dart';
-import '../../../../constants/sizes.dart';
-import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/signup/central.dart';
-import '../../../authentication/screens/signup/central_manager.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});

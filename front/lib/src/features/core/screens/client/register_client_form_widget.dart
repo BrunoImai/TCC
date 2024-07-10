@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tcc_front/src/features/core/screens/client/client_list_screen.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
 import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../central_home_screen/central_home_screen.dart';
 import 'client.dart';
 
 class RegisterClientFormWidget extends StatefulWidget {
@@ -304,7 +303,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CompanyHomeScreen()));
+                            builder: (context) => const CentralHomeScreen()));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Cadastro Realizado')),
                     );

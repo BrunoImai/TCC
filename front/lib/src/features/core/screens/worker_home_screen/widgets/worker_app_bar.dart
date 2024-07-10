@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
-import 'package:tcc_front/src/features/core/screens/profile/profile_screen.dart';
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
+import '../worker_home_screen.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
-  const HomeAppBar({
+class EmployeeHomeAppBar extends StatelessWidget implements PreferredSizeWidget{
+  const EmployeeHomeAppBar({
     super.key,
   });
 
@@ -27,7 +26,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => Get.to(() => const CompanyHomeScreen()),
+          onTap: () => Get.to(() => const WorkerHomeScreen()),
           child: Text(appName, style: Theme.of(context).textTheme.headline4),
         ),
       ),
@@ -38,7 +37,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget{
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
-              onPressed: () => Get.to(() => const ProfileScreen()),
+              onPressed: () => Get.to(() => const WorkerHomeScreen()),
               icon: const Image(image: AssetImage(userProfileImage))),
         )
       ],

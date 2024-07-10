@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/worker/register_worker_form_widget.dart';
 
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/text_strings.dart';
+import '../central_home_screen/widgets/central_app_bar.dart';
 
 class RegisterWorkerScreen extends StatelessWidget{
   const RegisterWorkerScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class RegisterWorkerScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: const CentralAppBar(),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(defaultSize),

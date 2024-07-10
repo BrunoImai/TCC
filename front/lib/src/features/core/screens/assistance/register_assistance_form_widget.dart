@@ -6,13 +6,13 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../central_home_screen/central_home_screen.dart';
 import '../worker/worker.dart';
 import 'assistance.dart';
 
@@ -524,7 +524,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CompanyHomeScreen()));
+                            builder: (context) => const CentralHomeScreen()));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Serviço cadastrado!')),
                     );

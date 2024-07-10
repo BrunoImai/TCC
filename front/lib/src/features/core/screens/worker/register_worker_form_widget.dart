@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/central_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -444,7 +444,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CompanyHomeScreen()));
+                              builder: (context) => const CentralHomeScreen()));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Cadastro Realizado')),
                       );

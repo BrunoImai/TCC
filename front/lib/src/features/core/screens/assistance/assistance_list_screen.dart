@@ -14,7 +14,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../company_home_screen/widgets/company_app_bar.dart';
+import '../central_home_screen/widgets/central_app_bar.dart';
 import '../worker/worker.dart';
 
 
@@ -188,7 +188,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: const CentralAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

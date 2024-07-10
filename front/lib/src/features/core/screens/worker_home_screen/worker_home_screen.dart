@@ -2,30 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_app_bar.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_central_control.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/widgets/company_search_bar.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_central_control.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_app_bar.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_search_bar.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 
-class CompanyHomeScreen extends StatefulWidget{
-  const CompanyHomeScreen({super.key});
+class WorkerHomeScreen extends StatefulWidget{
+  const WorkerHomeScreen({super.key});
 
   @override
-  State<CompanyHomeScreen> createState() => _CompanyHomeScreenState();
-
-
+  State<WorkerHomeScreen> createState() => _WorkerHomeScreenState();
 
 }
 
-class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
+class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: const EmployeeHomeAppBar(),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -34,20 +33,20 @@ class _CompanyHomeScreenState extends State<CompanyHomeScreen> {
           children: [
 
             //Heading
-            Text(homePageTitle + CentralManager.instance.loggedUser!.central.name,
+            Text(homePageTitle + WorkerManager.instance.loggedUser!.worker.name,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(exploreTechnician, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const CompanySearchBar(),
+            const EmployeeSearchBar(),
             const SizedBox(height: homePadding,),
 
             //Control Center
             Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            const CompanyCentralControl(),
+            const EmployeeCentralControl(),
             const SizedBox(height: homePadding,),
 
             //

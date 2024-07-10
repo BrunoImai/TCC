@@ -10,19 +10,14 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
-import 'package:tcc_front/src/features/core/screens/company_home_screen/company_home_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
-import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/login/login_screen.dart';
-import '../../../authentication/screens/signup/central.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../central_home_screen/central_home_screen.dart';
 import '../worker/worker.dart';
 
 class UpdateAssistanceScreen extends StatefulWidget {
@@ -631,7 +626,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CompanyHomeScreen())
+                                      builder: (context) => const CentralHomeScreen())
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Atualização Realizada')),
@@ -673,7 +668,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     deleteAssistance();
-                                    Get.to(const CompanyHomeScreen());
+                                    Get.to(const CentralHomeScreen());
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Serviço excluído com sucesso!')),
                                     );

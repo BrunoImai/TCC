@@ -7,12 +7,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:tcc_front/src/features/core/screens/client/update_client_screen.dart';
-import 'package:tcc_front/src/features/core/screens/profile/update_profile_screen.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../company_home_screen/widgets/company_app_bar.dart';
+import '../central_home_screen/widgets/central_app_bar.dart';
 import 'client.dart';
 
 class ClientListScreen extends StatefulWidget {
@@ -102,7 +101,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: const CentralAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
