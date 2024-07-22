@@ -129,7 +129,7 @@ Content-Type: application/json
   "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420, Brazil",
   "cpf": "12345678901",
   "period": "Manha",
-  "workersIds": [1]
+  "workersIds": [2]
 
 }
 
@@ -189,7 +189,7 @@ GET localhost:8080/api/worker/assistance/closest?coordinate=-25.450966074965084,
 Authorization: Bearer {{token}}
 
 ### Lista servico mais proximo ao servico 3
-GET localhost:8080/api/worker/assistance/closest?coordinate=-25.443821705838275, -49.05548752620021
+GET localhost:8080/api/worker/assistance/closest?coordinate=-25.436354, -49.2693665
 Authorization: Bearer {{token}}
 
 ### deleta servico 1

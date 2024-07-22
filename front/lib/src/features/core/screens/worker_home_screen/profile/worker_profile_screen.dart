@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
-import 'package:tcc_front/src/features/core/screens/worker_home_screen/profile/worker_profile_menu_widget.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/profile/widgets/worker_profile_menu_widget.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/sizes.dart';
@@ -54,8 +55,8 @@ class WorkerProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(CentralManager.instance.loggedUser!.central.name, style: Theme.of(context).textTheme.headline4),
-              Text(CentralManager.instance.loggedUser!.central.email, style: Theme.of(context).textTheme.bodyText2),
+              Text(WorkerManager.instance.loggedUser!.worker.name, style: Theme.of(context).textTheme.headline4),
+              Text(WorkerManager.instance.loggedUser!.worker.email, style: Theme.of(context).textTheme.bodyText2),
               const SizedBox(height: 20),
               /*SizedBox(
                 width: 200,

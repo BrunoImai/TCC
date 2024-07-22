@@ -72,7 +72,7 @@ const String otpSubTitle = "de Verificação";
 const String otpMessage = "Insira o código enviado por ";
 const String code = "Código ";
 
-//Initial logged screen
+//Initial central logged screen
 const String homePageTitle = "Olá, ";
 const String exploreServices = "Explore seus serviços";
 const String exploreTechnician = "Pesquise seus funcionários";
@@ -136,3 +136,6 @@ const String assitanceListSubTitle = "Encontre seus serviços!";
 
 //Update assistance screen
 const String editAssistance = "Editar serviço";
+
+//Worker Home Screen
+const String currentAndNextAssistance = "Seu atual ou próximo serviço";

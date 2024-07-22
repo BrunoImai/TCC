@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/profile/worker_profile_screen.dart';
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
 import '../worker_home_screen.dart';
 
-class EmployeeHomeAppBar extends StatelessWidget implements PreferredSizeWidget{
-  const EmployeeHomeAppBar({
+class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
+  const WorkerAppBar({
     super.key,
   });
 
@@ -37,7 +38,7 @@ class EmployeeHomeAppBar extends StatelessWidget implements PreferredSizeWidget{
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
-              onPressed: () => Get.to(() => const WorkerHomeScreen()),
+              onPressed: () => Get.to(() => const WorkerProfileScreen()),
               icon: const Image(image: AssetImage(userProfileImage))),
         )
       ],

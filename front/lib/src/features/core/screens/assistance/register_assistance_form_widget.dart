@@ -240,12 +240,12 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
 
       AssistanceRequest assistanceRequest = AssistanceRequest(
           description: description,
           name: assistanceName,
-          address: fullAddress,
+          address: '$fullAddress',
           complement: addressComplement,
           cpf: clientCpf,
           period: selectedPeriod,

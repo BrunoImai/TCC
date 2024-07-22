@@ -38,6 +38,8 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+
   String error = "";
 
   @override
@@ -54,6 +56,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
     String numberNeighborhood = addressParts[1];
     String cityState = addressParts[2];
     cepController.text = addressParts[3];
+    countryController.text = addressParts[4];
 
     List<String> numberNeighborhoodList = numberNeighborhood.split(' - ');
     numberController.text = numberNeighborhoodList[0];
@@ -62,23 +65,75 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
     List<String> cityStateList = cityState.split(' - ');
     cityController.text = cityStateList[0];
     stateController.text = cityStateList[1];
+
+    cepController.addListener(() {
+      String cep = cepController.text.replaceAll(RegExp(r'\D'), '');
+      if (cep.length == 8) {
+        fetchAddress(cep);
+      } else if (cep.isEmpty) {
+        setState(() {
+          addressController.clear();
+          numberController.clear();
+          addressComplementController.clear();
+          cityController.clear();
+          stateController.clear();
+          neighborhoodController.clear();
+          countryController.clear();
+        });
+      }
+    });
   }
 
   bool _clearFieldClientName = false;
   bool _clearFieldEmail = false;
   bool _clearFieldCpf = false;
   bool _clearFieldCellphone = false;
-  bool _clearFieldCep = false;
-  bool _clearFieldAddress = false;
-  bool _clearFieldNumber = false;
-  bool _clearFieldAddressComplement = false;
-  bool _clearFieldCity = false;
-  bool _clearFieldState = false;
-  bool _clearFieldNeighborhood = false;
 
   bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
+  }
+
+  Future<void> fetchAddress(String cep) async {
+    if (cep.replaceAll(RegExp(r'\D'), '').length != 8) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'O CEP deve conter 8 dígitos');
+        },
+      );
+      return;
+    }
+
+    final response = await http.get(Uri.parse('https://viacep.com.br/ws/$cep/json/'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['erro'] == null) {
+        setState(() {
+          addressController.text = data['logradouro'] ?? '';
+          neighborhoodController.text = data['bairro'] ?? '';
+          cityController.text = data['localidade'] ?? '';
+          stateController.text = data['uf'] ?? '';
+          countryController.text = 'Brasil';
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(errorDescription: 'CEP não encontrado.');
+          },
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'Erro ao buscar endereço.');
+        },
+      );
+    }
   }
   
 
@@ -94,8 +149,9 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
       String number = numberController.text;
       String addressComplement = addressComplementController.text;
       String city = cityController.text;
-      String state = stateController.text.toUpperCase();
+      String state = stateController.text;
       String neighborhood = neighborhoodController.text;
+      String country = countryController.text;
 
 
       if (clientName.isEmpty ||
@@ -107,7 +163,8 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
           number.isEmpty ||
           city.isEmpty ||
           state.isEmpty ||
-          neighborhood.isEmpty) {
+          neighborhood.isEmpty ||
+          country.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -187,8 +244,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
         return;
       }
 
-
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep, $country";
 
       UpdateClientRequest updateClientRequest = UpdateClientRequest(
         name: clientName,
@@ -357,18 +413,23 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: cepController,
+                      inputFormatters: [
+                        MaskTextInputFormatter(mask: '#####-###',),
+                      ],
                       decoration: InputDecoration(
                         labelText: cep,
                         prefixIcon: const Icon(Icons.local_post_office),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            setState(() {
-                              _clearFieldCep = true;
-                              if (_clearFieldCep) {
-                                cepController.clear();
-                              }
-                            });
+                            cepController.clear();
+                            addressController.clear();
+                            numberController.clear();
+                            addressComplementController.clear();
+                            cityController.clear();
+                            stateController.clear();
+                            neighborhoodController.clear();
+                            countryController.clear();
                           },
                         ),
                       ),
@@ -376,97 +437,45 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: addressController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: address,
-                        prefixIcon: const Icon(Icons.location_on),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldAddress = true;
-                              if (_clearFieldAddress) {
-                                addressController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.location_on),
                       ),
+                      enabled: false
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: numberController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: number,
-                        prefixIcon: const Icon(Icons.numbers),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldNumber = true;
-                              if (_clearFieldNumber) {
-                                numberController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.numbers),
                       ),
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: addressComplementController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: addressComplement,
-                        prefixIcon: const Icon(Icons.home_rounded),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldAddressComplement = true;
-                              if (_clearFieldAddressComplement) {
-                                addressComplementController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.home_rounded),
                       ),
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: neighborhoodController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: neighborhood,
-                        prefixIcon: const Icon(Icons.holiday_village_rounded),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldNeighborhood = true;
-                              if (_clearFieldNeighborhood) {
-                                neighborhoodController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.holiday_village_rounded),
                       ),
+                      enabled: false
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
                       controller: cityController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: city,
-                        prefixIcon: const Icon(Icons.location_on),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCity = true;
-                              if (_clearFieldCity) {
-                                cityController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.location_on),
                       ),
+                      enabled: false
                     ),
                     const SizedBox(height: formHeight - 20),
                     TextFormField(
@@ -475,21 +484,20 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
                         LengthLimitingTextInputFormatter(2),
                       ],
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: state,
-                        prefixIcon: const Icon(Icons.location_on),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldState = true;
-                              if (_clearFieldState) {
-                                stateController.clear();
-                              }
-                            });
-                          },
-                        ),
+                        prefixIcon: Icon(Icons.location_on),
                       ),
+                      enabled: false
+                    ),
+                    const SizedBox(height: formHeight - 10),
+                    TextFormField(
+                      controller: countryController,
+                      decoration: const InputDecoration(
+                        label: Text('País'),
+                        prefixIcon: Icon(Icons.public),
+                      ),
+                      enabled: false,
                     ),
                     const SizedBox(height: formHeight),
                     SizedBox(

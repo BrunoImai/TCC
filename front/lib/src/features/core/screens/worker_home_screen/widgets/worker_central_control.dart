@@ -13,8 +13,8 @@ import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
 import '../../assistance/register_assistance_screen.dart';
 
-class EmployeeCentralControl extends StatelessWidget {
-  const EmployeeCentralControl({
+class WorkerCentralControl extends StatelessWidget {
+  const WorkerCentralControl({
     super.key,
   });
 
@@ -77,66 +77,6 @@ class EmployeeCentralControl extends StatelessWidget {
                       Flexible(
                         child: Text(
                           clients,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: 0.3,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => const RegisterWorkerScreen()),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person_add, size: 40, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          registerWorker,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: 0.3,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => const WorkerListScreen()),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          workers,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../constants/text_strings.dart';
 
-class EmployeeSearchBar extends StatelessWidget {
-  const EmployeeSearchBar({
+class WorkerSearchBar extends StatelessWidget {
+  const WorkerSearchBar({
     super.key,
   });
 

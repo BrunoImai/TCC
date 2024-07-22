@@ -1,13 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
-import 'package:http/http.dart' as http;
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/central_home_screen.dart';
@@ -35,10 +34,53 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
 
   bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
+  }
+
+  Future<void> fetchAddress(String cep) async {
+    if (cep.replaceAll(RegExp(r'\D'), '').length != 8) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'O CEP deve conter 8 dígitos');
+        },
+      );
+      return;
+    }
+
+    final response = await http.get(Uri.parse('https://viacep.com.br/ws/$cep/json/'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['erro'] == null) {
+        setState(() {
+          addressController.text = data['logradouro'] ?? '';
+          neighborhoodController.text = data['bairro'] ?? '';
+          cityController.text = data['localidade'] ?? '';
+          stateController.text = data['uf'] ?? '';
+          countryController.text = 'Brasil';
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(errorDescription: 'CEP não encontrado.');
+          },
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'Erro ao buscar endereço.');
+        },
+      );
+    }
   }
 
   @override
@@ -55,6 +97,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
       String city = cityController.text;
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
+      String country = countryController.text;
 
       if (client.isEmpty ||
           cellphone.isEmpty ||
@@ -65,7 +108,8 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
           number.isEmpty ||
           city.isEmpty ||
           state.isEmpty ||
-          neighborhood.isEmpty) {
+          neighborhood.isEmpty ||
+          country.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -122,17 +166,6 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
         return;
       }
 
-      if (cepController.text.replaceAll(RegExp(r'\D'), '').length != 8) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O CEP deve conter 8 dígitos');
-          },
-        );
-        return;
-      }
-
       if (state.length != 2 || !RegExp(r'^[a-zA-Z]{2}$').hasMatch(state)) {
         showDialog(
           context: context,
@@ -145,7 +178,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep, $country";
 
       ClientRequest clientRequest = ClientRequest(
           name: client,
@@ -241,6 +274,12 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                   label: Text(cep),
                   prefixIcon: Icon(Icons.local_post_office)
               ),
+              onChanged: (value) {
+                final cleanCep = value.replaceAll(RegExp(r'\D'), '');
+                if (cleanCep.length == 8) {
+                  fetchAddress(cleanCep);
+                }
+              },
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -249,6 +288,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                   label: Text(address),
                   prefixIcon: Icon(Icons.location_on)
               ),
+              enabled: false
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -273,13 +313,16 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                   label: Text(neighborhood),
                   prefixIcon: Icon(Icons.holiday_village_rounded)
               ),
+              enabled: false
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: cityController,
               decoration: const InputDecoration(
                   label: Text(city),
-                  prefixIcon: Icon(Icons.location_on)),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
+              enabled: false
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -292,6 +335,16 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                   label: Text(state),
                   prefixIcon: Icon(Icons.location_on)
               ),
+              enabled: false
+            ),
+            const SizedBox(height: formHeight - 10),
+            TextFormField(
+              controller: countryController,
+              decoration: const InputDecoration(
+                label: Text('País'),
+                prefixIcon: Icon(Icons.public),
+              ),
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(
