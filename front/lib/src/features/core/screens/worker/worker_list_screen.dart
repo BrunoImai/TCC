@@ -40,7 +40,6 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
     filteredWorkerList = [];
   }
 
-
   void _onSearchChanged() {
     setState(() {
       filteredWorkerList = workerList.where((worker) {
@@ -67,12 +66,12 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
         final List<WorkersList> workersList = [];
         for (var item in jsonData) {
           final worker = WorkersList(
-              id: item['id'],
-              name: item['name'],
-              email: item['email'],
-              entryDate: item['entryDate'],
-              cpf: item['cpf'],
-              cellphone: item['cellphone'],
+            id: item['id'],
+            name: item['name'],
+            email: item['email'],
+            entryDate: item['entryDate'],
+            cpf: item['cpf'],
+            cellphone: item['cellphone'],
           );
           workersList.add(worker);
         }
@@ -82,20 +81,17 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
           filteredWorkerList = workersList;
         });
 
-
         return workerList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
         throw Exception('Failed to load worker list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP: $e');
       throw Exception('Falha ao carregar a lista de workeres');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +105,15 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${CentralManager.instance.loggedUser!.central.name},",style: Theme.of(context).textTheme.bodyText2,),
-                Text(workerListSubTitle, style: Theme.of(context).textTheme.headline2,),
-                const SizedBox(height: homePadding,),
+                Text(
+                  "${CentralManager.instance.loggedUser!.central.name},",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                Text(
+                  workerListSubTitle,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                const SizedBox(height: homePadding),
                 //Search Box
                 Container(
                   decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
@@ -141,7 +143,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
               ],
             ),
           ),
@@ -161,26 +163,30 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.person_outline_rounded,
-                                    color: darkColor,
-                                    size: 35,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    worker.name,
-                                    style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.person_outline_rounded,
+                                      color: darkColor,
+                                      size: 35,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        worker.name,
+                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -194,22 +200,19 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.email,
-                                    color: darkColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    worker.email,
-                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.email,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  worker.email,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -217,22 +220,19 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.phone,
-                                    color: darkColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    worker.cellphone,
-                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.phone,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  worker.cellphone,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),

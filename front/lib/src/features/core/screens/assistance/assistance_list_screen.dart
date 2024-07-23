@@ -197,8 +197,14 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${CentralManager.instance.loggedUser!.central.name},",style: Theme.of(context).textTheme.bodyText2,),
-                Text(assitanceListSubTitle, style: Theme.of(context).textTheme.headline2,),
+                Text(
+                  "${CentralManager.instance.loggedUser!.central.name},",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                Text(
+                  assitanceListSubTitle,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
                 const SizedBox(height: homePadding,),
                 //Search Box
                 Container(
@@ -249,26 +255,30 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.work,
-                                    color: darkColor,
-                                    size: 35,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    data.assistance.name,
-                                    style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.work,
+                                      color: darkColor,
+                                      size: 35,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.assistance.name,
+                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -282,22 +292,19 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.person,
-                                    color: darkColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    data.clientName,
-                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.person,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  data.clientName,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -305,22 +312,19 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.location_on,
-                                    color: darkColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    data.assistance.address,
-                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.location_on,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  data.assistance.address,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -328,22 +332,19 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 5),
-                                  const Icon(
-                                    Icons.people,
-                                    color: darkColor,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    data.workersName.join(', '),
-                                    style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.people,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  data.workersName.join(', '),
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
