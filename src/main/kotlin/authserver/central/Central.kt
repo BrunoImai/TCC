@@ -1,12 +1,12 @@
 package authserver.central
 
-import authserver.assistance.Assistance
+import authserver.delta.assistance.Assistance
 import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
-import authserver.client.Client
+import authserver.delta.client.Client
 import jakarta.persistence.*
 
-import authserver.worker.Worker
+import authserver.delta.worker.Worker
 import java.util.*
 
 @Entity

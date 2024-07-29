@@ -1,15 +1,15 @@
 package authserver.central
 
-import authserver.assistance.request.AssistanceRequest
+import authserver.delta.assistance.request.AssistanceRequest
 import authserver.central.requests.CentralPasswordChange
-import authserver.client.requests.ClientRequest
+import authserver.delta.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
-import authserver.maps.AddressRequest
-import authserver.maps.AddressResponse
-import authserver.worker.requests.WorkerRequest
-import authserver.worker.requests.WorkerUpdateRequest
+import authserver.delta.worker.requests.WorkerRequest
+import authserver.delta.worker.requests.WorkerUpdateRequest
+import authserver.j_audi.products.requests.ProductRequest
+import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
@@ -182,4 +182,74 @@ class CentralController(
         if (service.deleteWorker(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 
+    // Supplier Business
+
+    @GetMapping("/supplierBusiness/{id}")
+    fun getSupplierBusiness(@PathVariable("id") id: Long) =
+        service.getSupplier(id)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/supplierBusiness")
+    fun listSupplierBusiness() =
+        service.listSuppliers()
+            .map { it.toResponse() }
+
+    @PostMapping("/supplierBusiness")
+    fun createSupplierBusiness(@Valid @RequestBody req: SupplierBusinessRequest) =
+        service.createSupplier(req)
+            .toResponse()
+            .let {
+                ResponseEntity.status(CREATED).body(it)
+            }
+
+    @PutMapping("/supplierBusiness/{id}")
+    fun updateSupplierBusiness(@PathVariable("id") id: Long, @Valid @RequestBody supplier: SupplierBusinessRequest) =
+        service.updateSupplier(id, supplier)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/supplierBusiness/{id}")
+    fun deleteSupplierBusiness(@PathVariable("id") id: Long): ResponseEntity<Void> =
+        if (service.deleteSupplier(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    @GetMapping("/supplierBusiness/{id}/products")
+    fun listProducts(@PathVariable("id") id: Long) =
+        service.listProductsBySupplier(id)
+            .map { it.toResponse() }
+
+    // Product
+
+    @GetMapping("/product/{id}")
+    fun getProduct(@PathVariable("id") id: Long) =
+        service.getProduct(id)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/product")
+    fun listProducts() =
+        service.listProducts()
+            .map { it.toResponse() }
+
+    @PostMapping("/product")
+    fun createProduct(@Valid @RequestBody req: ProductRequest) =
+        service.createProduct(req)
+            .toResponse()
+            .let {
+                ResponseEntity.status(CREATED).body(it)
+            }
+
+    @PutMapping("/product/{id}")
+    fun updateProduct(@PathVariable("id") id: Long, @Valid @RequestBody product: ProductRequest) =
+        service.updateProduct(id, product)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/product/{id}")
+    fun deleteProduct(@PathVariable("id") id: Long): ResponseEntity<Void> =
+        if (service.deleteProduct(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
 }

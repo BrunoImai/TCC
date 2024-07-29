@@ -1,8 +1,8 @@
 package authserver.central
 
-import authserver.assistance.Assistance
-import authserver.assistance.AssistanceRepository
-import authserver.assistance.request.AssistanceRequest
+import authserver.delta.assistance.Assistance
+import authserver.delta.assistance.AssistanceRepository
+import authserver.delta.assistance.request.AssistanceRequest
 import authserver.central.requests.CentralPasswordChange
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
@@ -13,15 +13,22 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
-import authserver.client.Client
-import authserver.client.ClientRepository
-import authserver.client.requests.ClientRequest
+import authserver.delta.client.Client
+import authserver.delta.client.ClientRepository
+import authserver.delta.client.requests.ClientRequest
 import authserver.exception.InvalidCredentialException
 import authserver.utils.PasswordUtil
-import authserver.worker.Worker
-import authserver.worker.WorkerRepository
-import authserver.worker.requests.WorkerRequest
-import authserver.worker.requests.WorkerUpdateRequest
+import authserver.delta.worker.Worker
+import authserver.delta.worker.WorkerRepository
+import authserver.delta.worker.requests.WorkerRequest
+import authserver.delta.worker.requests.WorkerUpdateRequest
+import authserver.j_audi.old_prices.OldPrices
+import authserver.j_audi.products.Product
+import authserver.j_audi.products.ProductRepository
+import authserver.j_audi.products.requests.ProductRequest
+import authserver.j_audi.supplier_business.SupplierBusiness
+import authserver.j_audi.supplier_business.SupplierBusinessRepository
+import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder
 import com.amazonaws.services.simpleemail.model.*
@@ -42,8 +49,10 @@ class CentralService(
     val jwt: Jwt,
     val request: HttpServletRequest,
     private val clientRepository: ClientRepository,
+    private val supplierRepository: SupplierBusinessRepository,
+    private val productRepository: ProductRepository
 
-) {
+    ) {
 
     fun getCentralIdFromToken(): Long {
         val authentication = jwt.extract(request)
@@ -56,19 +65,18 @@ class CentralService(
 
 
     fun createCentral(req: CentralRequest): CentralLoginResponse {
-        val currentDate = LocalDate.now()
 
         if (centralRepository.findByEmail(req.email!!) != null) throw IllegalStateException("Email já cadastrado!")
         if (centralRepository.findByCnpj(req.cnpj!!) != null) throw IllegalStateException("CNPJ já cadastrado!")
 
         // Convert LocalDate to Date
-        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
         log.info("entrou")
         val central = Central(
             email = req.email,
             password = PasswordUtil.hashPassword(req.password!!),
             name = req.name!!,
-            creationDate = date,
+            creationDate = currentTime(),
             cnpj = req.cnpj,
             cellphone = req.cellphone!!
         )
@@ -203,22 +211,18 @@ class CentralService(
 
 
     fun createClient(req: ClientRequest): Client {
-        val currentDate = LocalDate.now()
-
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
 
         if (clientRepository.findByEmail(req.email) != null) throw IllegalStateException("Email do cliente já cadastrado!")
         if (clientRepository.findByCpf(req.cpf) != null) throw IllegalStateException("CPF do cliente já cadastrado!")
 
-        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-
         val client = Client(
             email = req.email,
             name = req.name,
             cpf = req.cpf,
             cellphone = req.cellphone,
-            entryDate = date,
+            entryDate = currentTime(),
             central = central,
             address = req.address,
             complement = req.complement
@@ -266,14 +270,11 @@ class CentralService(
         if (workerRepository.findByEmail(req.email) != null) throw IllegalStateException("Email do funcionário já cadastrado!")
         if (workerRepository .findByCpf(req.cpf) != null) throw IllegalStateException("CPF do funcionário já cadastrado!")
 
-        val currentDate = LocalDate.now()
-        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-
         val worker = Worker(
             email = req.email,
             name = req.name,
             cpf = req.cpf,
-            entryDate = date,
+            entryDate = currentTime(),
             central = central,
             cellphone = req.cellphone,
             password = PasswordUtil.hashPassword(req.password),
@@ -344,11 +345,8 @@ class CentralService(
             workers.add(worker)
         }
 
-        val currentDate = LocalDate.now()
-        val date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-
         val assistance = Assistance(
-            startDate = date,
+            startDate = currentTime(),
             description = req.description,
             name = req.name,
             address = req.address,
@@ -403,7 +401,113 @@ class CentralService(
         return true
     }
 
+    // Suppliers
 
+    fun createSupplier(req: SupplierBusinessRequest): SupplierBusiness {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+
+        val supplier = SupplierBusiness(
+            name = req.name,
+            cnpj = req.cnpj,
+            creation_date = currentTime(),
+            responsibleCentral = central,
+        )
+        return supplierRepository.save(supplier)
+    }
+
+    fun listSuppliers(): List<SupplierBusiness> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return supplierRepository.findAllByResponsibleCentral(central)
+    }
+
+    fun getSupplier(supplierId: Long): SupplierBusiness? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val supplier = supplierRepository.findByIdOrNull(supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+        if (supplier.responsibleCentral != central) throw IllegalStateException("Fornecedor não encontrado")
+        return supplier
+    }
+
+    fun updateSupplier(supplierId: Long, supplier: SupplierBusinessRequest): SupplierBusiness {
+        val supplierToUpdate = getSupplier(supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+        supplierToUpdate.name = supplier.name
+        supplierToUpdate.cnpj = supplier.cnpj
+        return supplierRepository.save(supplierToUpdate)
+    }
+
+    fun deleteSupplier(supplierId: Long): Boolean {
+        val supplier = supplierRepository.findByIdOrNull(supplierId) ?: return false
+        supplierRepository.delete(supplier)
+        return true
+    }
+    // Products
+
+    fun getProduct(productId: Long): Product? {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return productRepository.findByIdOrNull(productId)
+    }
+
+    fun createProduct(req: ProductRequest): Product {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val supplier = supplierRepository.findByIdOrNull(req.supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+        val product = Product(
+            name = req.name,
+            price = req.price,
+            supplier = supplier,
+            creation_date = currentTime()
+        )
+        return productRepository.save(product)
+    }
+
+    fun updateProduct(productId: Long, product: ProductRequest): Product {
+        val productToUpdate = productRepository.findByIdOrNull(productId) ?: throw IllegalStateException("Produto não encontrado")
+        val oldPrice = productToUpdate.price
+        productToUpdate.producthistory.add(
+            OldPrices(
+                update_date = currentTime(),
+                old_price = oldPrice,
+                product = productToUpdate
+            )
+        )
+
+        productToUpdate.name = product.name
+        productToUpdate.price = product.price
+        return productRepository.save(productToUpdate)
+    }
+
+    fun deleteProduct(productId: Long): Boolean {
+        val product = productRepository.findByIdOrNull(productId) ?: return false
+        productRepository.delete(product)
+        return true
+    }
+
+    fun listProductsBySupplier(supplierId: Long): List<Product> {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val supplier = supplierRepository.findByIdOrNull(supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+        return productRepository.findAllBySupplier(supplier)
+    }
+
+    fun listProducts(): List<Product> {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return productRepository.findAll()
+    }
+
+    fun listProductHistory(productId: Long): List<OldPrices> {
+        val product = productRepository.findByIdOrNull(productId) ?: throw IllegalStateException("Produto não encontrado")
+        return product.producthistory.toList()
+    }
+    // Utils
+
+    fun currentTime() : Date {
+        val currentDate = LocalDate.now()
+        return Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    }
 
     companion object {
         val log = LoggerFactory.getLogger(CentralService::class.java)

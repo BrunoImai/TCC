@@ -1,7 +1,7 @@
 package authserver.security
 
 import authserver.central.Central
-import authserver.worker.Worker
+import authserver.delta.worker.Worker
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.jackson.io.JacksonSerializer
