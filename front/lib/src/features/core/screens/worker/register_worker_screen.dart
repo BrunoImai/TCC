@@ -32,9 +32,9 @@ class RegisterWorkerScreen extends StatelessWidget{
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                    child: Container(
+                    child: SizedBox(
                       width: elementWidth,
-                      child: FormHeaderWidget(
+                      child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
                         title: registerWorkerTilte,
@@ -47,7 +47,7 @@ class RegisterWorkerScreen extends StatelessWidget{
                   Center(
                     child: Container(
                       width: elementWidth,
-                      child: RegisterWorkerFormWidget(),
+                      child: const RegisterWorkerFormWidget(),
                     ),
                   ),
                 ],

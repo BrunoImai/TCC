@@ -9,5 +9,5 @@ data class SupplierBusinessResponse(
     val creationDate: Date,
     val cnpj: String,
     val responsibleCentralId: Long,
-    val products: List<ProductResponse>
+    val products: Set<ProductResponse?>
 )

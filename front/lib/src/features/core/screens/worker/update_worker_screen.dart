@@ -537,10 +537,12 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                 onPressed: () {
                                   String currentPassword = currentPasswordController.text;
                                   String newPassword = newPasswordController.text;
+                                  String workerName = workerController.text;
 
-                                  if (central.isEmpty ||
+                                  if (workerName.isEmpty ||
                                       cellphone.isEmpty ||
                                       email.isEmpty ||
+                                      cpf.isEmpty ||
                                       currentPassword.isEmpty) {
                                     showDialog(
                                       context: context,

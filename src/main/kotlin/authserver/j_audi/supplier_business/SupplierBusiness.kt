@@ -30,5 +30,5 @@ class SupplierBusiness (
     var products: MutableList<Product> = mutableListOf(),
 
     ) {
-    fun toResponse() = SupplierBusinessResponse(id!!, name, creation_date, cnpj, responsibleCentral.id!!, products.map { it.toResponse() })
+    fun toResponse() = SupplierBusinessResponse(id!!, name, creation_date, cnpj, responsibleCentral.id!!, products.map { it.toResponse() }.toSet())
 }
