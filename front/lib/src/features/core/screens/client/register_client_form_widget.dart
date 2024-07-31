@@ -297,6 +297,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                   label: Text(number),
                   prefixIcon: Icon(Icons.numbers)
               ),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
