@@ -10,6 +10,7 @@ import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
 import authserver.j_audi.products.requests.ProductRequest
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
+import authserver.j_audi.supplier_business.response.SupplierBusinessResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
@@ -190,6 +191,14 @@ class CentralController(
             ?.toResponse()
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/supplierBusiness/byCnpj/{cnpj}")
+    fun getSupplierBusinessByCnpj(@PathVariable("cnpj") cnpj: String): ResponseEntity<SupplierBusinessResponse> {
+        return service.getSupplierByCnpj(cnpj)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+    }
 
     @GetMapping("/supplierBusiness")
     fun listSupplierBusiness() =

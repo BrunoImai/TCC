@@ -240,387 +240,403 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(defaultSize),
-          child: Column(
-            children: [
-              const Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: workerController,
-                      decoration: InputDecoration(
-                        labelText: fullName,
-                        prefixIcon: const Icon(LineAwesomeIcons.user),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldWorkerName = true;
-                              if (_clearFieldWorkerName) {
-                                workerController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: email,
-                        prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldEmail = true;
-                              if (_clearFieldEmail) {
-                                emailController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cpfController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '###.###.###-##',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cpf,
-                        prefixIcon: const Icon(Icons.numbers),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCpf = true;
-                              if (_clearFieldCpf) {
-                                cpfController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cellphoneController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '(##) #####-####',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cellphone,
-                        prefixIcon: const Icon(LineAwesomeIcons.phone),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCellphone = true;
-                              if (_clearFieldCellphone) {
-                                cellphoneController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: currentPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: currentPassword,
-                        prefixIcon: const Icon(Icons.fingerprint),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _showNewPassword = true;
-                              _clearFieldCurrentPassword = true;
-                              currentPasswordController.clear();
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    Visibility(
-                      visible: _showNewPassword,
-                      child: TextFormField(
-                        controller: newPasswordController,
-                        onChanged: (newPasswordController) => onPasswordChanged(newPasswordController),
-                        obscureText: true,
-                        focusNode: _passwordFocusNode,
-                        onTap: () {
-                          setState(() {
-                            _isPasswordEightCharacters = false;
-                            _hasPasswordOneNumber = false;
-                            _hasPasswordLowercase = false;
-                            _hasPasswordUppercase = false;
-                            _hasPasswordSpecialCharacters = false;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: newPassword,
-                          prefixIcon: const Icon(Icons.fingerprint),
-                          suffixIcon: IconButton(
-                            icon: const Icon(LineAwesomeIcons.angle_up),
-                            onPressed: () {
-                              setState(() {
-                                _showNewPassword = false;
-                                newPasswordController.clear();
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 29),
-                    Visibility(
-                      visible: _passwordFocusNode.hasFocus,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double elementWidth;
+            if (constraints.maxWidth < 800) {
+              elementWidth = double.infinity;
+            } else {
+              elementWidth = constraints.maxWidth * 0.3;
+            }
+
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(defaultSize),
+                width: elementWidth,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
+                  child: Column(
+                    children: [
+                      const Stack(
                         children: [
-                          const SizedBox(height: formHeight - 20),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                    color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
-                                    border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                    borderRadius: BorderRadius.circular(50)
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.check, color: whiteColor, size: 10,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: formHeight - 25),
-                              Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
-                            ],
+                          SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
                           ),
-                          const SizedBox(height: formHeight - 29),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                    color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
-                                    border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                    borderRadius: BorderRadius.circular(50)
-                                ),
-                                child: const Center(
-                                    child: Icon(
-                                      Icons.check,
-                                      color: whiteColor,
-                                      size: 10,
-                                    )
-                                ),
-                              ),
-                              const SizedBox(width: formHeight - 25),
-                              Text(numberCharacter, style: Theme.of(context).textTheme.overline)
-                            ],
-                          ),
-                          const SizedBox(height: formHeight - 29),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                    color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
-                                    border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                    borderRadius: BorderRadius.circular(50)
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.check,
-                                    color: whiteColor,
-                                    size: 10,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: formHeight - 25),
-                              Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
-                            ],
-                          ),
-                          const SizedBox(height: formHeight - 29),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                    color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
-                                    border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                    borderRadius: BorderRadius.circular(50)
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.check,
-                                    color: whiteColor,
-                                    size: 10,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: formHeight - 25),
-                              Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
-                            ],
-                          ),
-                          const SizedBox(height: formHeight - 29),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                    color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
-                                    border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                    borderRadius: BorderRadius.circular(50)
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.check,
-                                    color: whiteColor,
-                                    size: 10,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: formHeight - 25),
-                              Text(specialCharacter, style: Theme.of(context).textTheme.overline)
-                            ],
-                          ),
-                          const SizedBox(height: formHeight - 29)
                         ],
                       ),
-                    ),
-                    const SizedBox(height: formHeight),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          String currentPassword = currentPasswordController.text;
-                          String newPassword = newPasswordController.text;
-
-                          if (central.isEmpty ||
-                              cellphone.isEmpty ||
-                              email.isEmpty ||
-                              currentPassword.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'Todos os campos são obrigatórios.');
-                              },
-                            );
-                            return;
-                          }
-
-
-                          if (newPassword.isNotEmpty &&
-                              currentPassword == newPassword) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'A nova senha não pode ser igual a antiga');
-                              },
-                            );
-                          } else {
-                            updateWorker(() {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const CentralHomeScreen())
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Atualização Realizada')),
-                              );
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: Text(editProfile.toUpperCase(),style: const TextStyle(color: darkColor)),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            text: joinedWorker,
-                            style: const TextStyle(fontSize: 12),
-                            children: [
-                              TextSpan(
-                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.worker.entryDate)),
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
-                            ],
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.defaultDialog(
-                              title: delete.toUpperCase(),
-                              titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                              content: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text("Tem certeza que deseja excluir esse funcionário?"),
-                              ),
-                              confirm: Expanded(
-                                child: ElevatedButton(
+                      const SizedBox(height: 50),
+                      Form(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: workerController,
+                              decoration: InputDecoration(
+                                labelText: fullName,
+                                prefixIcon: const Icon(LineAwesomeIcons.user),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    deleteWorker();
-                                    Get.to(const CentralHomeScreen());
+                                    setState(() {
+                                      _clearFieldWorkerName = true;
+                                      if (_clearFieldWorkerName) {
+                                        workerController.clear();
+                                      }
+                                    });
                                   },
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
-                                  child: const Text("Sim"),
                                 ),
                               ),
-                              cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent.withOpacity(0.1),
-                              elevation: 0,
-                              foregroundColor: Colors.red,
-                              shape: const StadiumBorder(),
-                              side: BorderSide.none),
-                          child: const Text(delete),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                labelText: email,
+                                prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldEmail = true;
+                                      if (_clearFieldEmail) {
+                                        emailController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cpfController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '###.###.###-##',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cpf,
+                                prefixIcon: const Icon(Icons.numbers),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCpf = true;
+                                      if (_clearFieldCpf) {
+                                        cpfController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cellphoneController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '(##) #####-####',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cellphone,
+                                prefixIcon: const Icon(LineAwesomeIcons.phone),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCellphone = true;
+                                      if (_clearFieldCellphone) {
+                                        cellphoneController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: currentPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                labelText: currentPassword,
+                                prefixIcon: const Icon(Icons.fingerprint),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _showNewPassword = true;
+                                      _clearFieldCurrentPassword = true;
+                                      currentPasswordController.clear();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            Visibility(
+                              visible: _showNewPassword,
+                              child: TextFormField(
+                                controller: newPasswordController,
+                                onChanged: (newPasswordController) => onPasswordChanged(newPasswordController),
+                                obscureText: true,
+                                focusNode: _passwordFocusNode,
+                                onTap: () {
+                                  setState(() {
+                                    _isPasswordEightCharacters = false;
+                                    _hasPasswordOneNumber = false;
+                                    _hasPasswordLowercase = false;
+                                    _hasPasswordUppercase = false;
+                                    _hasPasswordSpecialCharacters = false;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  labelText: newPassword,
+                                  prefixIcon: const Icon(Icons.fingerprint),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(LineAwesomeIcons.angle_up),
+                                    onPressed: () {
+                                      setState(() {
+                                        _showNewPassword = false;
+                                        newPasswordController.clear();
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 29),
+                            Visibility(
+                              visible: _passwordFocusNode.hasFocus,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: formHeight - 20),
+                                  Row(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                            color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
+                                            border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.check, color: whiteColor, size: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: formHeight - 25),
+                                      Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
+                                    ],
+                                  ),
+                                  const SizedBox(height: formHeight - 29),
+                                  Row(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                            color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        child: const Center(
+                                            child: Icon(
+                                              Icons.check,
+                                              color: whiteColor,
+                                              size: 10,
+                                            )
+                                        ),
+                                      ),
+                                      const SizedBox(width: formHeight - 25),
+                                      Text(numberCharacter, style: Theme.of(context).textTheme.overline)
+                                    ],
+                                  ),
+                                  const SizedBox(height: formHeight - 29),
+                                  Row(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                            color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.check,
+                                            color: whiteColor,
+                                            size: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: formHeight - 25),
+                                      Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
+                                    ],
+                                  ),
+                                  const SizedBox(height: formHeight - 29),
+                                  Row(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                            color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.check,
+                                            color: whiteColor,
+                                            size: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: formHeight - 25),
+                                      Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
+                                    ],
+                                  ),
+                                  const SizedBox(height: formHeight - 29),
+                                  Row(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                            color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.check,
+                                            color: whiteColor,
+                                            size: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: formHeight - 25),
+                                      Text(specialCharacter, style: Theme.of(context).textTheme.overline)
+                                    ],
+                                  ),
+                                  const SizedBox(height: formHeight - 29)
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: formHeight),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  String currentPassword = currentPasswordController.text;
+                                  String newPassword = newPasswordController.text;
+
+                                  if (central.isEmpty ||
+                                      cellphone.isEmpty ||
+                                      email.isEmpty ||
+                                      currentPassword.isEmpty) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertPopUp(
+                                            errorDescription: 'Todos os campos são obrigatórios.');
+                                      },
+                                    );
+                                    return;
+                                  }
+
+                                  if (newPassword.isNotEmpty &&
+                                      currentPassword == newPassword) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertPopUp(
+                                            errorDescription: 'A nova senha não pode ser igual a antiga');
+                                      },
+                                    );
+                                  } else {
+                                    updateWorker(() {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const CentralHomeScreen())
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Atualização Realizada')),
+                                      );
+                                    });
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: primaryColor,
+                                    side: BorderSide.none,
+                                    shape: const StadiumBorder()),
+                                child: Text(editProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: joinedWorker,
+                                    style: const TextStyle(fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.worker.entryDate)),
+                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                      title: delete.toUpperCase(),
+                                      titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                                      content: const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                                        child: Text("Tem certeza que deseja excluir esse funcionário?"),
+                                      ),
+                                      confirm: Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            deleteWorker();
+                                            Get.to(const CentralHomeScreen());
+                                          },
+                                          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
+                                          child: const Text("Sim"),
+                                        ),
+                                      ),
+                                      cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                                      elevation: 0,
+                                      foregroundColor: Colors.red,
+                                      shape: const StadiumBorder(),
+                                      side: BorderSide.none),
+                                  child: const Text(delete),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
-                      ],
-                    )
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

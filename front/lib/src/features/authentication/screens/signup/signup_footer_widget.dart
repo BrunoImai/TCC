@@ -13,6 +13,7 @@ class SignUpFooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextButton(
           onPressed: () => Get.to(() => const WhoAreYouScreen()),

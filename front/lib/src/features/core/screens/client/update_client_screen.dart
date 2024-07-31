@@ -312,298 +312,314 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(defaultSize),
-          child: Column(
-            children: [
-              const Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: clientNameController,
-                      decoration: InputDecoration(
-                        labelText: fullName,
-                        prefixIcon: const Icon(LineAwesomeIcons.user),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldClientName = true;
-                              if (_clearFieldClientName) {
-                                clientNameController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: email,
-                        prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldEmail = true;
-                              if (_clearFieldEmail) {
-                                emailController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cpfController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '###.###.###-##',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cpf,
-                        prefixIcon: const Icon(Icons.numbers),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCpf = true;
-                              if (_clearFieldCpf) {
-                                cpfController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cellphoneController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '(##) #####-####',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cellphone,
-                        prefixIcon: const Icon(LineAwesomeIcons.phone),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCellphone = true;
-                              if (_clearFieldCellphone) {
-                                cellphoneController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cepController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '#####-###',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cep,
-                        prefixIcon: const Icon(Icons.local_post_office),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            cepController.clear();
-                            addressController.clear();
-                            numberController.clear();
-                            addressComplementController.clear();
-                            cityController.clear();
-                            stateController.clear();
-                            neighborhoodController.clear();
-                            countryController.clear();
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: addressController,
-                      decoration: const InputDecoration(
-                        labelText: address,
-                        prefixIcon: Icon(Icons.location_on),
-                      ),
-                      enabled: false
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: numberController,
-                      decoration: const InputDecoration(
-                        labelText: number,
-                        prefixIcon: Icon(Icons.numbers),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: addressComplementController,
-                      decoration: const InputDecoration(
-                        labelText: addressComplement,
-                        prefixIcon: Icon(Icons.home_rounded),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: neighborhoodController,
-                      decoration: const InputDecoration(
-                        labelText: neighborhood,
-                        prefixIcon: Icon(Icons.holiday_village_rounded),
-                      ),
-                      enabled: false
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cityController,
-                      decoration: const InputDecoration(
-                        labelText: city,
-                        prefixIcon: Icon(Icons.location_on),
-                      ),
-                      enabled: false
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: stateController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: state,
-                        prefixIcon: Icon(Icons.location_on),
-                      ),
-                      enabled: false
-                    ),
-                    const SizedBox(height: formHeight - 10),
-                    TextFormField(
-                      controller: countryController,
-                      decoration: const InputDecoration(
-                        label: Text('País'),
-                        prefixIcon: Icon(Icons.public),
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double elementWidth;
+            if (constraints.maxWidth < 800) {
+              elementWidth = double.infinity;
+            } else {
+              elementWidth = constraints.maxWidth * 0.3;
+            }
 
-                          if (cellphone.isEmpty ||
-                              email.isEmpty ||
-                              cpf.isEmpty ||
-                              currentPassword.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'Todos os campos são obrigatórios.');
-                              },
-                            );
-                            return;
-                          }
-
-
-                          if (newPassword.isNotEmpty &&
-                              currentPassword == newPassword) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AlertPopUp(
-                                    errorDescription: 'A nova senha não pode ser igual a antiga');
-                              },
-                            );
-                          } else {
-                            updateClient(() {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const CentralHomeScreen())
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Atualização Realizada')),
-                              );
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: Text(editProfile.toUpperCase(),style: const TextStyle(color: darkColor)),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            text: joined,
-                            style: const TextStyle(fontSize: 12),
-                            children: [
-                              TextSpan(
-                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.client.entryDate)),
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
-                            ],
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(defaultSize),
+                width: elementWidth,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
+                  child: Column(
+                    children: [
+                      const Stack(
+                        children: [
+                          SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
                           ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.defaultDialog(
-                              title: delete.toUpperCase(),
-                              titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                              content: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text("Tem certeza que deseja excluir esse cliente?"),
-                              ),
-                              confirm: Expanded(
-                                child: ElevatedButton(
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      Form(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: clientNameController,
+                              decoration: InputDecoration(
+                                labelText: fullName,
+                                prefixIcon: const Icon(LineAwesomeIcons.user),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    deleteClient();
-                                    Get.to(const CentralHomeScreen());
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Cliente excluído com sucesso!')),
-                                    );
+                                    setState(() {
+                                      _clearFieldClientName = true;
+                                      if (_clearFieldClientName) {
+                                        clientNameController.clear();
+                                      }
+                                    });
                                   },
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
-                                  child: const Text("Sim"),
                                 ),
                               ),
-                              cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent.withOpacity(0.1),
-                              elevation: 0,
-                              foregroundColor: Colors.red,
-                              shape: const StadiumBorder(),
-                              side: BorderSide.none),
-                          child: const Text(delete),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                labelText: email,
+                                prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldEmail = true;
+                                      if (_clearFieldEmail) {
+                                        emailController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cpfController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '###.###.###-##',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cpf,
+                                prefixIcon: const Icon(Icons.numbers),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCpf = true;
+                                      if (_clearFieldCpf) {
+                                        cpfController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cellphoneController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '(##) #####-####',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cellphone,
+                                prefixIcon: const Icon(LineAwesomeIcons.phone),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCellphone = true;
+                                      if (_clearFieldCellphone) {
+                                        cellphoneController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cepController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '#####-###',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cep,
+                                prefixIcon: const Icon(Icons.local_post_office),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    cepController.clear();
+                                    addressController.clear();
+                                    numberController.clear();
+                                    addressComplementController.clear();
+                                    cityController.clear();
+                                    stateController.clear();
+                                    neighborhoodController.clear();
+                                    countryController.clear();
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                labelText: address,
+                                prefixIcon: Icon(Icons.location_on),
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: numberController,
+                              decoration: const InputDecoration(
+                                labelText: number,
+                                prefixIcon: Icon(Icons.numbers),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: addressComplementController,
+                              decoration: const InputDecoration(
+                                labelText: addressComplement,
+                                prefixIcon: Icon(Icons.home_rounded),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: neighborhoodController,
+                              decoration: const InputDecoration(
+                                labelText: neighborhood,
+                                prefixIcon: Icon(Icons.holiday_village_rounded),
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cityController,
+                              decoration: const InputDecoration(
+                                labelText: city,
+                                prefixIcon: Icon(Icons.location_on),
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: stateController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                LengthLimitingTextInputFormatter(2),
+                              ],
+                              decoration: const InputDecoration(
+                                labelText: state,
+                                prefixIcon: Icon(Icons.location_on),
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 10),
+                            TextFormField(
+                              controller: countryController,
+                              decoration: const InputDecoration(
+                                label: Text('País'),
+                                prefixIcon: Icon(Icons.public),
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (cellphone.isEmpty ||
+                                      email.isEmpty ||
+                                      cpf.isEmpty ||
+                                      currentPassword.isEmpty) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertPopUp(
+                                            errorDescription: 'Todos os campos são obrigatórios.');
+                                      },
+                                    );
+                                    return;
+                                  }
+
+                                  if (newPassword.isNotEmpty &&
+                                      currentPassword == newPassword) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertPopUp(
+                                            errorDescription: 'A nova senha não pode ser igual a antiga');
+                                      },
+                                    );
+                                  } else {
+                                    updateClient(() {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const CentralHomeScreen())
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Atualização Realizada')),
+                                      );
+                                    });
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: primaryColor,
+                                    side: BorderSide.none,
+                                    shape: const StadiumBorder()),
+                                child: Text(editProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: joined,
+                                    style: const TextStyle(fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.client.entryDate)),
+                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                      title: delete.toUpperCase(),
+                                      titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                                      content: const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                                        child: Text("Tem certeza que deseja excluir esse cliente?"),
+                                      ),
+                                      confirm: Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            deleteClient();
+                                            Get.to(const CentralHomeScreen());
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text('Cliente excluído com sucesso!')),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent, side: BorderSide.none),
+                                          child: const Text("Sim"),
+                                        ),
+                                      ),
+                                      cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("Não")),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                                      elevation: 0,
+                                      foregroundColor: Colors.red,
+                                      shape: const StadiumBorder(),
+                                      side: BorderSide.none),
+                                  child: const Text(delete),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    )
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

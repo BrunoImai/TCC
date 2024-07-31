@@ -430,6 +430,16 @@ class CentralService(
         return supplier
     }
 
+    fun getSupplierByCnpj(cnpj: String): SupplierBusiness? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val supplier = supplierRepository.findByCnpj(cnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
+        if (supplier.responsibleCentral != central) throw IllegalStateException("Fornecedor não encontrado")
+
+        return supplier
+    }
+
+
     fun updateSupplier(supplierId: Long, supplier: SupplierBusinessRequest): SupplierBusiness {
         val supplierToUpdate = getSupplier(supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
         supplierToUpdate.name = supplier.name

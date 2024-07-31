@@ -334,369 +334,386 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(defaultSize),
-          child: Column(
-            children: [
-              const Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: Icon(Icons.work, color: primaryColor, size: 100),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: assistanceNameController,
-                      decoration: InputDecoration(
-                        labelText: assistanceName,
-                        prefixIcon: const Icon(LineAwesomeIcons.user),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldAssistanceName = true;
-                              if (_clearFieldAssistanceName) {
-                                assistanceNameController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: descriptionController,
-                      decoration: InputDecoration(
-                        labelText: description,
-                        prefixIcon: const Icon(Icons.add),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldDescription = true;
-                              if (_clearFieldDescription) {
-                                descriptionController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: clientCpfController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '###.###.###-##',),
-                      ],
-                      decoration: InputDecoration(
-                        labelText: cpf,
-                        prefixIcon: const Icon(Icons.numbers),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            setState(() {
-                              _clearFieldCpf = true;
-                              if (_clearFieldCpf) {
-                                clientCpfController.clear();
-                                cepController.clear();
-                                addressController.clear();
-                                numberController.clear();
-                                addressComplementController.clear();
-                                neighborhoodController.clear();
-                                cityController.clear();
-                                stateController.clear();
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cepController,
-                      inputFormatters: [
-                        MaskTextInputFormatter(mask: '#####-###',),
-                      ],
-                      decoration: const InputDecoration(
-                          label: Text(cep),
-                          prefixIcon: Icon(Icons.local_post_office)
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: addressController,
-                      decoration: const InputDecoration(
-                          label: Text(address),
-                          prefixIcon: Icon(Icons.location_on)
-                      ),
-                      enabled: _isAddressFieldEnabled,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: numberController,
-                      decoration: const InputDecoration(
-                          label: Text(number),
-                          prefixIcon: Icon(Icons.numbers)
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: addressComplementController,
-                      decoration: const InputDecoration(
-                          label: Text(addressComplement),
-                          prefixIcon: Icon(Icons.home_rounded)
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: neighborhoodController,
-                      decoration: const InputDecoration(
-                          label: Text(neighborhood),
-                          prefixIcon: Icon(Icons.holiday_village_rounded)
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: cityController,
-                      decoration: const InputDecoration(
-                          label: Text(city),
-                          prefixIcon: Icon(Icons.location_on)),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    TextFormField(
-                      controller: stateController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      decoration: const InputDecoration(
-                          label: Text(state),
-                          prefixIcon: Icon(Icons.location_on)
-                      ),
-                      enabled: false,
-                    ),
-                    const SizedBox(height: formHeight - 20),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isPeriodExpanded = !_isPeriodExpanded;
-                        });
-                      },
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: 'Período',
-                          prefixIcon: Icon(Icons.access_time),
-                          suffixIcon: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Icon(
-                              _isPeriodExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
-                            ),
-                          ),
-                        ),
-                        child: Text(selectedPeriod ?? ''),
-                      ),
-                    ),
-                    if (_isPeriodExpanded)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double elementWidth;
+            if (constraints.maxWidth < 800) {
+              elementWidth = double.infinity;
+            } else {
+              elementWidth = constraints.maxWidth * 0.3;
+            }
+
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(defaultSize),
+                width: elementWidth,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
+                  child: Column(
+                    children: [
+                      const Stack(
                         children: [
-                          ListTile(
-                            title: Text('Matutino', style: Theme.of(context).textTheme.bodyText2),
-                            onTap: () {
-                              setState(() {
-                                selectedPeriod = 'Matutino';
-                                _isPeriodExpanded = false; // Close the menu after selection
-                              });
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Vespertino', style: Theme.of(context).textTheme.bodyText2),
-                            onTap: () {
-                              setState(() {
-                                selectedPeriod = 'Vespertino';
-                                _isPeriodExpanded = false; // Close the menu after selection
-                              });
-                            },
-                          ),
-                          ListTile(
-                            title: Text('Noturno', style: Theme.of(context).textTheme.bodyText2),
-                            onTap: () {
-                              setState(() {
-                                selectedPeriod = 'Noturno';
-                                _isPeriodExpanded = false; // Close the menu after selection
-                              });
-                            },
+                          SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: Icon(Icons.work, color: primaryColor, size: 100),
                           ),
                         ],
                       ),
-                    const SizedBox(height: formHeight - 20),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isWorkerExpanded = !_isWorkerExpanded;
-                        });
-                      },
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          label: const Text('Funcionários'),
-                          prefixIcon: const Icon(Icons.person_search),
-                          suffixIcon: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: IconButton(
-                              icon: Icon(
-                                _isWorkerExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
+                      const SizedBox(height: 50),
+                      Form(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: assistanceNameController,
+                              decoration: InputDecoration(
+                                labelText: assistanceName,
+                                prefixIcon: const Icon(LineAwesomeIcons.user),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldAssistanceName = true;
+                                      if (_clearFieldAssistanceName) {
+                                        assistanceNameController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
-                              onPressed: () {
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                labelText: description,
+                                prefixIcon: const Icon(Icons.add),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldDescription = true;
+                                      if (_clearFieldDescription) {
+                                        descriptionController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: clientCpfController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '###.###.###-##',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: cpf,
+                                prefixIcon: const Icon(Icons.numbers),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCpf = true;
+                                      if (_clearFieldCpf) {
+                                        clientCpfController.clear();
+                                        cepController.clear();
+                                        addressController.clear();
+                                        numberController.clear();
+                                        addressComplementController.clear();
+                                        neighborhoodController.clear();
+                                        cityController.clear();
+                                        stateController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cepController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '#####-###',),
+                              ],
+                              decoration: const InputDecoration(
+                                  label: Text(cep),
+                                  prefixIcon: Icon(Icons.local_post_office)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                  label: Text(address),
+                                  prefixIcon: Icon(Icons.location_on)
+                              ),
+                              enabled: _isAddressFieldEnabled,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: numberController,
+                              decoration: const InputDecoration(
+                                  label: Text(number),
+                                  prefixIcon: Icon(Icons.numbers)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: addressComplementController,
+                              decoration: const InputDecoration(
+                                  label: Text(addressComplement),
+                                  prefixIcon: Icon(Icons.home_rounded)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: neighborhoodController,
+                              decoration: const InputDecoration(
+                                  label: Text(neighborhood),
+                                  prefixIcon: Icon(Icons.holiday_village_rounded)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cityController,
+                              decoration: const InputDecoration(
+                                  label: Text(city),
+                                  prefixIcon: Icon(Icons.location_on)),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: stateController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                LengthLimitingTextInputFormatter(2),
+                              ],
+                              decoration: const InputDecoration(
+                                  label: Text(state),
+                                  prefixIcon: Icon(Icons.location_on)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            GestureDetector(
+                              onTap: () {
                                 setState(() {
-                                  if (!_isWorkerExpanded) {
-                                    selectedWorkers.clear();
-                                  }
+                                  _isPeriodExpanded = !_isPeriodExpanded;
+                                });
+                              },
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Período',
+                                  prefixIcon: Icon(Icons.access_time),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Icon(
+                                      _isPeriodExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(selectedPeriod ?? ''),
+                              ),
+                            ),
+                            if (_isPeriodExpanded)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Text('Matutino', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPeriod = 'Matutino';
+                                        _isPeriodExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Vespertino', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPeriod = 'Vespertino';
+                                        _isPeriodExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Noturno', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPeriod = 'Noturno';
+                                        _isPeriodExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: formHeight - 20),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
                                   _isWorkerExpanded = !_isWorkerExpanded;
                                 });
                               },
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          selectedWorkers.isEmpty
-                              ? ''
-                              : selectedWorkers.map((worker) => worker.name).join(', '),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    if (_isWorkerExpanded)
-                      Column(
-                        children: workers.map((worker) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (selectedWorkers.contains(worker)) {
-                                  selectedWorkers.remove(worker);
-                                } else {
-                                  selectedWorkers.add(worker);
-                                }
-                              });
-                            },
-                            child: Row(
-                              children: [
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 300),
-                                  width: 14,
-                                  height: 14,
-                                  decoration: BoxDecoration(
-                                      color: selectedWorkers.contains(worker) ? Colors.green : Colors.transparent,
-                                      border: Border.all(color: selectedWorkers.contains(worker) ? Colors.transparent : primaryColor),
-                                      borderRadius: BorderRadius.circular(50)
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  label: const Text('Funcionários'),
+                                  prefixIcon: const Icon(Icons.person_search),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        _isWorkerExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (!_isWorkerExpanded) {
+                                            selectedWorkers.clear();
+                                          }
+                                          _isWorkerExpanded = !_isWorkerExpanded;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  child: selectedWorkers.contains(worker)
-                                      ? const Center(
-                                      child: Icon(
-                                        Icons.check,
-                                        color: whiteColor,
-                                        size: 10,
-                                      )
-                                  )
-                                      : null,
                                 ),
-                                const SizedBox(width: formHeight - 25),
-                                Text(worker.name, style: Theme.of(context).textTheme.bodyText2),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    const SizedBox(height: formHeight - 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                            updateAssistance(() {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const CentralHomeScreen())
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Atualização Realizada')),
-                              );
-                            });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: Text(editAssistance.toUpperCase(),style: const TextStyle(color: darkColor)),
-                      ),
-                    ),
-                    const SizedBox(height: formHeight),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            text: joined,
-                            style: const TextStyle(fontSize: 12),
-                            children: [
-                              TextSpan(
-                                  text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.assistance.startDate)),
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
-                            ],
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.defaultDialog(
-                              title: delete.toUpperCase(),
-                              titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                              content: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text("Tem certeza que deseja excluir esse serviço?"),
+                                child: Text(
+                                  selectedWorkers.isEmpty
+                                      ? ''
+                                      : selectedWorkers.map((worker) => worker.name).join(', '),
+                                ),
                               ),
-                              confirm: Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    deleteAssistance();
-                                    Get.to(const CentralHomeScreen());
+                            ),
+                            const SizedBox(height: 2),
+                            if (_isWorkerExpanded)
+                              Column(
+                                children: workers.map((worker) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (selectedWorkers.contains(worker)) {
+                                          selectedWorkers.remove(worker);
+                                        } else {
+                                          selectedWorkers.add(worker);
+                                        }
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        AnimatedContainer(
+                                          duration: const Duration(milliseconds: 300),
+                                          width: 14,
+                                          height: 14,
+                                          decoration: BoxDecoration(
+                                              color: selectedWorkers.contains(worker) ? Colors.green : Colors.transparent,
+                                              border: Border.all(color: selectedWorkers.contains(worker) ? Colors.transparent : primaryColor),
+                                              borderRadius: BorderRadius.circular(50)
+                                          ),
+                                          child: selectedWorkers.contains(worker)
+                                              ? const Center(
+                                              child: Icon(
+                                                Icons.check,
+                                                color: whiteColor,
+                                                size: 10,
+                                              )
+                                          )
+                                              : null,
+                                        ),
+                                        const SizedBox(width: formHeight - 25),
+                                        Text(worker.name, style: Theme.of(context).textTheme.bodyText2),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            const SizedBox(height: formHeight - 10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  updateAssistance(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const CentralHomeScreen())
+                                    );
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Serviço excluído com sucesso!')),
+                                      const SnackBar(content: Text('Atualização Realizada')),
+                                    );
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: primaryColor,
+                                    side: BorderSide.none,
+                                    shape: const StadiumBorder()),
+                                child: Text(editAssistance.toUpperCase(), style: const TextStyle(color: darkColor)),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: joined,
+                                    style: const TextStyle(fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.assistance.startDate)),
+                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                      title: delete.toUpperCase(),
+                                      titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                                      content: const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                                        child: Text("Tem certeza que deseja excluir esse serviço?"),
+                                      ),
+                                      confirm: Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            deleteAssistance();
+                                            Get.to(const CentralHomeScreen());
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text('Serviço excluído com sucesso!')),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent, side: BorderSide.none),
+                                          child: const Text("Sim"),
+                                        ),
+                                      ),
+                                      cancel: OutlinedButton(
+                                          onPressed: () => Get.back(), child: const Text("Não")),
                                     );
                                   },
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
-                                  child: const Text("Sim"),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                                      elevation: 0,
+                                      foregroundColor: Colors.red,
+                                      shape: const StadiumBorder(),
+                                      side: BorderSide.none),
+                                  child: const Text(delete),
                                 ),
-                              ),
-                              cancel: OutlinedButton(
-                                  onPressed: () => Get.back(), child: const Text("Não")
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent.withOpacity(0.1),
-                              elevation: 0,
-                              foregroundColor: Colors.red,
-                              shape: const StadiumBorder(),
-                              side: BorderSide.none),
-                          child: const Text(delete),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    )
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -46,35 +46,68 @@ class WhoAreYouScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Hero(
-                      tag: 'welcome-image-tag',
-                      child: Image(
-                        image: const AssetImage(welcomeImage),
-                        height: height * 0.6,)
+                    tag: 'welcome-image-tag',
+                    child: Image(
+                      image: const AssetImage(welcomeImage),
+                      height: height * 0.6,
+                    ),
                   ),
                   Column(
                     children: [
-                      Text(whoAreYouTitle, style: Theme.of(context).textTheme.headline3,),
-                      Text(whoAreYouSubTitle, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center,),
+                      Text(
+                        whoAreYouTitle,
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                      Text(
+                        whoAreYouSubTitle,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: OutlinedButton(
-                              onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1,)),
-                              child: Text(employee.toUpperCase())
-                          )
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                          child: ElevatedButton(
-                              onPressed: ()=> Get.to(() => const LoginScreen(whoAreYouTag: 2,)),
-                              child: Text(company.toUpperCase())
-                          )
-                      ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 800) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1)),
+                                child: Text(employee.toUpperCase()),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 2)),
+                                child: Text(company.toUpperCase()),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: constraints.maxWidth * 0.3,
+                              child: OutlinedButton(
+                                onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1)),
+                                child: Text(employee.toUpperCase()),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0),
+                            SizedBox(
+                              width: constraints.maxWidth * 0.3,
+                              child: ElevatedButton(
+                                onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 2)),
+                                child: Text(company.toUpperCase()),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

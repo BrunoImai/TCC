@@ -17,20 +17,43 @@ class RegisterWorkerScreen extends StatelessWidget{
     return Scaffold(
       appBar: const CentralAppBar(),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(defaultSize),
-          child: const Column(
-            children: [
-              FormHeaderWidget(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double elementWidth;
+            if (constraints.maxWidth < 800) {
+              elementWidth = double.infinity;
+            } else {
+              elementWidth = constraints.maxWidth * 0.3;
+            }
+
+            return Container(
+              padding: const EdgeInsets.all(defaultSize),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                image: welcomeImage,
-                title: registerWorkerTilte,
-                subTitle: registerWorkerSubTitle,
-                imageHeight: 0.15,
+                children: [
+                  Center(
+                    child: Container(
+                      width: elementWidth,
+                      child: FormHeaderWidget(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        image: welcomeImage,
+                        title: registerWorkerTilte,
+                        subTitle: registerWorkerSubTitle,
+                        imageHeight: 0.15,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Container(
+                      width: elementWidth,
+                      child: RegisterWorkerFormWidget(),
+                    ),
+                  ),
+                ],
               ),
-              RegisterWorkerFormWidget(),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

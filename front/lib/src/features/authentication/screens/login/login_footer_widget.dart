@@ -14,7 +14,7 @@ class LoginFooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         const SizedBox(height: formHeight - 20),
         TextButton(

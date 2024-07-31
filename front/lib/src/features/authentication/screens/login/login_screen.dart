@@ -20,21 +20,47 @@ class _LoginScreenState extends State<LoginScreen>{
   @override
   Widget build(BuildContext context) {
 
-    final size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         appBar: const WelcomeAppBar(),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(defaultSize),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LoginHeaderWidget(size: size),
-                LoginForm(whoAreYouTag: widget.whoAreYouTag,),
-                const LoginFooterWidget(),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double elementWidth;
+                if (constraints.maxWidth < 800) {
+                  elementWidth = double.infinity;
+                } else {
+                  elementWidth = constraints.maxWidth * 0.3;
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: LoginHeaderWidget(size: Size(constraints.maxWidth, constraints.maxHeight)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: LoginForm(whoAreYouTag: widget.whoAreYouTag),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: const LoginFooterWidget(),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),

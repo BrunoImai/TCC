@@ -17,20 +17,49 @@ class SignUpScreen extends StatelessWidget {
       child: Scaffold(
         appBar: const WelcomeAppBar(),
         body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(defaultSize),
-            child: const Column(
-              children: [
-                FormHeaderWidget(
-                  image: welcomeImage,
-                  title: signUpTitle,
-                  subTitle: signUpSubTitle,
-                  imageHeight: 0.15,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double elementWidth;
+              if (constraints.maxWidth < 800) {
+                elementWidth = double.infinity;
+              } else {
+                elementWidth = constraints.maxWidth * 0.3;
+              }
+
+              return Container(
+                padding: const EdgeInsets.all(defaultSize),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: const FormHeaderWidget(
+                          image: welcomeImage,
+                          title: signUpTitle,
+                          subTitle: signUpSubTitle,
+                          imageHeight: 0.15,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: const SignUpFormWidget(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        width: elementWidth,
+                        child: const SignUpFooterWidget(),
+                      ),
+                    ),
+                  ],
                 ),
-                SignUpFormWidget(),
-                SignUpFooterWidget(),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
