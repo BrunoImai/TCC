@@ -433,10 +433,8 @@ class CentralService(
     fun getSupplierByCnpj(cnpj: String): SupplierBusiness? {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        val supplier = supplierRepository.findByCnpj(cnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
-        if (supplier.responsibleCentral != central) throw IllegalStateException("Fornecedor não encontrado")
-
-        return supplier
+        val supplier =  supplierRepository.findByCnpj(cnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
+        return supplier.takeIf { it.responsibleCentral == central } ?: throw IllegalStateException("Fornecedor não encontrado")
     }
 
 
@@ -463,7 +461,7 @@ class CentralService(
     fun createProduct(req: ProductRequest): Product {
         val centralId = getCentralIdFromToken()
         centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        val supplier = supplierRepository.findByIdOrNull(req.supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+        val supplier = supplierRepository.findByCnpj(req.supplierCnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
         val product = Product(
             name = req.name,
             price = req.price,

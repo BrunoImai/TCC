@@ -18,6 +18,8 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/central")
@@ -192,13 +194,12 @@ class CentralController(
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
 
-    @GetMapping("/supplierBusiness/byCnpj/{cnpj}")
-    fun getSupplierBusinessByCnpj(@PathVariable("cnpj") cnpj: String): ResponseEntity<SupplierBusinessResponse> {
-        return service.getSupplierByCnpj(cnpj)
+    @GetMapping("/supplierBusiness/byCnpj")
+    fun getSupplierBusinessByCnpj(@RequestParam("cnpj") cnpj: String) =
+        service.getSupplierByCnpj(cnpj)
             ?.toResponse()
-            ?.let { ResponseEntity.ok(it) }
+            .let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
-    }
 
     @GetMapping("/supplierBusiness")
     fun listSupplierBusiness() =

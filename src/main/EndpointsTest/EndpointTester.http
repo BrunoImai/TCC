@@ -202,17 +202,17 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Novo Fornecedor",
-  "cnpj": "99887766554433"
+  "name": "Novo Fornecedor 3",
+  "cnpj": "99.887.766/5544-33"
 }
 
 
 ### busca fornecedor
-GET localhost:8080/api/central/supplierBusiness/1
+GET localhost:8080/api/central/supplierBusiness/53
 Authorization: Bearer {{token}}
 
 ### busca fornecedor
-GET localhost:8080/api/central/supplierBusiness/byCnpj/12.345.678/9101-23
+GET localhost:8080/api/central/supplierBusiness/byCnpj/99.887.766%2F5544-33
 Authorization: Bearer {{token}}
 
 
@@ -246,7 +246,7 @@ Content-Type: application/json
 {
   "name": "Produto Novo",
   "price": 99.99,
-  "supplierId": 2
+  "supplierCnpj": 53
 }
 
 ### lista produtos
@@ -259,7 +259,7 @@ GET localhost:8080/api/central/product/1
 Authorization: Bearer {{token}}
 
 ### atualiza produto
-PUT localhost:8080/api/central/product/2
+PUT localhost:8080/api/central/product/3
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
