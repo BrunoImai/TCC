@@ -5,9 +5,9 @@ import java.util.Date
 data class ProductResponse(
     val id: Long,
     val name: String,
-    val price: Double,
+    val price: Float,
     val supplierId: Long,
     val lastTimePurchase: Date?,
-    val oldPrices: Set<Double>,
+    val oldPrices: Set<Float>,
     val creationDate: Date
 )

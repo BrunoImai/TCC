@@ -16,7 +16,7 @@ class OldPrices (
     var update_date: Date,
 
     @Column(nullable = false)
-    var old_price: Double = 0.0,
+    var old_price: Float = 0.0f,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Products")

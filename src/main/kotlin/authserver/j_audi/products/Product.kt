@@ -22,7 +22,7 @@ class Product (
     var name: String = "",
 
     @Column
-    var price: Double = 0.0,
+    var price: Float = 0.0f,
 
     @Column
     var lastTimePurchased: Date? = null,

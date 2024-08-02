@@ -9,6 +9,7 @@ import authserver.central.requests.CentralUpdateRequest
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
 import authserver.j_audi.products.requests.ProductRequest
+import authserver.j_audi.products.requests.UpdateProductRequest
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
 import authserver.j_audi.supplier_business.response.SupplierBusinessResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -253,7 +254,7 @@ class CentralController(
             }
 
     @PutMapping("/product/{id}")
-    fun updateProduct(@PathVariable("id") id: Long, @Valid @RequestBody product: ProductRequest) =
+    fun updateProduct(@PathVariable("id") id: Long, @Valid @RequestBody product: UpdateProductRequest) =
         service.updateProduct(id, product)
             .toResponse()
             .let { ResponseEntity.ok(it) }

@@ -26,6 +26,7 @@ import authserver.j_audi.old_prices.OldPrices
 import authserver.j_audi.products.Product
 import authserver.j_audi.products.ProductRepository
 import authserver.j_audi.products.requests.ProductRequest
+import authserver.j_audi.products.requests.UpdateProductRequest
 import authserver.j_audi.supplier_business.SupplierBusiness
 import authserver.j_audi.supplier_business.SupplierBusinessRepository
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
@@ -471,7 +472,7 @@ class CentralService(
         return productRepository.save(product)
     }
 
-    fun updateProduct(productId: Long, product: ProductRequest): Product {
+    fun updateProduct(productId: Long, product: UpdateProductRequest): Product {
         val productToUpdate = productRepository.findByIdOrNull(productId) ?: throw IllegalStateException("Produto não encontrado")
         val oldPrice = productToUpdate.price
         productToUpdate.producthistory.add(

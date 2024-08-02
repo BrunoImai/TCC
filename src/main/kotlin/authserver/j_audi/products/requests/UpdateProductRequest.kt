@@ -1,7 +1,7 @@
 package authserver.j_audi.products.requests
 
-data class ProductRequest(
+class UpdateProductRequest (
     val name: String,
     val price: Float,
-    val supplierCnpj: String
+    val supplierCnpj: String?
 )
