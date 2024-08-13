@@ -2,6 +2,7 @@ package authserver.delta.assistance
 
 import authserver.delta.assistance.response.AssistanceResponse
 import authserver.central.Central
+import authserver.delta.category.Category
 import jakarta.persistence.*
 import authserver.delta.client.Client
 import org.example.authserver.utils.AssistanceStatus
@@ -59,7 +60,16 @@ class Assistance(
         joinColumns = [JoinColumn(name = "assistance_id")],
         inverseJoinColumns = [JoinColumn(name = "worker_id")]
     )
-    var responsibleWorkers: MutableSet<Worker> = HashSet()
+    var responsibleWorkers: MutableSet<Worker> = HashSet(),
+
+    @ManyToMany
+    @JoinTable(
+        name = "categories_assistance",
+        joinColumns = [JoinColumn(name = "assistance_id")],
+        inverseJoinColumns = [JoinColumn(name = "category_id")]
+    )
+    var categories: MutableSet<Category> = HashSet()
+
 ) {
     fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet())
 }

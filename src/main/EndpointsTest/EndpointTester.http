@@ -75,11 +75,11 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "Jeferson",
-    "email": "teste@gmail.com",
+    "name": "Cleiton",
+    "email": "tesewee@gmail.com",
     "password": "12345678",
     "cellphone": "11999999999",
-    "cpf": "12345678901",
+    "cpf": "12245678901",
     "address": "Rua dos bobos, n 0"
 }
 
@@ -118,6 +118,22 @@ Authorization: Bearer {{token}}
 GET localhost:8080/api/central/client
 Authorization: Bearer {{token}}
 
+### Cria categoria
+POST localhost:8080/api/central/category?name=Pato
+Authorization: Bearer {{token}}
+
+### Lista todas as categorias
+GET localhost:8080/api/central/category
+Authorization: Bearer {{token}}
+
+### Atualiza categoria
+PUT localhost:8080/api/central/category/1?name=Ar-Condicionado
+Authorization: Bearer {{token}}
+
+### Deleta categoria
+DELETE localhost:8080/api/central/category/1
+Authorization: Bearer {{token}}
+
 ### Cadastra serviço 1
 POST localhost:8080/api/central/assistance
 Authorization: Bearer {{token}}
@@ -144,7 +160,7 @@ Content-Type: application/json
   "address": "Av. Com. Franco, 4680 - Uberaba, Curitiba - PR, 81530-440, Brazil",
   "cpf": "12345678901",
   "period": "Manha",
-  "workersIds": [1]
+  "workersIds": [2]
 }
 
 ### Cadastra serviço 3
@@ -230,12 +246,16 @@ Content-Type: application/json
   "cnpj": "99887766554433"
 }
 
+### busca fornecedor pelo cnpj
+GET localhost:8080/api/central/supplierBusiness/byCnpj?cnpj=12.345.678/F9101-24
+Authorization: Bearer {{token}}
+
 ### deleta fornecedor
 DELETE localhost:8080/api/central/supplierBusiness/1
 Authorization: Bearer {{token}}
 
 ### lista produtos de um fornecedor
-GET localhost:8080/api/central/supplierBusiness/1/products
+GET localhost:8080/api/central/supplierBusiness/2/products
 Authorization: Bearer {{token}}
 
 ### cria um novo produto
@@ -273,3 +293,36 @@ Content-Type: application/json
 DELETE localhost:8080/api/central/product/1
 Authorization: Bearer {{token}}
 
+### cria Client Business
+POST localhost:8080/api/central/clientBusiness
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Cliente Business",
+  "cnpj": "12.345.678/F9101-24",
+  "cellphone": "11999999999"
+}
+
+### lista Client Business
+GET localhost:8080/api/central/clientBusiness
+Authorization: Bearer {{token}}
+
+### busca Client Business
+GET localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}
+
+### atualiza Client Business
+PUT localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Cliente Business Atualizado",
+  "cnpj": "12.345.678/F9101-24",
+  "cellphone": "11999999999"
+}
+
+### deleta Client Business
+DELETE localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}

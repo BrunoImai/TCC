@@ -3,6 +3,7 @@ package authserver.central
 import authserver.delta.assistance.Assistance
 import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
+import authserver.delta.category.Category
 import authserver.delta.client.Client
 import jakarta.persistence.*
 
@@ -27,7 +28,7 @@ class Central(
     @Column(unique = true, nullable = false)
     var email: String = "",
 
-    @Column
+    @Column(unique = true, nullable = false)
     var cnpj: String = "",
 
     @Column
@@ -54,7 +55,10 @@ class Central(
     var assistances: MutableSet<Assistance> = mutableSetOf(),
 
     @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var client: MutableSet<Client> = mutableSetOf()
+    var client: MutableSet<Client> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var category: MutableSet<Category> = mutableSetOf()
 ) {
     fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, cellphone )
 }

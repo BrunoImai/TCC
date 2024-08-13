@@ -8,6 +8,7 @@ import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
+import authserver.j_audi.client_business.request.ClientBusinessRequest
 import authserver.j_audi.products.requests.ProductRequest
 import authserver.j_audi.products.requests.UpdateProductRequest
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
@@ -207,6 +208,7 @@ class CentralController(
         service.listSuppliers()
             .map { it.toResponse() }
 
+
     @PostMapping("/supplierBusiness")
     fun createSupplierBusiness(@Valid @RequestBody req: SupplierBusinessRequest) =
         service.createSupplier(req)
@@ -262,5 +264,66 @@ class CentralController(
     @DeleteMapping("/product/{id}")
     fun deleteProduct(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.deleteProduct(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    // ClientBusiness
+
+    @GetMapping("/clientBusiness/{id}")
+    fun getClientBusiness(@PathVariable("id") id: Long) =
+        service.getClientBusiness(id)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/clientBusiness")
+    fun listClientBusiness() =
+        service.listClientBusiness()
+            .map { it.toResponse() }
+
+    @PostMapping("/clientBusiness")
+    fun createClientBusiness(@Valid @RequestBody req: ClientBusinessRequest) =
+        service.createClientBusiness(req)
+            .toResponse()
+            .let {
+                ResponseEntity.status(CREATED).body(it)
+            }
+
+    @PutMapping("/clientBusiness/{id}")
+    fun updateClientBusiness(@PathVariable("id") id: Long, @Valid @RequestBody clientBusiness: ClientBusinessRequest) =
+        service.updateClientBusiness(id, clientBusiness)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/clientBusiness/{id}")
+    fun deleteClientBusiness(@PathVariable("id") id: Long): ResponseEntity<Void> =
+        if (service.deleteClientBusiness(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    // Category
+
+    @GetMapping("/category/{id}")
+    fun getCategory(@PathVariable("id") id: Long) =
+        service.getCategory(id)
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/category")
+    fun listCategories() =
+        service.listCategories()
+            .let { ResponseEntity.ok(it) }
+
+    @PostMapping("/category")
+    fun createCategory(@RequestParam name: String) =
+        service.createCategory(name)
+            .let { ResponseEntity.status(CREATED).body(it) }
+
+    @PutMapping("/category/{id}")
+    fun updateCategory(@PathVariable("id") id: Long, @RequestParam name: String) =
+        service.updateCategory(id, name)
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/category/{id}")
+    fun deleteCategory(@PathVariable("id") id: Long) : ResponseEntity<Void> =
+        if (service.deleteCategory(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 }

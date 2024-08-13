@@ -1,5 +1,6 @@
 package authserver.delta.assistance.request
 
+import authserver.delta.category.Category
 import jakarta.validation.constraints.NotBlank
 
 data class AssistanceRequest(
@@ -19,6 +20,8 @@ data class AssistanceRequest(
 
     @field:NotBlank(message = "Period is mandatory")
     val period: String,
+
+    val categoriesId: List<Long>,
 
     val workersIds: List<Long>
 )

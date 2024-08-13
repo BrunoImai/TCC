@@ -13,6 +13,8 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
+import authserver.delta.category.Category
+import authserver.delta.category.CategoryRepository
 import authserver.delta.client.Client
 import authserver.delta.client.ClientRepository
 import authserver.delta.client.requests.ClientRequest
@@ -22,6 +24,9 @@ import authserver.delta.worker.Worker
 import authserver.delta.worker.WorkerRepository
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
+import authserver.j_audi.client_business.ClientBusiness
+import authserver.j_audi.client_business.ClientBusinessRepository
+import authserver.j_audi.client_business.request.ClientBusinessRequest
 import authserver.j_audi.old_prices.OldPrices
 import authserver.j_audi.products.Product
 import authserver.j_audi.products.ProductRepository
@@ -51,7 +56,9 @@ class CentralService(
     val request: HttpServletRequest,
     private val clientRepository: ClientRepository,
     private val supplierRepository: SupplierBusinessRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
+    private val clientBusinessRepository: ClientBusinessRepository
 
     ) {
 
@@ -338,12 +345,20 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val client = clientRepository.findByCpf(req.cpf) ?: throw IllegalStateException("Cliente não encontrado")
+
         val workers = mutableListOf<Worker>()
+        val categories = mutableListOf<Category>()
 
         for (workerId in req.workersIds) {
             val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
             if (worker.central != central) throw IllegalStateException("Funcionário não encontrado")
             workers.add(worker)
+        }
+
+        for (categoryId in req.categoriesId) {
+            val category = categoryRepository.findByIdOrNull(categoryId) ?: throw IllegalStateException("Categoria não encontrada")
+            if (category.central != central) throw IllegalStateException("Categoria não encontrado")
+            categories.add(category)
         }
 
         val assistance = Assistance(
@@ -356,7 +371,8 @@ class CentralService(
             period = req.period,
             responsibleCentral = central,
             client = client,
-            responsibleWorkers = workers.toMutableSet()
+            responsibleWorkers = workers.toMutableSet(),
+            categories = categories.toMutableSet()
         )
         central.assistanceQueue.add(assistance)
         return assistanceRepository.save(assistance)
@@ -431,12 +447,6 @@ class CentralService(
         return supplier
     }
 
-    fun getSupplierByCnpj(cnpj: String): SupplierBusiness? {
-        val centralId = getCentralIdFromToken()
-        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        val supplier =  supplierRepository.findByCnpj(cnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
-        return supplier.takeIf { it.responsibleCentral == central } ?: throw IllegalStateException("Fornecedor não encontrado")
-    }
 
 
     fun updateSupplier(supplierId: Long, supplier: SupplierBusinessRequest): SupplierBusiness {
@@ -450,6 +460,13 @@ class CentralService(
         val supplier = supplierRepository.findByIdOrNull(supplierId) ?: return false
         supplierRepository.delete(supplier)
         return true
+    }
+
+    fun getSupplierByCnpj(cnpj: String): SupplierBusiness? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val supplier =  supplierRepository.findByCnpj(cnpj) ?: throw IllegalStateException("Fornecedor não encontrado")
+        return supplier.takeIf { it.responsibleCentral == central } ?: throw IllegalStateException("Fornecedor não encontrado")
     }
     // Products
 
@@ -511,6 +528,87 @@ class CentralService(
         val product = productRepository.findByIdOrNull(productId) ?: throw IllegalStateException("Produto não encontrado")
         return product.producthistory.toList()
     }
+
+    // Category
+
+    fun createCategory(name: String): Category {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val category = Category(
+            name = name,
+            creationDate = currentTime(),
+            central = central
+        )
+        return categoryRepository.save(category)
+    }
+
+    fun listCategories(): List<Category> {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return categoryRepository.findAll()
+    }
+
+    fun getCategory(categoryId: Long): Category? {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return categoryRepository.findByIdOrNull(categoryId)
+    }
+
+    fun updateCategory(categoryId: Long, name: String): Category {
+        val category = categoryRepository.findByIdOrNull(categoryId) ?: throw IllegalStateException("Categoria não encontrada")
+        category.name = name
+        return categoryRepository.save(category)
+    }
+
+    fun deleteCategory(categoryId: Long): Boolean {
+        val category = categoryRepository.findByIdOrNull(categoryId) ?: return false
+        categoryRepository.delete(category)
+        return true
+    }
+
+    // ClientBusiness
+
+    fun createClientBusiness(req: ClientBusinessRequest): ClientBusiness {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val clientBusiness = ClientBusiness(
+            name = req.name,
+            cnpj = req.cnpj,
+            cellphone = req.cellphone,
+            creationDate = currentTime(),
+            responsibleCentral = central
+        )
+        return clientBusinessRepository.save(clientBusiness)
+    }
+
+    fun listClientBusiness(): List<ClientBusiness> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return clientBusinessRepository.findAllByResponsibleCentral(central)
+    }
+
+    fun getClientBusiness(clientBusinessId: Long): ClientBusiness? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val clientBusiness = clientBusinessRepository.findByIdOrNull(clientBusinessId) ?: throw IllegalStateException("Cliente não encontrado")
+        if (clientBusiness.responsibleCentral != central) throw IllegalStateException("Cliente não encontrado")
+        return clientBusiness
+    }
+
+    fun updateClientBusiness(clientBusinessId: Long, clientBusiness: ClientBusinessRequest): ClientBusiness {
+        val clientBusinessToUpdate = clientBusinessRepository.findByIdOrNull(clientBusinessId) ?: throw IllegalStateException("Cliente não encontrado")
+        clientBusinessToUpdate.name = clientBusiness.name
+        clientBusinessToUpdate.cnpj = clientBusiness.cnpj
+        clientBusinessToUpdate.cellphone = clientBusiness.cellphone
+        return clientBusinessRepository.save(clientBusinessToUpdate)
+    }
+
+    fun deleteClientBusiness(clientBusinessId: Long): Boolean {
+        val clientBusiness = clientBusinessRepository.findByIdOrNull(clientBusinessId) ?: return false
+        clientBusinessRepository.delete(clientBusiness)
+        return true
+    }
+
     // Utils
 
     fun currentTime() : Date {
