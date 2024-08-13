@@ -234,7 +234,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.phone,
+                                Icons.phone_android_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
