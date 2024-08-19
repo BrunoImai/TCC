@@ -220,7 +220,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             _onSearchChanged();
                           },
                           decoration: InputDecoration(
-                            hintText: search,
+                            hintText: tSearch,
                             hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {

@@ -19,7 +19,8 @@ const String cellphone = "Celular";
 const String cnpj = "CNPJ";
 const String cpf = "CPF";
 const String next = "Próximo";
-const String search = "Pesquisar";
+const String tSearch = "Pesquisar";
+const String tName = "Nome";
 
 
 //Splash Screen
@@ -85,6 +86,8 @@ const String registerWorker = "Registrar um novo funcionário";
 const String workers = "Funcionários cadastrados";
 const String registerService = "Registrar um novo serviço";
 const String serviceHistory = "Histórico de serviços";
+const String tRegisterCategory = "Registrar uma nova categoria";
+const String tCategories = "Categorias cadastradas";
 const String dashboards = "Dashboards";
 const String comissionControl = "Controle de comissões";
 
@@ -99,7 +102,7 @@ const String information = "Informações";
 const String userManagement = "Configurações do usuário";
 
 //Update profile screen
-const String delete = "Deletar";
+const String tDelete = "Deletar";
 const String joined = "Cliente desde ";
 const String joinedAt = "data entrada da central no sistema";
 
@@ -139,3 +142,14 @@ const String editAssistance = "Editar serviço";
 
 //Worker Home Screen
 const String currentAndNextAssistance = "Seu atual ou próximo serviço";
+
+//Register Category Screen
+const String tRegisterCategoryTitle = "Uma nova categoria A.G.E";
+const String tRegisterCategorySubTitle = "Cadastre sua nova categoria";
+
+//Update Category Screen
+const String tEditCategory = "Editar categoria";
+const String tJoinedCategory = "Categoria criada em: ";
+
+//Category List Screen
+const String tCategoryListTitle = "Encontre suas categorias";

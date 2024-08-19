@@ -578,7 +578,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                 ElevatedButton(
                                   onPressed: () {
                                     Get.defaultDialog(
-                                      title: delete.toUpperCase(),
+                                      title: tDelete.toUpperCase(),
                                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                       content: const Padding(
                                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -607,7 +607,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                       foregroundColor: Colors.red,
                                       shape: const StadiumBorder(),
                                       side: BorderSide.none),
-                                  child: const Text(delete),
+                                  child: const Text(tDelete),
                                 ),
                               ],
                             ),

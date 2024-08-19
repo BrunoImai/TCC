@@ -7,7 +7,7 @@ data class AssistanceRequest(
     @field:NotBlank(message = "Description is mandatory")
     val description: String,
 
-    @field:NotBlank(message = "Email is mandatory")
+    @field:NotBlank(message = "Name is mandatory")
     val name: String,
 
     @field:NotBlank(message = "Address is mandatory")

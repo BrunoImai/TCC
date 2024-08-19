@@ -20,7 +20,7 @@ class WorkerSearchBar extends StatelessWidget {
               onChanged: (value) {
               },
               decoration: InputDecoration(
-                hintText: search,
+                hintText: tSearch,
                 hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                 suffixIcon: IconButton(
                   onPressed: () {},

@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
 import authserver.delta.category.Category
 import authserver.delta.category.CategoryRepository
+import authserver.delta.category.request.CategoryRequest
 import authserver.delta.client.Client
 import authserver.delta.client.ClientRepository
 import authserver.delta.client.requests.ClientRequest
@@ -531,11 +532,11 @@ class CentralService(
 
     // Category
 
-    fun createCategory(name: String): Category {
+    fun createCategory(req: CategoryRequest): Category {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val category = Category(
-            name = name,
+            name = req.name,
             creationDate = currentTime(),
             central = central
         )
@@ -554,9 +555,9 @@ class CentralService(
         return categoryRepository.findByIdOrNull(categoryId)
     }
 
-    fun updateCategory(categoryId: Long, name: String): Category {
+    fun updateCategory(categoryId: Long, req: CategoryRequest): Category {
         val category = categoryRepository.findByIdOrNull(categoryId) ?: throw IllegalStateException("Categoria não encontrada")
-        category.name = name
+        category.name = req.name
         return categoryRepository.save(category)
     }
 

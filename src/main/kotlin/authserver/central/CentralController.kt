@@ -6,6 +6,7 @@ import authserver.delta.client.requests.ClientRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
+import authserver.delta.category.request.CategoryRequest
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
 import authserver.j_audi.client_business.request.ClientBusinessRequest
@@ -310,16 +311,18 @@ class CentralController(
     @GetMapping("/category")
     fun listCategories() =
         service.listCategories()
-            .let { ResponseEntity.ok(it) }
+            .map { ResponseEntity.ok(it) }
 
     @PostMapping("/category")
-    fun createCategory(@RequestParam name: String) =
-        service.createCategory(name)
+    fun createCategory(@Valid @RequestBody req: CategoryRequest) =
+        service.createCategory(req)
+            .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
     @PutMapping("/category/{id}")
-    fun updateCategory(@PathVariable("id") id: Long, @RequestParam name: String) =
-        service.updateCategory(id, name)
+    fun updateCategory(@PathVariable("id") id: Long, @Valid @RequestBody req: CategoryRequest) =
+        service.updateCategory(id, req)
+            .toResponse()
             .let { ResponseEntity.ok(it) }
 
     @DeleteMapping("/category/{id}")

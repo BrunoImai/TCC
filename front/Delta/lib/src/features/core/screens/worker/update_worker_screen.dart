@@ -601,7 +601,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                 ElevatedButton(
                                   onPressed: () {
                                     Get.defaultDialog(
-                                      title: delete.toUpperCase(),
+                                      title: tDelete.toUpperCase(),
                                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                       content: const Padding(
                                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -626,7 +626,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                       foregroundColor: Colors.red,
                                       shape: const StadiumBorder(),
                                       side: BorderSide.none),
-                                  child: const Text(delete),
+                                  child: const Text(tDelete),
                                 ),
                               ],
                             )
