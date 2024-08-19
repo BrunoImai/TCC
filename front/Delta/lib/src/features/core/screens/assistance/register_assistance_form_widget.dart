@@ -6,6 +6,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:tcc_front/src/features/core/screens/category/category.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -36,13 +37,17 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
+  final TextEditingController clientNameController = TextEditingController();
 
 
   bool _isAddressFieldEnabled = true;
   bool _isWorkerExpanded = false;
+  bool _isCategoryExpanded = false;
   bool _isPeriodExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
+  List<CategoryResponse> categories = [];
+  List<CategoryResponse> selectedCategories = [];
   String selectedPeriod = "";
 
   @override
@@ -50,6 +55,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
     super.initState();
     clientCpfController.addListener(_onCpfChanged);
     fetchWorkers();
+    fetchCategories();
   }
 
   void _onCpfChanged() {
@@ -70,6 +76,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       cityController.clear();
       stateController.clear();
       neighborhoodController.clear();
+      clientNameController.clear();
       _isAddressFieldEnabled = true;
     });
   }
@@ -121,6 +128,52 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
     }
   }
 
+  Future<void> fetchCategories() async {
+    try {
+      final categoriesList = await getAllCategories();
+      setState(() {
+        categories = categoriesList;
+      });
+    } catch (e) {
+      print('Error fetching workers: $e');
+    }
+  }
+
+  Future<List<CategoryResponse>> getAllCategories() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/category'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<CategoryResponse> categoriesList = jsonData.map((item) {
+          return CategoryResponse(
+            id: item['id'],
+            name: item['name'],
+            creationDate: item['creationDate'],
+          );
+        }).toList();
+
+        return categoriesList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load worker list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de categories');
+    }
+  }
+
+
+
   Future<void> _fetchClientDataByCpf(String cpf) async {
     try {
       final response = await http.get(
@@ -142,6 +195,8 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
           stateController.text = clientData['address'].split(', ')[2].split(' - ')[1];
           addressComplementController.text = clientData['complement'];
+
+          clientNameController.text = clientData['name'];
 
           _isAddressFieldEnabled = false;
         });
@@ -173,6 +228,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       String neighborhood = neighborhoodController.text;
       String clientCpf = clientCpfController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
+      List<num> categoriesIds = selectedCategories.map((category) => category.id).toList();
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
@@ -306,6 +362,80 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               ),
             ),
             const SizedBox(height: formHeight - 20),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isCategoryExpanded = !_isCategoryExpanded;
+                });
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  label: const Text('Categoria'),
+                  prefixIcon: const Icon(Icons.category_rounded),
+                  suffixIcon: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: IconButton(
+                      icon: Icon(
+                        _isCategoryExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isCategoryExpanded = !_isCategoryExpanded;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                child: Text(
+                  selectedCategories.isEmpty
+                      ? ''
+                      : selectedCategories.map((category) => category.name).join(', '),
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            if (_isCategoryExpanded)
+              Column(
+                children: categories.map((category) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (selectedCategories.contains(category)) {
+                          selectedCategories.remove(category);
+                        } else {
+                          selectedCategories.add(category);
+                        }
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                              color: selectedCategories.contains(category) ? Colors.green : Colors.transparent,
+                              border: Border.all(color: selectedCategories.contains(category) ? Colors.transparent : primaryColor),
+                              borderRadius: BorderRadius.circular(50)
+                          ),
+                          child: selectedCategories.contains(category)
+                              ? const Center(
+                              child: Icon(
+                                Icons.check,
+                                color: whiteColor,
+                                size: 10,
+                              )
+                          )
+                              : null,
+                        ),
+                        const SizedBox(width: formHeight - 25),
+                        Text(category.name, style: Theme.of(context).textTheme.bodyText2),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            const SizedBox(height: formHeight - 10),
             TextFormField(
               controller: clientCpfController,
               inputFormatters: [
@@ -315,6 +445,15 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(clientCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: clientNameController,
+              decoration: const InputDecoration(
+                  label: Text(tClientName),
+                  prefixIcon: Icon(Icons.person)
+              ),
+              enabled: _isAddressFieldEnabled,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -369,7 +508,8 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
               controller: cityController,
               decoration: const InputDecoration(
                   label: Text(city),
-                  prefixIcon: Icon(Icons.location_on)),
+                  prefixIcon: Icon(Icons.location_on)
+              ),
               enabled: _isAddressFieldEnabled,
             ),
             const SizedBox(height: formHeight - 20),

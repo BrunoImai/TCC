@@ -131,6 +131,7 @@ const String registerAssistanceSubTitle = "Cadastre seu novo serviço";
 const String assistanceName = "Nome do serviço";
 const String description = "Descrição";
 const String clientCpf = "CPF do Cliente";
+const String tClientName = "Nome do Cliente";
 const String period = "Período";
 const String workersIds = "Funcionário alocado para o serviço";
 
