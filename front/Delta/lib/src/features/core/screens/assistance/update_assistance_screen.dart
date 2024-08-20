@@ -584,6 +584,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               ),
                               enabled: false,
                             ),
+                            const SizedBox(height: formHeight - 20),
                             TextFormField(
                               controller: clientNameController,
                               decoration: const InputDecoration(
