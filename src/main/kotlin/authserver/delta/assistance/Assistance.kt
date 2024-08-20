@@ -71,5 +71,5 @@ class Assistance(
     var categories: MutableSet<Category> = HashSet()
 
 ) {
-    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet())
+    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet())
 }

@@ -311,7 +311,7 @@ class CentralController(
     @GetMapping("/category")
     fun listCategories() =
         service.listCategories()
-            .map { ResponseEntity.ok(it) }
+            .map { it.toResponse() }
 
     @PostMapping("/category")
     fun createCategory(@Valid @RequestBody req: CategoryRequest) =

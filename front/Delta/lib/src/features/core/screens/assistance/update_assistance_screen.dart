@@ -17,6 +17,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../category/category.dart';
 import '../central_home_screen/central_home_screen.dart';
 import '../worker/worker.dart';
 
@@ -39,12 +40,16 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
+  final TextEditingController clientNameController = TextEditingController();
 
   bool _isAddressFieldEnabled = true;
   bool _isWorkerExpanded = false;
+  bool _isCategoryExpanded = false;
   bool _isPeriodExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
+  List<CategoryResponse> categories = [];
+  List<CategoryResponse> selectedCategories = [];
   String selectedPeriod = "";
   String error = "";
 
@@ -62,6 +67,17 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         }
       }
     });
+
+    fetchCategories().then((_) {
+      List<num> categoriesNames = widget.assistance.categoryIds.map((id) => num.parse(id as String)).toList();
+      for (num categoryId in categoriesNames) {
+        CategoryResponse? category = categories.firstWhereOrNull((c) => c.id == categoryId);
+        if (category != null) {
+          selectedCategories.add(category);
+        }
+      }
+    });
+
 
     assistanceNameController.text = widget.assistance.name;
     descriptionController.text = widget.assistance.description;
@@ -144,6 +160,50 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     }
   }
 
+  Future<void> fetchCategories() async {
+    try {
+      final categoriesList = await getAllCategories();
+      setState(() {
+        categories = categoriesList;
+      });
+    } catch (e) {
+      print('Error fetching workers: $e');
+    }
+  }
+
+  Future<List<CategoryResponse>> getAllCategories() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/category'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<CategoryResponse> categoriesList = jsonData.map((item) {
+          return CategoryResponse(
+            id: item['id'],
+            name: item['name'],
+            creationDate: item['creationDate'],
+          );
+        }).toList();
+
+        return categoriesList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load worker list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de categories');
+    }
+  }
+
   Future<void> _fetchClientDataByCpf(String cpf) async {
     try {
       final response = await http.get(
@@ -165,6 +225,8 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
           cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
           stateController.text = clientData['address'].split(', ')[2].split(' - ')[1];
           addressComplementController.text = clientData['complement'];
+
+          clientNameController.text = clientData['name'];
 
           _isAddressFieldEnabled = false;
         });
@@ -194,6 +256,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
+      List<num> categoriesId = selectedCategories.map((category) => category.id).toList();
 
 
       if (description.isEmpty ||
@@ -205,12 +268,13 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
           city.isEmpty ||
           state.isEmpty ||
           neighborhood.isEmpty ||
-          selectedPeriod.isEmpty) {
+          selectedPeriod.isEmpty ||
+          categoriesId.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, categoria, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
           },
         );
         return;
@@ -271,7 +335,8 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         cpf: clientCpf,
         complement: addressComplement,
         period: selectedPeriod,
-        workersIds: workersIds
+        workersIds: workersIds,
+        categoriesId: categoriesId,
       );
 
       String requestBody = jsonEncode(updateAssistanceRequest.toJson());
@@ -402,6 +467,83 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               ),
                             ),
                             const SizedBox(height: formHeight - 20),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isCategoryExpanded = !_isCategoryExpanded;
+                                });
+                              },
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  label: const Text('Categoria'),
+                                  prefixIcon: const Icon(Icons.category_rounded),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        _isCategoryExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (!_isCategoryExpanded) {
+                                            selectedCategories.clear();
+                                          }
+                                          _isCategoryExpanded = !_isCategoryExpanded;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  selectedCategories.isEmpty
+                                      ? ''
+                                      : selectedCategories.map((category) => category.name).join(', '),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            if (_isCategoryExpanded)
+                              Column(
+                                children: categories.map((category) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (selectedCategories.contains(category)) {
+                                          selectedCategories.remove(category);
+                                        } else {
+                                          selectedCategories.add(category);
+                                        }
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        AnimatedContainer(
+                                          duration: const Duration(milliseconds: 300),
+                                          width: 14,
+                                          height: 14,
+                                          decoration: BoxDecoration(
+                                              color: selectedCategories.contains(category) ? Colors.green : Colors.transparent,
+                                              border: Border.all(color: selectedCategories.contains(category) ? Colors.transparent : primaryColor),
+                                              borderRadius: BorderRadius.circular(50)
+                                          ),
+                                          child: selectedCategories.contains(category)
+                                              ? const Center(
+                                              child: Icon(
+                                                Icons.check,
+                                                color: whiteColor,
+                                                size: 10,
+                                              )
+                                          )
+                                              : null,
+                                        ),
+                                        const SizedBox(width: formHeight - 25),
+                                        Text(category.name, style: Theme.of(context).textTheme.bodyText2),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            const SizedBox(height: formHeight - 20),
                             TextFormField(
                               controller: clientCpfController,
                               inputFormatters: [
@@ -441,6 +583,14 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                   prefixIcon: Icon(Icons.local_post_office)
                               ),
                               enabled: false,
+                            ),
+                            TextFormField(
+                              controller: clientNameController,
+                              decoration: const InputDecoration(
+                                  label: Text(tClientName),
+                                  prefixIcon: Icon(Icons.person)
+                              ),
+                              enabled: _isAddressFieldEnabled,
                             ),
                             const SizedBox(height: formHeight - 20),
                             TextFormField(
@@ -509,7 +659,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               child: InputDecorator(
                                 decoration: InputDecoration(
                                   labelText: 'Período',
-                                  prefixIcon: Icon(Icons.access_time),
+                                  prefixIcon: const Icon(Icons.access_time),
                                   suffixIcon: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: Icon(

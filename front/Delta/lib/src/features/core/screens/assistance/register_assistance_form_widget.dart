@@ -228,7 +228,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       String neighborhood = neighborhoodController.text;
       String clientCpf = clientCpfController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
-      List<num> categoriesIds = selectedCategories.map((category) => category.id).toList();
+      List<num> categoriesId = selectedCategories.map((category) => category.id).toList();
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
@@ -305,6 +305,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           complement: addressComplement,
           cpf: clientCpf,
           period: selectedPeriod,
+          categoriesId: categoriesId,
           workersIds: workersIds
       );
 

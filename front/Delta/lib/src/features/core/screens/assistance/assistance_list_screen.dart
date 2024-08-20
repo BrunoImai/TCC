@@ -14,6 +14,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../category/category.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 import '../worker/worker.dart';
 
@@ -83,6 +84,38 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
     }
   }
 
+  Future<List<CategoryResponse>> getAllCategories() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/category'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<CategoryResponse> categoryList = jsonData.map((item) {
+          return CategoryResponse(
+            id: item['id'],
+            name: item['name'],
+            creationDate: item['creationDate'],
+          );
+        }).toList();
+
+        return categoryList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load category list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de workers');
+    }
+  }
 
 
   Future<List<WorkersList>> getAllWorkers() async {
@@ -139,6 +172,11 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
         print(workerIdToNameMap);
 
+        final allCategories = await getAllCategories();
+
+        final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
+        print(categoryIdToNameMap);
+
         final List<AssistanceInformations> assistancesList = [];
         for (var item in jsonData) {
           final client = await getClientByCpf(item['cpf']);
@@ -150,6 +188,15 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
           final workersIds = (item['workersIds'] as List<dynamic>)
               .map((id) => id.toString()).toList();
 
+         final categoriesName = (item['categoryIds'] as List<dynamic>)
+              .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
+              .toList();
+         print(categoriesName);
+
+          final categoryIds = (item['categoryIds'] as List<dynamic>)
+              .map((id) => id.toString()).toList();
+          print(categoryIds);
+
 
           final assistance = AssistanceResponse(
               id: item['id'].toString(),
@@ -159,10 +206,11 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               address: item['address'],
               clientCpf: item['cpf'],
               period: item['period'],
-              workersIds: workersIds
+              workersIds: workersIds,
+              categoryIds: categoryIds
           );
           final assistanceInformations = AssistanceInformations(
-              assistance.id, workerNames, client!.name, assistance);
+              assistance.id, workerNames, client!.name, assistance, categoriesName);
           assistancesList.add(assistanceInformations);
         }
 
@@ -289,6 +337,26 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             ],
                           ),
                           const SizedBox(height: 10),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.category_rounded,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  data.categoriesName.join(', '),
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

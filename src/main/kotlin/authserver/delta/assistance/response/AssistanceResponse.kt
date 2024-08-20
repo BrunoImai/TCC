@@ -11,5 +11,6 @@ data class AssistanceResponse(
     val complement: String?,
     val cpf: String,
     val period: String,
-    val workersIds: Set<Long?>
+    val workersIds: Set<Long?>,
+    val categoryIds: Set<Long?>
 )
