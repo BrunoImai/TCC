@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/central_home_screen.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker_list_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -175,12 +176,32 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
           // Registration failed
           print('Registration failed. Status code: ${response.statusCode}');
 
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertPopUp(
-                    errorDescription: response.body);
-              });
+          if (response.body == 'Email já cadastrado!' || response.body ==  "CPF do funcionário já cadastrado!") {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                    onConfirmed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WorkerListScreen(),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                  );
+                });
+          }
+
         }
       } catch (e) {
         print('Error occurred: $e');

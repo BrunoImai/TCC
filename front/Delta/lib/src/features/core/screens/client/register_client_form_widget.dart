@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
+import 'package:tcc_front/src/features/core/screens/client/client_list_screen.dart';
 
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/sizes.dart';
@@ -209,12 +210,32 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
           // Registration failed
           print('Login failed. Status code: ${response.statusCode}');
 
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertPopUp(
-                    errorDescription: response.body);
-              });
+          if (response.body == 'Email do cliente já cadastrado!' || response.body == 'CPF do cliente já cadastrado!') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                    onConfirmed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ClientListScreen(),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                  );
+                });
+          }
+
         }
       } catch (e) {
         print('Error occurred: $e');

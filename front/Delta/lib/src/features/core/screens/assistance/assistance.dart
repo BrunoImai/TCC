@@ -66,7 +66,7 @@ class  UpdateAssistanceRequest {
       'cpf': cpf,
       'period': period,
       'workersIds': workersIds,
-      'categoriesIds': categoriesId
+      'categoriesId': categoriesId
     };
   }
 }

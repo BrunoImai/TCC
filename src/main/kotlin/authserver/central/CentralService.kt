@@ -406,6 +406,7 @@ class CentralService(
         assistanceToUpdate.address = assistance.address
         assistanceToUpdate.cpf = assistance.cpf
         assistanceToUpdate.period = assistance.period
+        assistanceToUpdate.categories = assistance.categoriesId.map { categoryRepository.findByIdOrNull(it) ?: throw IllegalStateException("Categoria não encontrada") }.toMutableSet()
         return assistanceRepository.save(assistanceToUpdate)
     }
 
