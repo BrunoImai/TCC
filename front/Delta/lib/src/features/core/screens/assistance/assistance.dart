@@ -1,6 +1,3 @@
-
-import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
-
 class AssistanceRequest {
   final String description;
   final String name;
