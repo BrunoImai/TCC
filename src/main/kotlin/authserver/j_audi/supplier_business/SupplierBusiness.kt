@@ -7,10 +7,9 @@ import jakarta.persistence.*
 import java.util.*
 
 @Entity
-@Table(name = "Supplier_Business")
 class SupplierBusiness (
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)

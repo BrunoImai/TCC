@@ -8,12 +8,14 @@ import authserver.delta.client.Client
 import jakarta.persistence.*
 
 import authserver.delta.worker.Worker
+import authserver.j_audi.client_business.ClientBusiness
+import authserver.j_audi.supplier_business.SupplierBusiness
 import java.util.*
 
 @Entity
-@Table(name = "Central")
-class Central(
-    @Id @GeneratedValue
+class  Central(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)
@@ -58,7 +60,14 @@ class Central(
     var client: MutableSet<Client> = mutableSetOf(),
 
     @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var category: MutableSet<Category> = mutableSetOf()
+    var category: MutableSet<Category> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var clientBussines: MutableSet<ClientBusiness> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var supplierBusiness: MutableSet<SupplierBusiness> = mutableSetOf(),
+
 ) {
     fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, cellphone )
 }

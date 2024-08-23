@@ -9,10 +9,9 @@ import jakarta.persistence.Table
 import java.util.*
 
 @Entity
-@Table(name = "Products")
 class Product (
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)
@@ -30,9 +29,14 @@ class Product (
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
     var producthistory: MutableSet<OldPrices> = HashSet(),
 
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var productQtt: MutableSet<ProductQtt> = HashSet(),
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Supplier_Business_id")
     var supplier: SupplierBusiness,
-){
+
+
+    ){
 fun toResponse() = ProductResponse(id!!, name, price, supplier.id!!, lastTimePurchased, producthistory.map { it.old_price }.toSet(), creation_date)
 }

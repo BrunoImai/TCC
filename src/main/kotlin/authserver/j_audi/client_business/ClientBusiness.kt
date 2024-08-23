@@ -8,7 +8,7 @@ import java.util.*
 @Entity
 class ClientBusiness(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)
@@ -19,7 +19,6 @@ class ClientBusiness(
 
     @Column
     var cellphone: String = "",
-
 
     @Column(nullable = false)
     var creationDate: Date,

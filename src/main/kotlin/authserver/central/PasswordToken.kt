@@ -1,15 +1,12 @@
 package authserver.central
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.util.*
 
 @Entity
-@Table(name = "password_token")
 class PasswordToken (
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var token: String,
     var exispirationDate: Date

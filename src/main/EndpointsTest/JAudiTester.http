@@ -1,0 +1,212 @@
+### Create a new Central
+POST localhost:8080/api/central
+Content-Type: application/json
+
+{
+  "name": "JAudi",
+  "email": "JAudi@gmail.com",
+  "password": "central0000",
+  "cellphone": "11999999999",
+  "cnpj": "12348228903334"
+}
+### Login as JAudi
+POST localhost:8080/api/central/login
+Content-Type: application/json
+
+{
+"email": "JAudi@gmail.com",
+"password": "central0000"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.central.id)
+%}
+
+### cria um fornecedor
+POST localhost:8080/api/central/supplierBusiness
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Novo Fornecedor 3",
+  "cnpj": "99.887.766/5544-33"
+}
+
+
+### busca fornecedor
+GET localhost:8080/api/central/supplierBusiness/53
+Authorization: Bearer {{token}}
+
+### busca fornecedor
+GET localhost:8080/api/central/supplierBusiness/byCnpj/99.887.766%2F5544-33
+Authorization: Bearer {{token}}
+
+
+### lista fornecedores
+GET localhost:8080/api/central/supplierBusiness
+Authorization: Bearer {{token}}
+
+### atualiza fornecedor
+PUT localhost:8080/api/central/supplierBusiness/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Fornecedor Atualizado",
+  "cnpj": "99887766554433"
+}
+
+### busca fornecedor pelo cnpj
+GET localhost:8080/api/central/supplierBusiness/byCnpj?cnpj=12.345.678/F9101-24
+Authorization: Bearer {{token}}
+
+### deleta fornecedor
+DELETE localhost:8080/api/central/supplierBusiness/1
+Authorization: Bearer {{token}}
+
+### lista produtos de um fornecedor
+GET localhost:8080/api/central/supplierBusiness/1/products
+Authorization: Bearer {{token}}
+
+### cria um novo produto
+POST localhost:8080/api/central/product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Produto Novo",
+  "price": 99.99,
+  "supplierCnpj": "99.887.766/5544-33"
+}
+
+### cria um novo produto 2
+POST localhost:8080/api/central/product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Produto caro",
+  "price": 5555,
+  "supplierCnpj": "99.887.766/5544-33"
+}
+
+### lista produtos
+GET localhost:8080/api/central/product
+Authorization: Bearer {{token}}
+
+
+### busca produto
+GET localhost:8080/api/central/product/1
+Authorization: Bearer {{token}}
+
+### atualiza produto
+PUT localhost:8080/api/central/product/3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Produto Atualizado",
+  "price": 9999999.99,
+  "supplierId": 2
+}
+
+### deleta produto
+DELETE localhost:8080/api/central/product/1
+Authorization: Bearer {{token}}
+
+### cria Client Business
+POST localhost:8080/api/central/clientBusiness
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Cliente Business",
+  "cnpj": "12.345.678/F9101-24",
+  "cellphone": "11999999999"
+}
+
+### lista Client Business
+GET localhost:8080/api/central/clientBusiness
+Authorization: Bearer {{token}}
+
+### busca Client Business
+GET localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}
+
+### atualiza Client Business
+PUT localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Cliente Business Atualizado",
+  "cnpj": "12.345.678/F9101-24",
+  "cellphone": "11999999999"
+}
+
+### deleta Client Business
+DELETE localhost:8080/api/central/clientBusiness/1
+Authorization: Bearer {{token}}
+
+### Cria uma venda
+POST localhost:8080/api/central/sale
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productsQtt": [
+    {
+      "idProduct": 1,
+      "qtt": 12
+    },
+
+    {
+      "idProduct": 2,
+      "qtt": 1
+    }
+
+  ],
+  "clientId": 1,
+  "supplierId": 1,
+  "purchaseOrder": "123456",
+  "carrier": "Transportadora",
+  "fare": "Frete"
+}
+
+### lista Vendas
+GET localhost:8080/api/central/sale
+Authorization: Bearer {{token}}
+
+### Lista venda 4
+
+GET localhost:8080/api/central/sale/4
+Authorization: Bearer {{token}}
+
+### Atualiza venda 4
+PUT localhost:8080/api/central/sale/4
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productsQtt": [
+    {
+      "idProduct": 1,
+      "qtt": 12
+    },
+
+    {
+      "idProduct": 2,
+      "qtt": 1
+    }
+
+  ],
+  "clientId": 1,
+  "supplierId": 1,
+  "purchaseOrder": "777777",
+  "carrier": "Transportadora nova",
+  "fare": "Frete"
+}
+
+### Deleta venda 4
+DELETE localhost:8080/api/central/sale/4
+Authorization: Bearer {{token}}

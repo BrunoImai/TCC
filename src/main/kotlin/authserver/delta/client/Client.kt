@@ -8,9 +8,9 @@ import jakarta.validation.constraints.Email
 import java.util.*
 
 @Entity
-@Table(name = "Client")
 class Client(
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)

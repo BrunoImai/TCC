@@ -6,10 +6,9 @@ import java.util.*
 
 
 @Entity
-@Table(name = "Old_prices")
 class OldPrices (
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)

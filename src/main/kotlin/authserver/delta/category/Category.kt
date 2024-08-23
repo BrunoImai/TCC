@@ -10,10 +10,9 @@ import jakarta.persistence.Table
 import java.util.*
 
 @Entity
-@Table(name = "Category")
 class Category (
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)

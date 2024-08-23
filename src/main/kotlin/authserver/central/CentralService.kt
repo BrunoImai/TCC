@@ -30,9 +30,14 @@ import authserver.j_audi.client_business.ClientBusinessRepository
 import authserver.j_audi.client_business.request.ClientBusinessRequest
 import authserver.j_audi.old_prices.OldPrices
 import authserver.j_audi.products.Product
+import authserver.j_audi.products.ProductQtt
+import authserver.j_audi.products.ProductQttRepository
 import authserver.j_audi.products.ProductRepository
 import authserver.j_audi.products.requests.ProductRequest
 import authserver.j_audi.products.requests.UpdateProductRequest
+import authserver.j_audi.sale.Sale
+import authserver.j_audi.sale.SaleRepository
+import authserver.j_audi.sale.requests.SaleRequest
 import authserver.j_audi.supplier_business.SupplierBusiness
 import authserver.j_audi.supplier_business.SupplierBusinessRepository
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
@@ -59,8 +64,9 @@ class CentralService(
     private val supplierRepository: SupplierBusinessRepository,
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
-    private val clientBusinessRepository: ClientBusinessRepository
-
+    private val clientBusinessRepository: ClientBusinessRepository,
+    private val saleRepository: SaleRepository,
+    private val productQttRepository: ProductQttRepository
     ) {
 
     fun getCentralIdFromToken(): Long {
@@ -406,6 +412,7 @@ class CentralService(
         assistanceToUpdate.address = assistance.address
         assistanceToUpdate.cpf = assistance.cpf
         assistanceToUpdate.period = assistance.period
+        assistanceToUpdate.categories = assistance.categoriesId.map { categoryRepository.findByIdOrNull(it) ?: throw IllegalStateException("Categoria não encontrada") }.toMutableSet()
         return assistanceRepository.save(assistanceToUpdate)
     }
 
@@ -607,6 +614,119 @@ class CentralService(
     fun deleteClientBusiness(clientBusinessId: Long): Boolean {
         val clientBusiness = clientBusinessRepository.findByIdOrNull(clientBusinessId) ?: return false
         clientBusinessRepository.delete(clientBusiness)
+        return true
+    }
+
+    // Sale
+
+    fun createSale(saleRequest: SaleRequest): Sale {
+        val centralId = getCentralIdFromToken()
+        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val client = clientBusinessRepository.findByIdOrNull(saleRequest.clientId) ?: throw IllegalStateException("Cliente não encontrado")
+        val supplier = supplierRepository.findByIdOrNull(saleRequest.supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+
+        val sale = Sale(
+            saleDate = currentTime(),
+            purchaseOrder = saleRequest.purchaseOrder,
+            carrier = saleRequest.carrier,
+            fare = saleRequest.fare,
+            client = client,
+            supplier = supplier
+        )
+        // Warning
+        var totalPrice = 0.0f
+
+        for (productSale in saleRequest.productsQtt) {
+            val product = productRepository.findByIdOrNull(productSale.idProduct) ?: throw IllegalStateException("Produto não encontrado")
+            if (product.supplier != supplier) throw IllegalStateException("Produto não encontrado")
+
+            val productQtt = ProductQtt (
+                product = product,
+                qtt = productSale.qtt,
+                priceOnSale = product.price,
+                sale = sale
+            )
+
+            totalPrice += product.price * productSale.qtt
+
+            productQttRepository.save(productQtt)
+        }
+
+        sale.totalPrice = totalPrice
+
+        saleRepository.save(sale)
+
+        return sale
+    }
+
+    fun listSalesByClient(clientId: Long): List<Sale> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        central.clientBussines.find { it.id == clientId } ?: throw IllegalStateException("Cliente não encontrado")
+        return saleRepository.findAllByClient_Id(clientId)
+    }
+
+    fun listSalesBySupplier(supplierId: Long): List<Sale> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        central.supplierBusiness.find { it.id == supplierId } ?: throw IllegalStateException("Fornecedor não encontrado")
+        return saleRepository.findAllBySupplier_Id(supplierId)
+    }
+
+    fun listSales(): List<Sale> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+
+        return central.clientBussines.flatMap { client -> saleRepository.findAllByClient_Id(client.id!!) } +
+               central.supplierBusiness.flatMap { supplier -> saleRepository.findAllBySupplier_Id(supplier.id!!) }
+    }
+
+    fun getSale(saleId: Long): Sale? {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val sale = saleRepository.findByIdOrNull(saleId)
+        return sale?.takeIf { it.client?.responsibleCentral == central || it.supplier?.responsibleCentral == central }
+    }
+
+    fun updateSale(saleId: Long, saleRequest: SaleRequest): Sale {
+        val sale = saleRepository.findByIdOrNull(saleId) ?: throw IllegalStateException("Venda não encontrada")
+        val client = clientBusinessRepository.findByIdOrNull(saleRequest.clientId) ?: throw IllegalStateException("Cliente não encontrado")
+        val supplier = supplierRepository.findByIdOrNull(saleRequest.supplierId) ?: throw IllegalStateException("Fornecedor não encontrado")
+
+        sale.purchaseOrder = saleRequest.purchaseOrder
+        sale.carrier = saleRequest.carrier
+        sale.fare = saleRequest.fare
+        sale.client = client
+        sale.supplier = supplier
+
+        var totalPrice = 0.0f
+
+        saleRepository.save(sale)
+
+        for (productSale in saleRequest.productsQtt) {
+            val product = productRepository.findByIdOrNull(productSale.idProduct) ?: throw IllegalStateException("Produto não encontrado")
+            if (product.supplier != supplier) throw IllegalStateException("Produto não encontrado")
+
+            val productQtt = ProductQtt (
+                product = product,
+                qtt = productSale.qtt,
+                priceOnSale = product.price,
+                sale = sale
+            )
+
+            totalPrice += product.price * productSale.qtt
+
+            productQttRepository.save(productQtt)
+        }
+
+        sale.totalPrice = totalPrice
+
+        return saleRepository.save(sale)
+    }
+
+    fun deleteSale(saleId: Long): Boolean {
+        val sale = saleRepository.findByIdOrNull(saleId) ?: return false
+        saleRepository.delete(sale)
         return true
     }
 

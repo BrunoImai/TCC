@@ -26,16 +26,16 @@ class CentralBootstrap(
             rolesRepository.save(centralRole)
         }
 
-        if (userRepository.count() == 0L) {
-            val admin = Central(
-                email = "admin@authserver.com",
-                password = "admin",
-                name = "Auth Server Administrator",
-                creationDate = Date.from(LocalDate.now()
-                    .atStartOfDay(ZoneId.systemDefault()).toInstant())
-            )
-            admin.roles.add(adminRole)  // adminRole is now a managed entity
-            userRepository.save(admin)
-        }
+//        if (userRepository.count() == 0L) {
+//            val admin = Central(
+//                email = "admin@authserver.com",
+//                password = "admin",
+//                name = "Auth Server Administrator",
+//                creationDate = Date.from(LocalDate.now()
+//                    .atStartOfDay(ZoneId.systemDefault()).toInstant())
+//            )
+//            admin.roles.add(adminRole)  // adminRole is now a managed entity
+//            userRepository.save(admin)
+//        }
     }
 }

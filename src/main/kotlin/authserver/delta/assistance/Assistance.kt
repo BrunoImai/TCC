@@ -10,9 +10,9 @@ import authserver.delta.worker.Worker
 import java.util.*
 
 @Entity
-@Table(name = "Assistance")
 class Assistance(
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(nullable = false)
