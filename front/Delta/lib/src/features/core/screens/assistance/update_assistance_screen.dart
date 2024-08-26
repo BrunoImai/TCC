@@ -340,6 +340,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       );
 
       String requestBody = jsonEncode(updateAssistanceRequest.toJson());
+      print(requestBody);
 
       try {
         final response = await http.put(
@@ -501,7 +502,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            //const SizedBox(height: 2),
                             if (_isCategoryExpanded)
                               Column(
                                 children: categories.map((category) {

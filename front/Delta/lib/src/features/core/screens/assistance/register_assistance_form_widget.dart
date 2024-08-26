@@ -7,6 +7,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
+import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -329,12 +330,31 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           // Registration failed
           print('Registration failed. Status code: ${response.statusCode}');
 
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertPopUp(
-                    errorDescription: response.body);
-              });
+          if (response.body == 'Cliente não encontrado.') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                    onConfirmed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterClientScreen(),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                  );
+                });
+          }
         }
       } catch (e) {
         print('Error occurred: $e');

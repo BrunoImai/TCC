@@ -179,12 +179,31 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
           // Registration failed
           print('Login failed. Status code: ${response.statusCode}');
 
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertPopUp(
-                    errorDescription: response.body);
-              });
+          if (response.body == 'Email já cadastrado!' || response.body == 'CNPJ já cadastrado!') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                    onConfirmed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WhoAreYouScreen(),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertPopUp(
+                    errorDescription: response.body,
+                  );
+                });
+          }
 
         }
       } catch (e) {
