@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
 "email": "JAudi@gmail.com",
-"password": "central0000"
+"password": "Abcde12!!"
 }
 > {%
     client.global.set("token", response.body.token)

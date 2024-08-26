@@ -633,8 +633,10 @@ class CentralService(
             client = client,
             supplier = supplier
         )
-        // Warning
+
         var totalPrice = 0.0f
+
+        var productsQtts = mutableSetOf<ProductQtt>()
 
         for (productSale in saleRequest.productsQtt) {
             val product = productRepository.findByIdOrNull(productSale.idProduct) ?: throw IllegalStateException("Produto não encontrado")
@@ -649,12 +651,14 @@ class CentralService(
 
             totalPrice += product.price * productSale.qtt
 
-            productQttRepository.save(productQtt)
+            productsQtts.add(productQtt)
         }
 
         sale.totalPrice = totalPrice
 
         saleRepository.save(sale)
+
+        productsQtts.map { productQttRepository.save(it) }
 
         return sale
     }

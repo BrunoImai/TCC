@@ -304,7 +304,7 @@ class CentralController(
     // Sale
 
     @PostMapping("/sale")
-    fun createSale(@Valid @RequestBody req: SaleRequest) =
+    fun createSale(@RequestBody req: SaleRequest) =
         service.createSale(req)
             .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
