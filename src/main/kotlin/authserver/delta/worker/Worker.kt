@@ -2,6 +2,7 @@ package authserver.delta.worker
 
 import authserver.delta.assistance.Assistance
 import authserver.central.Central
+import authserver.delta.report.Report
 import authserver.delta.worker.response.WorkerResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
@@ -36,7 +37,10 @@ class Worker(
     var central: Central? = null,
 
     @ManyToMany(mappedBy = "responsibleWorkers")
-    var currentAssistances: MutableSet<Assistance> = HashSet()
+    var currentAssistances: MutableSet<Assistance> = HashSet(),
+
+    @ManyToMany(mappedBy = "responsibleWorkers")
+    var reports: MutableSet<Report> = HashSet()
 ) {
     fun toResponse() = WorkerResponse(id!!, name, email, cpf, cellphone, entryDate)
 }

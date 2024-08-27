@@ -7,6 +7,7 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
 import authserver.delta.category.request.CategoryRequest
+import authserver.delta.report.request.ReportRequest
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
 import authserver.j_audi.client_business.request.ClientBusinessRequest
@@ -14,7 +15,6 @@ import authserver.j_audi.products.requests.ProductRequest
 import authserver.j_audi.products.requests.UpdateProductRequest
 import authserver.j_audi.sale.requests.SaleRequest
 import authserver.j_audi.supplier_business.requests.SupplierBusinessRequest
-import authserver.j_audi.supplier_business.response.SupplierBusinessResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
@@ -22,8 +22,6 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/central")
@@ -370,5 +368,31 @@ class CentralController(
     @DeleteMapping("/category/{id}")
     fun deleteCategory(@PathVariable("id") id: Long) : ResponseEntity<Void> =
         if (service.deleteCategory(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    // Report
+
+    @PostMapping("/report")
+    fun createReport(@Valid @RequestBody req: ReportRequest) =
+        service.createReport(req)
+            .toResponse()
+            .let { ResponseEntity.status(CREATED).body(it) }
+
+    @GetMapping("/report/{id}")
+    fun getReport(@PathVariable("id") id: Long) =
+        service.getReport(id)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @PutMapping("/report/{id}")
+    fun updateReport(@PathVariable("id") id: Long, @Valid @RequestBody req: ReportRequest) =
+        service.updateReport(id, req)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/report/{id}")
+    fun deleteReport(@PathVariable("id") id: Long) : ResponseEntity<Void> =
+        if (service.deleteReport(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 }

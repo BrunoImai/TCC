@@ -1,4 +1,4 @@
-package org.example.authserver.utils
+package authserver.delta.assistance
 
 enum class AssistanceStatus {
     FINALIZADO,

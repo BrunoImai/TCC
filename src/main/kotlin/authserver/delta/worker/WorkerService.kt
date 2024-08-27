@@ -14,10 +14,17 @@ import authserver.utils.PasswordUtil
 import authserver.delta.worker.response.WorkerLoginResponse
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
-import org.example.authserver.utils.AssistanceStatus
+import authserver.delta.assistance.AssistanceStatus
+import authserver.delta.client.ClientRepository
+import authserver.delta.report.Report
+import authserver.delta.report.ReportRepository
+import authserver.delta.report.request.ReportRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 @Service
 class WorkerService (
@@ -25,7 +32,9 @@ class WorkerService (
     val jwt: Jwt,
     val request: HttpServletRequest,
     val centralRepository: CentralRepository,
-    val assistanceRepository: AssistanceRepository
+    val assistanceRepository: AssistanceRepository,
+    val clientRepository: ClientRepository,
+    val reportRepository: ReportRepository
 ){
     var apiKey = "AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY"
 
@@ -123,7 +132,31 @@ class WorkerService (
 //        return AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
 //    }
 
+    fun createReport(reportReq: ReportRequest) : Report {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val assistance = assistanceRepository.findByIdOrNull(reportReq.assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+
+        val client = clientRepository.findByIdOrNull(reportReq.clientId) ?: throw IllegalStateException("Cliente não encontrado")
+        val report = Report(
+            name = reportReq.name,
+            description = reportReq.description,
+            creationDate = currentTime(),
+            assistance = assistance,
+            responsibleWorkers = mutableSetOf(worker),
+            client = client,
+            totalPrice = reportReq.totalPrice,
+        )
+        return reportRepository.save(report)
+    }
+
     private fun buildUrl(origin: String, destination: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"
     }
+
+    fun currentTime() : Date {
+        val currentDate = LocalDate.now()
+        return Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    }
+
 }

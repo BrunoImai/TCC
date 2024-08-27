@@ -5,7 +5,7 @@ import authserver.central.Central
 import authserver.delta.category.Category
 import jakarta.persistence.*
 import authserver.delta.client.Client
-import org.example.authserver.utils.AssistanceStatus
+import authserver.delta.report.Report
 import authserver.delta.worker.Worker
 import java.util.*
 
@@ -68,7 +68,11 @@ class Assistance(
         joinColumns = [JoinColumn(name = "assistance_id")],
         inverseJoinColumns = [JoinColumn(name = "category_id")]
     )
-    var categories: MutableSet<Category> = HashSet()
+    var categories: MutableSet<Category> = HashSet(),
+
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "assistance_id", referencedColumnName = "id")
+    var report: Report? = null
 
 ) {
     fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet())

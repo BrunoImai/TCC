@@ -1,5 +1,6 @@
 package authserver.delta.worker
 
+import authserver.delta.report.request.ReportRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
@@ -19,4 +20,12 @@ class WorkerController(
 
     @GetMapping("/assistance/closest")
     fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) = service.getClosestAssistance(coordinate)
+
+    @PostMapping("/report")
+    fun createReport(@Valid @RequestBody reportRequest: ReportRequest) =
+        service.createReport(reportRequest)
+            .toResponse()
+            .let {
+                ResponseEntity.ok(it)
+            }
 }
