@@ -150,8 +150,15 @@ class WorkerService (
             responsibleWorkers = mutableSetOf(worker),
             client = client,
             totalPrice = reportReq.totalPrice,
+            responsibleCentral = worker.central!!
         )
         return reportRepository.save(report)
+    }
+
+    fun listReports(): List<Report> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        return reportRepository.findAllByResponsibleWorkersContains(worker)
     }
 
     fun listWorkers(): List<Worker> {

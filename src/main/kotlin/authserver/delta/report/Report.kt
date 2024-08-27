@@ -1,5 +1,6 @@
 package authserver.delta.report
 
+import authserver.central.Central
 import authserver.delta.assistance.Assistance
 import authserver.delta.client.Client
 import authserver.delta.report.response.ReportResponse
@@ -39,9 +40,12 @@ class Report (
     var totalPrice: Float = 0.0f,
 
     @OneToOne(mappedBy = "report")
-    var assistance: Assistance? = null
+    var assistance: Assistance? = null,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Central_id")
+    var responsibleCentral: Central,
 
-) {
+    ) {
     fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! })
 }

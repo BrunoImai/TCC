@@ -35,6 +35,12 @@ class WorkerController(
                 ResponseEntity.ok(it)
             }
 
+    @GetMapping("/report")
+    fun listReports() =
+        service.listReports()
+            .map { it.toResponse() }
+            .let { ResponseEntity.ok(it) }
+
     @GetMapping("/category")
     fun listCategories() =
         service.listCategories()

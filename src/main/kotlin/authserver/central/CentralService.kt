@@ -760,6 +760,7 @@ class CentralService(
             responsibleWorkers = workers.toMutableSet(),
             client = client,
             totalPrice = reportReq.totalPrice,
+            responsibleCentral = central
         )
         return reportRepository.save(report)
     }
@@ -770,11 +771,11 @@ class CentralService(
         return reportRepository.findAllByStatusAndClient_Central(ReportStatus.EM_ANALISE, central)
     }
 
-//    fun listAllReports () : List<Report> {
-//        val centralId = getCentralIdFromToken()
-//        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-//        return reportRepository.findAllByClient_Central(central)
-//    }
+    fun listReports () : List<Report> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return reportRepository.findAllByResponsibleCentral(central)
+    }
 
     fun getReport(reportId: Long) : Report {
         val report = reportRepository.findByIdOrNull(reportId) ?: throw IllegalStateException("Relatório não encontrado")

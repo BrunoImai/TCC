@@ -378,6 +378,11 @@ class CentralController(
             .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
+    @GetMapping("/report")
+    fun listReports() =
+        service.listReports()
+            .map { it.toResponse() }
+
     @GetMapping("/report/{id}")
     fun getReport(@PathVariable("id") id: Long) =
         service.getReport(id)

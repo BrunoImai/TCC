@@ -222,7 +222,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Relatorio 1",
+  "name": "Relatorio 4",
   "description": "Concerto maquina de lavar",
   "assistanceId": 1,
   "responsibleWorkersIds": [1],
@@ -249,6 +249,9 @@ Content-Type: application/json
 GET localhost:8080/api/central/report/1
 Authorization: Bearer {{token}}
 
+### Lista todos os relatórios
+GET localhost:8080/api/central/report
+Authorization: Bearer {{token}}
 
 ### Cria relatório Worker
 POST localhost:8080/api/worker/report

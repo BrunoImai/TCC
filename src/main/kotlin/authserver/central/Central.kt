@@ -5,6 +5,7 @@ import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
 import authserver.delta.category.Category
 import authserver.delta.client.Client
+import authserver.delta.report.Report
 import jakarta.persistence.*
 
 import authserver.delta.worker.Worker
@@ -67,6 +68,9 @@ class  Central(
 
     @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
     var supplierBusiness: MutableSet<SupplierBusiness> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var reports: MutableSet<Report> = mutableSetOf(),
 
 ) {
     fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, cellphone )
