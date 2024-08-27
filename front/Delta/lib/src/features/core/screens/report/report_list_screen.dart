@@ -69,9 +69,9 @@ class _ReportsListScreenState extends State<ReportListScreen> {
 
   Future<ClientResponse?> getClientByCpf(String cpf) async {
     final response = await http.get(
-      Uri.parse('http://localhost:8080/api/central/client/byCpf/$cpf'),
+      Uri.parse('http://localhost:8080/api/central/$userType/byCpf/$cpf'),
       headers: {
-        'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        'Authorization': 'Bearer $userToken'
       },
     );
 
