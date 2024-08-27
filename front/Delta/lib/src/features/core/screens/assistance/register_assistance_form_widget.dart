@@ -20,8 +20,8 @@ import 'assistance.dart';
 
 class RegisterAssistanceFormWidget extends StatefulWidget {
   const RegisterAssistanceFormWidget({
-    super.key,
-  });
+    super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   _RegisterAssistanceFormWidget createState() => _RegisterAssistanceFormWidget();
@@ -340,7 +340,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RegisterClientScreen(),
+                          builder: (context) => RegisterClientScreen(whoAreYouTag: widget.whoAreYouTag,),
                         ),
                       );
                     },
@@ -685,7 +685,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CentralHomeScreen()));
+                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Serviço cadastrado!')),
                     );

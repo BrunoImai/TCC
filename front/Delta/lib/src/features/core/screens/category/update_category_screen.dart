@@ -17,9 +17,9 @@ import '../../../authentication/screens/signup/central_manager.dart';
 import 'category.dart';
 
 class UpdateCategoryScreen extends StatefulWidget {
-  const UpdateCategoryScreen({super.key, required this.category});
+  const UpdateCategoryScreen({super.key, required this.category, required this.whoAreYouTag});
   final CategoryResponse category;
-  
+  final num whoAreYouTag;
   @override
   _UpdateCategoryScreenState createState() => _UpdateCategoryScreenState();
 }
@@ -179,7 +179,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const CentralHomeScreen())
+                                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Atualização Realizada')),
@@ -221,7 +221,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             deleteWorker();
-                                            Get.to(const CentralHomeScreen());
+                                            Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,));
                                           },
                                           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                           child: const Text("Sim"),

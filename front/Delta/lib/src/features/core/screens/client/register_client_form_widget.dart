@@ -15,8 +15,9 @@ import 'client.dart';
 
 class RegisterClientFormWidget extends StatefulWidget {
   const RegisterClientFormWidget({
-    super.key,
+    super.key, required this.whoAreYouTag
   });
+  final num whoAreYouTag;
 
   @override
   _RegisterClientFormWidget createState() => _RegisterClientFormWidget();
@@ -220,7 +221,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ClientListScreen(),
+                          builder: (context) => ClientListScreen(whoAreYouTag: widget.whoAreYouTag,),
                         ),
                       );
                     },
@@ -377,7 +378,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CentralHomeScreen()));
+                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Cadastro Realizado')),
                     );

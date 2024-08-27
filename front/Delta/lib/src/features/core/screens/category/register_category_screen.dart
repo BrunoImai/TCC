@@ -9,13 +9,13 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 
 class RegisterCategoryScreen extends StatelessWidget{
-  const RegisterCategoryScreen({Key? key}) : super(key: key);
-
+  const RegisterCategoryScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: whoAreYouTag,),
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -47,7 +47,7 @@ class RegisterCategoryScreen extends StatelessWidget{
                   Center(
                     child: SizedBox(
                       width: elementWidth,
-                      child: const RegisterCategoryFormWidget(),
+                      child: RegisterCategoryFormWidget(whoAreYouTag: whoAreYouTag,),
                     ),
                   ),
                 ],

@@ -9,8 +9,9 @@ import '../worker_home_screen.dart';
 
 class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
   const WorkerAppBar({
-    super.key,
+    super.key, required this.whoAreYouTag
   });
+  final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => Get.to(() => const WorkerHomeScreen()),
+          onTap: () => Get.to(() => WorkerHomeScreen(whoAreYouTag: whoAreYouTag)),
           child: Text(appName, style: Theme.of(context).textTheme.headline4),
         ),
       ),

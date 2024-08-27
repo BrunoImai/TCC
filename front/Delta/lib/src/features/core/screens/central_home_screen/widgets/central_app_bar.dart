@@ -10,8 +10,9 @@ import '../profile/profile_screen.dart';
 
 class CentralAppBar extends StatelessWidget implements PreferredSizeWidget{
   const CentralAppBar({
-    super.key,
-  });
+    super.key, required this.whoAreYouTag});
+
+    final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class CentralAppBar extends StatelessWidget implements PreferredSizeWidget{
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => Get.to(() => const CentralHomeScreen()),
+          onTap: () => Get.to(() => CentralHomeScreen(whoAreYouTag: whoAreYouTag,)),
           child: Text(appName, style: Theme.of(context).textTheme.headline4),
         ),
       ),

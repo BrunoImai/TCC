@@ -185,13 +185,13 @@ class _LoginFormState extends State<LoginForm> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CentralHomeScreen()),
+                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)),
                         );
                       } else {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const WorkerHomeScreen()),
+                                builder: (context) => WorkerHomeScreen(whoAreYouTag: widget.whoAreYouTag)),
                         );
                       }
                       ScaffoldMessenger.of(context).showSnackBar(

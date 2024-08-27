@@ -19,8 +19,9 @@ import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/central_home_screen.dart';
 
 class UpdateClientScreen extends StatefulWidget {
-  const UpdateClientScreen({super.key, required this.client});
+  const UpdateClientScreen({super.key, required this.client, required this.whoAreYouTag});
   final ClientResponse client;
+  final num whoAreYouTag;
   
   @override
   _UpdateClientScreenState createState() => _UpdateClientScreenState();
@@ -545,7 +546,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => const CentralHomeScreen())
+                                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
                                       );
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(content: Text('Atualização Realizada')),
@@ -588,7 +589,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             deleteClient();
-                                            Get.to(const CentralHomeScreen());
+                                            Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,));
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(content: Text('Cliente excluído com sucesso!')),
                                             );

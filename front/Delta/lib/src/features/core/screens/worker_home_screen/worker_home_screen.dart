@@ -12,7 +12,8 @@ import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 
 class WorkerHomeScreen extends StatefulWidget{
-  const WorkerHomeScreen({super.key});
+  const WorkerHomeScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   State<WorkerHomeScreen> createState() => _WorkerHomeScreenState();
@@ -25,7 +26,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const WorkerAppBar(),
+      appBar: WorkerAppBar(whoAreYouTag: widget.whoAreYouTag),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -53,7 +54,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             //Control Center
             Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            const WorkerCentralControl(),
+            WorkerCentralControl(whoAreYouTag: widget.whoAreYouTag),
             const SizedBox(height: homePadding,),
 
             //

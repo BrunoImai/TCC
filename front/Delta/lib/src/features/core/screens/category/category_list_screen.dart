@@ -17,7 +17,8 @@ import 'category.dart';
 
 
 class CategoryListScreen extends StatefulWidget {
-  const CategoryListScreen({Key? key}) : super(key: key);
+  const CategoryListScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   _CategoryListScreenState createState() => _CategoryListScreenState();
@@ -98,7 +99,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -197,7 +198,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateCategoryScreen(category: category));
+                                  Get.to(() => UpdateCategoryScreen(category: category, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),

@@ -17,8 +17,9 @@ import 'worker.dart';
 
 class RegisterWorkerFormWidget extends StatefulWidget {
   const RegisterWorkerFormWidget({
-    super.key,
+    super.key, required this.whoAreYouTag
   });
+  final num whoAreYouTag;
 
   @override
   _RegisterWorkerFormWidget createState() => _RegisterWorkerFormWidget();
@@ -186,7 +187,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const WorkerListScreen(),
+                          builder: (context) => WorkerListScreen(whoAreYouTag: widget.whoAreYouTag,),
                         ),
                       );
                     },
@@ -465,7 +466,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CentralHomeScreen()));
+                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Cadastro Realizado')),
                       );
