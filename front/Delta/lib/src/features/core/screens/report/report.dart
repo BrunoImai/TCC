@@ -39,32 +39,6 @@ class ReportInformations {
 
 }
 
-class  UpdateReportRequest {
-  final String description;
-  final String name;
-  final String address;
-  final String complement;
-  final String cpf;
-  final String? period;
-  final List<num> workersIds;
-  final List<num> categoriesId;
-
-  UpdateReportRequest({required this.description, required this.name, required this.address, required this.complement,required this.cpf,
-    required this.period, required this.workersIds, required this.categoriesId});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'description': description,
-      'name': name,
-      'address': address,
-      'cpf': cpf,
-      'period': period,
-      'workersIds': workersIds,
-      'categoriesId': categoriesId
-    };
-  }
-}
-
 class ReportResponse {
   final String id;
   final String startDate;
