@@ -263,3 +263,19 @@ Content-Type: application/json
   "clientId": 1,
   "totalPrice": 100.00
 }
+
+### Lista todos os serviços (Worker)
+GET localhost:8080/api/worker/assistance
+Authorization: Bearer {{token}}
+
+### Lista todas as categorias (Worker)
+GET localhost:8080/api/worker/category
+Authorization: Bearer {{token}}
+
+### Lista todas as categorias (Worker)
+GET localhost:8080/api/worker/worker
+Authorization: Bearer {{token}}
+
+### Busca cliente pelo cpf
+GET localhost:8080/api/worker/client/byCpf/12345678901
+Authorization: Bearer {{token}}
