@@ -770,6 +770,12 @@ class CentralService(
         return reportRepository.findAllByStatusAndClient_Central(ReportStatus.EM_ANALISE, central)
     }
 
+//    fun listAllReports () : List<Report> {
+//        val centralId = getCentralIdFromToken()
+//        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+//        return reportRepository.findAllByClient_Central(central)
+//    }
+
     fun getReport(reportId: Long) : Report {
         val report = reportRepository.findByIdOrNull(reportId) ?: throw IllegalStateException("Relatório não encontrado")
         val centralId = getCentralIdFromToken()

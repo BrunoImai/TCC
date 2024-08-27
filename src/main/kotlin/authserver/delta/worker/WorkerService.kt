@@ -15,6 +15,9 @@ import authserver.delta.worker.response.WorkerLoginResponse
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
 import authserver.delta.assistance.AssistanceStatus
+import authserver.delta.category.Category
+import authserver.delta.category.CategoryRepository
+import authserver.delta.client.Client
 import authserver.delta.client.ClientRepository
 import authserver.delta.report.Report
 import authserver.delta.report.ReportRepository
@@ -34,7 +37,8 @@ class WorkerService (
     val centralRepository: CentralRepository,
     val assistanceRepository: AssistanceRepository,
     val clientRepository: ClientRepository,
-    val reportRepository: ReportRepository
+    val reportRepository: ReportRepository,
+    val categoryRepository: CategoryRepository
 ){
     var apiKey = "AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY"
 
@@ -150,9 +154,38 @@ class WorkerService (
         return reportRepository.save(report)
     }
 
+    fun listWorkers(): List<Worker> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        return workerRepository.findAllByCentral(central)
+    }
+
+    fun listCategories(): List<Category> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        return categoryRepository.findAll()
+    }
+
+    fun listAllAssistancesByWorker(): List<Assistance> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        return assistanceRepository.findAllByResponsibleWorkersContains(worker)
+    }
+
+    fun getClientByCpf(cpf: String): Client? {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        return clientRepository.findByCpf(cpf)?.takeIf { it.central == central }
+    }
+
     private fun buildUrl(origin: String, destination: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"
     }
+
+
 
     fun currentTime() : Date {
         val currentDate = LocalDate.now()
