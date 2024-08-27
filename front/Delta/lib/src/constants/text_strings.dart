@@ -85,6 +85,7 @@ const String clients = "Clientes cadastrados";
 const String registerWorker = "Registrar um novo funcionário";
 const String workers = "Funcionários cadastrados";
 const String registerService = "Registrar um novo serviço";
+const String registerReport = "Registrar um novo relatório";
 const String serviceHistory = "Histórico de serviços";
 const String tRegisterCategory = "Registrar uma nova categoria";
 const String tCategories = "Categorias cadastradas";
@@ -154,3 +155,9 @@ const String tJoinedCategory = "Categoria criada em: ";
 
 //Category List Screen
 const String tCategoryListTitle = "Encontre suas categorias";
+
+//Register Report Screen
+const String tRegisterReportTitle = "Relatório A.G.E";
+const String tRegisterReportSubTitle = "Cadastre seu novo relatório";
+const String tTitle = "Título";
+const String tTotalPrice = "Preço Total";
