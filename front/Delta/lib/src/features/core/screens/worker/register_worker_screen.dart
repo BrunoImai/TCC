@@ -10,12 +10,13 @@ import '../../../../constants/text_strings.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 
 class RegisterWorkerScreen extends StatelessWidget{
-  const RegisterWorkerScreen({Key? key}) : super(key: key);
+  const RegisterWorkerScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: whoAreYouTag,),
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -47,7 +48,7 @@ class RegisterWorkerScreen extends StatelessWidget{
                   Center(
                     child: Container(
                       width: elementWidth,
-                      child: const RegisterWorkerFormWidget(),
+                      child: RegisterWorkerFormWidget(whoAreYouTag: whoAreYouTag,),
                     ),
                   ),
                 ],

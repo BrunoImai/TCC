@@ -22,8 +22,9 @@ import '../central_home_screen/central_home_screen.dart';
 import '../worker/worker.dart';
 
 class UpdateAssistanceScreen extends StatefulWidget {
-  const UpdateAssistanceScreen({super.key, required this.assistance});
+  const UpdateAssistanceScreen({super.key, required this.assistance, required this.whoAreYouTag});
   final AssistanceResponse assistance;
+  final num whoAreYouTag;
 
   @override
   _UpdateAssistanceScreenState createState() => _UpdateAssistanceScreenState();
@@ -791,7 +792,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const CentralHomeScreen())
+                                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Atualização Realizada')),
@@ -833,7 +834,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             deleteAssistance();
-                                            Get.to(const CentralHomeScreen());
+                                            Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag));
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(content: Text('Serviço excluído com sucesso!')),
                                             );

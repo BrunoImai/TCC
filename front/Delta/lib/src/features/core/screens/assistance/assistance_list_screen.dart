@@ -22,7 +22,8 @@ import '../worker/worker.dart';
 
 
 class AssistanceListScreen extends StatefulWidget {
-  const AssistanceListScreen({Key? key}) : super(key: key);
+  const AssistanceListScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   _AssistancesListScreenState createState() => _AssistancesListScreenState();
@@ -236,7 +237,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -330,7 +331,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateAssistanceScreen(assistance: data.assistance));
+                                  Get.to(() => UpdateAssistanceScreen(assistance: data.assistance, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),

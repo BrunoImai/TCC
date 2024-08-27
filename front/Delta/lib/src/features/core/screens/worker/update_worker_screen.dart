@@ -20,9 +20,10 @@ import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/central_home_screen.dart';
 
 class UpdateWorkerScreen extends StatefulWidget {
-  const UpdateWorkerScreen({super.key, required this.worker});
+  const UpdateWorkerScreen({super.key, required this.worker, required this.whoAreYouTag});
   final WorkersList worker;
-  
+  final num whoAreYouTag;
+
   @override
   _UpdateWorkerScreenState createState() => _UpdateWorkerScreenState();
 }
@@ -568,7 +569,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => const CentralHomeScreen())
+                                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
                                       );
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(content: Text('Atualização Realizada')),
@@ -611,7 +612,7 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             deleteWorker();
-                                            Get.to(const CentralHomeScreen());
+                                            Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag));
                                           },
                                           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                           child: const Text("Sim"),

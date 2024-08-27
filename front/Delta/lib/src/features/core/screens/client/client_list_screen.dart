@@ -15,7 +15,8 @@ import '../central_home_screen/widgets/central_app_bar.dart';
 import 'client.dart';
 
 class ClientListScreen extends StatefulWidget {
-  const ClientListScreen({Key? key}) : super(key: key);
+  const ClientListScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   _ClientListScreenState createState() => _ClientListScreenState();
@@ -101,7 +102,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -200,7 +201,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateClientScreen(client: client));
+                                  Get.to(() => UpdateClientScreen(client: client, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),

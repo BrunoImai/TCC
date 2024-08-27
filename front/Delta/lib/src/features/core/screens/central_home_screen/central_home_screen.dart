@@ -10,7 +10,8 @@ import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 
 class CentralHomeScreen extends StatefulWidget{
-  const CentralHomeScreen({super.key});
+  const CentralHomeScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   State<CentralHomeScreen> createState() => _CentralHomeScreenState();
@@ -25,7 +26,7 @@ class _CentralHomeScreenState extends State<CentralHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -47,7 +48,7 @@ class _CentralHomeScreenState extends State<CentralHomeScreen> {
             //Control Center
             Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            const CentralCentralControl(),
+            CentralCentralControl(whoAreYouTag: widget.whoAreYouTag,),
             const SizedBox(height: homePadding,),
 
             //

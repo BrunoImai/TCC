@@ -14,8 +14,10 @@ import '../../../authentication/screens/signup/central_manager.dart';
 
 class RegisterCategoryFormWidget extends StatefulWidget {
   const RegisterCategoryFormWidget({
-    super.key,
+    super.key, required this.whoAreYouTag
   });
+
+  final num whoAreYouTag;
 
   @override
   _RegisterCategoryFormWidget createState() => _RegisterCategoryFormWidget();
@@ -110,7 +112,7 @@ class _RegisterCategoryFormWidget extends State<RegisterCategoryFormWidget> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CentralHomeScreen()));
+                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Cadastro Realizado')),
                     );

@@ -15,8 +15,9 @@ import '../../assistance/register_assistance_screen.dart';
 
 class WorkerCentralControl extends StatelessWidget {
   const WorkerCentralControl({
-    super.key,
+    super.key, required this.whoAreYouTag
   });
+  final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class WorkerCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const RegisterClientScreen()),
+                onPressed: () => Get.to(() => RegisterClientScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -61,7 +62,7 @@ class WorkerCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const ClientListScreen()),
+                onPressed: () => Get.to(() => ClientListScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -91,7 +92,7 @@ class WorkerCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const RegisterAssistanceScreen()),
+                onPressed: () => Get.to(() => RegisterAssistanceScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -121,7 +122,7 @@ class WorkerCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const AssistanceListScreen()),
+                onPressed: () => Get.to(() => AssistanceListScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

@@ -16,7 +16,8 @@ import '../../../authentication/screens/signup/central_manager.dart';
 
 
 class WorkerListScreen extends StatefulWidget {
-  const WorkerListScreen({Key? key}) : super(key: key);
+  const WorkerListScreen({super.key, required this.whoAreYouTag});
+  final num whoAreYouTag;
 
   @override
   _WorkerListScreenState createState() => _WorkerListScreenState();
@@ -96,7 +97,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CentralAppBar(),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -190,7 +191,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateWorkerScreen(worker: worker));
+                                  Get.to(() => UpdateWorkerScreen(worker: worker, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),
