@@ -20,6 +20,7 @@ import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/central_home_screen.dart';
 import '../client/client.dart';
 import '../worker/worker.dart';
+import '../worker_home_screen/worker_home_screen.dart';
 
 class RegisterReportFormWidget extends StatefulWidget {
   const RegisterReportFormWidget({
@@ -599,7 +600,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                   );
                 }).toList(),
               ),
-            const SizedBox(height: formHeight - 10),
+            const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: totalPriceController,
               decoration: const InputDecoration(
@@ -608,16 +609,25 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
               ),
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
             ),
-            const SizedBox(height: formHeight - 20),
+            const SizedBox(height: formHeight - 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   registerReport(() {
-                    Navigator.push(
+                    if (widget.whoAreYouTag == 2) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)
+                          )
+                      );
+                    } else {Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)));
+                            builder: (context) => WorkerHomeScreen(whoAreYouTag: widget.whoAreYouTag,)
+                        )
+                    );}
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Serviço cadastrado!')),
                     );
