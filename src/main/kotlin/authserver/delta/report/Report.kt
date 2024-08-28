@@ -47,5 +47,5 @@ class Report (
     var responsibleCentral: Central,
 
     ) {
-    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! })
+    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! }, totalPrice)
 }

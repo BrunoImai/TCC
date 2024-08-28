@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
-import 'package:tcc_front/src/features/core/screens/assistance/update_assistance_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:tcc_front/src/features/core/screens/report/report.dart';
 import 'package:tcc_front/src/features/core/screens/client/client.dart';
 import 'package:tcc_front/src/features/core/screens/report/report.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../constants/text_strings.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../category/category.dart';
@@ -35,7 +36,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
 
   TextEditingController searchController = TextEditingController();
 
-  late List<ReportInformations> assistanceList;
+  late List<ReportInformations> reportList;
   late List<ReportInformations> filteredReportsList;
   String userToken = "";
   String userType = "";
@@ -52,24 +53,24 @@ class _ReportsListScreenState extends State<ReportListScreen> {
     }
     futureData = getAllReports();
     searchController.addListener(_onSearchChanged);
-    assistanceList = [];
+    reportList = [];
     filteredReportsList = [];
   }
 
 
   void _onSearchChanged() {
     setState(() {
-      filteredReportsList = assistanceList.where((data) {
-        final name = data.assistance.name.toLowerCase();
+      filteredReportsList = reportList.where((data) {
+        final name = data.report.name.toLowerCase();
         final query = searchController.text.toLowerCase();
         return name.contains(query);
       }).toList();
     });
   }
 
-  Future<ClientResponse?> getClientByCpf(String cpf) async {
+  Future<ClientResponse?> getClientById(int id) async {
     final response = await http.get(
-      Uri.parse('http://localhost:8080/api/central/$userType/byCpf/$cpf'),
+      Uri.parse('http://localhost:8080/api/$userType/client/$id'),
       headers: {
         'Authorization': 'Bearer $userToken'
       },
@@ -94,46 +95,13 @@ class _ReportsListScreenState extends State<ReportListScreen> {
     }
   }
 
-  Future<List<CategoryResponse>> getAllCategories() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/category'),
-        headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-        },
-      );
-      print("Status code: ${response.statusCode}");
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-
-        final List<CategoryResponse> categoryList = jsonData.map((item) {
-          return CategoryResponse(
-            id: item['id'],
-            name: item['name'],
-            creationDate: item['creationDate'],
-          );
-        }).toList();
-
-        return categoryList;
-      } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        throw Exception('Failed to load category list');
-      }
-    } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de workers');
-    }
-  }
-
 
   Future<List<WorkersList>> getAllWorkers() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/worker'),
+        Uri.parse('http://localhost:8080/api/$userType/worker'),
         headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+          'Authorization': 'Bearer $userToken'
         },
       );
       print("Status code: ${response.statusCode}");
@@ -159,7 +127,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
         throw Exception('Failed to load worker list');
       }
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
+      print('Erro ao fazer a solicitação HTTP workers: $e');
       throw Exception('Falha ao carregar a lista de workers');
     }
   }
@@ -167,9 +135,9 @@ class _ReportsListScreenState extends State<ReportListScreen> {
   Future<List<ReportInformations>> getAllReports() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/assistance'),
+        Uri.parse('http://localhost:8080/api/$userType/report'),
         headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+          'Authorization': 'Bearer $userToken'
         },
       );
       print("Status code: ${response.statusCode}");
@@ -182,64 +150,54 @@ class _ReportsListScreenState extends State<ReportListScreen> {
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
         print(workerIdToNameMap);
 
-        final allCategories = await getAllCategories();
-
-        final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
-        print(categoryIdToNameMap);
-
-        final List<ReportInformations> assistancesList = [];
+        final List<ReportInformations> reportsList = [];
         for (var item in jsonData) {
-          final client = await getClientByCpf(item['cpf']);
+          final client = await getClientById(item['clientId']);
 
-          final workerNames = (item['workersIds'] as List<dynamic>)
+          final workerNames = (item['responsibleWorkersIds'] as List<dynamic>)
               .map((id) => workerIdToNameMap[id] ?? 'Unknown')
               .toList();
 
-          final workersIds = (item['workersIds'] as List<dynamic>)
+          final workersIds = (item['responsibleWorkersIds'] as List<dynamic>)
               .map((id) => id.toString()).toList();
 
-         final categoriesName = (item['categoryIds'] as List<dynamic>)
-              .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
-              .toList();
-         print(categoriesName);
 
-          final categoryIds = (item['categoryIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-          print(categoryIds);
-
-
-          final assistance = ReportResponse(
+          final report = ReportResponse(
               id: item['id'].toString(),
-              startDate: item['startDate'],
-              description: item['description'],
               name: item['name'],
-              address: item['address'],
-              clientCpf: item['cpf'],
-              period: item['period'],
-              workersIds: workersIds,
-              categoryIds: categoryIds
+              description: item['description'],
+              creationDate: item['creationDate'],
+              status: item['status'],
+              //TO DO
+              assistanceId: "1",
+              clientId: item['clientId'].toString(),
+              responsibleWorkersIds: workersIds,
+              totalPrice: item['totalPrice'].toString()
           );
-          final assistanceInformations = ReportInformations(
-              assistance.id, workerNames, client!.name, assistance, categoriesName);
-          assistancesList.add(assistanceInformations);
+
+          print("Report: $report");
+
+          final reportInformations = ReportInformations(
+              report.id, workerNames, client!.name, report);
+          reportsList.add(reportInformations);
         }
 
         setState(() {
-          assistanceList = assistancesList;
-          filteredReportsList = assistancesList;
+          reportList = reportsList;
+          filteredReportsList = reportsList;
         });
+        print("ReportList: $reportList");
 
-
-        return assistanceList;
+        return reportList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load assistance list');
+        throw Exception('Failed to load report list');
       }
 
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      print('Erro ao fazer a solicitação HTTP reports: $e');
+      throw Exception('Falha ao carregar a lista de reports');
     }
   }
 
@@ -260,7 +218,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  assitanceListSubTitle,
+                  reportListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding,),
@@ -322,14 +280,14 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                                 child: Row(
                                   children: [
                                     const Icon(
-                                      Icons.work,
+                                      Icons.content_paste_search_rounded,
                                       color: darkColor,
                                       size: 35,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.assistance.name,
+                                        data.report.assistanceId as String,
                                         style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -340,7 +298,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => UpdateReportScreen(assistance: data.assistance, whoAreYouTag: widget.whoAreYouTag,));
+                                  //Get.to(() => UpdateReportScreen(report: data.report, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),
@@ -351,14 +309,14 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.category_rounded,
+                                Icons.assignment_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.categoriesName.join(', '),
+                                  data.report.name,
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -378,7 +336,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.clientName,
+                                  "${data.report.totalPrice} reais",
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -391,14 +349,14 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.location_on,
+                                Icons.date_range_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.assistance.address,
+                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.report.creationDate)),
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,

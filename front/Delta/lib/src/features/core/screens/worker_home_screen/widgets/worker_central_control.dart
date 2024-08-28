@@ -10,6 +10,7 @@ import '../../../../../constants/text_strings.dart';
 import '../../client/client_list_screen.dart';
 import '../../client/register_client_screen.dart';
 import '../../report/register_report_screen.dart';
+import '../../report/report_list_screen.dart';
 import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
 import '../../assistance/register_assistance_screen.dart';
@@ -49,6 +50,36 @@ class WorkerCentralControl extends StatelessWidget {
                       Flexible(
                         child: Text(
                           registerReport,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => ReportListScreen(whoAreYouTag: whoAreYouTag,)),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.subject_rounded, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          serviceHistory,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,

@@ -8,5 +8,6 @@ data class ReportResponse (
     val status: String,
     val assistanceId: Long?,
     val clientId: Long,
-    val responsibleWorkersIds: List<Long>
+    val responsibleWorkersIds: List<Long>,
+    val totalPrice: Float
 )

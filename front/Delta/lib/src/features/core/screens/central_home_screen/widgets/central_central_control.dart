@@ -13,6 +13,7 @@ import '../../../../../constants/text_strings.dart';
 import '../../category/register_category_screen.dart';
 import '../../client/client_list_screen.dart';
 import '../../client/register_client_screen.dart';
+import '../../report/report_list_screen.dart';
 import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
 import '../../assistance/register_assistance_screen.dart';
@@ -232,7 +233,7 @@ class CentralCentralControl extends StatelessWidget {
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerReport,
+                          registerBudget,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
@@ -244,10 +245,10 @@ class CentralCentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            /*FractionallySizedBox(
+            FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => AssistanceListScreen(whoAreYouTag: whoAreYouTag,)),
+                onPressed: () => Get.to(() => ReportListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -258,11 +259,11 @@ class CentralCentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.work_history, size: 40, color: darkColor),
+                      const Icon(Icons.subject_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          serviceHistory,
+                          budgetHistory,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
@@ -273,7 +274,7 @@ class CentralCentralControl extends StatelessWidget {
                   ),
                 ),
               ),
-            ),*/
+            ),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(

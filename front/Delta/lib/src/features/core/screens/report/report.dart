@@ -29,41 +29,40 @@ class ReportRequest {
 
 
 class ReportInformations {
-  String id;
+  String? id;
   List<String> workersName;
   String clientName;
-  ReportResponse assistance;
-  List<String> categoriesName;
+  ReportResponse report;
 
-  ReportInformations(this.id, this.workersName, this.clientName, this.assistance, this.categoriesName);
+  ReportInformations(this.id, this.workersName, this.clientName, this.report);
 
 }
 
 class ReportResponse {
-  final String id;
-  final String startDate;
-  final String description;
+  final String? id;
   final String name;
-  final String address;
-  final String clientCpf;
-  final String period;
-  final List<String> workersIds;
-  final List<String> categoryIds;
+  final String description;
+  final String creationDate;
+  final String status;
+  final String? assistanceId;
+  final String clientId;
+  final List<String> responsibleWorkersIds;
+  final String totalPrice;
 
-  ReportResponse({required this.id, required this.startDate,required this.description, required this.name, required this.address, required this.clientCpf,
-    required this.period, required this.workersIds, required this.categoryIds});
+  ReportResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
+  required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
 
   Map<String, dynamic> toJson() {
     return {
       'id' : id,
-      'startDate': startDate,
-      'description': description,
       'name': name,
-      'address': address,
-      'clientCpf': clientCpf,
-      'period': period,
-      'workersIds': workersIds,
-      'categoryIds': categoryIds
+      'description': description,
+      'creationDate': creationDate,
+      'status': status,
+      'assistanceId': assistanceId,
+      'clientId': clientId,
+      'responsibleWorkersIds': responsibleWorkersIds,
+      'totalPrice': totalPrice
     };
   }
 }

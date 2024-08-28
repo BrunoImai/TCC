@@ -62,8 +62,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
     }
-
-    clientCpfController.addListener(_onCpfChanged);
     fetchWorkers();
     fetchAssistances();
     assistanceSearchController.addListener(_onAssistanceSearchChanged);
@@ -95,6 +93,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
     if (assistance != null) {
       setState(() {
         selectedAssistance = assistance;
+        nameController.text = assistance.assistance.name;
         clientCpfController.text = assistance.assistance.clientCpf;
         clientNameController.text = assistance.clientName;
         assistanceIdController.text = assistance.assistance.id;
@@ -103,15 +102,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       });
     }
   }
-
-  void _onCpfChanged() {
-    String cpf = clientCpfController.text;
-    if (cpf.isEmpty) {
-    } else if (cpf.replaceAll(RegExp(r'\D'), '').length == 11) {
-      _fetchClientDataByCpf(cpf);
-    }
-  }
-
 
   Future<void> fetchWorkers() async {
     try {
@@ -300,7 +290,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
   }
 
 
-  Future<void> _fetchClientDataByCpf(String cpf) async {
+  /*Future<void> _fetchClientDataByCpf(String cpf) async {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/$userToken/client/byCpf/$cpf'),
@@ -327,7 +317,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
     } catch (e) {
       print('Error occurred: $e');
     }
-  }
+  }*/
 
 
   @override
@@ -622,12 +612,14 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                               builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,)
                           )
                       );
-                    } else {Navigator.push(
+                    } else {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => WorkerHomeScreen(whoAreYouTag: widget.whoAreYouTag,)
                         )
-                    );}
+                    );
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Serviço cadastrado!')),
                     );
