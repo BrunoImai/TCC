@@ -636,7 +636,8 @@ class CentralService(
             carrier = saleRequest.carrier,
             fare = saleRequest.fare,
             client = client,
-            supplier = supplier
+            supplier = supplier,
+            billingDate = saleRequest.billingDate
         )
 
         var totalPrice = 0.0f
