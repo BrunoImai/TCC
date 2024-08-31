@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
+import 'package:tcc_front/src/features/core/screens/budget/update_budget_screen.dart';
 import 'package:tcc_front/src/features/core/screens/client/client.dart';
 import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
 import '../../../../constants/colors.dart';
@@ -298,7 +299,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => UpdateBudgetScreen(budget: data.budget, whoAreYouTag: widget.whoAreYouTag,));
+                                  Get.to(() => UpdateBudgetScreen(budget: data.budget, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),

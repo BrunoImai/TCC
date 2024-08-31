@@ -38,6 +38,31 @@ class BudgetInformations {
 
 }
 
+class UpdateBudgetRequest {
+  final String name;
+  final String description;
+  final String status;
+  final num? assistanceId;
+  final num clientId;
+  final List<num> responsibleWorkersIds;
+  final String totalPrice;
+
+  UpdateBudgetRequest({required this.name,required this.description, required this.status,
+    required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      'status': status,
+      'assistanceId': assistanceId,
+      'clientId': clientId,
+      'responsibleWorkersIds': responsibleWorkersIds,
+      'totalPrice': totalPrice
+    };
+  }
+}
+
 class BudgetResponse {
   final String? id;
   final String name;
