@@ -10,5 +10,5 @@ data class SaleRequest (
     val purchaseOrder: String,
     val carrier: String,
     val fare: String,
-    val billingDate: Date,
+    val billingDate: String,
 )

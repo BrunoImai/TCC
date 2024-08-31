@@ -12,6 +12,6 @@ data class SaleResponse (
     val fare: String,
     val productsQtt: List<ProductQttResponse>,
     val saleDate: Date,
-    val billingDate: Date,
+    val billingDate: String,
     val totalPrice: Float
 )

@@ -40,7 +40,7 @@ class Sale (
     var totalPrice: Float = 0.0f,
 
     @Column
-    var billingDate : Date
+    var billingDate : String
 ) {
     fun toResponse() = SaleResponse(id!!, client!!.id!!, supplier!!.id!!, purchaseOrder, carrier, fare, products.map { it.toResponse() }, saleDate, billingDate, totalPrice)
 }
