@@ -9,7 +9,6 @@ import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
 import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
-import 'package:tcc_front/src/features/core/screens/report/report.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -21,17 +20,18 @@ import '../central_home_screen/central_home_screen.dart';
 import '../client/client.dart';
 import '../worker/worker.dart';
 import '../worker_home_screen/worker_home_screen.dart';
+import 'budget.dart';
 
-class RegisterReportFormWidget extends StatefulWidget {
-  const RegisterReportFormWidget({
+class RegisterBudgetFormWidget extends StatefulWidget {
+  const RegisterBudgetFormWidget({
     super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
-  _RegisterReportFormWidget createState() => _RegisterReportFormWidget();
+  _RegisterBudgetFormWidget createState() => _RegisterBudgetFormWidget();
 }
 
-class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
+class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
@@ -393,7 +393,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
         return;
       }
 
-      ReportRequest reportRequest = ReportRequest(
+      BudgetRequest reportRequest = BudgetRequest(
         name: name,
         description: description,
         clientId: clientId,

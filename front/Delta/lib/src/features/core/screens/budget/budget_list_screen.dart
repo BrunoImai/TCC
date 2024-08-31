@@ -8,9 +8,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:tcc_front/src/features/core/screens/report/report.dart';
+import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
 import 'package:tcc_front/src/features/core/screens/client/client.dart';
-import 'package:tcc_front/src/features/core/screens/report/report.dart';
+import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
@@ -22,22 +22,22 @@ import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 
 
-class ReportListScreen extends StatefulWidget {
-  const ReportListScreen({super.key, required this.whoAreYouTag});
+class BudgetListScreen extends StatefulWidget {
+  const BudgetListScreen({super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
-  _ReportsListScreenState createState() => _ReportsListScreenState();
+  _BudgetListScreenState createState() => _BudgetListScreenState();
 }
 
-class _ReportsListScreenState extends State<ReportListScreen> {
+class _BudgetListScreenState extends State<BudgetListScreen> {
   bool searchBarInUse = false;
-  late Future<List<ReportInformations>> futureData;
+  late Future<List<BudgetInformations>> futureData;
 
   TextEditingController searchController = TextEditingController();
 
-  late List<ReportInformations> reportList;
-  late List<ReportInformations> filteredReportsList;
+  late List<BudgetInformations> budgetList;
+  late List<BudgetInformations> filteredBudgetsList;
   String userToken = "";
   String userType = "";
 
@@ -51,17 +51,17 @@ class _ReportsListScreenState extends State<ReportListScreen> {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
     }
-    futureData = getAllReports();
+    futureData = getAllBudgets();
     searchController.addListener(_onSearchChanged);
-    reportList = [];
-    filteredReportsList = [];
+    budgetList = [];
+    filteredBudgetsList = [];
   }
 
 
   void _onSearchChanged() {
     setState(() {
-      filteredReportsList = reportList.where((data) {
-        final name = data.report.name.toLowerCase();
+      filteredBudgetsList = budgetList.where((data) {
+        final name = data.budget.name.toLowerCase();
         final query = searchController.text.toLowerCase();
         return name.contains(query);
       }).toList();
@@ -132,7 +132,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
     }
   }
 
-  Future<List<ReportInformations>> getAllReports() async {
+  Future<List<BudgetInformations>> getAllBudgets() async {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/$userType/report'),
@@ -150,7 +150,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
         print(workerIdToNameMap);
 
-        final List<ReportInformations> reportsList = [];
+        final List<BudgetInformations> budgetsList = [];
         for (var item in jsonData) {
           final client = await getClientById(item['clientId']);
 
@@ -162,7 +162,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
               .map((id) => id.toString()).toList();
 
 
-          final report = ReportResponse(
+          final budget = BudgetResponse(
               id: item['id'].toString(),
               name: item['name'],
               description: item['description'],
@@ -175,29 +175,29 @@ class _ReportsListScreenState extends State<ReportListScreen> {
               totalPrice: item['totalPrice'].toString()
           );
 
-          print("Report: $report");
+          print("Budget: $budget");
 
-          final reportInformations = ReportInformations(
-              report.id, workerNames, client!.name, report);
-          reportsList.add(reportInformations);
+          final budgetInformations = BudgetInformations(
+              budget.id, workerNames, client!.name, budget);
+          budgetsList.add(budgetInformations);
         }
 
         setState(() {
-          reportList = reportsList;
-          filteredReportsList = reportsList;
+          budgetList = budgetsList;
+          filteredBudgetsList = budgetsList;
         });
-        print("ReportList: $reportList");
+        print("BudgetList: $budgetList");
 
-        return reportList;
+        return budgetList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load report list');
+        throw Exception('Failed to load budget list');
       }
 
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP reports: $e');
-      throw Exception('Falha ao carregar a lista de reports');
+      print('Erro ao fazer a solicitação HTTP budgets: $e');
+      throw Exception('Falha ao carregar a lista de budgets');
     }
   }
 
@@ -218,7 +218,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  reportListSubTitle,
+                  budgetListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding,),
@@ -259,9 +259,9 @@ class _ReportsListScreenState extends State<ReportListScreen> {
             child: Padding(
               padding: const EdgeInsets.all(homeCardPadding),
               child: ListView.builder(
-                itemCount: filteredReportsList.length,
+                itemCount: filteredBudgetsList.length,
                 itemBuilder: (context, index) {
-                  final data = filteredReportsList[index];
+                  final data = filteredBudgetsList[index];
                   return Card(
                     elevation: 3,
                     color: cardBgColor,
@@ -287,7 +287,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.report.assistanceId as String,
+                                        data.budget.assistanceId as String,
                                         style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -298,7 +298,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => UpdateReportScreen(report: data.report, whoAreYouTag: widget.whoAreYouTag,));
+                                  //Get.to(() => UpdateBudgetScreen(budget: data.budget, whoAreYouTag: widget.whoAreYouTag,));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),
@@ -316,7 +316,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.report.name,
+                                  data.budget.name,
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -336,7 +336,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  "${data.report.totalPrice} reais",
+                                  "${data.budget.totalPrice} reais",
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -356,7 +356,7 @@ class _ReportsListScreenState extends State<ReportListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.report.creationDate)),
+                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.budget.creationDate)),
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,

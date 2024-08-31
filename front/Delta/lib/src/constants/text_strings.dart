@@ -163,5 +163,5 @@ const String tRegisterReportSubTitle = "Cadastre seu novo relatório";
 const String tTitle = "Título";
 const String tTotalPrice = "Preço Total";
 
-//Report List Screen
-const String reportListSubTitle = "Encontre seus relatórios!";
+//Budget List Screen
+const String budgetListSubTitle = "Encontre seus orçamentos!";

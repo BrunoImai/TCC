@@ -1,4 +1,4 @@
-class ReportRequest {
+class BudgetRequest {
   final String name;
   final String description;
   final num clientId;
@@ -6,7 +6,7 @@ class ReportRequest {
   final num? assistanceId;
   final String totalPrice;
 
-  ReportRequest({
+  BudgetRequest({
     required this.name,
     required this.description,
     required this.clientId,
@@ -28,17 +28,17 @@ class ReportRequest {
 }
 
 
-class ReportInformations {
+class BudgetInformations {
   String? id;
   List<String> workersName;
   String clientName;
-  ReportResponse report;
+  BudgetResponse budget;
 
-  ReportInformations(this.id, this.workersName, this.clientName, this.report);
+  BudgetInformations(this.id, this.workersName, this.clientName, this.budget);
 
 }
 
-class ReportResponse {
+class BudgetResponse {
   final String? id;
   final String name;
   final String description;
@@ -49,7 +49,7 @@ class ReportResponse {
   final List<String> responsibleWorkersIds;
   final String totalPrice;
 
-  ReportResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
+  BudgetResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
   required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
 
   Map<String, dynamic> toJson() {
