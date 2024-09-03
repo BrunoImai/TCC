@@ -4,6 +4,7 @@ import authserver.central.Central
 import authserver.delta.assistance.Assistance
 import authserver.delta.report.response.ReportResponse
 import authserver.delta.worker.Worker
+import authserver.utils.PaymentType
 import jakarta.persistence.*
 import java.util.*
 

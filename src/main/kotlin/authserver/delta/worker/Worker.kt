@@ -40,7 +40,12 @@ class Worker(
     var currentAssistances: MutableSet<Assistance> = HashSet(),
 
     @ManyToMany(mappedBy = "responsibleWorkers")
-    var reports: MutableSet<Report> = HashSet()
+    var reports: MutableSet<Report> = HashSet(),
+
+    @ManyToMany(mappedBy = "responsibleWorkers")
+    var budgetz: MutableSet<Report> = HashSet()
+
+
 ) {
     fun toResponse() = WorkerResponse(id!!, name, email, cpf, cellphone, entryDate)
 }
