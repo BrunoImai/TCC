@@ -90,6 +90,8 @@ const String budgetHistory = "Histórico de orçamentos";
 const String serviceHistory = "Histórico de serviços";
 const String tRegisterCategory = "Registrar uma nova categoria";
 const String tCategories = "Categorias cadastradas";
+const String tRegisterReport = "Registrar um novo relatório";
+const String tReports = "Histórico de relatórios";
 const String dashboards = "Dashboards";
 const String comissionControl = "Controle de comissões";
 
@@ -165,3 +167,10 @@ const String tTotalPrice = "Preço Total";
 
 //Budget List Screen
 const String budgetListSubTitle = "Encontre seus orçamentos!";
+
+//Register Report Screen
+const String tRegisterBudgetTitle = "Orçamento A.G.E";
+const String tRegisterBudgetSubTitle = "Cadastre seu novo orçamento";
+
+//Report List Screen
+const String tReportListSubTitle = "Encontre seus relatórios!";

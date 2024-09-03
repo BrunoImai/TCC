@@ -7,10 +7,9 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
-import '../report/register_report_form_widget.dart';
 
-class RegisterReportScreen extends StatelessWidget{
-  const RegisterReportScreen({super.key, required this.whoAreYouTag});
+class RegisterBudgetScreen extends StatelessWidget{
+  const RegisterBudgetScreen({super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
@@ -33,22 +32,22 @@ class RegisterReportScreen extends StatelessWidget{
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                    child: Container(
+                    child: SizedBox(
                       width: elementWidth,
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: tRegisterBudgetTitle,
-                        subTitle: tRegisterBudgetSubTitle,
+                        title: tRegisterReportTitle,
+                        subTitle: tRegisterReportSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: Container(
+                    child: SizedBox(
                       width: elementWidth,
-                      child: RegisterReportFormWidget(whoAreYouTag: whoAreYouTag),
+                      child: RegisterBudgetFormWidget(whoAreYouTag: whoAreYouTag),
                     ),
                   ),
                 ],

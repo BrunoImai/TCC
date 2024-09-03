@@ -1,18 +1,24 @@
-class BudgetRequest {
+class ReportRequest {
   final String name;
   final String description;
   final num clientId;
   final List<num> responsibleWorkersIds;
   final num? assistanceId;
   final String totalPrice;
+  final String paymentType;
+  final bool machinePartExchange;
+  final bool delayed;
 
-  BudgetRequest({
+  ReportRequest({
     required this.name,
     required this.description,
     required this.clientId,
     required this.responsibleWorkersIds,
     required this.assistanceId,
     required this.totalPrice,
+    required this.paymentType,
+    required this.machinePartExchange,
+    required this.delayed
   });
 
   Map<String, dynamic> toJson() {
@@ -22,23 +28,26 @@ class BudgetRequest {
       'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
       'assistanceId': assistanceId,
-      'totalPrice': totalPrice
+      'totalPrice': totalPrice,
+      'paymentType': paymentType,
+      'machinePartExchange': machinePartExchange,
+      'delayed': delayed
     };
   }
 }
 
 
-class BudgetInformations {
+class ReportInformations {
   String? id;
   List<String> workersName;
   String clientName;
-  BudgetResponse budget;
+  ReportResponse report;
 
-  BudgetInformations(this.id, this.workersName, this.clientName, this.budget);
+  ReportInformations(this.id, this.workersName, this.clientName, this.report);
 
 }
 
-class UpdateBudgetRequest {
+class UpdateReportRequest {
   final String name;
   final String description;
   final String status;
@@ -46,9 +55,13 @@ class UpdateBudgetRequest {
   final num clientId;
   final List<num> responsibleWorkersIds;
   final String totalPrice;
+  final String paymentType;
+  final bool machinePartExchange;
+  final bool delayed;
 
-  UpdateBudgetRequest({required this.name,required this.description, required this.status,
-    required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
+  UpdateReportRequest({required this.name,required this.description, required this.status,
+    required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice,
+    required this.paymentType, required this.machinePartExchange, required this.delayed});
 
   Map<String, dynamic> toJson() {
     return {
@@ -58,12 +71,15 @@ class UpdateBudgetRequest {
       'assistanceId': assistanceId,
       'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
-      'totalPrice': totalPrice
+      'totalPrice': totalPrice,
+      'paymentType': paymentType,
+      'machinePartExchange': machinePartExchange,
+      'delayed': delayed
     };
   }
 }
 
-class BudgetResponse {
+class ReportResponse {
   final String? id;
   final String name;
   final String description;
@@ -73,9 +89,13 @@ class BudgetResponse {
   final String clientId;
   final List<String> responsibleWorkersIds;
   final String totalPrice;
+  final String paymentType;
+  final bool machinePartExchange;
+  final bool delayed;
 
-  BudgetResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
-  required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
+  ReportResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
+  required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice,
+  required this.paymentType, required this.machinePartExchange, required this.delayed});
 
   Map<String, dynamic> toJson() {
     return {
@@ -87,7 +107,10 @@ class BudgetResponse {
       'assistanceId': assistanceId,
       'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
-      'totalPrice': totalPrice
+      'totalPrice': totalPrice,
+      'paymentType': paymentType,
+      'machinePartExchange': machinePartExchange,
+      'delayed': delayed
     };
   }
 }
