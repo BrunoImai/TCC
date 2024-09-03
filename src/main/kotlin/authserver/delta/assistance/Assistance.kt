@@ -2,6 +2,7 @@ package authserver.delta.assistance
 
 import authserver.delta.assistance.response.AssistanceResponse
 import authserver.central.Central
+import authserver.delta.budget.Budget
 import authserver.delta.category.Category
 import jakarta.persistence.*
 import authserver.delta.client.Client
@@ -71,8 +72,12 @@ class Assistance(
     var categories: MutableSet<Category> = HashSet(),
 
     @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "assistance_id", referencedColumnName = "id")
-    var report: Report? = null
+    @JoinColumn(name = "report_id", referencedColumnName = "id")
+    var report: Report? = null,
+
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "budget_id", referencedColumnName = "id")
+    var budget: Budget? = null
 
 ) {
     fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet())

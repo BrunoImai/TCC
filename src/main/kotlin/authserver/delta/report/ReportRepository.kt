@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReportRepository : JpaRepository<Report, Long> {
-    fun findAllByStatusAndClient_Central (status: ReportStatus , central: Central) : List<Report>
 
     fun findAllByResponsibleCentral(central: Central) : List<Report>
 

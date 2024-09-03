@@ -217,7 +217,7 @@ DELETE localhost:8080/api/central/assistance/52
 Authorization: Bearer {{token}}
 
 ### Cria relatório Central
-POST localhost:8080/api/central/report
+POST localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -231,7 +231,7 @@ Content-Type: application/json
 }
 
 ### Atualiza relatório
-PUT localhost:8080/api/central/report
+PUT localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -246,15 +246,15 @@ Content-Type: application/json
 
 ### busca relatório
 
-GET localhost:8080/api/central/report/1
+GET localhost:8080/api/central/budget/1
 Authorization: Bearer {{token}}
 
 ### Lista todos os relatórios
-GET localhost:8080/api/central/report
+GET localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 
 ### Cria relatório Worker
-POST localhost:8080/api/worker/report
+POST localhost:8080/api/worker/budget
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -281,4 +281,51 @@ Authorization: Bearer {{token}}
 
 ### Busca cliente pelo cpf
 GET localhost:8080/api/worker/client/byCpf/12345678901
+Authorization: Bearer {{token}}
+
+### Cria relatório Central
+POST localhost:8080/api/central/report
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Relatorio 4",
+  "description": "Concerto maquina de lavar",
+  "assistanceId": 1,
+  "responsibleWorkersIds": [1],
+  "clientId": 1,
+  "totalPrice": 100.00,
+  "paymentType": "CREDITO",
+  "machinePartExchange": true,
+  "delayed": false
+}
+
+### Atualiza relatório
+PUT localhost:8080/api/central/report
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Relatorio novo",
+  "description": "Concerto maquina de lavar",
+  "assistanceId": 1,
+  "responsibleWorkersIds": [1],
+  "clientId": 1,
+  "totalPrice": 200.00,
+  "paymentType": "CREDITO",
+  "machinePartExchange": true,
+  "delayed": true
+}
+
+### busca relatório
+
+GET localhost:8080/api/central/report/1
+Authorization: Bearer {{token}}
+
+### Lista todos os relatórios
+GET localhost:8080/api/central/report
+Authorization: Bearer {{token}}
+
+### deletar relatorio
+DELETE localhost:8080/api/central/report/10
 Authorization: Bearer {{token}}

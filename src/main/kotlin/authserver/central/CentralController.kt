@@ -7,6 +7,7 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.requests.CentralRequest
 import authserver.central.requests.CentralUpdateRequest
 import authserver.delta.category.request.CategoryRequest
+import authserver.delta.budget.request.BudgetRequest
 import authserver.delta.report.request.ReportRequest
 import authserver.delta.worker.requests.WorkerRequest
 import authserver.delta.worker.requests.WorkerUpdateRequest
@@ -368,6 +369,37 @@ class CentralController(
     @DeleteMapping("/category/{id}")
     fun deleteCategory(@PathVariable("id") id: Long) : ResponseEntity<Void> =
         if (service.deleteCategory(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    // Budget
+
+    @PostMapping("/budget")
+    fun createBudget(@Valid @RequestBody req: BudgetRequest) =
+        service.createBudget(req)
+            .toResponse()
+            .let { ResponseEntity.status(CREATED).body(it) }
+
+    @GetMapping("/budget")
+    fun listBudgets() =
+        service.listBudgets()
+            .map { it.toResponse() }
+
+    @GetMapping("/budget/{id}")
+    fun getBudget(@PathVariable("id") id: Long) =
+        service.getBudget(id)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @PutMapping("/budget/{id}")
+    fun updateBudget(@PathVariable("id") id: Long, @Valid @RequestBody req: BudgetRequest) =
+        service.updateBudget(id, req)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @DeleteMapping("/budget/{id}")
+    fun deleteBudget(@PathVariable("id") id: Long) : ResponseEntity<Void> =
+        if (service.deleteBudget(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 
     // Report

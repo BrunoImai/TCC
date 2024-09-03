@@ -15,6 +15,9 @@ import authserver.delta.worker.response.WorkerLoginResponse
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
 import authserver.delta.assistance.AssistanceStatus
+import authserver.delta.budget.Budget
+import authserver.delta.budget.BudgetRepository
+import authserver.delta.budget.request.BudgetRequest
 import authserver.delta.category.Category
 import authserver.delta.category.CategoryRepository
 import authserver.delta.client.Client
@@ -38,7 +41,8 @@ class WorkerService (
     val assistanceRepository: AssistanceRepository,
     val clientRepository: ClientRepository,
     val reportRepository: ReportRepository,
-    val categoryRepository: CategoryRepository
+    val categoryRepository: CategoryRepository,
+    val budgetRepository: BudgetRepository
 ){
     var apiKey = "AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY"
 
@@ -136,29 +140,29 @@ class WorkerService (
 //        return AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
 //    }
 
-    fun createReport(reportReq: ReportRequest) : Report {
+    fun createBudget(budgetReq: BudgetRequest) : Budget {
         val workerId = getWorkerIdFromToken()
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
-        val assistance = assistanceRepository.findByIdOrNull(reportReq.assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+        val assistance = assistanceRepository.findByIdOrNull(budgetReq.assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
 
-        val client = clientRepository.findByIdOrNull(reportReq.clientId) ?: throw IllegalStateException("Cliente não encontrado")
-        val report = Report(
-            name = reportReq.name,
-            description = reportReq.description,
+        val client = clientRepository.findByIdOrNull(budgetReq.clientId) ?: throw IllegalStateException("Cliente não encontrado")
+        val budget = Budget(
+            name = budgetReq.name,
+            description = budgetReq.description,
             creationDate = currentTime(),
             assistance = assistance,
             responsibleWorkers = mutableSetOf(worker),
             client = client,
-            totalPrice = reportReq.totalPrice,
+            totalPrice = budgetReq.totalPrice,
             responsibleCentral = worker.central!!
         )
-        return reportRepository.save(report)
+        return budgetRepository.save(budget)
     }
 
-    fun listReports(): List<Report> {
+    fun listBudgets(): List<Budget> {
         val workerId = getWorkerIdFromToken()
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
-        return reportRepository.findAllByResponsibleWorkersContains(worker)
+        return budgetRepository.findAllByResponsibleWorkersContains(worker)
     }
 
     fun listWorkers(): List<Worker> {
@@ -187,6 +191,83 @@ class WorkerService (
         val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
         return clientRepository.findByCpf(cpf)?.takeIf { it.central == central }
     }
+
+
+    // Report
+
+    fun createReport(reportReq: ReportRequest) : Report {
+        val workerId = getWorkerIdFromToken()
+        val workerCreator =  workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        val central = centralRepository.findByIdOrNull(workerCreator.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+
+        val workers = mutableListOf<Worker>()
+        for (workerIds in reportReq.responsibleWorkersIds) {
+            val worker = workerRepository.findByIdOrNull(workerIds) ?: throw IllegalStateException("Funcionário não encontrado")
+            if (worker.central != central) throw IllegalStateException("Funcionário não encontrado")
+            workers.add(worker)
+        }
+
+        val assistance = assistanceRepository.findByIdOrNull(reportReq.assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+
+        val report = Report(
+            name = reportReq.name,
+            description = reportReq.description,
+            creationDate = currentTime(),
+            responsibleWorkers = workers.toMutableSet(),
+            responsibleCentral = central,
+            paymentType = reportReq.paymentType,
+            machinePartExchange = reportReq.machinePartExchange,
+            assistance = assistance,
+            workDelayed = reportReq.delayed,
+            totalPrice = reportReq.totalPrice
+            )
+
+        assistance.report = report
+        assistanceRepository.save(assistance)
+
+        return reportRepository.save(report)
+    }
+
+    fun getReport(reportId: Long) : Report {
+        val report = reportRepository.findByIdOrNull(reportId) ?: throw IllegalStateException("Relatório não encontrado")
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        val central = worker.central
+        if (report.responsibleCentral != central) throw IllegalStateException("Relatório não encontrado")
+        return report
+    }
+
+    fun listReports() : List<Report> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        return reportRepository.findAllByResponsibleWorkersContains(worker)
+    }
+
+
+    fun updateReport(reportId: Long, reportReq: ReportRequest) : Report {
+        val report = reportRepository.findByIdOrNull(reportId) ?: throw IllegalStateException("Relatório não encontrado")
+        val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionário não encontrado")
+        val centralId = worker.central?.id!!
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        if (report.responsibleCentral != central) throw IllegalStateException("Relatório não encontrado")
+        val workers = mutableListOf<Worker>()
+        for (workerId in reportReq.responsibleWorkersIds) {
+            val thisWorker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+            if (thisWorker.central != central) throw IllegalStateException("Funcionário não encontrado")
+            workers.add(worker)
+        }
+        report.name = reportReq.name
+        report.description = reportReq.description
+        report.responsibleWorkers = workers.toMutableSet()
+        report.paymentType = reportReq.paymentType
+        report.workDelayed = reportReq.delayed
+        report.machinePartExchange = reportReq.machinePartExchange
+
+        return reportRepository.save(report)
+    }
+
+
+
 
     private fun buildUrl(origin: String, destination: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"

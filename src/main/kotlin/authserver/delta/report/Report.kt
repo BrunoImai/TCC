@@ -2,7 +2,6 @@ package authserver.delta.report
 
 import authserver.central.Central
 import authserver.delta.assistance.Assistance
-import authserver.delta.client.Client
 import authserver.delta.report.response.ReportResponse
 import authserver.delta.worker.Worker
 import jakarta.persistence.*
@@ -18,9 +17,6 @@ class Report (
 
     @Column(nullable = false)
     var description: String = "",
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    var client: Client,
 
     @ManyToMany
     @JoinTable(
@@ -46,6 +42,15 @@ class Report (
     @JoinColumn(name = "Central_id")
     var responsibleCentral: Central,
 
+    @Column
+    var paymentType: PaymentType,
+
+    @Column
+    var machinePartExchange: Boolean,
+
+    @Column
+    var workDelayed: Boolean,
+
     ) {
-    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! }, totalPrice)
+    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, responsibleWorkers.map { it.id!! }, totalPrice, paymentType, machinePartExchange, workDelayed)
 }
