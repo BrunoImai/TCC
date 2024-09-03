@@ -14,6 +14,7 @@ import '../../budget/register_budget_screen.dart';
 import '../../category/register_category_screen.dart';
 import '../../client/client_list_screen.dart';
 import '../../client/register_client_screen.dart';
+import '../../report/report_list_screen.dart';
 import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
 import '../../assistance/register_assistance_screen.dart';
@@ -218,7 +219,7 @@ class CentralCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: whoAreYouTag)),
+                onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -229,7 +230,7 @@ class CentralCentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.library_books_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.attach_money_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
@@ -249,6 +250,66 @@ class CentralCentralControl extends StatelessWidget {
               widthFactor: 0.3,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => BudgetListScreen(whoAreYouTag: whoAreYouTag,)),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.monetization_on_outlined, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          budgetHistory,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: whoAreYouTag)),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.library_books_rounded, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tRegisterReport,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => ReportListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

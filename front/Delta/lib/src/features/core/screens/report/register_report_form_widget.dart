@@ -9,6 +9,7 @@ import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
 import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
+import 'package:tcc_front/src/features/core/screens/report/report.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -20,26 +21,28 @@ import '../central_home_screen/central_home_screen.dart';
 import '../client/client.dart';
 import '../worker/worker.dart';
 import '../worker_home_screen/worker_home_screen.dart';
-import 'budget.dart';
 
-class RegisterBudgetFormWidget extends StatefulWidget {
-  const RegisterBudgetFormWidget({
+class RegisterReportFormWidget extends StatefulWidget {
+  const RegisterReportFormWidget({
     super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
-  _RegisterBudgetFormWidget createState() => _RegisterBudgetFormWidget();
+  _RegisterReportFormWidget createState() => _RegisterReportFormWidget();
 }
 
-class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
+class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
   final TextEditingController totalPriceController = TextEditingController();
+  final TextEditingController paymentTypeController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
+  bool _machinePartExchange = false;
+  bool _delayed = false;
   bool _isWorkerExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
@@ -290,36 +293,6 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
   }
 
 
-  /*Future<void> _fetchClientDataByCpf(String cpf) async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/$userToken/client/byCpf/$cpf'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final clientData = jsonDecode(response.body);
-        setState(() {
-          clientNameController.text = clientData['name'];
-        });
-        return clientData.toList();
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(errorDescription: 'Cliente não encontrado.');
-          },
-        );
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    }
-  }*/
-
-
   @override
   Widget build(BuildContext context) {
     Future<void> registerReport(VoidCallback onSuccess) async {
@@ -327,6 +300,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
       String totalPrice = totalPriceController.text;
+      String paymentType = paymentTypeController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
       if (description.isEmpty ||
@@ -393,13 +367,16 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
         return;
       }
 
-      BudgetRequest reportRequest = BudgetRequest(
+      ReportRequest reportRequest = ReportRequest(
         name: name,
         description: description,
         clientId: clientId,
         responsibleWorkersIds: workersIds,
         assistanceId: assistanceId,
         totalPrice: totalPrice,
+        paymentType: paymentType,
+        machinePartExchange: _machinePartExchange,
+        delayed: _delayed
       );
 
       String requestBody = jsonEncode(reportRequest.toJson());
@@ -598,6 +575,38 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
                   prefixIcon: Icon(Icons.attach_money_rounded)
               ),
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+            ),
+            const SizedBox(height: formHeight - 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Houve troca de peça?'),
+                Switch(
+                  value: _machinePartExchange,
+                  activeColor: primaryColor,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _machinePartExchange = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: formHeight - 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Houve atraso na finalização do serviço?'),
+                Switch(
+                  value: _delayed,
+                  activeColor: primaryColor,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _delayed = value;
+                    });
+                  },
+                ),
+              ],
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(
