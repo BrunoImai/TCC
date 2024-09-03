@@ -2,6 +2,7 @@ package authserver.delta.budget
 
 import authserver.central.Central
 import authserver.delta.assistance.Assistance
+import authserver.delta.budget.response.BudgetResponse
 import authserver.delta.client.Client
 import authserver.delta.worker.Worker
 import jakarta.persistence.*
@@ -40,4 +41,6 @@ class Budget (
     @OneToOne(mappedBy = "budget")
     var assistance: Assistance? = null,
 
-    ) {}
+    ) {
+    fun toResponse() = BudgetResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! }, totalPrice)
+}
