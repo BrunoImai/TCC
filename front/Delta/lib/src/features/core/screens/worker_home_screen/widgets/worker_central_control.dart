@@ -32,7 +32,7 @@ class WorkerCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: whoAreYouTag)),
+                onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

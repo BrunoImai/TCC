@@ -1,6 +1,5 @@
 package authserver.delta.report.response
-
-import authserver.delta.report.PaymentType
+import authserver.utils.PaymentType
 
 data class ReportResponse (
     val id: Long,

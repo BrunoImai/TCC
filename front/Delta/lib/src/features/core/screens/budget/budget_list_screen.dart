@@ -139,7 +139,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
   Future<List<BudgetInformations>> getAllBudgets() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/$userType/report'),
+        Uri.parse('http://localhost:8080/api/$userType/budget'),
         headers: {
           'Authorization': 'Bearer $userToken'
         },

@@ -37,17 +37,18 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
   final TextEditingController totalPriceController = TextEditingController();
-  final TextEditingController paymentTypeController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
   bool _machinePartExchange = false;
   bool _delayed = false;
   bool _isWorkerExpanded = false;
+  bool _isPaymentTypeExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
+  String selectedPaymentType = "";
   late List<AssistanceInformations> assistanceList;
   late List<AssistanceInformations> filteredAssistancesList;
   AssistanceInformations? selectedAssistance;
@@ -300,7 +301,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
       String totalPrice = totalPriceController.text;
-      String paymentType = paymentTypeController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
       if (description.isEmpty ||
@@ -370,11 +370,10 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       ReportRequest reportRequest = ReportRequest(
         name: name,
         description: description,
-        clientId: clientId,
         responsibleWorkersIds: workersIds,
         assistanceId: assistanceId,
         totalPrice: totalPrice,
-        paymentType: paymentType,
+        paymentType: selectedPaymentType,
         machinePartExchange: _machinePartExchange,
         delayed: _delayed
       );
@@ -577,6 +576,71 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
             ),
             const SizedBox(height: formHeight - 20),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isPaymentTypeExpanded = !_isPaymentTypeExpanded;
+                });
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Método de Pagamento',
+                  prefixIcon: const Icon(Icons.payment_rounded),
+                  suffixIcon: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Icon(
+                      _isPaymentTypeExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPaymentTypeExpanded
+                    ),
+                  ),
+                ),
+                child: Text(selectedPaymentType ?? ''), // Show selected period
+              ),
+            ),
+
+            // Show the menu options if expanded
+            if (_isPaymentTypeExpanded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Text('Crédito', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPaymentType = 'Crédito';
+                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Débito', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPaymentType = 'Débito';
+                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Dinheiro', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPaymentType = 'Dinheiro';
+                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Pix', style: Theme.of(context).textTheme.bodyText2),
+                    onTap: () {
+                      setState(() {
+                        selectedPaymentType = 'Pix';
+                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                      });
+                    },
+                  ),
+                ],
+              ),
+            const SizedBox(height: formHeight - 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -630,7 +694,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                     );
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Serviço cadastrado!')),
+                      const SnackBar(content: Text('Relatório cadastrado!')),
                     );
                   });
                 },

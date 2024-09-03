@@ -158,7 +158,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
 
         final List<ReportInformations> reportsList = [];
         for (var item in jsonData) {
-          final client = await getClientById(item['clientId']);
 
           final workerNames = (item['responsibleWorkersIds'] as List<dynamic>)
               .map((id) => workerIdToNameMap[id] ?? 'Unknown')
@@ -176,7 +175,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
               status: item['status'],
               //TO DO
               assistanceId: "1",
-              clientId: item['clientId'].toString(),
               responsibleWorkersIds: workersIds,
               totalPrice: item['totalPrice'].toString(),
               paymentType: item['paymentType'],
@@ -187,7 +185,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
           print("Report: $report");
 
           final reportInformations = ReportInformations(
-              report.id, workerNames, client!.name, report);
+              report.id, workerNames, report);
           reportsList.add(reportInformations);
         }
 

@@ -421,7 +421,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
     Future<void> deleteAssistance() async {
 
       final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/$userType/report/${widget.budget.id}'),
+        Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $userToken',

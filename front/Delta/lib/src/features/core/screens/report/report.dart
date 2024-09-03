@@ -1,7 +1,6 @@
 class ReportRequest {
   final String name;
   final String description;
-  final num clientId;
   final List<num> responsibleWorkersIds;
   final num? assistanceId;
   final String totalPrice;
@@ -12,7 +11,6 @@ class ReportRequest {
   ReportRequest({
     required this.name,
     required this.description,
-    required this.clientId,
     required this.responsibleWorkersIds,
     required this.assistanceId,
     required this.totalPrice,
@@ -25,7 +23,6 @@ class ReportRequest {
     return {
       'name': name,
       'description': description,
-      'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
       'assistanceId': assistanceId,
       'totalPrice': totalPrice,
@@ -40,10 +37,9 @@ class ReportRequest {
 class ReportInformations {
   String? id;
   List<String> workersName;
-  String clientName;
   ReportResponse report;
 
-  ReportInformations(this.id, this.workersName, this.clientName, this.report);
+  ReportInformations(this.id, this.workersName, this.report);
 
 }
 
@@ -52,7 +48,6 @@ class UpdateReportRequest {
   final String description;
   final String status;
   final num? assistanceId;
-  final num clientId;
   final List<num> responsibleWorkersIds;
   final String totalPrice;
   final String paymentType;
@@ -60,7 +55,7 @@ class UpdateReportRequest {
   final bool delayed;
 
   UpdateReportRequest({required this.name,required this.description, required this.status,
-    required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice,
+    required this.assistanceId, required this.responsibleWorkersIds, required this.totalPrice,
     required this.paymentType, required this.machinePartExchange, required this.delayed});
 
   Map<String, dynamic> toJson() {
@@ -69,7 +64,6 @@ class UpdateReportRequest {
       'description': description,
       'status': status,
       'assistanceId': assistanceId,
-      'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
       'totalPrice': totalPrice,
       'paymentType': paymentType,
@@ -86,7 +80,6 @@ class ReportResponse {
   final String creationDate;
   final String status;
   final String? assistanceId;
-  final String clientId;
   final List<String> responsibleWorkersIds;
   final String totalPrice;
   final String paymentType;
@@ -94,7 +87,7 @@ class ReportResponse {
   final bool delayed;
 
   ReportResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
-  required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice,
+  required this.assistanceId, required this.responsibleWorkersIds, required this.totalPrice,
   required this.paymentType, required this.machinePartExchange, required this.delayed});
 
   Map<String, dynamic> toJson() {
@@ -105,7 +98,6 @@ class ReportResponse {
       'creationDate': creationDate,
       'status': status,
       'assistanceId': assistanceId,
-      'clientId': clientId,
       'responsibleWorkersIds': responsibleWorkersIds,
       'totalPrice': totalPrice,
       'paymentType': paymentType,

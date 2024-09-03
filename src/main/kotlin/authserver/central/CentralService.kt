@@ -843,9 +843,6 @@ class CentralService(
             totalPrice = reportReq.totalPrice
         )
 
-        assistance.report = report
-        assistanceRepository.save(assistance)
-
         return reportRepository.save(report)
     }
 

@@ -14,6 +14,7 @@ import '../../budget/register_budget_screen.dart';
 import '../../category/register_category_screen.dart';
 import '../../client/client_list_screen.dart';
 import '../../client/register_client_screen.dart';
+import '../../report/register_report_screen.dart';
 import '../../report/report_list_screen.dart';
 import '../../worker/register_worker_screen.dart';
 import '../../worker/worker_list_screen.dart';
@@ -219,7 +220,7 @@ class CentralCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: whoAreYouTag)),
+                onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -324,7 +325,7 @@ class CentralCentralControl extends StatelessWidget {
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          budgetHistory,
+                          tReports,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,

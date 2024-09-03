@@ -9,8 +9,8 @@ import '../../../../constants/text_strings.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 import '../report/register_report_form_widget.dart';
 
-class RegisterReportScreen extends StatelessWidget{
-  const RegisterReportScreen({super.key, required this.whoAreYouTag});
+class RegisterBudgetScreen extends StatelessWidget{
+  const RegisterBudgetScreen({super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
@@ -48,7 +48,7 @@ class RegisterReportScreen extends StatelessWidget{
                   Center(
                     child: Container(
                       width: elementWidth,
-                      child: RegisterReportFormWidget(whoAreYouTag: whoAreYouTag),
+                      child: RegisterBudgetFormWidget(whoAreYouTag: whoAreYouTag),
                     ),
                   ),
                 ],

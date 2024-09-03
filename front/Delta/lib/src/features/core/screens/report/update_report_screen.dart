@@ -389,7 +389,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         description: description,
         status: status,
         assistanceId: assistanceId,
-        clientId: clientId,
         responsibleWorkersIds: workersIds,
         totalPrice: totalPrice,
           paymentType: paymentType,

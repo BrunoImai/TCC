@@ -290,36 +290,6 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
   }
 
 
-  /*Future<void> _fetchClientDataByCpf(String cpf) async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/$userToken/client/byCpf/$cpf'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final clientData = jsonDecode(response.body);
-        setState(() {
-          clientNameController.text = clientData['name'];
-        });
-        return clientData.toList();
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(errorDescription: 'Cliente não encontrado.');
-          },
-        );
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    }
-  }*/
-
-
   @override
   Widget build(BuildContext context) {
     Future<void> registerReport(VoidCallback onSuccess) async {
@@ -393,7 +363,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
         return;
       }
 
-      BudgetRequest reportRequest = BudgetRequest(
+      BudgetRequest budgetRequest = BudgetRequest(
         name: name,
         description: description,
         clientId: clientId,
@@ -402,12 +372,12 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
         totalPrice: totalPrice,
       );
 
-      String requestBody = jsonEncode(reportRequest.toJson());
+      String requestBody = jsonEncode(budgetRequest.toJson());
       print(requestBody);
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/$userType/report'),
+          Uri.parse('http://localhost:8080/api/$userType/budget'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken'
@@ -621,7 +591,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
                     );
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Serviço cadastrado!')),
+                      const SnackBar(content: Text('Orçamento cadastrado!')),
                     );
                   });
                 },
