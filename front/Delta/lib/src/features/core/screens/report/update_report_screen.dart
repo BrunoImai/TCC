@@ -80,6 +80,9 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     nameController.text = widget.report.name;
     totalPriceController.text = widget.report.totalPrice;
     statusController.text = widget.report.status;
+    _machinePartExchange = widget.report.machinePartExchange;
+    _delayed = widget.report.delayed;
+
   }
 
   void _onAssistanceSearchChanged() {
@@ -676,6 +679,38 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                   prefixIcon: Icon(Icons.attach_money_rounded)
                               ),
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Houve troca de peça?'),
+                                Switch(
+                                  value: _machinePartExchange,
+                                  activeColor: primaryColor,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      _machinePartExchange = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Houve atraso na finalização do serviço?'),
+                                Switch(
+                                  value: _delayed,
+                                  activeColor: primaryColor,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      _delayed = value;
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                             const SizedBox(height: formHeight - 10),
                             SizedBox(
