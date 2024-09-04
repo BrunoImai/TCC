@@ -168,9 +168,15 @@ const String tTotalPrice = "Preço Total";
 //Budget List Screen
 const String budgetListSubTitle = "Encontre seus orçamentos!";
 
+//Update Budget Screen
+const String tEditBudget = "Editar orçamento";
+
 //Register Report Screen
 const String tRegisterBudgetTitle = "Orçamento A.G.E";
 const String tRegisterBudgetSubTitle = "Cadastre seu novo orçamento";
 
 //Report List Screen
 const String tReportListSubTitle = "Encontre seus relatórios!";
+
+//Update Report Screen
+const String tEditReport = "Editar relatório";

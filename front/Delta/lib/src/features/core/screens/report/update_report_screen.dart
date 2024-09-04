@@ -41,12 +41,12 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
   final TextEditingController totalPriceController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
-  final TextEditingController paymentTypeController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
   bool _machinePartExchange = false;
   bool _delayed = false;
   bool _isWorkerExpanded = false;
+  bool _isPaymentTypeExpanded = false;
   bool _clearFieldAssistanceId = false;
   bool _clearFieldName = false;
   bool _clearFieldStatus = false;
@@ -56,6 +56,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
   List<WorkersList> selectedWorkers = [];
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
+  String selectedPaymentType = "";
   late List<AssistanceInformations> assistanceList;
   late List<AssistanceInformations> filteredAssistancesList;
   AssistanceInformations? selectedAssistance;
@@ -80,6 +81,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     nameController.text = widget.report.name;
     totalPriceController.text = widget.report.totalPrice;
     statusController.text = widget.report.status;
+    selectedPaymentType = widget.report.paymentType;
     _machinePartExchange = widget.report.machinePartExchange;
     _delayed = widget.report.delayed;
 
@@ -115,7 +117,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         clientCpfController.text = assistance.assistance.clientCpf;
         clientNameController.text = assistance.clientName;
         assistanceIdController.text = assistance.assistance.id;
-        String paymentType = paymentTypeController.text;
         selectedWorkers = workers.where((worker) =>
             assistance.assistance.workersIds.contains(worker.id.toString())).toList();
       });
@@ -315,7 +316,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
       String totalPrice = totalPriceController.text;
-      String paymentType = paymentTypeController.text;
       String status = statusController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
@@ -391,9 +391,9 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         assistanceId: assistanceId,
         responsibleWorkersIds: workersIds,
         totalPrice: totalPrice,
-          paymentType: paymentType,
-          machinePartExchange: _machinePartExchange,
-          delayed: _delayed
+        paymentType: selectedPaymentType,
+        machinePartExchange: _machinePartExchange,
+        delayed: _delayed
       );
 
       String requestBody = jsonEncode(updateReportRequest.toJson());
@@ -680,6 +680,71 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
                             const SizedBox(height: formHeight - 20),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isPaymentTypeExpanded = !_isPaymentTypeExpanded;
+                                });
+                              },
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Método de Pagamento',
+                                  prefixIcon: const Icon(Icons.payment_rounded),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Icon(
+                                      _isPaymentTypeExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPaymentTypeExpanded
+                                    ),
+                                  ),
+                                ),
+                                child: Text(selectedPaymentType ?? ''), // Show selected period
+                              ),
+                            ),
+
+                            // Show the menu options if expanded
+                            if (_isPaymentTypeExpanded)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Text('Crédito', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPaymentType = 'Crédito';
+                                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Débito', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPaymentType = 'Débito';
+                                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Dinheiro', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPaymentType = 'Dinheiro';
+                                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Pix', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPaymentType = 'Pix';
+                                        _isPaymentTypeExpanded = false; // Close the menu after selection
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: formHeight - 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -731,7 +796,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(editAssistance.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditReport.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),

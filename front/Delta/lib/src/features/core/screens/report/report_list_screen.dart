@@ -154,10 +154,11 @@ class _ReportListScreenState extends State<ReportListScreen> {
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
-        print(workerIdToNameMap);
+        print("workerIdToNameMap: $workerIdToNameMap");
 
         final List<ReportInformations> reportsList = [];
         for (var item in jsonData) {
+          print("WorkersIds: ${item['responsibleWorkersIds']}");
 
           final workerNames = (item['responsibleWorkersIds'] as List<dynamic>)
               .map((id) => workerIdToNameMap[id] ?? 'Unknown')
@@ -356,7 +357,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.attach_money_rounded,
+                                Icons.payment_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),

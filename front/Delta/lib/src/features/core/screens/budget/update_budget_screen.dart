@@ -689,7 +689,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(editAssistance.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditBudget.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),
@@ -714,7 +714,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                       content: const Padding(
                                         padding: EdgeInsets.symmetric(vertical: 15.0),
-                                        child: Text("Tem certeza que deseja excluir esse serviço?"),
+                                        child: Text("Tem certeza que deseja excluir esse orçamento?"),
                                       ),
                                       confirm: Expanded(
                                         child: ElevatedButton(
@@ -722,7 +722,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                             deleteAssistance();
                                             Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag));
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Serviço excluído com sucesso!')),
+                                              const SnackBar(content: Text('Orçamento excluído com sucesso!')),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
