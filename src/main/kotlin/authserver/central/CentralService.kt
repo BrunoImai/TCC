@@ -1,5 +1,7 @@
 package authserver.central
 
+import authserver.central.notification.Notification
+import authserver.central.notification.NotificationRepository
 import authserver.delta.assistance.Assistance
 import authserver.delta.assistance.AssistanceRepository
 import authserver.delta.assistance.request.AssistanceRequest
@@ -75,7 +77,8 @@ class CentralService(
     private val saleRepository: SaleRepository,
     private val productQttRepository: ProductQttRepository,
     private val budgetRepository: BudgetRepository,
-    private val reportRepository: ReportRepository
+    private val reportRepository: ReportRepository,
+    private val notificationRepository: NotificationRepository
     ) {
 
     fun getCentralIdFromToken(): Long {
@@ -770,10 +773,16 @@ class CentralService(
         return budgetRepository.save(budget)
     }
 
-    fun listOpenBudgets () : List<Budget> {
+
+    fun listBudgetsByStatus (status: String) : List<Budget> {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        return budgetRepository.findAllByStatusAndClient_Central(BudgetStatus.EM_ANALISE, central)
+        val budgetStatus = try {
+            BudgetStatus.valueOf(status.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalStateException("Status inválido")
+        }
+        return budgetRepository.findAllByStatusAndClient_Central(budgetStatus, central)
     }
 
     fun listBudgets () : List<Budget> {
@@ -890,7 +899,43 @@ class CentralService(
         return true
     }
 
+    // Notifications
 
+    fun listNotifications() : MutableSet<Notification> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return central.notifications
+    }
+
+    fun listUnreadNotifications() : MutableSet<Notification> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return central.notifications.filter { !it.readed }.toMutableSet()
+    }
+
+    fun getNotification(notificationId: Long) : Notification {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val notification = central.notifications.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
+        notification.readed = true
+        centralRepository.save(central)
+        return notification
+    }
+
+    fun deleteNotification(notificationId: Long) : Boolean {
+        val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
+        val notification = central.notifications.find { it.id == notificationId } ?: return false
+        central.notifications.remove(notification)
+        centralRepository.save(central)
+        return true
+    }
+
+    fun deleteAllNotifications() : Boolean {
+        val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
+        central.notifications.clear()
+        centralRepository.save(central)
+        return true
+    }
 
     // Utils
 

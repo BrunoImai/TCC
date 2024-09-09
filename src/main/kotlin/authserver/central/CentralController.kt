@@ -391,6 +391,11 @@ class CentralController(
             .let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
 
+    @GetMapping("/budget/{status}")
+    fun listBudgetsByStatus(@PathVariable("status") status: String) =
+        service.listBudgetsByStatus(status)
+            .map { it.toResponse() }
+
     @PutMapping("/budget/{id}")
     fun updateBudget(@PathVariable("id") id: Long, @Valid @RequestBody req: BudgetRequest) =
         service.updateBudget(id, req)
@@ -431,5 +436,34 @@ class CentralController(
     @DeleteMapping("/report/{id}")
     fun deleteReport(@PathVariable("id") id: Long) : ResponseEntity<Void> =
         if (service.deleteReport(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    // Notification
+
+    @GetMapping("/notification")
+    fun listNotifications() =
+        service.listNotifications()
+            .map { it.toResponse() }
+
+    @GetMapping("/notification/{id}")
+    fun getNotification(@PathVariable("id") id: Long) =
+        service.getNotification(id)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/notification/unread")
+    fun listUnreadNotifications() =
+        service.listUnreadNotifications()
+            .map { it.toResponse() }
+
+    @DeleteMapping("/notification/{id}")
+    fun deleteNotification(@PathVariable("id") id: Long) : ResponseEntity<Void> =
+        if (service.deleteNotification(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
+
+    @DeleteMapping("/notification")
+    fun deleteAllNotifications() : ResponseEntity<Void> =
+        if (service.deleteAllNotifications()) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 }

@@ -9,5 +9,5 @@ data class BudgetResponse(
     val assistanceId: Long?,
     val clientId: Long,
     val responsibleWorkersIds: List<Long>,
-    val totalPrice: Float
+    val totalPrice: Float,
 )

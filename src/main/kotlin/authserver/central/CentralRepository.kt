@@ -25,4 +25,5 @@ interface CentralRepository : JpaRepository<Central, Long> {
     @Query("select c.assistanceQueue from Central c where c.id = :id")
     fun findAssistanceQueueById(id: Long): List<Assistance>
 
+
 }

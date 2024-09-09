@@ -1,5 +1,6 @@
 package authserver.central
 
+import authserver.central.notification.Notification
 import authserver.delta.assistance.Assistance
 import authserver.central.responses.CentralResponse
 import authserver.central.role.Role
@@ -72,6 +73,9 @@ class  Central(
     @OneToMany(mappedBy = "responsibleCentral", cascade = [CascadeType.ALL], orphanRemoval = true)
     var budgets: MutableSet<Budget> = mutableSetOf(),
 
-) {
+    @OneToMany(mappedBy = "central", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var notifications: MutableSet<Notification> = mutableSetOf(),
+
+    ) {
     fun toResponse() = CentralResponse(id!!, name, email, creationDate, cnpj, cellphone )
 }

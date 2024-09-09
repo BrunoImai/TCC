@@ -1,5 +1,6 @@
 package authserver.delta.worker
 
+import authserver.delta.budget.request.BudgetRequest
 import authserver.delta.report.request.ReportRequest
 import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.validation.Valid
@@ -21,6 +22,27 @@ class WorkerController(
     @GetMapping("/assistance")
     fun getAssistances() =
         service.listAllAssistancesByWorker()
+            .map{ it.toResponse() }
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/assistance/currentAssistance")
+    fun getLastAssistance() =
+        service.currentAssistance()
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @PostMapping("/budget")
+    fun createBudget(@Valid @RequestBody budgetRequest: BudgetRequest) =
+        service.createBudget(budgetRequest)
+            .toResponse()
+            .let {
+                ResponseEntity.ok(it)
+            }
+
+    @GetMapping("/budget")
+    fun getBudgets() =
+        service.listBudgets()
             .map{ it.toResponse() }
             .let { ResponseEntity.ok(it) }
 

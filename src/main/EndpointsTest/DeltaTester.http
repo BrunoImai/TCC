@@ -186,32 +186,6 @@ GET localhost:8080/api/central/assistance
 Authorization: Bearer {{token}}
 
 
-### worker login
-POST localhost:8080/api/worker/login
-Content-Type: application/json
-
-{
-  "email": "tesewee@gmail.com",
-  "password": "12345678"
-}
-> {%
-    client.global.set("token", response.body.token)
-    client.global.set("id", response.body.worker.id)
-%}
-
-### Lista servico mais proximo ao servico 1
-GET localhost:8080/api/worker/assistance/closest?coordinate=-25.47156996804939, -49.228870016810575
-Authorization: Bearer {{token}}
-
-
-### Lista servico mais proximo ao servico 2
-GET localhost:8080/api/worker/assistance/closest?coordinate=-25.450966074965084, -49.25218936712957
-Authorization: Bearer {{token}}
-
-### Lista servico mais proximo ao servico 3
-GET localhost:8080/api/worker/assistance/closest?coordinate=-25.436354, -49.2693665
-Authorization: Bearer {{token}}
-
 ### deleta servico 1
 DELETE localhost:8080/api/central/assistance/52
 Authorization: Bearer {{token}}
@@ -230,7 +204,8 @@ Content-Type: application/json
   "totalPrice": 100.00
 }
 
-### Atualiza relatório
+
+### Atualiza Orcamento
 PUT localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -249,39 +224,10 @@ Content-Type: application/json
 GET localhost:8080/api/central/budget/1
 Authorization: Bearer {{token}}
 
-### Lista todos os relatórios
-GET localhost:8080/api/central/budget
+### Lista todos os orcamentos
+GET localhost:8080/api/worker/budget
 Authorization: Bearer {{token}}
 
-### Cria relatório Worker
-POST localhost:8080/api/worker/budget
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "name": "Relatorio 1",
-  "description": "Concerto maquina de lavar",
-  "assistanceId": 1,
-  "responsibleWorkersIds": [1],
-  "clientId": 1,
-  "totalPrice": 100.00
-}
-
-### Lista todos os serviços (Worker)
-GET localhost:8080/api/worker/assistance
-Authorization: Bearer {{token}}
-
-### Lista todas as categorias (Worker)
-GET localhost:8080/api/worker/category
-Authorization: Bearer {{token}}
-
-### Lista todas as categorias (Worker)
-GET localhost:8080/api/worker/worker
-Authorization: Bearer {{token}}
-
-### Busca cliente pelo cpf
-GET localhost:8080/api/worker/client/byCpf/12345678901
-Authorization: Bearer {{token}}
 
 ### Cria relatório Central
 POST localhost:8080/api/central/report
@@ -328,4 +274,16 @@ Authorization: Bearer {{token}}
 
 ### deletar relatorio
 DELETE localhost:8080/api/central/report/10
+Authorization: Bearer {{token}}
+
+### Lista notificacoes
+GET localhost:8080/api/central/notification
+Authorization: Bearer {{token}}
+
+### Lista notificacoes nao lidas
+GET localhost:8080/api/central/notification/unread
+Authorization: Bearer {{token}}
+
+### Busca notificacao
+GET localhost:8080/api/central/notification/1
 Authorization: Bearer {{token}}

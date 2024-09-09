@@ -5,6 +5,8 @@ import authserver.delta.assistance.AssistanceRepository
 import authserver.delta.assistance.response.AssistanceResponse
 import authserver.central.CentralRepository
 import authserver.central.CentralService.Companion.log
+import authserver.central.notification.Notification
+import authserver.central.notification.NotificationRepository
 import authserver.exception.InvalidCredentialException
 import authserver.delta.maps.AddressResponse
 import authserver.delta.maps.MapResponse
@@ -42,7 +44,8 @@ class WorkerService (
     val clientRepository: ClientRepository,
     val reportRepository: ReportRepository,
     val categoryRepository: CategoryRepository,
-    val budgetRepository: BudgetRepository
+    val budgetRepository: BudgetRepository,
+    val notificationRepository: NotificationRepository
 ){
     var apiKey = "AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY"
 
@@ -128,6 +131,15 @@ class WorkerService (
         return central.assistanceQueue.map { it }
     }
 
+    fun currentAssistance(): Assistance? {
+        val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionario não encontrado")
+        val currentAssistance = worker.currentAssistances.lastOrNull() ?: return null
+        if (currentAssistance.assistanceStatus == AssistanceStatus.FINALIZADO || currentAssistance.assistanceStatus == AssistanceStatus.CANCELADO) {
+            return null
+        }
+        return currentAssistance
+    }
+
     // Maps
 //    fun getClosestAssist(currentLocation: String): AddressResponse {
 //        val restTemplate = RestTemplate()
@@ -156,6 +168,17 @@ class WorkerService (
             totalPrice = budgetReq.totalPrice,
             responsibleCentral = worker.central!!
         )
+
+        val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        val notification = Notification(
+            title = "Orçamento ${budgetReq.name}",
+            message = "Um novo orçamento foi criado para a assistência ${assistance.name}",
+            central = central,
+            creationDate = currentTime()
+        )
+
+        notificationRepository.save(notification)
+
         return budgetRepository.save(budget)
     }
 

@@ -43,7 +43,7 @@ class Worker(
     var reports: MutableSet<Report> = HashSet(),
 
     @ManyToMany(mappedBy = "responsibleWorkers")
-    var budgetz: MutableSet<Report> = HashSet()
+    var budgets: MutableSet<Report> = HashSet()
 
 
 ) {
