@@ -23,6 +23,7 @@ import '../category/category.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
+import '../worker_home_screen/widgets/worker_app_bar.dart';
 
 
 class ReportListScreen extends StatefulWidget {
@@ -211,8 +212,15 @@ class _ReportListScreenState extends State<ReportListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    PreferredSizeWidget appBar;
+    if (widget.whoAreYouTag == 2) {
+      appBar = CentralAppBar(whoAreYouTag: widget.whoAreYouTag);
+    } else {
+      appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
+    }
+
     return Scaffold(
-      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
+      appBar: appBar,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -8,6 +8,7 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../worker_home_screen/widgets/worker_app_bar.dart';
 
 class RegisterReportScreen extends StatelessWidget{
   const RegisterReportScreen({super.key, required this.whoAreYouTag});
@@ -15,8 +16,15 @@ class RegisterReportScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    PreferredSizeWidget appBar;
+    if (whoAreYouTag == 2) {
+      appBar = CentralAppBar(whoAreYouTag: whoAreYouTag);
+    } else {
+      appBar = WorkerAppBar(whoAreYouTag: whoAreYouTag);
+    }
+
     return Scaffold(
-      appBar: CentralAppBar(whoAreYouTag: whoAreYouTag,),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {
