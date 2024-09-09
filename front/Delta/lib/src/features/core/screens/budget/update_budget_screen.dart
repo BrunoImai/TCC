@@ -43,10 +43,6 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
-  bool _isWorkerExpanded = false;
-  bool _clearFieldAssistanceId = false;
-  bool _clearFieldName = false;
-  bool _clearFieldStatus = false;
   bool _clearFieldDescription = false;
   bool _clearFieldTotalPrice = false;
   List<WorkersList> workers = [];
@@ -54,7 +50,6 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
-  late List<AssistanceInformations> filteredAssistancesList;
   AssistanceInformations? selectedAssistance;
   String userToken = "";
   String userType = "";
@@ -70,49 +65,14 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       userType = 'worker';
     }
     fetchWorkers();
-    fetchAssistances();
-    assistanceSearchController.addListener(_onAssistanceSearchChanged);
+    fetchAssistance(widget.budget.assistanceId!);
 
     descriptionController.text = widget.budget.description;
     nameController.text = widget.budget.name;
     totalPriceController.text = widget.budget.totalPrice;
     statusController.text = widget.budget.status;
-  }
 
-  void _onAssistanceSearchChanged() {
-    String query = assistanceSearchController.text.toLowerCase();
-    setState(() {
-      filteredAssistancesList = assistanceList.where((assistance) {
-        return assistance.assistance.id.contains(query) ||
-            assistance.clientName.toLowerCase().contains(query);
-      }).toList();
-    });
-  }
-
-  Future<void> fetchAssistances() async {
-    try {
-      final assistances = await getAllAssistances();
-      setState(() {
-        assistanceList = assistances;
-        filteredAssistancesList = assistances;
-      });
-    } catch (e) {
-      print('Error fetching assistances: $e');
-    }
-  }
-
-  void _onAssistanceSelected(AssistanceInformations? assistance) {
-    if (assistance != null) {
-      setState(() {
-        selectedAssistance = assistance;
-        nameController.text = assistance.assistance.name;
-        clientCpfController.text = assistance.assistance.clientCpf;
-        clientNameController.text = assistance.clientName;
-        assistanceIdController.text = assistance.assistance.id;
-        selectedWorkers = workers.where((worker) =>
-            assistance.assistance.workersIds.contains(worker.id.toString())).toList();
-      });
-    }
+    assistanceIdController.text = widget.budget.assistanceId!;
   }
 
   Future<void> fetchWorkers() async {
@@ -222,10 +182,10 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
     }
   }
 
-  Future<List<AssistanceInformations>> getAllAssistances() async {
+  Future<void> fetchAssistance(String assistanceId) async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/$userType/assistance'),
+        Uri.parse('http://localhost:8080/api/$userType/assistance/$assistanceId'),
         headers: {
           'Authorization': 'Bearer $userToken'
         },
@@ -233,71 +193,57 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-        print(jsonData);
+        final jsonData = json.decode(response.body) as Map<String, dynamic>;
+
+        final client = await getClientByCpf(jsonData['cpf']);
         final allWorkers = await getAllWorkers();
-
-        final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
-        print(workerIdToNameMap);
-
         final allCategories = await getAllCategories();
 
-        final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
-        print(categoryIdToNameMap);
+        final workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
+        final categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
 
-        final List<AssistanceInformations> assistancesList = [];
-        for (var item in jsonData) {
-          final client = await getClientByCpf(item['cpf']);
+        final workerNames = (jsonData['workersIds'] as List<dynamic>)
+            .map((id) => workerIdToNameMap[id] ?? 'Unknown')
+            .toList();
 
-          final workerNames = (item['workersIds'] as List<dynamic>)
-              .map((id) => workerIdToNameMap[id] ?? 'Unknown')
-              .toList();
-
-          final workersIds = (item['workersIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-
-          final categoriesName = (item['categoryIds'] as List<dynamic>)
-              .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
-              .toList();
-          print(categoriesName);
-
-          final categoryIds = (item['categoryIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-          print(categoryIds);
-
-
-          final assistance = AssistanceResponse(
-              id: item['id'].toString(),
-              startDate: item['startDate'],
-              description: item['description'],
-              name: item['name'],
-              address: item['address'],
-              clientCpf: item['cpf'],
-              period: item['period'],
-              workersIds: workersIds,
-              categoryIds: categoryIds
-          );
-          final assistanceInformations = AssistanceInformations(
-              assistance.id, workerNames, client!.name, assistance, categoriesName);
-          assistancesList.add(assistanceInformations);
-        }
+        final categoriesName = (jsonData['categoryIds'] as List<dynamic>)
+            .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
+            .toList();
 
         setState(() {
-          assistanceList = assistancesList;
-          filteredAssistancesList = assistancesList;
+          selectedAssistance = AssistanceInformations(
+              jsonData['id'].toString(),
+              workerNames,
+              client!.name,
+              AssistanceResponse(
+                id: jsonData['id'].toString(),
+                startDate: jsonData['startDate'],
+                description: jsonData['description'],
+                name: jsonData['name'],
+                address: jsonData['address'],
+                clientCpf: jsonData['cpf'],
+                period: jsonData['period'],
+                workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+                categoryIds: (jsonData['categoryIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+              ),
+              categoriesName
+          );
+
+          assistanceIdController.text = selectedAssistance!.assistance.id;
+          nameController.text = selectedAssistance!.assistance.name;
+          descriptionController.text = selectedAssistance!.assistance.description;
+          clientCpfController.text = selectedAssistance!.assistance.clientCpf;
+          clientNameController.text = selectedAssistance!.clientName;
+          selectedWorkers = workers.where((worker) =>
+              selectedAssistance!.assistance.workersIds.contains(worker.id.toString())).toList();
         });
-
-
-        return assistanceList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load assistance list');
+        throw Exception('Failed to load assistance');
       }
-
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      print('Error fetching assistance: $e');
     }
   }
 
@@ -314,36 +260,14 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
+          totalPrice.isEmpty ||
           clientCpf.isEmpty ||
           name.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome do serviço, descrição, categoria, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
-          },
-        );
-        return;
-      }
-
-      if (assistanceName.length == 1) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O nome deve conter mais que um carácter');
-          },
-        );
-        return;
-      }
-
-      if (clientCpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription:
-                'O número de CPF deve conter exatamente 11 dígitos.');
+                errorDescription: 'Todos os campos são obrigatórios.');
           },
         );
         return;
@@ -477,73 +401,18 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                           children: [
                             TextFormField(
                               controller: assistanceIdController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   labelText: 'Número do serviço',
                                   prefixIcon: Icon(Icons.content_paste_search_rounded),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldAssistanceId = true;
-                                      if (_clearFieldAssistanceId) {
-                                        nameController.clear();
-                                        clientCpfController.clear();
-                                        clientNameController.clear();
-                                      }
-                                    });
-                                  },
-                                ),
                               ),
-                              onTap: () async {
-                                AssistanceInformations? selectedAssistance = await showDialog<AssistanceInformations>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Selecione um serviço', style: Theme.of(context).textTheme.headline4),
-                                      content: SizedBox(
-                                        width: double.maxFinite,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: assistanceList.length,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            final assistance = assistanceList[index];
-                                            return ListTile(
-                                              title: Text(assistance.assistance.id),
-                                              onTap: () {
-                                                Navigator.pop(context, assistance);
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                                if (selectedAssistance != null) {
-                                  setState(() {
-                                    _onAssistanceSelected(selectedAssistance);
-                                  });
-                                }
-                              },
                               readOnly: true,
                             ),
                             const SizedBox(height: formHeight - 20),
                             TextFormField(
                               controller: nameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   label: Text(tTitle),
                                   prefixIcon: Icon(Icons.assignment_rounded),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldName = true;
-                                      if (_clearFieldName) {
-                                        nameController.clear();
-                                      }
-                                    });
-                                  },
-                                ),
                               ),
                             ),
                             const SizedBox(height: formHeight - 20),
@@ -588,28 +457,10 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                             ),
                             const SizedBox(height: formHeight - 20),
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isWorkerExpanded = !_isWorkerExpanded;
-                                });
-                              },
                               child: InputDecorator(
-                                decoration: InputDecoration(
-                                  label: const Text('Funcionários'),
-                                  prefixIcon: const Icon(Icons.person_search),
-                                  suffixIcon: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        _isWorkerExpanded ? LineAwesomeIcons.angle_up : Icons.edit,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _isWorkerExpanded = !_isWorkerExpanded;
-                                        });
-                                      },
-                                    ),
-                                  ),
+                                decoration: const InputDecoration(
+                                  label: Text('Funcionários'),
+                                  prefixIcon: Icon(Icons.people),
                                 ),
                                 child: Text(
                                   selectedWorkers.isEmpty
@@ -618,54 +469,23 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 2),
-                            if (_isWorkerExpanded)
-                              Column(
-                                children: workers.map((worker) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        if (selectedWorkers.contains(worker)) {
-                                          selectedWorkers.remove(worker);
-                                        } else {
-                                          selectedWorkers.add(worker);
-                                        }
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        AnimatedContainer(
-                                          duration: const Duration(milliseconds: 300),
-                                          width: 14,
-                                          height: 14,
-                                          decoration: BoxDecoration(
-                                              color: selectedWorkers.contains(worker) ? Colors.green : Colors.transparent,
-                                              border: Border.all(color: selectedWorkers.contains(worker) ? Colors.transparent : primaryColor),
-                                              borderRadius: BorderRadius.circular(50)
-                                          ),
-                                          child: selectedWorkers.contains(worker)
-                                              ? const Center(
-                                              child: Icon(
-                                                Icons.check,
-                                                color: whiteColor,
-                                                size: 10,
-                                              )
-                                          )
-                                              : null,
-                                        ),
-                                        const SizedBox(width: formHeight - 25),
-                                        Text(worker.name, style: Theme.of(context).textTheme.bodyText2),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
                             const SizedBox(height: formHeight - 20),
                             TextFormField(
                               controller: totalPriceController,
-                              decoration: const InputDecoration(
-                                  label: Text(tTotalPrice),
-                                  prefixIcon: Icon(Icons.attach_money_rounded)
+                              decoration: InputDecoration(
+                                  label: const Text(tTotalPrice),
+                                  prefixIcon: const Icon(Icons.attach_money_rounded),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldTotalPrice = true;
+                                      if (_clearFieldTotalPrice) {
+                                        totalPriceController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
