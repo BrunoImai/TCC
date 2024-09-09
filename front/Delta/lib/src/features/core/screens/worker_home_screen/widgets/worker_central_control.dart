@@ -45,7 +45,7 @@ class WorkerCentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.library_books_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.attach_money_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
@@ -75,7 +75,7 @@ class WorkerCentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.subject_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.monetization_on_outlined, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
