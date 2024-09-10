@@ -166,7 +166,7 @@ class WorkerService (
             responsibleWorkers = mutableSetOf(worker),
             client = client,
             totalPrice = budgetReq.totalPrice,
-            responsibleCentral = worker.central!!
+            responsibleCentral = worker.central!!,
         )
 
         val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
@@ -174,7 +174,8 @@ class WorkerService (
             title = "Orçamento ${budgetReq.name}",
             message = "Um novo orçamento foi criado para a assistência ${assistance.name}",
             central = central,
-            creationDate = currentTime()
+            creationDate = currentTime(),
+            budgetId = budget.id
         )
 
         notificationRepository.save(notification)

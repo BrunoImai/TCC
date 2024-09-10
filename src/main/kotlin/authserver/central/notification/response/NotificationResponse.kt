@@ -6,5 +6,6 @@ data class NotificationResponse (
     val message: String,
     val creationDate: String,
     val readed: Boolean,
-    val workerId: Long
+    val workerId: Long,
+    val budgetId: Long?
 )

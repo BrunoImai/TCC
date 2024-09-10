@@ -26,6 +26,8 @@ class Notification (
     @ManyToOne(fetch = FetchType.LAZY)
     var central: Central,
 
+    var budgetId: Long? = null
+
     ) {
-    fun toResponse() = NotificationResponse(id!!, title, message, creationDate.toString(), readed, central.id!!)
+    fun toResponse() = NotificationResponse(id!!, title, message, creationDate.toString(), readed, central.id!!, budgetId)
 }
