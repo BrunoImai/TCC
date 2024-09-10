@@ -266,6 +266,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
             description: item['description'],
             name: item['name'],
             address: item['address'],
+            complement: item['complement'],
             clientCpf: item['cpf'],
             period: item['period'],
             workersIds: workersIds,

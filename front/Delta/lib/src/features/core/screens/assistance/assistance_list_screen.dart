@@ -205,6 +205,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               description: item['description'],
               name: item['name'],
               address: item['address'],
+              complement: item['complement'],
               clientCpf: item['cpf'],
               period: item['period'],
               workersIds: workersIds,

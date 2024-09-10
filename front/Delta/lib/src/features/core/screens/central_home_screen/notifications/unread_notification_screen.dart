@@ -116,12 +116,13 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
 
 
           final notification = NotificationResponse(
-            id: item['id'],
+            id: item['id'].toString(),
             title: item['title'],
             message: item['message'],
             creationDate: item['creationDate'],
             readed: item['readed'],
-            workerId: workerId,
+            workerId: workerId.toString(),
+            budgetId: item['budgetId'].toString()
           );
 
           print("Notificarion: $notification");
@@ -248,7 +249,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  //Get.to(() => BudgetApprovalScreen(budget: budget, whoAreYouTag: widget.whoAreYouTag));
+                                  Get.to(() => BudgetApprovalScreen(budgetId: data.notification.budgetId, whoAreYouTag: widget.whoAreYouTag));
                                 },
                                 icon: const Icon(Icons.edit_notifications_rounded, color: darkColor),
                               ),

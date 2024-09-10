@@ -60,7 +60,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     clientCpfController.addListener(_onCpfChanged);
 
     fetchWorkers().then((_) {
-      List<num> assistanceWorkers = widget.assistance.workersIds.map((id) => num.parse(id)).toList();
+      List<num>? assistanceWorkers = widget.assistance.workersIds.map((id) => num.parse(id)).toList();
       for (num workerId in assistanceWorkers) {
         WorkersList? worker = workers.firstWhereOrNull((w) => w.id == workerId);
         if (worker != null) {
@@ -83,7 +83,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     assistanceNameController.text = widget.assistance.name;
     descriptionController.text = widget.assistance.description;
     clientCpfController.text = widget.assistance.clientCpf;
-    //addressComplementController.text = widget.assistance.complement;
+    addressComplementController.text = widget.assistance.complement!;
 
     List<String> addressParts = widget.assistance.address.split(', ');
     addressController.text = addressParts[0];

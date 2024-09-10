@@ -31,5 +31,5 @@ class Notification (
     var budget: Budget,
 
     ) {
-    fun toResponse() = NotificationResponse(id!!, title, message, creationDate.toString(), readed, central.id!!, budget.toResponse())
+    fun toResponse() = NotificationResponse(id!!, title, message, creationDate.toString(), readed, central.id!!, budget.id!!)
 }

@@ -207,6 +207,7 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
                 description: jsonData['description'],
                 name: jsonData['name'],
                 address: jsonData['address'],
+                complement: jsonData['complement'],
                 clientCpf: jsonData['cpf'],
                 period: jsonData['period'],
                 workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
@@ -262,6 +263,16 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
                       if (selectedAssistance != null) ...[
                         Text(
                           'Cliente: ${selectedAssistance!.clientName}',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400,
+                            color: darkColor,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Endereço: ${selectedAssistance!.assistance.address}, ${selectedAssistance!.assistance.complement}',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                             fontSize: 14.0,

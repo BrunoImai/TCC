@@ -181,7 +181,6 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
           );
 
           print("Budget: $budget");
-
           final budgetInformations = BudgetInformations(
               budget.id, workerNames, client!.name, budget);
           budgetsList.add(budgetInformations);

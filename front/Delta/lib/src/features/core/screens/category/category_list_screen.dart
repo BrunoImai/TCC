@@ -58,6 +58,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/central/category'),
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
         },
       );

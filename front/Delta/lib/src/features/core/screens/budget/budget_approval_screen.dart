@@ -25,8 +25,8 @@ import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 
 class BudgetApprovalScreen extends StatefulWidget {
-  const BudgetApprovalScreen({super.key, required this.budget, required this.whoAreYouTag});
-  final BudgetResponse budget;
+  const BudgetApprovalScreen({super.key, required this.budgetId, required this.whoAreYouTag});
+  final String budgetId;
   final num whoAreYouTag;
 
   @override
@@ -39,20 +39,21 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
   final TextEditingController totalPriceController = TextEditingController();
-  final TextEditingController statusController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
   bool _clearFieldTotalPrice = false;
-  bool _clearFieldStatus = false;
+  bool _isStatusExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
   AssistanceInformations? selectedAssistance;
+  String selectedStatus = "";
   String userToken = "";
   String userType = "";
+  BudgetResponse? budget;
 
   @override
   void initState() {
@@ -64,15 +65,54 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
     }
-    fetchWorkers();
-    fetchAssistance(widget.budget.assistanceId!);
+    fetchBudget();
+  }
 
-    descriptionController.text = widget.budget.description;
-    nameController.text = widget.budget.name;
-    totalPriceController.text = widget.budget.totalPrice;
-    statusController.text = widget.budget.status;
+  Future<void> fetchBudget() async {
+    budget = await getBudgetById(widget.budgetId);
 
-    assistanceIdController.text = widget.budget.assistanceId!;
+    if (budget != null) {
+      descriptionController.text = budget!.description;
+      nameController.text = budget!.name;
+      totalPriceController.text = budget!.totalPrice;
+      selectedStatus = budget!.status;
+
+      assistanceIdController.text = budget!.assistanceId!;
+      fetchWorkers();
+      fetchAssistance(budget!.assistanceId!);
+    } else {
+      print("Erro ao carregar o orçamento");
+    }
+  }
+
+  Future<BudgetResponse?> getBudgetById(String id) async {
+    final response = await http.get(
+      Uri.parse('http://localhost:8080/api/$userType/budget/$id'),
+      headers: {
+        'Authorization': 'Bearer $userToken'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      print(jsonData);
+
+
+      return BudgetResponse(
+          id: jsonData['id'].toString(),
+          name: jsonData['name'],
+          description: jsonData['description'],
+          creationDate: jsonData['creationDate'],
+          status: jsonData['status'],
+          assistanceId: jsonData['assistanceId'],
+          clientId: jsonData['clientId'].toString(),
+          responsibleWorkersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+          totalPrice: jsonData['totalPrice'].toString()
+      );
+    } else {
+      print('Failed to load client. Status code: ${response.statusCode}');
+      return null;
+    }
   }
 
   Future<void> fetchWorkers() async {
@@ -221,6 +261,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                 description: jsonData['description'],
                 name: jsonData['name'],
                 address: jsonData['address'],
+                complement: jsonData['complement'],
                 clientCpf: jsonData['cpf'],
                 period: jsonData['period'],
                 workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
@@ -254,7 +295,6 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
       String totalPrice = totalPriceController.text;
-      String status = statusController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
 
@@ -303,7 +343,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,
-        status: status,
+        status: selectedStatus,
         assistanceId: assistanceId,
         clientId: clientId,
         responsibleWorkersIds: workersIds,
@@ -315,7 +355,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
+          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budgetId}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken'
@@ -339,26 +379,6 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
         }
       } catch (e) {
         print('Erro ao registrar: $e');
-      }
-    }
-
-    Future<void> deleteAssistance() async {
-
-      final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
-        },
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        setState(() {
-          Navigator.pop(context, true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Serviço excluído com sucesso!')),
-          );
-        });
       }
     }
 
@@ -481,25 +501,59 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
                             const SizedBox(height: formHeight - 20),
-                            TextFormField(
-                              controller: statusController,
-                              decoration: InputDecoration(
-                                label: const Text(tTotalPrice),
-                                prefixIcon: const Icon(Icons.attach_money_rounded),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldStatus = true;
-                                      if (_clearFieldStatus) {
-                                        statusController.clear();
-                                      }
-                                    });
-                                  },
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isStatusExpanded = !_isStatusExpanded;
+                                });
+                              },
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Método de Pagamento',
+                                  prefixIcon: const Icon(Icons.payment_rounded),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Icon(
+                                      _isStatusExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPaymentTypeExpanded
+                                    ),
+                                  ),
                                 ),
+                                child: Text(selectedStatus ?? ''),
                               ),
-                              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
+                            if (_isStatusExpanded)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Text('APROVADO', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'APROVADO';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('REPROVADO', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'REPROVADO';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('EM_ANALISE', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'EM_ANALISE';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             const SizedBox(height: formHeight - 10),
                             SizedBox(
                               width: double.infinity,
@@ -533,7 +587,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(
-                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.budget.creationDate)),
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(budget!.creationDate)),
                                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                                     ],
                                   ),

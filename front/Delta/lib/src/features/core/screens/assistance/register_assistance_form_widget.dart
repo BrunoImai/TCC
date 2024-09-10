@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
 import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
@@ -414,7 +411,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                 ),
               ),
             ),
-            const SizedBox(height: 2),
             if (_isCategoryExpanded)
               Column(
                 children: categories.map((category) {
@@ -449,14 +445,13 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                           )
                               : null,
                         ),
-                        const SizedBox(width: formHeight - 25),
                         Text(category.name, style: Theme.of(context).textTheme.bodyText2),
                       ],
                     ),
                   );
                 }).toList(),
               ),
-            const SizedBox(height: formHeight - 10),
+            const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: clientCpfController,
               inputFormatters: [

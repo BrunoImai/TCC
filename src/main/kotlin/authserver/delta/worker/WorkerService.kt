@@ -223,6 +223,13 @@ class WorkerService (
         return clientRepository.findByCpf(cpf)?.takeIf { it.central == central }
     }
 
+    fun getClientById(id: Long): Client? {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        return clientRepository.findByIdOrNull(id)
+    }
+
 
     // Report
 
