@@ -794,18 +794,20 @@ class CentralService(
     }
 
     fun getBudget(budgetId: Long) : Budget {
-        val budget = budgetRepository.findByIdOrNull(budgetId) ?: throw IllegalStateException("Relatório não encontrado")
+        val budget = budgetRepository.findByIdOrNull(budgetId) ?: throw IllegalStateException("Orçamento não encontrado")
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        if (budget.client.central != central) throw IllegalStateException("Relatório não encontrado")
+        if (budget.client.central != central) throw IllegalStateException("Orçamento não encontrado")
+        central.notifications.find { it.budgetId == budgetId }?.let { it.readed = true }
+        centralRepository.save(central)
         return budget
     }
 
     fun updateBudget(budgetId: Long, budgetReq: BudgetRequest) : Budget {
-        val budget = budgetRepository.findByIdOrNull(budgetId) ?: throw IllegalStateException("Relatório não encontrado")
+        val budget = budgetRepository.findByIdOrNull(budgetId) ?: throw IllegalStateException("Orçamento não encontrado")
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        if (budget.client.central != central) throw IllegalStateException("Relatório não encontrado")
+        if (budget.client.central != central) throw IllegalStateException("Orçamento não encontrado")
         val workers = mutableListOf<Worker>()
         for (workerId in budgetReq.responsibleWorkersIds) {
             val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
@@ -823,7 +825,7 @@ class CentralService(
     fun deleteBudget(budgetId: Long) : Boolean {
         val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
         val budget = budgetRepository.findByIdOrNull(budgetId) ?: return false
-        if (budget.assistance?.responsibleCentral != central) throw IllegalStateException("Relatório não encontrado")
+        if (budget.assistance?.responsibleCentral != central) throw IllegalStateException("Orçamento não encontrado")
         budgetRepository.delete(budget)
         return true
     }
@@ -919,8 +921,6 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val notification = central.notifications.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
-        notification.readed = true
-        centralRepository.save(central)
         return notification
     }
 
