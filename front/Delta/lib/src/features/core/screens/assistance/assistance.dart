@@ -95,7 +95,7 @@ class AssistanceResponse {
       'clientCpf': clientCpf,
       'period': period,
       'workersIds': workersIds,
-      'categoryIds': categoryIds
+      'categoryIds': categoryIds,
     };
   }
 }

@@ -267,7 +267,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
               clientCpf: item['cpf'],
               period: item['period'],
               workersIds: workersIds,
-              categoryIds: categoryIds
+              categoryIds: categoryIds,
           );
           final assistanceInformations = AssistanceInformations(
               assistance.id, workerNames, client!.name, assistance, categoriesName);

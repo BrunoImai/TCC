@@ -1,5 +1,6 @@
 package authserver.delta.assistance.response
 
+import authserver.delta.assistance.AssistanceStatus
 import java.util.*
 
 data class AssistanceResponse(
@@ -12,5 +13,5 @@ data class AssistanceResponse(
     val cpf: String,
     val period: String,
     val workersIds: Set<Long?>,
-    val categoryIds: Set<Long?>
+    val categoryIds: Set<Long?>,
 )

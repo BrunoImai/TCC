@@ -35,7 +35,6 @@ class BudgetInformations {
   BudgetResponse budget;
 
   BudgetInformations(this.id, this.workersName, this.clientName, this.budget);
-
 }
 
 class UpdateBudgetRequest {

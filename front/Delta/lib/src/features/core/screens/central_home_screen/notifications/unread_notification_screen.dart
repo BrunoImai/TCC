@@ -1,123 +1,52 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
-import 'package:tcc_front/src/features/core/screens/assistance/update_assistance_screen.dart';
-import 'package:tcc_front/src/features/core/screens/client/client.dart';
-import '../../../../constants/colors.dart';
-import '../../../../constants/sizes.dart';
-import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/signup/central_manager.dart';
-import '../category/category.dart';
-import '../central_home_screen/widgets/central_app_bar.dart';
-import '../worker/worker.dart';
+import 'package:intl/intl.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/notifications/notification.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
+import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
+import '../../../../../constants/colors.dart';
+import '../../../../../constants/sizes.dart';
+import '../../../../../constants/text_strings.dart';
+import '../../../../authentication/screens/signup/central_manager.dart';
 
 
-
-
-class AssistanceListScreen extends StatefulWidget {
-  const AssistanceListScreen({super.key, required this.whoAreYouTag});
+class UnreadNotificationScreen extends StatefulWidget {
+  const UnreadNotificationScreen({super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
-  _AssistancesListScreenState createState() => _AssistancesListScreenState();
+  _UnreadNotificationScreenState createState() => _UnreadNotificationScreenState();
 }
 
-class _AssistancesListScreenState extends State<AssistanceListScreen> {
+class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
   bool searchBarInUse = false;
-  late Future<List<AssistanceInformations>> futureData;
+  late Future<List<NotificationInformations>> futureData;
 
   TextEditingController searchController = TextEditingController();
 
-  late List<AssistanceInformations> assistanceList;
-  late List<AssistanceInformations> filteredAssistancesList;
+  late List<NotificationInformations> unreadNotificationList;
+  late List<NotificationInformations> filteredUnreadNotificationList;
 
   @override
   void initState() {
     super.initState();
-    futureData = getAllAssistances();
+    futureData = getAllUnreadNotifications();
     searchController.addListener(_onSearchChanged);
-    assistanceList = [];
-    filteredAssistancesList = [];
+    unreadNotificationList = [];
+    filteredUnreadNotificationList = [];
   }
-
 
   void _onSearchChanged() {
     setState(() {
-      filteredAssistancesList = assistanceList.where((data) {
-        final name = data.assistance.name.toLowerCase();
+      filteredUnreadNotificationList = unreadNotificationList.where((data) {
+        final name = data.notification.title.toLowerCase();
         final query = searchController.text.toLowerCase();
         return name.contains(query);
       }).toList();
     });
   }
-
-  Future<ClientResponse?> getClientByCpf(String cpf) async {
-    final response = await http.get(
-      Uri.parse('http://localhost:8080/api/central/client/byCpf/$cpf'),
-      headers: {
-        'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
-      return ClientResponse(
-        id: jsonData['id'],
-        name: jsonData['name'],
-        email: jsonData['email'],
-        entryDate: jsonData['entryDate'],
-        cpf: jsonData['cpf'],
-        cellphone: jsonData['cellphone'],
-        address: jsonData['address'],
-        complement: jsonData['complement'],
-      );
-    } else {
-      print('Failed to load client. Status code: ${response.statusCode}');
-      return null;
-    }
-  }
-
-  Future<List<CategoryResponse>> getAllCategories() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/category'),
-        headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-        },
-      );
-      print("Status code: ${response.statusCode}");
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-
-        final List<CategoryResponse> categoryList = jsonData.map((item) {
-          return CategoryResponse(
-            id: item['id'],
-            name: item['name'],
-            creationDate: item['creationDate'],
-          );
-        }).toList();
-
-        return categoryList;
-      } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        throw Exception('Failed to load category list');
-      }
-    } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de workers');
-    }
-  }
-
 
   Future<List<WorkersList>> getAllWorkers() async {
     try {
@@ -150,15 +79,16 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
         throw Exception('Failed to load worker list');
       }
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
+      print('Erro ao fazer a solicitação HTTP workers: $e');
       throw Exception('Falha ao carregar a lista de workers');
     }
   }
 
-  Future<List<AssistanceInformations>> getAllAssistances() async {
+
+  Future<List<NotificationInformations>> getAllUnreadNotifications() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/assistance'),
+        Uri.parse('http://localhost:8080/api/central/notification/unread'),
         headers: {
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
         },
@@ -173,66 +103,49 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
         print(workerIdToNameMap);
 
-        final allCategories = await getAllCategories();
-
-        final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
-        print(categoryIdToNameMap);
-
-        final List<AssistanceInformations> assistancesList = [];
+        final List<NotificationInformations> notificationsList = [];
         for (var item in jsonData) {
-          final client = await getClientByCpf(item['cpf']);
 
-          final workerNames = (item['workersIds'] as List<dynamic>)
-              .map((id) => workerIdToNameMap[id] ?? 'Unknown')
-              .toList();
+          final workerName = workerIdToNameMap[item['workerId']] ?? 'Unknown';
 
-          final workersIds = (item['workersIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-
-         final categoriesName = (item['categoryIds'] as List<dynamic>)
-              .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
-              .toList();
-         print(categoriesName);
-
-          final categoryIds = (item['categoryIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-          print(categoryIds);
+          final workerId = item['workerId'].toString();
 
 
-          final assistance = AssistanceResponse(
-              id: item['id'].toString(),
-              startDate: item['startDate'],
-              description: item['description'],
-              name: item['name'],
-              address: item['address'],
-              clientCpf: item['cpf'],
-              period: item['period'],
-              workersIds: workersIds,
-              categoryIds: categoryIds,
+          final notification = NotificationResponse(
+            id: item['id'],
+            title: item['title'],
+            message: item['message'],
+            creationDate: item['creationDate'],
+            readed: item['readed'],
+            workerId: workerId,
           );
-          final assistanceInformations = AssistanceInformations(
-              assistance.id, workerNames, client!.name, assistance, categoriesName);
-          assistancesList.add(assistanceInformations);
+
+          print("Notificarion: $notification");
+
+          final notificationInformations = NotificationInformations(
+              notification.id, workerName, notification);
+          notificationsList.add(notificationInformations);
         }
 
         setState(() {
-          assistanceList = assistancesList;
-          filteredAssistancesList = assistancesList;
+          unreadNotificationList = notificationsList;
+          filteredUnreadNotificationList = notificationsList;
         });
+        print("UnreadNotificationList: $unreadNotificationList");
 
-
-        return assistanceList;
+        return unreadNotificationList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load assistance list');
+        throw Exception('Failed to load notification list');
       }
 
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      print('Erro ao fazer a solicitação HTTP notification: $e');
+      throw Exception('Falha ao carregar a lista de notification');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -251,10 +164,10 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  assitanceListSubTitle,
+                  tUnreadNotificationSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
                 //Search Box
                 Container(
                   decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
@@ -284,7 +197,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
               ],
             ),
           ),
@@ -292,9 +205,9 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
             child: Padding(
               padding: const EdgeInsets.all(homeCardPadding),
               child: ListView.builder(
-                itemCount: filteredAssistancesList.length,
+                itemCount: filteredUnreadNotificationList.length,
                 itemBuilder: (context, index) {
-                  final data = filteredAssistancesList[index];
+                  final data = filteredUnreadNotificationList[index];
                   return Card(
                     elevation: 3,
                     color: cardBgColor,
@@ -313,14 +226,14 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                 child: Row(
                                   children: [
                                     const Icon(
-                                      Icons.work,
+                                      Icons.short_text,
                                       color: darkColor,
                                       size: 35,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.assistance.name,
+                                        data.notification.title,
                                         style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -331,9 +244,8 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateAssistanceScreen(assistance: data.assistance, whoAreYouTag: widget.whoAreYouTag,));
                                 },
-                                icon: const Icon(Icons.edit, color: darkColor),
+                                icon: const Icon(Icons.edit_notifications_rounded, color: darkColor),
                               ),
                             ],
                           ),
@@ -342,14 +254,14 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.category_rounded,
+                                Icons.message_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.categoriesName.join(', '),
+                                  data.notification.message,
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -369,7 +281,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.clientName,
+                                  data.workerName,
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -382,14 +294,14 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.location_on,
+                                Icons.date_range_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  data.assistance.address,
+                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.notification.creationDate)),
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -398,25 +310,6 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             ],
                           ),
                           const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.workersName.join(', '),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
