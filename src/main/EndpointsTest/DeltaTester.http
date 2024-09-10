@@ -165,7 +165,8 @@ Content-Type: application/json
   "address": "Av. Com. Franco, 4680 - Uberaba, Curitiba - PR, 81530-440, Brazil",
   "cpf": "12345678901",
   "period": "Manha",
-  "workersIds": [2]
+  "workersIds": [1],
+  "categoriesId": [1]
 }
 
 ### Cadastra serviço 3
@@ -286,4 +287,8 @@ Authorization: Bearer {{token}}
 
 ### Busca notificacao
 GET localhost:8080/api/central/notification/1
+Authorization: Bearer {{token}}
+
+### Deleta orcamento
+DELETE localhost:8080/api/central/budget/1
 Authorization: Bearer {{token}}

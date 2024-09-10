@@ -772,7 +772,10 @@ class CentralService(
             totalPrice = budgetReq.totalPrice,
             responsibleCentral = central
         )
+
+        budget.assistance = assistance
         return budgetRepository.save(budget)
+
     }
 
 
@@ -825,7 +828,7 @@ class CentralService(
     fun deleteBudget(budgetId: Long) : Boolean {
         val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
         val budget = budgetRepository.findByIdOrNull(budgetId) ?: return false
-        if (budget.assistance?.responsibleCentral != central) throw IllegalStateException("Orçamento não encontrado")
+        if (budget.assistance!!.responsibleCentral!!.id!! != central.id) throw IllegalStateException("Orçamento não encontrado")
         budgetRepository.delete(budget)
         return true
     }

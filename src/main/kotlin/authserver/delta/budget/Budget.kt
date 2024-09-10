@@ -39,11 +39,11 @@ class Budget (
     @ManyToOne(fetch = FetchType.LAZY)
     var responsibleCentral: Central,
 
-    @OneToOne(mappedBy = "budget")
-    var assistance: Assistance? = null,
-
     @OneToMany(mappedBy = "budget", cascade = [CascadeType.ALL], orphanRemoval = true)
     var notifications: MutableSet<Notification> = mutableSetOf(),
+
+    @OneToOne(mappedBy = "budget", fetch = FetchType.LAZY)
+    var assistance: Assistance? = null,
 
     ) {
     fun toResponse() = BudgetResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! }, totalPrice)

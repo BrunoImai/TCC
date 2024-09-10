@@ -75,9 +75,10 @@ class Assistance(
     @JoinColumn(name = "report_id", referencedColumnName = "id")
     var report: Report? = null,
 
-    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "budget_id", referencedColumnName = "id")
-    var budget: Budget? = null
+    var budget: Budget? = null,
+
 
 ) {
     fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet())
