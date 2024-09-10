@@ -112,13 +112,13 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
 
 
           final notification = NotificationResponse(
-            id: item['id'],
+            id: item['id'].toString(),
             title: item['title'],
             message: item['message'],
             creationDate: item['creationDate'],
             readed: item['readed'],
-            workerId: workerId,
-            budgetId: item['budgetId']
+            workerId: workerId.toString(),
+            budgetId: item['budgetId'].toString()
           );
 
           print("Notificarion: $notification");
