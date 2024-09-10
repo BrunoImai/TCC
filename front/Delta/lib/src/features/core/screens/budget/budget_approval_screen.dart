@@ -25,8 +25,8 @@ import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 
 class BudgetApprovalScreen extends StatefulWidget {
-  const BudgetApprovalScreen({super.key, required this.budget, required this.whoAreYouTag});
-  final BudgetResponse budget;
+  const BudgetApprovalScreen({super.key, required this.budgetId, required this.whoAreYouTag});
+  final String budgetId;
   final num whoAreYouTag;
 
   @override
@@ -53,6 +53,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
   String selectedStatus = "";
   String userToken = "";
   String userType = "";
+  BudgetResponse? budget;
 
   @override
   void initState() {
@@ -64,15 +65,54 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
     }
-    fetchWorkers();
-    fetchAssistance(widget.budget.assistanceId!);
+    fetchBudget();
+  }
 
-    descriptionController.text = widget.budget.description;
-    nameController.text = widget.budget.name;
-    totalPriceController.text = widget.budget.totalPrice;
-    selectedStatus = widget.budget.status;
+  Future<void> fetchBudget() async {
+    budget = await getBudgetById(widget.budgetId);
 
-    assistanceIdController.text = widget.budget.assistanceId!;
+    if (budget != null) {
+      descriptionController.text = budget!.description;
+      nameController.text = budget!.name;
+      totalPriceController.text = budget!.totalPrice;
+      selectedStatus = budget!.status;
+
+      assistanceIdController.text = budget!.assistanceId!;
+      fetchWorkers();
+      fetchAssistance(budget!.assistanceId!);
+    } else {
+      print("Erro ao carregar o orçamento");
+    }
+  }
+
+  Future<BudgetResponse?> getBudgetById(String id) async {
+    final response = await http.get(
+      Uri.parse('http://localhost:8080/api/$userType/budget/$id'),
+      headers: {
+        'Authorization': 'Bearer $userToken'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      print(jsonData);
+
+
+      return BudgetResponse(
+          id: jsonData['id'].toString(),
+          name: jsonData['name'],
+          description: jsonData['description'],
+          creationDate: jsonData['creationDate'],
+          status: jsonData['status'],
+          assistanceId: jsonData['assistanceId'],
+          clientId: jsonData['clientId'].toString(),
+          responsibleWorkersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+          totalPrice: jsonData['totalPrice'].toString()
+      );
+    } else {
+      print('Failed to load client. Status code: ${response.statusCode}');
+      return null;
+    }
   }
 
   Future<void> fetchWorkers() async {
@@ -221,6 +261,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                 description: jsonData['description'],
                 name: jsonData['name'],
                 address: jsonData['address'],
+                complement: jsonData['complement'],
                 clientCpf: jsonData['cpf'],
                 period: jsonData['period'],
                 workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
@@ -314,7 +355,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
+          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budgetId}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken'
@@ -338,26 +379,6 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
         }
       } catch (e) {
         print('Erro ao registrar: $e');
-      }
-    }
-
-    Future<void> deleteAssistance() async {
-
-      final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $userToken',
-        },
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        setState(() {
-          Navigator.pop(context, true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Serviço excluído com sucesso!')),
-          );
-        });
       }
     }
 
@@ -505,28 +526,28 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ListTile(
-                                    title: Text('Aprovado', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('APROVADO', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'Aprovado';
+                                        selectedStatus = 'APROVADO';
                                         _isStatusExpanded = false;
                                       });
                                     },
                                   ),
                                   ListTile(
-                                    title: Text('Reprovado', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('REPROVADO', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'Reprovado';
+                                        selectedStatus = 'REPROVADO';
                                         _isStatusExpanded = false;
                                       });
                                     },
                                   ),
                                   ListTile(
-                                    title: Text('Em_análise', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('EM_ANALISE', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'Em_análise';
+                                        selectedStatus = 'EM_ANALISE';
                                         _isStatusExpanded = false;
                                       });
                                     },
@@ -566,7 +587,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(
-                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.budget.creationDate)),
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(budget!.creationDate)),
                                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                                     ],
                                   ),

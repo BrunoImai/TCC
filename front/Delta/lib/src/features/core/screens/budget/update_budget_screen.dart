@@ -221,6 +221,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                 description: jsonData['description'],
                 name: jsonData['name'],
                 address: jsonData['address'],
+                complement: jsonData['complement'],
                 clientCpf: jsonData['cpf'],
                 period: jsonData['period'],
                 workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),

@@ -9,5 +9,5 @@ data class NotificationResponse (
     val creationDate: String,
     val readed: Boolean,
     val workerId: Long,
-    val budget: BudgetResponse?
+    val budgetId: Long
 )

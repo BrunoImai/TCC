@@ -1,3 +1,4 @@
+import 'dart:async'; // Adicione esta importação
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -7,8 +8,8 @@ import 'notification.dart';
 
 class NotificationController extends GetxController {
   var unreadNotificationsCount = 0.obs;
+  Timer? _timer;
 
-  // Função para buscar as notificações não lidas
   Future<void> fetchUnreadNotifications() async {
     try {
       final response = await http.get(
@@ -39,6 +40,17 @@ class NotificationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     fetchUnreadNotifications();
+
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      fetchUnreadNotifications();
+    });
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }

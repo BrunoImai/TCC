@@ -76,6 +76,21 @@ class BudgetResponse {
   BudgetResponse({required this.id, required this.name,required this.description, required this.creationDate, required this.status,
   required this.assistanceId, required this.clientId, required this.responsibleWorkersIds, required this.totalPrice});
 
+  factory BudgetResponse.fromJson(Map<String, dynamic> json) {
+    return BudgetResponse(
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      creationDate: json['creationDate'] as String,
+      status: json['status'] as String,
+      assistanceId: json['assistanceId'] as String?,
+      clientId: json['clientId'] as String,
+      responsibleWorkersIds: List<String>.from(json['responsibleWorkersIds'] as List<dynamic>),
+      totalPrice: json['totalPrice'] as String,
+    );
+  }
+
+
   Map<String, dynamic> toJson() {
     return {
       'id' : id,

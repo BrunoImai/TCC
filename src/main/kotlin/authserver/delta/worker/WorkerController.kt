@@ -47,7 +47,8 @@ class WorkerController(
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/assistance/closest")
-    fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) = service.getClosestAssistance(coordinate)
+    fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) =
+        service.getClosestAssistance(coordinate)
 
     @PostMapping("/report")
     fun createReport(@Valid @RequestBody reportRequest: ReportRequest) =
@@ -76,6 +77,13 @@ class WorkerController(
     @GetMapping("/client/byCpf/{cpf}")
     fun getClientByCpf(@PathVariable("cpf") cpf: String) =
         service.getClientByCpf(cpf)
+            ?.toResponse()
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/client/{id}")
+    fun getClientByCpf(@PathVariable("id") id: Long) =
+        service.getClientById(id)
             ?.toResponse()
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()

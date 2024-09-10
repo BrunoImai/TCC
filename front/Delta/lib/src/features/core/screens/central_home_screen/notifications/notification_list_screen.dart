@@ -118,7 +118,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
             creationDate: item['creationDate'],
             readed: item['readed'],
             workerId: workerId,
-            budget_id: item['budget_id']
+            budgetId: item['budgetId']
           );
 
           print("Notificarion: $notification");
