@@ -177,7 +177,7 @@ class WorkerService (
             message = "Um novo orçamento foi criado para a assistência ${assistance.name}",
             central = central,
             creationDate = currentTime(),
-            budgetId = createdBudget.id
+            budget = createdBudget
         )
 
         notificationRepository.save(notification)
