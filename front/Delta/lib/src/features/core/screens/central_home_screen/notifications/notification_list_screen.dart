@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
 import '../../../../authentication/screens/signup/central_manager.dart';
+import '../../budget/budget_approval_screen.dart';
 
 
 class NotificationListScreen extends StatefulWidget {
@@ -245,6 +248,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
+                                  Get.to(() => BudgetApprovalScreen(budgetId: data.notification.budgetId, whoAreYouTag: widget.whoAreYouTag));
                                 },
                                 icon: const Icon(Icons.edit_notifications_rounded, color: darkColor),
                               ),
