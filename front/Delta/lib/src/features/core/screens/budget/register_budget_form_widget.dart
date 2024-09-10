@@ -226,7 +226,6 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 
-        // Verifica se a resposta é um objeto único (para worker) ou uma lista (para central)
         final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
 
         final allWorkers = await getAllWorkers();
