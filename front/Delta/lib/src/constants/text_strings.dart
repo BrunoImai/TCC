@@ -92,6 +92,7 @@ const String tRegisterCategory = "Registrar uma nova categoria";
 const String tCategories = "Categorias cadastradas";
 const String tRegisterReport = "Registrar um novo relatório";
 const String tReports = "Histórico de relatórios";
+const String tNotificationsHistory = "Histórico de notificações";
 const String dashboards = "Dashboards";
 const String comissionControl = "Controle de comissões";
 
@@ -117,6 +118,12 @@ const String editClient = "Editar cliente";
 //Client List Screen
 const String clientListSubTitle = "Encontre seus clientes!";
 
+
+//Unread notifications
+const String tUnreadNotificationSubTitle = "Encontre seus notificações não lidas!";
+
+//Unread notifications
+const String tNotificationTitle = "Encontre seus notificações!";
 
 //Worker List Screen
 const String workerListSubTitle = "Encontre seus funcionários!";

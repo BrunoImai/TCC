@@ -300,7 +300,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
         return;
       }
 
-      UpdateBudgetRequest updateAssistanceRequest = UpdateBudgetRequest(
+      UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,
         status: status,
@@ -310,12 +310,12 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
         totalPrice: totalPrice,
       );
 
-      String requestBody = jsonEncode(updateAssistanceRequest.toJson());
+      String requestBody = jsonEncode(updateBudgetRequest.toJson());
       print(requestBody);
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/$userType/report/${widget.budget.id}'),
+          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken'
@@ -365,7 +365,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editAssistance, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditBudget, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

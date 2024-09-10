@@ -45,11 +45,12 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
   List<WorkersList> selectedWorkers = [];
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
-  late List<AssistanceInformations> assistanceList;
-  late List<AssistanceInformations> filteredAssistancesList;
+  late List<AssistanceInformations> assistanceList = [];
+  late List<AssistanceInformations> filteredAssistancesList = [];
   AssistanceInformations? selectedAssistance;
   String userToken = "";
   String userType = "";
+  String userUrl = "";
 
 
   @override
@@ -58,9 +59,11 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
     if(widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
+      userUrl = 'http://localhost:8080/api/central/assistance';
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
+      userUrl = 'http://localhost:8080/api/worker/assistance/currentAssistance';
     }
     fetchWorkers();
     fetchAssistances();
@@ -213,7 +216,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
   Future<List<AssistanceInformations>> getAllAssistances() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/$userType/assistance'),
+        Uri.parse(userUrl),
         headers: {
           'Authorization': 'Bearer $userToken'
         },
@@ -221,20 +224,21 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-        print(jsonData);
-        final allWorkers = await getAllWorkers();
+        final jsonData = json.decode(response.body);
 
+        // Verifica se a resposta é um objeto único (para worker) ou uma lista (para central)
+        final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
+
+        final allWorkers = await getAllWorkers();
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
         print(workerIdToNameMap);
 
         final allCategories = await getAllCategories();
-
         final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
         print(categoryIdToNameMap);
 
         final List<AssistanceInformations> assistancesList = [];
-        for (var item in jsonData) {
+        for (var item in assistancesJson) {
           final client = await getClientByCpf(item['cpf']);
 
           final workerNames = (item['workersIds'] as List<dynamic>)
@@ -253,20 +257,21 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
               .map((id) => id.toString()).toList();
           print(categoryIds);
 
-
           final assistance = AssistanceResponse(
-              id: item['id'].toString(),
-              startDate: item['startDate'],
-              description: item['description'],
-              name: item['name'],
-              address: item['address'],
-              clientCpf: item['cpf'],
-              period: item['period'],
-              workersIds: workersIds,
-              categoryIds: categoryIds
+            id: item['id'].toString(),
+            startDate: item['startDate'],
+            description: item['description'],
+            name: item['name'],
+            address: item['address'],
+            clientCpf: item['cpf'],
+            period: item['period'],
+            workersIds: workersIds,
+            categoryIds: categoryIds,
           );
+
           final assistanceInformations = AssistanceInformations(
               assistance.id, workerNames, client!.name, assistance, categoriesName);
+
           assistancesList.add(assistanceInformations);
         }
 
@@ -274,7 +279,6 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
           assistanceList = assistancesList;
           filteredAssistancesList = assistancesList;
         });
-
 
         return assistanceList;
       } else {
@@ -288,6 +292,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       throw Exception('Falha ao carregar a lista de clientes');
     }
   }
+
 
 
   @override
