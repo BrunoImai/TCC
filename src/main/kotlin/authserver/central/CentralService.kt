@@ -798,7 +798,7 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         if (budget.client.central != central) throw IllegalStateException("Orçamento não encontrado")
-        central.notifications.find { it.budgetId == budgetId }?.let { it.readed = true }
+        central.notifications.find { it.budget.id == budgetId }?.let { it.readed = true }
         centralRepository.save(central)
         return budget
     }

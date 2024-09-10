@@ -1,6 +1,7 @@
 package authserver.delta.budget
 
 import authserver.central.Central
+import authserver.central.notification.Notification
 import authserver.delta.assistance.Assistance
 import authserver.delta.budget.response.BudgetResponse
 import authserver.delta.client.Client
@@ -40,6 +41,9 @@ class Budget (
 
     @OneToOne(mappedBy = "budget")
     var assistance: Assistance? = null,
+
+    @OneToMany(mappedBy = "budget", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var notifications: MutableSet<Notification> = mutableSetOf(),
 
     ) {
     fun toResponse() = BudgetResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, client.id!!, responsibleWorkers.map { it.id!! }, totalPrice)

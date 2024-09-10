@@ -1,5 +1,7 @@
 package authserver.central.notification.response
 
+import authserver.delta.budget.response.BudgetResponse
+
 data class NotificationResponse (
     val id: Long,
     val title: String,
@@ -7,5 +9,5 @@ data class NotificationResponse (
     val creationDate: String,
     val readed: Boolean,
     val workerId: Long,
-    val budgetId: Long?
+    val budget: BudgetResponse?
 )
