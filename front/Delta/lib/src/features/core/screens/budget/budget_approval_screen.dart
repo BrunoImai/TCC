@@ -39,18 +39,18 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
   final TextEditingController totalPriceController = TextEditingController();
-  final TextEditingController statusController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
   bool _clearFieldTotalPrice = false;
-  bool _clearFieldStatus = false;
+  bool _isStatusExpanded = false;
   List<WorkersList> workers = [];
   List<WorkersList> selectedWorkers = [];
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
   AssistanceInformations? selectedAssistance;
+  String selectedStatus = "";
   String userToken = "";
   String userType = "";
 
@@ -70,7 +70,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
     descriptionController.text = widget.budget.description;
     nameController.text = widget.budget.name;
     totalPriceController.text = widget.budget.totalPrice;
-    statusController.text = widget.budget.status;
+    selectedStatus = widget.budget.status;
 
     assistanceIdController.text = widget.budget.assistanceId!;
   }
@@ -254,7 +254,6 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
       String totalPrice = totalPriceController.text;
-      String status = statusController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
 
@@ -303,7 +302,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,
-        status: status,
+        status: selectedStatus,
         assistanceId: assistanceId,
         clientId: clientId,
         responsibleWorkersIds: workersIds,
@@ -481,25 +480,59 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
                             const SizedBox(height: formHeight - 20),
-                            TextFormField(
-                              controller: statusController,
-                              decoration: InputDecoration(
-                                label: const Text(tTotalPrice),
-                                prefixIcon: const Icon(Icons.attach_money_rounded),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldStatus = true;
-                                      if (_clearFieldStatus) {
-                                        statusController.clear();
-                                      }
-                                    });
-                                  },
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isStatusExpanded = !_isStatusExpanded;
+                                });
+                              },
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Método de Pagamento',
+                                  prefixIcon: const Icon(Icons.payment_rounded),
+                                  suffixIcon: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Icon(
+                                      _isStatusExpanded ? LineAwesomeIcons.angle_up : LineAwesomeIcons.angle_down, // Changed the icon based on _isPaymentTypeExpanded
+                                    ),
+                                  ),
                                 ),
+                                child: Text(selectedStatus ?? ''),
                               ),
-                              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
+                            if (_isStatusExpanded)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    title: Text('Aprovado', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'Aprovado';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Reprovado', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'Reprovado';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Em_análise', style: Theme.of(context).textTheme.bodyText2),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedStatus = 'Em_análise';
+                                        _isStatusExpanded = false;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             const SizedBox(height: formHeight - 10),
                             SizedBox(
                               width: double.infinity,

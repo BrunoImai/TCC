@@ -5,9 +5,10 @@ class NotificationResponse {
   final String creationDate;
   final bool readed;
   final String workerId;
+  final int budget_id;
 
   NotificationResponse({required this.id, required this.title, required this.message, required this.creationDate,
-    required this.readed, required this.workerId});
+    required this.readed, required this.workerId, required this.budget_id});
 
   factory NotificationResponse.fromJson(Map<String, dynamic> json) {
     return NotificationResponse(
@@ -17,6 +18,7 @@ class NotificationResponse {
       creationDate: json['creationDate'],
       readed: json['readed'],
       workerId: json['workerId'].toString(),
+      budget_id: json['budget_id'],
     );
   }
 
@@ -28,6 +30,7 @@ class NotificationResponse {
       'creationDate': creationDate,
       'readed': readed,
       'workerId': workerId,
+      'budget_id': budget_id
     };
   }
 }
