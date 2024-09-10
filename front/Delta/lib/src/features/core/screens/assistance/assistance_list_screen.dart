@@ -208,7 +208,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               clientCpf: item['cpf'],
               period: item['period'],
               workersIds: workersIds,
-              categoryIds: categoryIds
+              categoryIds: categoryIds,
           );
           final assistanceInformations = AssistanceInformations(
               assistance.id, workerNames, client!.name, assistance, categoriesName);

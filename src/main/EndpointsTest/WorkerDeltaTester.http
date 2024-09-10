@@ -11,6 +11,19 @@ Content-Type: application/json
     client.global.set("id", response.body.worker.id)
 %}
 
+### worker login 1
+POST localhost:8080/api/worker/login
+Content-Type: application/json
+
+{
+  "email": "joao@gmail.com",
+  "password": "Abcde12!!"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.worker.id)
+%}
+
 ### Lista servico mais proximo ao servico 1
 GET localhost:8080/api/worker/assistance/closest?coordinate=-25.47156996804939, -49.228870016810575
 Authorization: Bearer {{token}}

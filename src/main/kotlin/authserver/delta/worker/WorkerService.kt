@@ -79,7 +79,7 @@ class WorkerService (
                 assistance.cpf,
                 assistance.period,
                 assistance.responsibleWorkers.map { it.id!! }.toSet(),
-                assistance.categories.map { it.id!! }.toSet()
+                assistance.categories.map { it.id!! }.toSet(),
             )
         }
         val restTemplate = RestTemplate()
@@ -109,7 +109,7 @@ class WorkerService (
             closestAssistance.cpf,
             closestAssistance.period,
             closestAssistance.responsibleWorkers.map{ it.id!! }.toSet(),
-            closestAssistance.categories.map{ it.id!! }.toSet()
+            closestAssistance.categories.map{ it.id!! }.toSet(),
         )
     }
 
