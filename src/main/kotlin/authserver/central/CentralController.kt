@@ -391,7 +391,7 @@ class CentralController(
             .let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
 
-    @GetMapping("/budget/{status}")
+    @GetMapping("/budget/status/{status}")
     fun listBudgetsByStatus(@PathVariable("status") status: String) =
         service.listBudgetsByStatus(status)
             .map { it.toResponse() }

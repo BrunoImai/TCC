@@ -174,7 +174,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
               creationDate: item['creationDate'],
               status: item['status'],
               //TO DO
-              assistanceId: "1",
+              assistanceId: item['assistanceId'].toString(),
               clientId: item['clientId'].toString(),
               responsibleWorkersIds: workersIds,
               totalPrice: item['totalPrice'].toString()

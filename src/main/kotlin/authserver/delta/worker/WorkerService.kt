@@ -172,11 +172,6 @@ class WorkerService (
         val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
         val createdBudget = budgetRepository.save(budget)
 
-        assistance.budget = budget
-        budget.assistance = assistance
-
-        assistanceRepository.save(assistance)
-
         val notification = Notification(
             title = "Orçamento ${budgetReq.name}",
             message = "Um novo orçamento foi criado para a assistência ${assistance.name}",

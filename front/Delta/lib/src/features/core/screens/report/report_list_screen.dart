@@ -168,7 +168,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
               creationDate: item['creationDate'],
               status: item['status'],
               //TO DO
-              assistanceId: "1",
+              assistanceId: item['assistanceId'].toString(),
               responsibleWorkersIds: workersIds,
               totalPrice: item['totalPrice'].toString(),
               paymentType: item['paymentType'],
