@@ -110,7 +110,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
           totalPrice: jsonData['totalPrice'].toString()
       );
     } else {
-      print('Failed to load client. Status code: ${response.statusCode}');
+      print('Failed to load budget approval. Status code: ${response.statusCode}');
       return null;
     }
   }
