@@ -26,6 +26,8 @@ class Product (
     @Column
     var lastTimePurchased: Date? = null,
 
+
+
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
     var producthistory: MutableSet<OldPrices> = HashSet(),
 
@@ -35,7 +37,6 @@ class Product (
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Supplier_Business_id")
     var supplier: SupplierBusiness,
-
 
     ){
 fun toResponse() = ProductResponse(id!!, name, price, supplier.id!!, lastTimePurchased, producthistory.map { it.old_price }.toSet(), creation_date)

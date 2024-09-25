@@ -9,5 +9,5 @@ data class ProductResponse(
     val supplierId: Long,
     val lastTimePurchase: Date?,
     val oldPrices: Set<Float>,
-    val creationDate: Date
+    val creationDate: Date,
 )

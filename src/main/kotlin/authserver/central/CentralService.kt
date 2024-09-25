@@ -506,7 +506,7 @@ class CentralService(
             name = req.name,
             price = req.price,
             supplier = supplier,
-            creation_date = currentTime()
+            creation_date = currentTime(),
         )
         return productRepository.save(product)
     }
@@ -772,8 +772,8 @@ class CentralService(
             totalPrice = budgetReq.totalPrice,
             responsibleCentral = central
         )
-
         budget.assistance = assistance
+        assistance.budget = budget
         return budgetRepository.save(budget)
 
     }

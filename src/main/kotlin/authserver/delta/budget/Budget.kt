@@ -42,7 +42,7 @@ class Budget (
     @OneToMany(mappedBy = "budget", cascade = [CascadeType.ALL], orphanRemoval = true)
     var notifications: MutableSet<Notification> = mutableSetOf(),
 
-    @OneToOne(mappedBy = "budget", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "budget", fetch = FetchType.EAGER)
     var assistance: Assistance? = null,
 
     ) {
