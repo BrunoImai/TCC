@@ -70,6 +70,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
   Future<void> fetchBudget() async {
     budget = await getBudgetById(widget.budgetId);
+    print(budget);
 
     if (budget != null) {
       descriptionController.text = budget!.description;
@@ -95,8 +96,6 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      print(jsonData);
-
 
       return BudgetResponse(
           id: jsonData['id'].toString(),
@@ -104,9 +103,9 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
           description: jsonData['description'],
           creationDate: jsonData['creationDate'],
           status: jsonData['status'],
-          assistanceId: jsonData['assistanceId'],
+          assistanceId: jsonData['assistanceId'].toString(),
           clientId: jsonData['clientId'].toString(),
-          responsibleWorkersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+          responsibleWorkersIds: (jsonData['responsibleWorkersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
           totalPrice: jsonData['totalPrice'].toString()
       );
     } else {

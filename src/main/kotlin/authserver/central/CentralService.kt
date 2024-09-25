@@ -822,6 +822,7 @@ class CentralService(
         budget.description = budgetReq.description
         budget.client = client
         budget.responsibleWorkers = workers.toMutableSet()
+        budget.status = budgetReq.status
         return budgetRepository.save(budget)
     }
 
