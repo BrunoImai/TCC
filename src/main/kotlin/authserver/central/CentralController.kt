@@ -402,6 +402,12 @@ class CentralController(
             .toResponse()
             .let { ResponseEntity.ok(it) }
 
+    @PutMapping("/budget/validate/{id}")
+    fun validateBudget(@PathVariable("id") id: Long, @Valid @RequestBody req: BudgetRequest) =
+        service.validateBudget(id, req)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+
     @DeleteMapping("/budget/{id}")
     fun deleteBudget(@PathVariable("id") id: Long) : ResponseEntity<Void> =
         if (service.deleteBudget(id)) ResponseEntity.ok().build()

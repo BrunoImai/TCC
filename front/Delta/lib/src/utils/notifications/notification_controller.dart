@@ -3,19 +3,42 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../authentication/screens/signup/central_manager.dart';
+
+import '../../features/authentication/screens/signup/central_manager.dart';
+import '../../features/core/screens/worker/worker_manager.dart';
 import 'notification.dart';
 
 class NotificationController extends GetxController {
   var unreadNotificationsCount = 0.obs;
   Timer? _timer;
+  final num whoAreYouTag;
+
+  NotificationController(this.whoAreYouTag);
+
+
+
+  String getUserToken() {
+    if (whoAreYouTag == 2) {
+      return CentralManager.instance.loggedUser!.token;
+    } else {
+      return WorkerManager.instance.loggedUser!.token;
+    }
+  }
+
+  String getUserUrl() {
+    if (whoAreYouTag == 2) {
+      return 'http://localhost:8080/api/central/notification/unread';
+    } else {
+      return 'http://localhost:8080/api/worker/notification/unread';
+    }
+  }
 
   Future<void> fetchUnreadNotifications() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/notification/unread'),
+        Uri.parse(getUserUrl()),
         headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
+          'Authorization': 'Bearer ${getUserToken()}',
         },
       );
 
@@ -43,7 +66,7 @@ class NotificationController extends GetxController {
 
     fetchUnreadNotifications();
 
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _timer = Timer.periodic(Duration(seconds:3000), (timer) {
       fetchUnreadNotifications();
     });
   }

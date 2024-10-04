@@ -46,6 +46,12 @@ class WorkerController(
             .map{ it.toResponse() }
             .let { ResponseEntity.ok(it) }
 
+    @GetMapping("/budget/byAssistance/{id}")
+    fun getBudgetByAssistanceId(@PathVariable("id") id: Long) =
+        service.getBudgetByAssistanceId(id)
+            ?.toResponse()
+            .let { ResponseEntity.ok(it) }
+
     @GetMapping("/assistance/closest")
     fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) =
         service.getClosestAssistance(coordinate)
@@ -87,4 +93,21 @@ class WorkerController(
             ?.toResponse()
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/notification")
+    fun listNotifications() =
+        service.listNotifications()
+            .map { it.toResponse() }
+
+    @GetMapping("/notification/{id}")
+    fun getNotification(@PathVariable("id") id: Long) =
+        service.getNotification(id)
+            .toResponse()
+            .let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/notification/unread")
+    fun listUnreadNotifications() =
+        service.listUnreadNotifications()
+            .map { it.toResponse() }
 }

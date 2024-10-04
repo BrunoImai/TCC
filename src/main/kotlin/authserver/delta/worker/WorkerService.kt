@@ -190,6 +190,15 @@ class WorkerService (
         return createdBudget
     }
 
+
+    fun getBudgetByAssistanceId (assistanceId: Long) : Budget? {
+        val workerId = getWorkerIdFromToken()
+        workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val budget = budgetRepository.findByIdWithAssistance(assistanceId)
+        return budget
+    }
+
+
     fun listBudgets(): List<Budget> {
         val workerId = getWorkerIdFromToken()
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
@@ -302,6 +311,35 @@ class WorkerService (
         report.machinePartExchange = reportReq.machinePartExchange
 
         return reportRepository.save(report)
+    }
+
+    // Notifications
+
+    fun listNotifications(): MutableSet<Notification> {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId)
+            ?: throw IllegalStateException("Funcionário não encontrado")
+
+        // Get all budgets for which the worker is responsible
+        val budgets = budgetRepository.findAllByResponsibleWorkersContains(worker)
+
+        // Use flatMap to collect all notifications from the budgets and convert to a mutable set
+        return budgets.flatMap { budget ->
+            notificationRepository.findAllByBudget(budget)
+        }.toMutableSet()
+    }
+
+    fun listUnreadNotifications() : List<Notification> {
+        val workerId = getWorkerIdFromToken()
+        print("Entrou notificações não lidas worker")
+        workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        return listNotifications().filter { !it.readed }
+    }
+
+    fun getNotification(notificationId: Long) : Notification {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        return worker.central?.notifications?.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
     }
 
 

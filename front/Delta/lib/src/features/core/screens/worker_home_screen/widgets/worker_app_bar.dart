@@ -5,6 +5,8 @@ import 'package:tcc_front/src/features/core/screens/worker_home_screen/profile/w
 
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
+import '../../../../../utils/notifications/notification_controller.dart';
+import '../../../../../utils/notifications/unread_notification_screen.dart';
 import '../worker_home_screen.dart';
 
 class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -15,6 +17,8 @@ class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context) {
+    final NotificationController notificationController = Get.put(NotificationController(whoAreYouTag));
+
     return AppBar(
       elevation: 0,
       centerTitle: true,
@@ -33,15 +37,55 @@ class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
         ),
       ),
       actions: [
+        Obx(() => Stack(
+          clipBehavior: Clip.none,
+          children: [
+            IconButton(
+              iconSize: 28,
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                Get.to(() => UnreadNotificationScreen(whoAreYouTag: whoAreYouTag,));
+              },
+            ),
+            if (notificationController.unreadNotificationsCount.value > 0)
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 20,
+                    minHeight: 20,
+                  ),
+                  child: Text(
+                    notificationController.unreadNotificationsCount.value.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        )),
+        // Ícone do perfil do usuário
         Container(
           margin: const EdgeInsets.only(right: 20, top: 7),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
-              onPressed: () => Get.to(() => const WorkerProfileScreen()),
-              icon: const Image(image: AssetImage(userProfileImage))),
-        )
+            iconSize: 36,
+            onPressed: () => Get.to(() => const WorkerProfileScreen()),
+            icon: const Image(image: AssetImage(userProfileImage)),
+          ),
+        ),
       ],
     );
   }

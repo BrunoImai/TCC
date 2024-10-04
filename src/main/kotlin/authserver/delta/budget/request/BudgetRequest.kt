@@ -9,5 +9,5 @@ data class BudgetRequest(
     val responsibleWorkersIds: List<Long>,
     val assistanceId: Long,
     val totalPrice: Float,
-    val status: BudgetStatus
+    val status: BudgetStatus?
 )

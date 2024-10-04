@@ -53,6 +53,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
   String selectedStatus = "";
   String userToken = "";
   String userType = "";
+  String userUrl = "";
   BudgetResponse? budget;
 
   @override
@@ -61,9 +62,11 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
     if(widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
+      userUrl = 'http://localhost:8080/api/central/budget/validate/${widget.budgetId}';
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
+      userUrl = 'http://localhost:8080/api/worker/budget/${widget.budgetId}';
     }
     fetchBudget();
   }
@@ -354,7 +357,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budgetId}'),
+          Uri.parse(userUrl),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $userToken'

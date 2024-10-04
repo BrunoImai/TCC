@@ -822,8 +822,14 @@ class CentralService(
         budget.description = budgetReq.description
         budget.client = client
         budget.responsibleWorkers = workers.toMutableSet()
-        budget.status = budgetReq.status
+        budget.status = budgetReq.status ?: throw IllegalStateException("Status não pode ser nulo")
         return budgetRepository.save(budget)
+    }
+
+    fun validateBudget(budgetId: Long, budgetReq: BudgetRequest) : Budget {
+        val budget = updateBudget(budgetId, budgetReq)
+        budget.notifications.map { notification ->  notification.readed = false}
+        return budget
     }
 
     fun deleteBudget(budgetId: Long) : Boolean {

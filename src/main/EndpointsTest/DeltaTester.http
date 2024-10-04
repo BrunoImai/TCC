@@ -150,8 +150,8 @@ Content-Type: application/json
   "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420, Brazil",
   "cpf": "12345678901",
   "period": "Manha",
-  "workersIds": [1],
-  "categoriesId": [1]
+  "workersIds": [6],
+  "categoriesId": [3]
 }
 
 ### Cadastra serviço 2
@@ -191,16 +191,16 @@ Authorization: Bearer {{token}}
 DELETE localhost:8080/api/central/assistance/52
 Authorization: Bearer {{token}}
 
-### Cria relatório Central
+### Cria budget Central
 POST localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Relatorio 4",
+  "name": "budget 4",
   "description": "Concerto maquina de lavar",
   "assistanceId": 1,
-  "responsibleWorkersIds": [1],
+  "responsibleWorkersIds": [6],
   "clientId": 1,
   "totalPrice": 100.00
 }

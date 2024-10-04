@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/central_home_screen.dart';
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/text_strings.dart';
-import '../notifications/notification_controller.dart';
-import '../notifications/unread_notification_screen.dart';
+import '../../../../../utils/notifications/notification_controller.dart';
+import '../../../../../utils/notifications/unread_notification_screen.dart';
 import '../profile/profile_screen.dart';
 
 class CentralAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +17,7 @@ class CentralAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NotificationController notificationController = Get.put(NotificationController());
+    final NotificationController notificationController = Get.put(NotificationController(whoAreYouTag));
 
     return AppBar(
       elevation: 0,
@@ -73,7 +73,8 @@ class CentralAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
           ],
-        )),
+        )
+        ),
         // Ícone do perfil do usuário
         Container(
           margin: const EdgeInsets.only(right: 20, top: 7),
@@ -81,7 +82,7 @@ class CentralAppBar extends StatelessWidget implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
-            iconSize: 36, // Ajusta o tamanho do ícone de perfil para manter consistência
+            iconSize: 36,
             onPressed: () => Get.to(() => const ProfileScreen()),
             icon: const Image(image: AssetImage(userProfileImage)),
           ),

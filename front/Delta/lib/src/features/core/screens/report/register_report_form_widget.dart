@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
-import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 import 'package:tcc_front/src/features/core/screens/report/report.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 import '../../../../commom_widgets/alert_dialog.dart';

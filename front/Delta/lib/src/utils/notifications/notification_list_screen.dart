@@ -5,26 +5,32 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:tcc_front/src/features/core/screens/budget/budget_approval_screen.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/notifications/notification.dart';
+
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
-import '../../../../../constants/colors.dart';
-import '../../../../../constants/sizes.dart';
-import '../../../../../constants/text_strings.dart';
-import '../../../../authentication/screens/signup/central_manager.dart';
-import '../../budget/update_budget_screen.dart';
+
+import '../../constants/colors.dart';
+import '../../constants/sizes.dart';
+import '../../constants/text_strings.dart';
+import '../../features/authentication/screens/signup/central_manager.dart';
+import '../../features/core/screens/budget/budget.dart';
+import '../../features/core/screens/budget/budget_approval_screen.dart';
+import '../../features/core/screens/budget/update_budget_screen.dart';
+import '../../features/core/screens/worker/worker_manager.dart';
+import '../../features/core/screens/worker_home_screen/widgets/worker_app_bar.dart';
+import 'notification.dart';
 
 
-class UnreadNotificationScreen extends StatefulWidget {
-  const UnreadNotificationScreen({super.key, required this.whoAreYouTag});
+
+class NotificationListScreen extends StatefulWidget {
+  const NotificationListScreen({super.key, required this.whoAreYouTag});
   final num whoAreYouTag;
 
   @override
-  _UnreadNotificationScreenState createState() => _UnreadNotificationScreenState();
+  _NotificationListScreenState createState() => _NotificationListScreenState();
 }
 
-class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
+class _NotificationListScreenState extends State<NotificationListScreen> {
   bool searchBarInUse = false;
   late Future<List<NotificationInformations>> futureData;
 
@@ -32,15 +38,29 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
 
   late List<NotificationInformations> unreadNotificationList;
   late List<NotificationInformations> filteredUnreadNotificationList;
+  String userToken = "";
+  String userType = "";
+  String userUrl = "";
+
 
   @override
   void initState() {
     super.initState();
-    futureData = getAllUnreadNotifications();
+    if(widget.whoAreYouTag == 2) {
+      userToken = CentralManager.instance.loggedUser!.token;
+      userType = 'central';
+      userUrl = 'http://localhost:8080/api/central/assistance';
+    } else {
+      userToken = WorkerManager.instance.loggedUser!.token;
+      userType = 'worker';
+      userUrl = 'http://localhost:8080/api/worker/assistance/currentAssistance';
+    }
+    futureData = getAllNotifications();
     searchController.addListener(_onSearchChanged);
     unreadNotificationList = [];
-    filteredUnreadNotificationList = [];
+    filteredUnreadNotificationList = [];;
   }
+
 
   void _onSearchChanged() {
     setState(() {
@@ -55,9 +75,9 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
   Future<List<WorkersList>> getAllWorkers() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/worker'),
+        Uri.parse('http://localhost:8080/api/$userType/worker'),
         headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+          'Authorization': 'Bearer $userToken'
         },
       );
       print("Status code: ${response.statusCode}");
@@ -89,12 +109,12 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
   }
 
 
-  Future<List<NotificationInformations>> getAllUnreadNotifications() async {
+  Future<List<NotificationInformations>> getAllNotifications() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/notification/unread'),
+        Uri.parse('http://localhost:8080/api/$userType/notification'),
         headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+          'Authorization': 'Bearer $userToken'
         },
       );
       print("Status code: ${response.statusCode}");
@@ -151,11 +171,46 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
     }
   }
 
+  Future<BudgetResponse?> getBudgetById(String id) async {
+    final response = await http.get(
+      Uri.parse('http://localhost:8080/api/$userType/budget/$id'),
+      headers: {
+        'Authorization': 'Bearer $userToken'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+
+      return BudgetResponse(
+          id: jsonData['id'].toString(),
+          name: jsonData['name'],
+          description: jsonData['description'],
+          creationDate: jsonData['creationDate'],
+          status: jsonData['status'],
+          assistanceId: jsonData['assistanceId'].toString(),
+          clientId: jsonData['clientId'].toString(),
+          responsibleWorkersIds: (jsonData['responsibleWorkersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+          totalPrice: jsonData['totalPrice'].toString()
+      );
+    } else {
+      print('Failed to load budget approval. Status code: ${response.statusCode}');
+      return null;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    PreferredSizeWidget appBar;
+    if (widget.whoAreYouTag == 2) {
+      appBar = CentralAppBar(whoAreYouTag: widget.whoAreYouTag);
+    } else {
+      appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
+    }
+
     return Scaffold(
-      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
+      appBar: appBar,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -169,7 +224,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  tUnreadNotificationSubTitle,
+                  tNotificationTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),
@@ -248,8 +303,17 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {
-                                  Get.to(() => BudgetApprovalScreen(budgetId: data.notification.budgetId, whoAreYouTag: widget.whoAreYouTag));
+                                onPressed: () async {
+                                  if (widget.whoAreYouTag == 2) {
+                                    Get.to(() => BudgetApprovalScreen(budgetId: data.notification.budgetId, whoAreYouTag: widget.whoAreYouTag));
+                                  } else {
+                                    BudgetResponse? budget = await getBudgetById(data.notification.budgetId);
+                                    if (budget != null) {
+                                      Get.to(() => UpdateBudgetScreen(budget: budget, whoAreYouTag: widget.whoAreYouTag));
+                                    } else {
+                                      print('Failed to fetch budget');
+                                    }
+                                  }
                                 },
                                 icon: const Icon(Icons.edit_notifications_rounded, color: darkColor),
                               ),
