@@ -23,6 +23,7 @@ import '../central_home_screen/central_home_screen.dart';
 import '../client/client.dart';
 import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
+import '../worker_home_screen/worker_home_screen.dart';
 
 class UpdateBudgetScreen extends StatefulWidget {
   const UpdateBudgetScreen({super.key, required this.budget, required this.whoAreYouTag});
@@ -496,11 +497,20 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   updateAssistance(() {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
-                                    );
+                                    if(widget.whoAreYouTag == 2) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => WorkerHomeScreen(whoAreYouTag: widget.whoAreYouTag,))
+                                      );
+                                    }
+
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Atualização Realizada')),
                                     );

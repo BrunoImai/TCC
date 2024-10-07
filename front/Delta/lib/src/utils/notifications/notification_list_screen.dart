@@ -41,6 +41,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
   String userToken = "";
   String userType = "";
   String userUrl = "";
+  String userName = "";
 
 
   @override
@@ -50,10 +51,12 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userUrl = 'http://localhost:8080/api/central/assistance';
+      userName = CentralManager.instance.loggedUser!.central.name;
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
       userUrl = 'http://localhost:8080/api/worker/assistance/currentAssistance';
+      userName = WorkerManager.instance.loggedUser!.worker.name;
     }
     futureData = getAllNotifications();
     searchController.addListener(_onSearchChanged);
@@ -220,7 +223,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${CentralManager.instance.loggedUser!.central.name},",
+                  "$userName,",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(

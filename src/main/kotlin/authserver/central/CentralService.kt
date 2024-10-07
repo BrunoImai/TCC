@@ -828,7 +828,14 @@ class CentralService(
 
     fun validateBudget(budgetId: Long, budgetReq: BudgetRequest) : Budget {
         val budget = updateBudget(budgetId, budgetReq)
-        budget.notifications.map { notification ->  notification.readed = false}
+        for (notification in budget.notifications) {
+            notification.readed = false
+            notification.message = "Seu orçamento foi ${budget.status}"
+//            if (budget.status == BudgetStatus.APROVADO) {
+//                notification.message = "Seu orçamento foi aprovado!"
+//            } else if (budget.status == BudgetStatus.REPROVADO)
+            notificationRepository.save(notification)
+        }
         return budget
     }
 

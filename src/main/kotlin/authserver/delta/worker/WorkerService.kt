@@ -198,6 +198,33 @@ class WorkerService (
         return budget
     }
 
+    fun getBudgetById (budgetId: Long) : Budget? {
+        val workerId = getWorkerIdFromToken()
+        workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val budget = budgetRepository.findByIdOrNull(budgetId)
+        return budget
+    }
+
+    fun updateBudget(budgetId: Long, budgetReq: BudgetRequest) : Budget {
+        val budget = budgetRepository.findByIdOrNull(budgetId) ?: throw IllegalStateException("Orçamento não encontrado")
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        if (budget.client.central != worker.central) throw IllegalStateException("Orçamento não encontrado")
+        val workers = mutableListOf<Worker>()
+        for (workerId in budgetReq.responsibleWorkersIds) {
+            val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+            if (worker.central != worker.central) throw IllegalStateException("Funcionário não encontrado")
+            workers.add(worker)
+        }
+        val client = clientRepository.findByIdOrNull(budgetReq.clientId) ?: throw IllegalStateException("Cliente não encontrado")
+        budget.name = budgetReq.name
+        budget.description = budgetReq.description
+        budget.client = client
+        budget.responsibleWorkers = workers.toMutableSet()
+        budget.status = budgetReq.status ?: throw IllegalStateException("Status não pode ser nulo")
+        return budgetRepository.save(budget)
+    }
+
 
     fun listBudgets(): List<Budget> {
         val workerId = getWorkerIdFromToken()
@@ -223,6 +250,13 @@ class WorkerService (
         val workerId = getWorkerIdFromToken()
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
         return assistanceRepository.findAllByResponsibleWorkersContains(worker)
+    }
+
+    fun getAssistanceById(id: Long): Assistance? {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
+        val assistances = assistanceRepository.findAllByResponsibleWorkersContains(worker)
+        return assistances.filter { it.id == id }.first()
     }
 
     fun getClientByCpf(cpf: String): Client? {
@@ -324,16 +358,18 @@ class WorkerService (
         val budgets = budgetRepository.findAllByResponsibleWorkersContains(worker)
 
         // Use flatMap to collect all notifications from the budgets and convert to a mutable set
-        return budgets.flatMap { budget ->
+        val notifications =  budgets.flatMap { budget ->
             notificationRepository.findAllByBudget(budget)
         }.toMutableSet()
+        return notifications
     }
 
     fun listUnreadNotifications() : List<Notification> {
         val workerId = getWorkerIdFromToken()
         print("Entrou notificações não lidas worker")
         workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
-        return listNotifications().filter { !it.readed }
+        val unreadedNotifications =  listNotifications().filter { !it.readed }
+        return unreadedNotifications
     }
 
     fun getNotification(notificationId: Long) : Notification {
@@ -341,9 +377,6 @@ class WorkerService (
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
         return worker.central?.notifications?.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
     }
-
-
-
 
     private fun buildUrl(origin: String, destination: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"

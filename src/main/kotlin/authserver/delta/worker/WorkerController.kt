@@ -25,6 +25,12 @@ class WorkerController(
             .map{ it.toResponse() }
             .let { ResponseEntity.ok(it) }
 
+    @GetMapping("/assistance/{id}")
+    fun getAssistanceById(@PathVariable("id") id: Long) =
+        service.getAssistanceById(id)
+            ?.toResponse()
+            .let { ResponseEntity.ok(it) }
+
     @GetMapping("/assistance/currentAssistance")
     fun getLastAssistance() =
         service.currentAssistance()
@@ -50,6 +56,18 @@ class WorkerController(
     fun getBudgetByAssistanceId(@PathVariable("id") id: Long) =
         service.getBudgetByAssistanceId(id)
             ?.toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/budget/{id}")
+    fun getBudgetById(@PathVariable("id") id: Long) =
+        service.getBudgetById(id)
+            ?.toResponse()
+            .let { ResponseEntity.ok(it) }
+
+    @PutMapping("/budget/{id}")
+    fun updateBudget(@PathVariable("id") id: Long, @Valid @RequestBody req: BudgetRequest) =
+        service.updateBudget(id, req)
+            .toResponse()
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/assistance/closest")
