@@ -18,7 +18,6 @@ import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
 import '../../../../authentication/screens/signup/central.dart';
 import '../../../../authentication/screens/signup/central_manager.dart';
-import '../../../../constants/colors.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});

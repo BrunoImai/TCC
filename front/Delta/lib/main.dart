@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tcc_front/src/features/authentication/screens/slapsh_screen/slapsh_screen.dart';
+import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 import 'package:tcc_front/src/utils/theme/theme.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.leftToRightWithFade,
       transitionDuration: const Duration(milliseconds: 500),
-      home: const SplashScreen(),
+      home: const WhoAreYouScreen(),
     );
   }
 }

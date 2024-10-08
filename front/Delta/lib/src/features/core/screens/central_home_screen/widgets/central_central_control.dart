@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance_list_screen.dart';
 import 'package:tcc_front/src/features/core/screens/category/category_list_screen.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/dash_board_screen.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
+import '../../../../../controllers/controller.dart';
 import '../../../../../utils/notifications/notification_list_screen.dart';
 import '../../budget/budget_list_screen.dart';
 import '../../budget/register_budget_screen.dart';
@@ -458,11 +461,13 @@ class CentralCentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            //const SizedBox(width: homeCardPadding,),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(() => ChangeNotifierProvider(
+                  create: (context) => Controller(),
+                  child: DashBoardScreen(whoAreYouTag: whoAreYouTag),
+                )),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -479,7 +484,10 @@ class CentralCentralControl extends StatelessWidget {
                         child: Text(
                           dashboards,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                              color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

@@ -9,8 +9,6 @@ import '../../../../../constants/colors.dart';
 import '../../../../../constants/images_strings.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
-import '../../../../authentication/screens/signup/central_manager.dart';
-import '../../../../constants/colors.dart';
 
 
 class WorkerProfileScreen extends StatelessWidget {
