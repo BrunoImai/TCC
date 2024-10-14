@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AnalyticInfo {
   final String? title;
   final IconData? icon;
-  final int? count;
+  int? count;
   final Color? color;
 
   AnalyticInfo({

@@ -18,7 +18,7 @@ class AnalyticCards extends StatelessWidget {
           crossAxisCount: size.width < 650 ? 2 : 4,
           childAspectRatio: size.width < 650 ? 2 : 1.5,
         ),
-        tablet: AnalyticInfoCardGridView(),
+        tablet: const AnalyticInfoCardGridView(),
         desktop: AnalyticInfoCardGridView(
           childAspectRatio: size.width < 1400 ? 1.5 : 2.1,
         ),
