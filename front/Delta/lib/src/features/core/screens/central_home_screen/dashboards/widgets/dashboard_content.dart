@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/analytic_cards.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/custom_appbar.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/discussions.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/top_referals.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/users.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/users_by_device.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/viewers.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
 import '../../../../../../constants/responsive.dart';
 
@@ -16,41 +23,36 @@ class DashboardContent extends StatelessWidget {
         padding: const EdgeInsets.all(homePadding),
         child: Column(
           children: [
-            CentralAppBar(whoAreYouTag: whoAreYouTag),
+            CustomAppbar(whoAreYouTag: whoAreYouTag),
             const SizedBox(
               height: homePadding,
             ),
             Column(
               children: [
-                /*Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       flex: 5,
                       child: Column(
                         children: [
-                          AnalyticCards(),
-                          SizedBox(
-                            height: homePadding,
-                          ),
-                          Users(),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: homePadding,
-                            ),
-                          if (Responsive.isMobile(context)) Discussions(),
+                          const AnalyticCards(),
+                          const SizedBox(height: homePadding,),
+                          const Users(),
+                          if(Responsive.isMobile(context))
+                            const SizedBox(height: homePadding,),
+                          if(Responsive.isMobile(context))
+                            const Discussions(),
                         ],
                       ),
                     ),
-                    if (!Responsive.isMobile(context))
-                      SizedBox(
-                        width: homePadding,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Expanded(
+                    if(!Responsive.isMobile(context))
+                      const SizedBox(width: homePadding,),
+                    if(!Responsive.isMobile(context))
+                    const Expanded(
                         flex: 2,
-                        child: Discussions(),
-                      ),
+                        child: Discussions()
+                    )
                   ],
                 ),
                 Row(
@@ -60,55 +62,43 @@ class DashboardContent extends StatelessWidget {
                       flex: 5,
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: homePadding,
-                          ),
+                          const SizedBox(height: homePadding,),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if(!Responsive.isMobile(context))
-                                Expanded(
-                                  child: TopReferals(),
+                                const Expanded(
                                   flex: 2,
+                                  child: TopReferals(),
                                 ),
                               if(!Responsive.isMobile(context))
-                                SizedBox(width: homePadding,),
-                              Expanded(
+                                const SizedBox(width: homePadding,),
+                              const Expanded(
                                 flex: 3,
                                 child: Viewers(),
                               ),
                             ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
                           ),
-                          SizedBox(
-                            height: homePadding,
-                          ),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: homePadding,
-                            ),
-                          if (Responsive.isMobile(context)) TopReferals(),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: homePadding,
-                            ),
-                          if (Responsive.isMobile(context)) UsersByDevice(),
+                          if(Responsive.isMobile(context))
+                            const SizedBox(height: homePadding,),
+                          if(Responsive.isMobile(context))
+                            const TopReferals(),
+                          if(Responsive.isMobile(context))
+                            const UsersByDevice(),
                         ],
                       ),
                     ),
-                    if (!Responsive.isMobile(context))
-                      SizedBox(
-                        width: homePadding,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Expanded(
-                        flex: 2,
-                        child: UsersByDevice(),
+                    if(!Responsive.isMobile(context))
+                      const SizedBox(width: homePadding,),
+                    if(!Responsive.isMobile(context))
+                      const Expanded(
+                          flex: 2,
+                          child: UsersByDevice()
                       ),
                   ],
-                ),*/
+                ),
               ],
             ),
-
           ],
         ),
       ),
