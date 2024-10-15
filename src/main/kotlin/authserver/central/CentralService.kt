@@ -15,6 +15,7 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import authserver.central.responses.CentralLoginResponse
 import jakarta.servlet.http.HttpServletRequest
 import authserver.central.role.RolesRepository
+import authserver.delta.assistance.AssistanceStatus
 import authserver.delta.category.Category
 import authserver.delta.category.CategoryRepository
 import authserver.delta.category.request.CategoryRequest
@@ -407,6 +408,17 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         return assistanceRepository.findAllByResponsibleCentral(central)
+    }
+
+    fun listAssistancesByStatus (status: String) : List<Assistance> {
+        val centralId = getCentralIdFromToken()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        val assistanceStatus = try {
+            AssistanceStatus.valueOf(status.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalStateException("Status inválido")
+        }
+        return assistanceRepository.findAssistanceByAssistanceStatusAndClient_Central(assistanceStatus, central)
     }
 
     fun getAssistance(assistanceId: Long): Assistance? {

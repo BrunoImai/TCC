@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 import '../../../../../../constants/colors.dart';
-import '../models/discussions_info_model.dart';
+import '../models/current_assistances_info_model.dart';
 import '../models/referal_info_model.dart';
 
 List discussionData = [
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Lutfhi Chan",
+    assistanceName: "Lutfhi Chan",
     date: "Jan 25,2021",
   ),
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Devi Carlos",
+    assistanceName: "Devi Carlos",
     date: "Jan 25,2021",
   ),
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Danar Comel",
+    assistanceName: "Danar Comel",
     date: "Jan 25,2021",
   ),
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Karin Lumina",
+    assistanceName: "Karin Lumina",
     date: "Jan 25,2021",
   ),
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Fandid Deadan",
+    assistanceName: "Fandid Deadan",
     date: "Jan 25,2021",
   ),
-  DiscussionInfoModel(
+  CurrentAssistancesInfoModel(
     icon: Icons.people,
-    name: "Lutfhi Chan",
+    assistanceName: "Lutfhi Chan",
     date: "Jan 25,2021",
   ),
 ];

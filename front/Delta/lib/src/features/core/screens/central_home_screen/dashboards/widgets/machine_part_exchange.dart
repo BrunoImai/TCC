@@ -1,10 +1,88 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/radial_painter.dart';
 import '../../../../../../constants/sizes.dart';
+import '../../../../../authentication/screens/signup/central_manager.dart';
+import '../../../report/report.dart';
 
-class UsersByDevice extends StatelessWidget {
-  const UsersByDevice({super.key});
+class MachinePartExchange extends StatefulWidget {
+  const MachinePartExchange({super.key});
+
+  @override
+  _MachinePartExchangeState createState() => _MachinePartExchangeState();
+}
+
+class _MachinePartExchangeState extends State<MachinePartExchange> {
+  double percent = 0.0;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      List<ReportResponse> reports = await getAllReports();
+
+      int totalReports = reports.length;
+      int reportsWithPartExchange = reports
+          .where((report) => report.machinePartExchange == true)
+          .length;
+
+      setState(() {
+        percent = totalReports > 0 ? reportsWithPartExchange / totalReports : 0.0;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Erro ao carregar os dados: $e');
+    }
+  }
+
+  Future<List<ReportResponse>> getAllReports() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/report'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        final List<ReportResponse> reportsList = jsonData.map((item) {
+          return ReportResponse(
+            id: item['id'].toString(),
+            name: item['name'],
+            description: item['description'],
+            creationDate: item['creationDate'],
+            status: item['status'],
+            assistanceId: item['assistanceId'],
+            responsibleWorkersIds:
+            (item['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+            totalPrice: item['totalPrice'].toString(),
+            paymentType: item['paymentType'],
+            machinePartExchange: item['machinePartExchange'],
+            delayed: item['delayed'],
+          );
+        }).toList();
+
+        return reportsList;
+      } else {
+        throw Exception('Failed to load report list');
+      }
+    } catch (e) {
+      throw Exception('Erro ao carregar a lista de relatórios: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +99,7 @@ class UsersByDevice extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Users by device',
+              'Peça trocada durante assistência',
               style: TextStyle(
                 color: darkColor,
                 fontSize: 15,
@@ -36,13 +114,13 @@ class UsersByDevice extends StatelessWidget {
                 foregroundPainter: RadialPainter(
                   bgColor: darkColor.withOpacity(0.1),
                   lineColor: primaryColor,
-                  percent: 0.7,
+                  percent: percent,
                   width: 18.0,
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    '70%',
-                    style: TextStyle(
+                    '${(percent * 100).toStringAsFixed(1)}%',
+                    style: const TextStyle(
                       color: darkColor,
                       fontSize: 36,
                       fontWeight: FontWeight.w600,
@@ -64,7 +142,7 @@ class UsersByDevice extends StatelessWidget {
                         size: 10,
                       ),
                       const SizedBox(width: homePadding /2,),
-                      Text('Desktop',style: TextStyle(
+                      Text('Sim',style: TextStyle(
                         color: darkColor.withOpacity(0.5),
                         fontWeight: FontWeight.bold,
                       ),)
@@ -78,7 +156,7 @@ class UsersByDevice extends StatelessWidget {
                         size: 10,
                       ),
                       const SizedBox(width: homePadding /2,),
-                      Text('Mobile',style: TextStyle(
+                      Text('Não',style: TextStyle(
                         color: darkColor.withOpacity(0.5),
                         fontWeight: FontWeight.bold,
                       ),)

@@ -101,6 +101,11 @@ class CentralController(
             ?.toResponse()
             .let { ResponseEntity.ok(it) }
 
+    @GetMapping("/assistance/status/{status}")
+    fun listAssistancesByStatus(@PathVariable("status") status: String) =
+        service.listAssistancesByStatus(status)
+            .map { it.toResponse() }
+
     @PutMapping("/assistance/{id}")
     fun updateAssistance(@PathVariable("id") id: Long, @Valid @RequestBody assistance: AssistanceRequest) =
         service.updateAssistance(id, assistance)

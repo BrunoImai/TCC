@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/analytic_cards.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/custom_appbar.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/discussions.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/current_assistances.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/top_referals.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/users.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/users_by_device.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/machine_part_exchange.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/viewers.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
 import '../../../../../../constants/responsive.dart';
@@ -42,16 +42,16 @@ class DashboardContent extends StatelessWidget {
                           if(Responsive.isMobile(context))
                             const SizedBox(height: homePadding,),
                           if(Responsive.isMobile(context))
-                            const Discussions(),
+                            CurrentAssistances(whoAreYouTag: whoAreYouTag,),
                         ],
                       ),
                     ),
                     if(!Responsive.isMobile(context))
                       const SizedBox(width: homePadding,),
                     if(!Responsive.isMobile(context))
-                    const Expanded(
+                    Expanded(
                         flex: 2,
-                        child: Discussions()
+                        child: CurrentAssistances(whoAreYouTag: whoAreYouTag)
                     )
                   ],
                 ),
@@ -84,7 +84,7 @@ class DashboardContent extends StatelessWidget {
                           if(Responsive.isMobile(context))
                             const TopReferals(),
                           if(Responsive.isMobile(context))
-                            const UsersByDevice(),
+                            const MachinePartExchange(),
                         ],
                       ),
                     ),
@@ -93,7 +93,7 @@ class DashboardContent extends StatelessWidget {
                     if(!Responsive.isMobile(context))
                       const Expanded(
                           flex: 2,
-                          child: UsersByDevice()
+                          child: MachinePartExchange()
                       ),
                   ],
                 ),

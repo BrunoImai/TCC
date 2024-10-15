@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tcc_front/src/constants/colors.dart';
-
 import '../../../../../../constants/sizes.dart';
-import '../models/discussions_info_model.dart';
+import '../../../assistance/update_assistance_screen.dart';
+import '../models/current_assistances_info_model.dart';
 
 
-class DiscussionInfoDetail extends StatelessWidget {
-  const DiscussionInfoDetail({Key? key, required this.info}) : super(key: key);
+class CurrentAssistancesInfoDetail extends StatelessWidget {
+  const CurrentAssistancesInfoDetail({super.key, required this.info, required this.whoAreYouTag});
 
-  final DiscussionInfoModel info;
+  final CurrentAssistancesInfoModel info;
+  final num whoAreYouTag;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class DiscussionInfoDetail extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    info.name!,
+                    info.assistanceName!,
                     style: GoogleFonts.poppins(
                         fontSize: 14.0,
                         fontWeight: FontWeight.w600,
@@ -42,7 +45,25 @@ class DiscussionInfoDetail extends StatelessWidget {
                   ),
 
                   Text(
-                    info.date!,
+                    info.clientName!,
+                    style: GoogleFonts.poppins(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.normal,
+                        color: darkColor
+                    ),
+                  ),
+
+                  Text(
+                    info.workersName!,
+                    style: GoogleFonts.poppins(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.normal,
+                        color: darkColor
+                    ),
+                  ),
+
+                  Text(
+                    info.status!,
                     style: GoogleFonts.poppins(
                         fontSize: 12.0,
                         fontWeight: FontWeight.normal,
@@ -53,7 +74,12 @@ class DiscussionInfoDetail extends StatelessWidget {
               ),
             ),
           ),
-          Icon(Icons.more_vert_rounded,color: primaryColor.withOpacity(0.5),size: 18,)
+          IconButton(
+            onPressed: () {
+              Get.to(() => UpdateAssistanceScreen(assistance: info.assistanceResponse!, whoAreYouTag: whoAreYouTag,));
+            },
+            icon: Icon(Icons.more_vert_rounded, color: primaryColor.withOpacity(0.5),size: 18,),
+          ),
         ],
       ),
     );
