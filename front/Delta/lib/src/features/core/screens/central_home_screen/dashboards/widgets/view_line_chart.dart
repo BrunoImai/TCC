@@ -41,7 +41,7 @@ class _ViewLineChartState extends State<ViewLineChart> {
                 reservedSize: 22,
                 getTitlesWidget: (double value, TitleMeta meta) {
                   const style = TextStyle(
-                    color: Colors.grey, // Substitua por lightTextColor se definido
+                    color: Colors.grey,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   );

@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 
 import '../../../../../../constants/sizes.dart';
-import 'bar_chart_users.dart';
+import 'bar_chart_assistances.dart';
 
 
-class Users extends StatelessWidget {
-  const Users({super.key});
+class AssistancesChart extends StatelessWidget {
+  const AssistancesChart({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class Users extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Users",
+            "Assistências",
             style: GoogleFonts.poppins(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w700,
@@ -31,7 +31,7 @@ class Users extends StatelessWidget {
             ),
           ),
           const Expanded(
-            child: BarChartUsers(),
+            child: BarChartAssistances(),
           )
         ],
       ),

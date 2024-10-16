@@ -16,7 +16,6 @@ class MachinePartExchange extends StatefulWidget {
 
 class _MachinePartExchangeState extends State<MachinePartExchange> {
   double percent = 0.0;
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -35,12 +34,8 @@ class _MachinePartExchangeState extends State<MachinePartExchange> {
 
       setState(() {
         percent = totalReports > 0 ? reportsWithPartExchange / totalReports : 0.0;
-        isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       print('Erro ao carregar os dados: $e');
     }
   }
