@@ -64,20 +64,16 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
     }
   }
 
-  // Função para pegar o intervalo de datas de uma semana a partir da data
   String getWeekRange(DateTime date) {
-    final startOfWeek = date.subtract(Duration(days: date.weekday - 1)); // Início da semana (segunda-feira)
-    final endOfWeek = startOfWeek.add(const Duration(days: 6)); // Final da semana (domingo)
+    final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    final endOfWeek = startOfWeek.add(const Duration(days: 6));
     final formatter = DateFormat('dd/MM');
     return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
   }
 
   int _getWeekOfYear(DateTime date) {
-    // A primeira semana do ano é a semana em que ocorre o primeiro dia do ano (1º de janeiro).
     final startOfYear = DateTime(date.year, 1, 1);
     final daysDifference = date.difference(startOfYear).inDays;
-
-    // O número da semana é o número de dias desde o início do ano dividido por 7, arredondado para cima.
     return (daysDifference / 7).ceil();
   }
 
@@ -87,6 +83,13 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       final Map<int, int> weeklyAssistances = {};
 
       final DateTime threeMonthsAgo = DateTime.now().subtract(const Duration(days: 90));
+
+      final int currentWeek = _getWeekOfYear(DateTime.now());
+      final int startWeek = _getWeekOfYear(threeMonthsAgo);
+
+      for (int week = startWeek; week <= currentWeek; week++) {
+        weeklyAssistances[week] = 0;
+      }
 
       final filteredAssistances = assistances.where((assistance) {
         DateTime startDate = DateTime.parse(assistance.startDate);
@@ -99,17 +102,15 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
 
         if (weeklyAssistances.containsKey(weekOfYear)) {
           weeklyAssistances[weekOfYear] = weeklyAssistances[weekOfYear]! + 1;
-        } else {
-          weeklyAssistances[weekOfYear] = 1;
         }
       }
-      print(weeklyAssistances);
 
       return weeklyAssistances;
     } catch (e) {
       throw Exception('Erro ao carregar a lista de assistências por semana: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +161,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                       space: 8.0,
                       child: Transform.rotate(
                         angle: -0.45,
-                          child: Text(weekRange, style: style)
+                        child: Text(weekRange, style: style)
                       ),
                     );
                   },

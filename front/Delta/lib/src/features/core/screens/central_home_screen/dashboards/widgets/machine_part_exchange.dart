@@ -28,13 +28,18 @@ class _MachinePartExchangeState extends State<MachinePartExchange> {
       List<ReportResponse> reports = await getAllReports();
 
       int totalReports = reports.length;
+      print('totalReports MPE: $totalReports');
       int reportsWithPartExchange = reports
           .where((report) => report.machinePartExchange == true)
           .length;
 
+      print('reportsWithPartExchange $reportsWithPartExchange');
+
       setState(() {
         percent = totalReports > 0 ? reportsWithPartExchange / totalReports : 0.0;
+        print('percent MPE $percent');
       });
+
     } catch (e) {
       print('Erro ao carregar os dados: $e');
     }
