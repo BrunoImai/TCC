@@ -8,6 +8,7 @@ import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker_home_screen/widgets/worker_app_bar.dart';
 
 class RegisterReportScreen extends StatelessWidget{
@@ -23,8 +24,13 @@ class RegisterReportScreen extends StatelessWidget{
       appBar = WorkerAppBar(whoAreYouTag: whoAreYouTag);
     }
 
+    final drawer = whoAreYouTag == 2
+        ? CentralDrawerMenu(whoAreYouTag: whoAreYouTag)
+        : CentralDrawerMenu(whoAreYouTag: whoAreYouTag); //WorkerDrawerMenu(whoAreYouTag: whoAreYouTag);
+
     return Scaffold(
       appBar: appBar,
+      drawer: drawer,
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {

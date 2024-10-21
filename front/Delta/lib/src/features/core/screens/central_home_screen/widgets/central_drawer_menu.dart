@@ -6,25 +6,24 @@ import 'package:tcc_front/src/constants/images_strings.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/central_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/profile/profile_screen.dart';
+import '../../../../../commom_widgets/drawer_list_tile.dart';
+import '../../../../../constants/text_strings.dart';
+import '../../../../../utils/notifications/notification_list_screen.dart';
+import '../../assistance/assistance_list_screen.dart';
+import '../../assistance/register_assistance_screen.dart';
+import '../../budget/budget_list_screen.dart';
+import '../../budget/register_budget_screen.dart';
+import '../../category/category_list_screen.dart';
+import '../../category/register_category_screen.dart';
+import '../../client/client_list_screen.dart';
+import '../../client/register_client_screen.dart';
+import '../../report/register_report_screen.dart';
+import '../../report/report_list_screen.dart';
+import '../../worker/register_worker_screen.dart';
+import '../../worker/worker_list_screen.dart';
 
-import '../../../../../../constants/text_strings.dart';
-import '../../../../../../utils/notifications/notification_list_screen.dart';
-import '../../../assistance/assistance_list_screen.dart';
-import '../../../assistance/register_assistance_screen.dart';
-import '../../../budget/budget_list_screen.dart';
-import '../../../budget/register_budget_screen.dart';
-import '../../../category/category_list_screen.dart';
-import '../../../category/register_category_screen.dart';
-import '../../../client/client_list_screen.dart';
-import '../../../client/register_client_screen.dart';
-import '../../../report/register_report_screen.dart';
-import '../../../report/report_list_screen.dart';
-import '../../../worker/register_worker_screen.dart';
-import '../../../worker/worker_list_screen.dart';
-import 'drawer_list_tile.dart';
-
-class DrawerMenu extends StatelessWidget {
-  const DrawerMenu({super.key, required this.whoAreYouTag});
+class CentralDrawerMenu extends StatelessWidget {
+  const CentralDrawerMenu({super.key, required this.whoAreYouTag});
 
   final num whoAreYouTag;
 

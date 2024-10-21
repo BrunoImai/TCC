@@ -464,10 +464,7 @@ class CentralCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => ChangeNotifierProvider(
-                  create: (context) => Controller(),
-                  child: DashBoardScreen(whoAreYouTag: whoAreYouTag),
-                )),
+                onPressed: () => Get.to(() => DashBoardScreen(whoAreYouTag: whoAreYouTag),),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,

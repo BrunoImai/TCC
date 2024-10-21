@@ -400,6 +400,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         title: Text(editAssistance, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
+
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {

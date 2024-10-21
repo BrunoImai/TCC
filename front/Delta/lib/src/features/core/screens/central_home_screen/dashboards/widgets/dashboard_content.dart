@@ -8,7 +8,6 @@ import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboar
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/assistances_chart.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/machine_part_exchange.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/revenue.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
 import '../../../../../../constants/responsive.dart';
 
 class DashboardContent extends StatelessWidget {

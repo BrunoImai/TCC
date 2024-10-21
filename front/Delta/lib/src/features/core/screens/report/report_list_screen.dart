@@ -13,6 +13,7 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 import '../worker_home_screen/widgets/worker_app_bar.dart';
@@ -211,8 +212,13 @@ class _ReportListScreenState extends State<ReportListScreen> {
       appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
     }
 
+    final drawer = widget.whoAreYouTag == 2
+        ? CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag)
+        : CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag); //WorkerDrawerMenu(whoAreYouTag: whoAreYouTag);
+
     return Scaffold(
       appBar: appBar,
+      drawer: drawer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

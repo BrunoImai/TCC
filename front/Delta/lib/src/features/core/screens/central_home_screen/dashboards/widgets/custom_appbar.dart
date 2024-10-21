@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/profile_info.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_search_bar.dart';
-
-import '../../../../../../constants/colors.dart';
 import '../../../../../../constants/responsive.dart';
 import '../../../../../../constants/text_strings.dart';
 import '../../../../../../controllers/controller.dart';

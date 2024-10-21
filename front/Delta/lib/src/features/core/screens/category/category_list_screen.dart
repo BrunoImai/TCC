@@ -13,6 +13,7 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import 'category.dart';
 
 
@@ -101,6 +102,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),
+      drawer: CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

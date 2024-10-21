@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tcc_front/src/features/authentication/screens/slapsh_screen/slapsh_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:tcc_front/src/controllers/controller.dart';
 import 'package:tcc_front/src/features/authentication/screens/welcome/who_are_you_screen.dart';
 import 'package:tcc_front/src/utils/theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Controller()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +29,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.leftToRightWithFade,
       transitionDuration: const Duration(milliseconds: 500),
-      home: const WhoAreYouScreen(),
+      home: ChangeNotifierProvider(
+        create: (context) => Controller(),
+        child: const WhoAreYouScreen(),
+      )
     );
   }
 }
