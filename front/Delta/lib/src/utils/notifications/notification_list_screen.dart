@@ -280,7 +280,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
                             ),
                             child: Container(
                               height:
-                                  200, // Ajuste a altura conforme necessário
+                                  200,
                               padding: const EdgeInsets.all(10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

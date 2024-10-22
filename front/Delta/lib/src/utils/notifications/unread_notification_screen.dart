@@ -299,7 +299,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Container(
-                            height: 200, // Altura do card
+                            height: 200,
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
