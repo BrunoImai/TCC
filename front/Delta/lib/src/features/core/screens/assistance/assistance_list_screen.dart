@@ -237,8 +237,11 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
-      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),
       drawer: CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,8 +259,8 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                   tAssitanceListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                const SizedBox(height: homePadding,),
-                //Search Box
+                const SizedBox(height: homePadding),
+                // Search Box
                 Container(
                   decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -286,144 +289,176 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
               ],
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredAssistancesList.length,
-                itemBuilder: (context, index) {
-                  final data = filteredAssistancesList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredAssistancesList.map((data) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            height: 200,
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.work,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              data.assistance.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w800,
+                                                color: darkColor,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() => UpdateAssistanceScreen(
+                                          assistance: data.assistance,
+                                          whoAreYouTag: widget.whoAreYouTag,
+                                        ));
+                                      },
+                                      icon: const Icon(Icons.edit, color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.work,
+                                      Icons.category_rounded,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.assistance.name,
-                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        data.categoriesName.join(', '),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateAssistanceScreen(assistance: data.assistance, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.category_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.categoriesName.join(', '),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.person,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.clientName,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.clientName,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.assistance.address,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.assistance.address,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.people,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.workersName.join(', '),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.workersName.join(', '),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),

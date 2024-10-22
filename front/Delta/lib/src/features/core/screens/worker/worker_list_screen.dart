@@ -97,8 +97,16 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final widthFactor = screenWidth <= 600
+        ? 1.0
+        : 0.3; // Usar um fator de largura semelhante
+
     return Scaffold(
-      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
+      appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),
       drawer: CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,17 +118,25 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
               children: [
                 Text(
                   "${CentralManager.instance.loggedUser!.central.name},",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText2,
                 ),
                 Text(
                   tWorkerListSubTitle,
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline2,
                 ),
                 const SizedBox(height: homePadding),
-                //Search Box
+                // Search Box
                 Container(
-                  decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                      border: Border(left: BorderSide(width: 4))),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -132,7 +148,8 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle: TextStyle(
+                                color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -140,7 +157,10 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                               icon: const Icon(Icons.search, size: 25),
                             ),
                           ),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline4,
                         ),
                       ),
                     ],
@@ -151,100 +171,120 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredWorkerList.length,
-                itemBuilder: (context, index) {
-                  final worker = filteredWorkerList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredWorkerList.map((worker) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.person_outline_rounded,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              worker.name,
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: darkColor),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() =>
+                                            UpdateWorkerScreen(worker: worker,
+                                              whoAreYouTag: widget
+                                                  .whoAreYouTag,));
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit, color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.person_outline_rounded,
+                                      Icons.email,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        worker.name,
-                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        worker.email,
+                                        style: GoogleFonts.poppins(fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateWorkerScreen(worker: worker, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.email,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  worker.email,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.phone,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        worker.cellphone,
+                                        style: GoogleFonts.poppins(fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 5),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.phone,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  worker.cellphone,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),

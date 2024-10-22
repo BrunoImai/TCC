@@ -100,6 +100,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
       appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),
       drawer: CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
@@ -120,12 +123,11 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),
-                //Search Box
+                // Search Box
                 Container(
                   decoration: const BoxDecoration(
                       border: Border(left: BorderSide(width: 4))),
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -137,8 +139,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle:
-                            TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -157,84 +158,98 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredCategoryList.length,
-                itemBuilder: (context, index) {
-                  final category = filteredCategoryList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredCategoryList.map((category) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.category_rounded,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              category.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w800,
+                                                color: darkColor,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() => UpdateCategoryScreen(
+                                          category: category,
+                                          whoAreYouTag: widget.whoAreYouTag,
+                                        ));
+                                      },
+                                      icon: const Icon(Icons.edit, color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.category_rounded,
+                                      Icons.calendar_today,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Flexible(
+                                    Expanded(
                                       child: Text(
-                                        category.name,
+                                        DateFormat('dd/MM/yyyy').format(DateTime.parse(category.creationDate)),
                                         style: GoogleFonts.poppins(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w800,
-                                            color: darkColor),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateCategoryScreen(category: category, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.calendar_today,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(category.creationDate)),
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),

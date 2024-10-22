@@ -44,7 +44,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.whoAreYouTag == 2) {
+    if (widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userUrl = 'http://localhost:8080/api/central/assistance';
@@ -123,25 +123,26 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
         print(jsonData);
         final allWorkers = await getAllWorkers();
 
-        final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
+        final Map<num, String> workerIdToNameMap = {
+          for (var worker in allWorkers) worker.id: worker.name
+        };
         print(workerIdToNameMap);
 
         final List<NotificationInformations> notificationsList = [];
         for (var item in jsonData) {
-
           final workerName = workerIdToNameMap[item['workerId']] ?? 'Unknown';
 
           final workerId = item['workerId'].toString();
 
 
           final notification = NotificationResponse(
-            id: item['id'].toString(),
-            title: item['title'],
-            message: item['message'],
-            creationDate: item['creationDate'],
-            readed: item['readed'],
-            workerId: workerId.toString(),
-            budgetId: item['budgetId'].toString()
+              id: item['id'].toString(),
+              title: item['title'],
+              message: item['message'],
+              creationDate: item['creationDate'],
+              readed: item['readed'],
+              workerId: workerId.toString(),
+              budgetId: item['budgetId'].toString()
           );
 
           print("Notificarion: $notification");
@@ -163,7 +164,6 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
         print('Response body: ${response.body}');
         throw Exception('Failed to load notification list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP notification: $e');
       throw Exception('Falha ao carregar a lista de notification');
@@ -189,11 +189,13 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
           status: jsonData['status'],
           assistanceId: jsonData['assistanceId'].toString(),
           clientId: jsonData['clientId'].toString(),
-          responsibleWorkersIds: (jsonData['responsibleWorkersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+          responsibleWorkersIds: (jsonData['responsibleWorkersIds'] as List<
+              dynamic>).map((id) => id.toString()).toList(),
           totalPrice: jsonData['totalPrice'].toString()
       );
     } else {
-      print('Failed to load budget approval. Status code: ${response.statusCode}');
+      print('Failed to load budget approval. Status code: ${response
+          .statusCode}');
       return null;
     }
   }
@@ -208,6 +210,12 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
       appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
     }
 
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -220,17 +228,25 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
               children: [
                 Text(
                   "$userName,",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText2,
                 ),
                 Text(
                   tUnreadNotificationSubTitle,
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline2,
                 ),
                 const SizedBox(height: homePadding),
                 //Search Box
                 Container(
-                  decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                      border: Border(left: BorderSide(width: 4))),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -242,7 +258,8 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle: TextStyle(
+                                color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -250,7 +267,10 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                               icon: const Icon(Icons.search, size: 25),
                             ),
                           ),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline4,
                         ),
                       ),
                     ],
@@ -261,129 +281,161 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredUnreadNotificationList.length,
-                itemBuilder: (context, index) {
-                  final data = filteredUnreadNotificationList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredUnreadNotificationList.map((data) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            height: 200, // Altura do card
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.short_text,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              data.notification.title,
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: darkColor),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () async {
+                                        if (widget.whoAreYouTag == 2) {
+                                          Get.to(() =>
+                                              BudgetApprovalScreen(
+                                                  budgetId: data.notification
+                                                      .budgetId,
+                                                  whoAreYouTag: widget
+                                                      .whoAreYouTag));
+                                        } else {
+                                          BudgetResponse? budget = await getBudgetById(
+                                              data.notification.budgetId);
+                                          if (budget != null) {
+                                            Get.to(() =>
+                                                UpdateBudgetScreen(budget: budget,
+                                                    whoAreYouTag: widget
+                                                        .whoAreYouTag));
+                                          } else {
+                                            print('Failed to fetch budget');
+                                          }
+                                        }
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit_notifications_rounded,
+                                          color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.short_text,
+                                      Icons.message_rounded,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.notification.title,
-                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        data.notification.message,
+                                        style: GoogleFonts.poppins(fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  if (widget.whoAreYouTag == 2) {
-                                    Get.to(() => BudgetApprovalScreen(budgetId: data.notification.budgetId, whoAreYouTag: widget.whoAreYouTag));
-                                  } else {
-                                    BudgetResponse? budget = await getBudgetById(data.notification.budgetId);
-                                    if (budget != null) {
-                                      Get.to(() => UpdateBudgetScreen(budget: budget, whoAreYouTag: widget.whoAreYouTag));
-                                    } else {
-                                      print('Failed to fetch budget');
-                                    }
-                                  }
-                                },
-                                icon: const Icon(Icons.edit_notifications_rounded, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.message_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.notification.message,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.person,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.workerName,
+                                        style: GoogleFonts.poppins(fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.workerName,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.date_range_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        DateFormat('dd/MM/yyyy').format(
+                                            DateTime.parse(
+                                                data.notification.creationDate)),
+                                        style: GoogleFonts.poppins(fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: darkColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 5),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.date_range_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.notification.creationDate)),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),
