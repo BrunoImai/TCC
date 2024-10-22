@@ -253,7 +253,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  assitanceListSubTitle,
+                  tAssitanceListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding,),

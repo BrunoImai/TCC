@@ -129,8 +129,8 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                 const SizedBox(height: defaultSize * 4),
                 FormHeaderWidget(
                   image: forgetPasswordImage,
-                  title: updatePasswordTitle.toUpperCase(),
-                  subTitle: updatePasswordSubTitle,
+                  title: tUpdatePasswordTitle.toUpperCase(),
+                  subTitle: tUpdatePasswordSubTitle,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   heightBetween: 30.0,
                   textAlign: TextAlign.center,
@@ -155,8 +155,8 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.fingerprint),
-                          labelText: password,
-                          hintText: password,
+                          labelText: tPassword,
+                          hintText: tPassword,
                           border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -194,7 +194,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: formHeight - 25),
-                                Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
+                                Text(tNumberOfCharacters, style: Theme.of(context).textTheme.overline)
                               ],
                             ),
                             const SizedBox(height: formHeight - 29),
@@ -218,7 +218,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: formHeight - 25),
-                                Text(numberCharacter, style: Theme.of(context).textTheme.overline)
+                                Text(tNumberCharacter, style: Theme.of(context).textTheme.overline)
                               ],
                             ),
                             const SizedBox(height: formHeight - 29),
@@ -242,7 +242,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: formHeight - 25),
-                                Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
+                                Text(tLowerCaseCharacter, style: Theme.of(context).textTheme.overline)
                               ],
                             ),
                             const SizedBox(height: formHeight - 29),
@@ -266,7 +266,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: formHeight - 25),
-                                Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
+                                Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline)
                               ],
                             ),
                             const SizedBox(height: formHeight - 29),
@@ -290,7 +290,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: formHeight - 25),
-                                Text(specialCharacter, style: Theme.of(context).textTheme.overline)
+                                Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline)
                               ],
                             ),
                           ],
@@ -303,8 +303,8 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                         obscureText: !_isVisibleConfirmPassword,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.fingerprint),
-                          labelText: confirmPassword,
-                          hintText: confirmPassword,
+                          labelText: tConfirmPassword,
+                          hintText: tConfirmPassword,
                           border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -356,7 +356,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
                                   });
                                 }
                               },
-                              child: Text(next.toUpperCase())
+                              child: Text(tNext.toUpperCase())
                           )
                       ),
                     ],

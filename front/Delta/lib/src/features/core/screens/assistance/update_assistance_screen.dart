@@ -260,7 +260,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       List<num> categoriesId = selectedCategories.map((category) => category.id).toList();
 
 
-      if (description.isEmpty ||
+      if (tDescription.isEmpty ||
           assistanceName.isEmpty ||
           clientCpf.isEmpty ||
           cep.isEmpty ||
@@ -330,7 +330,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
 
       UpdateAssistanceRequest updateAssistanceRequest = UpdateAssistanceRequest(
-        description: description,
+        description: tDescription,
         name: assistanceName,
         address: fullAddress,
         cpf: clientCpf,
@@ -397,7 +397,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editAssistance, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditAssistance, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
 
@@ -435,7 +435,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: assistanceNameController,
                               decoration: InputDecoration(
-                                labelText: assistanceName,
+                                labelText: tAssistanceName,
                                 prefixIcon: const Icon(LineAwesomeIcons.user),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -454,7 +454,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: descriptionController,
                               decoration: InputDecoration(
-                                labelText: description,
+                                labelText: tDescription,
                                 prefixIcon: const Icon(Icons.add),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -553,7 +553,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: InputDecoration(
-                                labelText: cpf,
+                                labelText: tCpf,
                                 prefixIcon: const Icon(Icons.numbers),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -582,7 +582,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 MaskTextInputFormatter(mask: '#####-###',),
                               ],
                               decoration: const InputDecoration(
-                                  label: Text(cep),
+                                  label: Text(tCep),
                                   prefixIcon: Icon(Icons.local_post_office)
                               ),
                               enabled: false,
@@ -600,7 +600,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: addressController,
                               decoration: const InputDecoration(
-                                  label: Text(address),
+                                  label: Text(tAddress),
                                   prefixIcon: Icon(Icons.location_on)
                               ),
                               enabled: _isAddressFieldEnabled,
@@ -609,7 +609,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: numberController,
                               decoration: const InputDecoration(
-                                  label: Text(number),
+                                  label: Text(tNumber),
                                   prefixIcon: Icon(Icons.numbers)
                               ),
                               enabled: false,
@@ -618,7 +618,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: addressComplementController,
                               decoration: const InputDecoration(
-                                  label: Text(addressComplement),
+                                  label: Text(tAddressComplement),
                                   prefixIcon: Icon(Icons.home_rounded)
                               ),
                               enabled: false,
@@ -627,7 +627,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: neighborhoodController,
                               decoration: const InputDecoration(
-                                  label: Text(neighborhood),
+                                  label: Text(tNeighborhood),
                                   prefixIcon: Icon(Icons.holiday_village_rounded)
                               ),
                               enabled: false,
@@ -636,7 +636,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                             TextFormField(
                               controller: cityController,
                               decoration: const InputDecoration(
-                                  label: Text(city),
+                                  label: Text(tCity),
                                   prefixIcon: Icon(Icons.location_on)),
                               enabled: false,
                             ),
@@ -648,7 +648,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                 LengthLimitingTextInputFormatter(2),
                               ],
                               decoration: const InputDecoration(
-                                  label: Text(state),
+                                  label: Text(tState),
                                   prefixIcon: Icon(Icons.location_on)
                               ),
                               enabled: false,
@@ -804,7 +804,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(editAssistance.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditAssistance.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),
@@ -813,7 +813,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

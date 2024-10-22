@@ -40,8 +40,8 @@ class RegisterClientScreen extends StatelessWidget{
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: registerClientTitle,
-                        subTitle: registerClientSubTitle,
+                        title: tRegisterClientTitle,
+                        subTitle: tRegisterClientSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),

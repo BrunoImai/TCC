@@ -210,7 +210,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editProfile, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditProfile, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -268,7 +268,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             TextFormField(
                               controller: centralController,
                               decoration: InputDecoration(
-                                labelText: central,
+                                labelText: tCentral,
                                 prefixIcon: const Icon(LineAwesomeIcons.user),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -287,7 +287,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             TextFormField(
                               controller: emailController,
                               decoration: InputDecoration(
-                                labelText: email,
+                                labelText: tEmail,
                                 prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -309,7 +309,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 MaskTextInputFormatter(mask: '##.###.###/####-##'),
                               ],
                               decoration: InputDecoration(
-                                labelText: cnpj,
+                                labelText: tCnpj,
                                 prefixIcon: const Icon(Icons.numbers),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -331,7 +331,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 MaskTextInputFormatter(mask: '(##) #####-####'),
                               ],
                               decoration: InputDecoration(
-                                labelText: cellphone,
+                                labelText: tCellphone,
                                 prefixIcon: const Icon(LineAwesomeIcons.phone),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -351,7 +351,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               controller: currentPasswordController,
                               obscureText: true,
                               decoration: InputDecoration(
-                                labelText: currentPassword,
+                                labelText: tCurrentPassword,
                                 prefixIcon: const Icon(Icons.fingerprint),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -383,7 +383,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   });
                                 },
                                 decoration: InputDecoration(
-                                  labelText: newPassword,
+                                  labelText: tNewPassword,
                                   prefixIcon: const Icon(Icons.fingerprint),
                                   suffixIcon: IconButton(
                                     icon: const Icon(LineAwesomeIcons.angle_up),
@@ -424,7 +424,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(numberOfCharacters, style: Theme.of(context).textTheme.overline),
+                                      Text(tNumberOfCharacters, style: Theme.of(context).textTheme.overline),
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -448,7 +448,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(numberCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline),
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -472,7 +472,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tLowerCaseCharacter, style: Theme.of(context).textTheme.overline),
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -496,7 +496,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline),
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -520,7 +520,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(specialCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline),
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -535,9 +535,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   String currentPassword = currentPasswordController.text;
                                   String newPassword = newPasswordController.text;
 
-                                  if (central.isEmpty ||
-                                      cellphone.isEmpty ||
-                                      email.isEmpty ||
+                                  if (tCentral.isEmpty ||
+                                      tCellphone.isEmpty ||
+                                      tEmail.isEmpty ||
                                       currentPassword.isEmpty) {
                                     showDialog(
                                       context: context,
@@ -575,7 +575,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(editProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),
@@ -584,7 +584,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

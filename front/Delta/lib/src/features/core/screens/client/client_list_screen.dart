@@ -118,7 +118,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  clientListSubTitle,
+                  tClientListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),

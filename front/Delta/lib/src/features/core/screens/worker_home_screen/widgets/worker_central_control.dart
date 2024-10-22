@@ -100,18 +100,18 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.notifications, size: 40, color: darkColor),
+                      const Icon(Icons.notifications, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tNotificationsHistory,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
-                            fontSize: 14.0,
+                            fontSize: 13.0,
                             fontWeight: FontWeight.w600,
                             color: darkColor,
                           ),
@@ -136,18 +136,18 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               child: SizedBox(
-                height: 150,
+                height: 120,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.attach_money_rounded, size: 40, color: darkColor),
+                    const Icon(Icons.attach_money_rounded, size: 30, color: darkColor),
                     const SizedBox(height: 10),
                     Flexible(
                       child: Text(
-                        registerBudget,
+                        tRegisterBudget,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                          fontSize: 14.0,
+                          fontSize: 13.0,
                           fontWeight: FontWeight.w600,
                           color: darkColor,
                         ),
@@ -172,18 +172,18 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.monetization_on_outlined, size: 40, color: darkColor),
+                      const Icon(Icons.monetization_on_outlined, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          budgetHistory,
+                          tBudgetHistory,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
-                            fontSize: 14.0,
+                            fontSize: 13.0,
                             fontWeight: FontWeight.w600,
                             color: darkColor,
                           ),
@@ -209,18 +209,18 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   child: SizedBox(
-                    height: 150,
+                    height: 120,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.library_books_rounded, size: 40, color: darkColor),
+                        const Icon(Icons.library_books_rounded, size: 30, color: darkColor),
                         const SizedBox(height: 10),
                         Flexible(
                           child: Text(
                             tRegisterReport,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.poppins(
-                              fontSize: 14.0,
+                              fontSize: 13.0,
                               fontWeight: FontWeight.w600,
                               color: darkColor,
                             ),
@@ -245,18 +245,18 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.subject_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.subject_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tReports,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
-                            fontSize: 14.0,
+                            fontSize: 13.0,
                             fontWeight: FontWeight.w600,
                             color: darkColor,
                           ),

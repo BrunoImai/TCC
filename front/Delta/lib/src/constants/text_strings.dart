@@ -1,122 +1,121 @@
 //General text
-const String login = "Login";
-const String signUp = "Cadastrar";
-const String password = "Senha";
-const String newPassword = "Nova Senha";
-const String currentPassword = "Senha Atual";
-const String confirmPassword = "Confirme sua senha";
-const String forgetPassword = "Esqueceu a senha?";
-const String email = "Email";
-const String signInWithGoogle = "Entre com o Google";
-const String fullName = "Nome completo";
-const String address = "Endereço";
-const String addressComplement = "Complemento";
-const String city = "Cidade";
-const String state = "Estado";
-const String neighborhood = "Bairro";
-const String central = "Nome da Empresa";
-const String cellphone = "Celular";
-const String cnpj = "CNPJ";
-const String cpf = "CPF";
-const String next = "Próximo";
+const String tLogin = "Login";
+const String tSignUp = "Cadastrar";
+const String tPassword = "Senha";
+const String tNewPassword = "Nova Senha";
+const String tCurrentPassword = "Senha Atual";
+const String tConfirmPassword = "Confirme sua senha";
+const String tForgetPassword = "Esqueceu a senha?";
+const String tEmail = "Email";
+const String tFullName = "Nome completo";
+const String tAddress = "Endereço";
+const String tAddressComplement = "Complemento";
+const String tCity = "Cidade";
+const String tState = "Estado";
+const String tNeighborhood = "Bairro";
+const String tCentral = "Nome da Empresa";
+const String tCellphone = "Celular";
+const String tCnpj = "CNPJ";
+const String tCpf = "CPF";
+const String tNext = "Próximo";
 const String tSearch = "Pesquisar";
 const String tName = "Nome";
 
 
 //Splash Screen
-const String appName = "A.G.E";
-const String appTagLine = "Assitente de Gerência Empresarial";
+const String tAppName = "A.G.E";
+const String tAppTagLine = "Assitente de Gerência Empresarial";
 
 //Welcome Screen
-const String welcomeTitle = "Bem vindo ao A.G.E";
-const String welcomeSubTitle = "Gerenciando seu negócio";
+const String tWelcomeTitle = "Bem vindo ao A.G.E";
+const String tWelcomeSubTitle = "Gerenciando seu negócio";
 
 //Who are you screen
-const String whoAreYouTitle = "Quem é você?";
-const String whoAreYouSubTitle = "É hora de gerenciar o seu negócio";
-const String employee = "Técnico";
-const String company = "Empresa";
+const String tWhoAreYouTitle = "Quem é você?";
+const String tWhoAreYouSubTitle = "É hora de gerenciar o seu negócio";
+const String tEmployee = "Técnico";
+const String tCompany = "Empresa";
 
 //Login Screen
-const String loginTitle = "Bem vindo de volta,";
-const String loginSubTitle = "É hora de gerenciar o seu negócio";
-const String rememberMe = "Lembra de mim?";
-const String dontHaveAnAccount = "Não possui uma conta?";
+const String tLoginTitle = "Bem vindo de volta,";
+const String tLoginSubTitle = "É hora de gerenciar o seu negócio";
+const String tRememberMe = "Lembra de mim?";
+const String tDontHaveAnAccount = "Não possui uma conta?";
 
 //SignUp Screen
-const String signUpTitle = "Hora de se tornar A.G.E";
-const String signUpSubTitle = "Crie seu perfil e comece essa jornada com A.G.Ente...";
-const String alreadyHaveAnAccount = "Já possui uma conta?";
-const String numberOfCharacters = "Contém pelo menos oito caracteres";
-const String uppercaseCharacter = "Contém pelo menos um carácter maiúsculo";
-const String lowercaseCharacter = "Contém pelo menos um carácter minúsculo";
-const String numberCharacter = "Contém pelo menos um número";
-const String specialCharacter = "Contém pelo menos um carácter especial";
+const String tSignUpTitle = "Hora de se tornar A.G.E";
+const String tSignUpSubTitle = "Crie seu perfil e comece essa jornada com A.G.Ente...";
+const String tAlreadyHaveAnAccount = "Já possui uma conta?";
+const String tNumberOfCharacters = "Contém pelo menos oito caracteres";
+const String tUppercaseCharacter = "Contém pelo menos um carácter maiúsculo";
+const String tLowerCaseCharacter = "Contém pelo menos um carácter minúsculo";
+const String tNumberCharacter = "Contém pelo menos um número";
+const String tSpecialCharacter = "Contém pelo menos um carácter especial";
 
 //Register Client Screen
-const String registerClientTitle = "Mais um cliente A.G.E";
-const String registerClientSubTitle = "Cadastre seu novo cliente";
-const String cep = "CEP";
-const String complement = "Complemento";
-const String number = "Número";
+const String tRegisterClientTitle = "Mais um cliente A.G.E";
+const String tRegisterClientSubTitle = "Cadastre seu novo cliente";
+const String tCep = "CEP";
+const String tComplement = "Complemento";
+const String tNumber = "Número";
 
 
 //Forget Password
-const String resetViaEmail = "Mude sua senha com a verificação do email";
-const String forgetPasswordSubTitle = "Coloque seu email cadastrado para receber o código";
-const String updatePasswordTitle = "Alteração de senha";
-const String updatePasswordSubTitle = "Coloque sua nova senha e a confirmação dela";
+const String tResetViaEmail = "Mude sua senha com a verificação do email";
+const String tForgetPasswordSubTitle = "Coloque seu email cadastrado para receber o código";
+const String tUpdatePasswordTitle = "Alteração de senha";
+const String tUpdatePasswordSubTitle = "Coloque sua nova senha e a confirmação dela";
 
 //OTP Screen
-const String otpTitle = "CÓDIGO";
-const String otpSubTitle = "de Verificação";
-const String otpMessage = "Insira o código enviado por ";
-const String code = "Código ";
+const String tOtpTitle = "CÓDIGO";
+const String tOtpSubTitle = "de Verificação";
+const String tOtpMessage = "Insira o código enviado por ";
+const String tCode = "Código ";
 
 //Initial central logged screen
-const String homePageTitle = "Olá, ";
-const String exploreServices = "Explore seus serviços";
-const String exploreTechnician = "Pesquise seus funcionários";
-const String nextService = "Seu próximo serviço";
-const String controlCenter = "Central de Controle";
-const String yourComissions = "Suas comissões";
-const String registerClient = "Registrar um novo cliente";
-const String clients = "Clientes cadastrados";
-const String registerWorker = "Registrar um novo funcionário";
-const String workers = "Funcionários cadastrados";
-const String registerService = "Registrar um novo serviço";
-const String registerBudget = "Registrar um novo orçamentos";
-const String budgetHistory = "Histórico de orçamentos";
-const String serviceHistory = "Histórico de serviços";
+const String tHomePageTitle = "Olá, ";
+const String tExploreControlCentral = "Explore sua central de controle";
+const String tExploreWorker = "Pesquise seus funcionários";
+const String tNextService = "Seu próximo serviço";
+const String tControlCenter = "Central de Controle";
+const String tYourComissions = "Suas comissões";
+const String tRegisterClient = "Registrar cliente";
+const String tClients = "Clientes cadastrados";
+const String tRegisterWorker = "Registrar funcionário";
+const String tWorkers = "Funcionários cadastrados";
+const String tRegisterService = "Registrar serviço";
+const String tRegisterBudget = "Registrar orçamento";
+const String tBudgetHistory = "Histórico de orçamentos";
+const String tServiceHistory = "Histórico de serviços";
 const String tRegisterCategory = "Registrar uma nova categoria";
 const String tCategories = "Categorias cadastradas";
 const String tRegisterReport = "Registrar um novo relatório";
 const String tReports = "Histórico de relatórios";
 const String tNotificationsHistory = "Histórico de notificações";
-const String dashboards = "Dashboards";
-const String comissionControl = "Controle de comissões";
+const String tDashboards = "Dashboards";
+const String tComissionControl = "Controle de comissões";
 
 //Profile screen
-const String profile = "Perfil";
-const String editProfile = "Editar perfil";
-const String logout = "Sair";
-const String profileHeading = "Nome usuário";
-const String profileSubHeading = "Email usuário";
-const String settings = "Configurações";
-const String information = "Informações";
-const String userManagement = "Configurações do usuário";
+const String tProfile = "Perfil";
+const String tEditProfile = "Editar perfil";
+const String tLogout = "Sair";
+const String tProfileHeading = "Nome usuário";
+const String tProfileSubHeading = "Email usuário";
+const String tSettings = "Configurações";
+const String tInformation = "Informações";
+const String tUserManagement = "Configurações do usuário";
 
 //Update profile screen
 const String tDelete = "Deletar";
-const String joined = "Cliente desde ";
-const String joinedAt = "data entrada da central no sistema";
+const String tJoined = "Cliente desde ";
+const String tJoinedAt = "data entrada da central no sistema";
 
 //Update client screen
-const String editClient = "Editar cliente";
+const String tEditClient = "Editar cliente";
 
 
 //Client List Screen
-const String clientListSubTitle = "Encontre seus clientes!";
+const String tClientListSubTitle = "Encontre seus clientes!";
 
 
 //Unread notifications
@@ -126,34 +125,34 @@ const String tUnreadNotificationSubTitle = "Encontre seus notificações não li
 const String tNotificationTitle = "Encontre seus notificações!";
 
 //Worker List Screen
-const String workerListSubTitle = "Encontre seus funcionários!";
+const String tWorkerListSubTitle = "Encontre seus funcionários!";
 
 //Update worker screen
-const String editWorker = "Editar funcionário";
-const String joinedWorker = "Funcionário desde ";
+const String tEditWorker = "Editar funcionário";
+const String tJoinedWorker = "Funcionário desde ";
 
 //Register Worker Screen
-const String registerWorkerTilte = "Mais um funcionário A.G.E";
-const String registerWorkerSubTitle = "Cadastre seu novo funcionário";
+const String tRegisterWorkerTilte = "Mais um funcionário A.G.E";
+const String tRegisterWorkerSubTitle = "Cadastre seu novo funcionário";
 
 //Register Assistance Screen
-const String registerAssistanceTitle = "Mais um serviço A.G.E";
-const String registerAssistanceSubTitle = "Cadastre seu novo serviço";
-const String assistanceName = "Nome do serviço";
-const String description = "Descrição";
-const String clientCpf = "CPF do Cliente";
+const String tRegisterAssistanceTitle = "Mais um serviço A.G.E";
+const String tRegisterAssistanceSubTitle = "Cadastre seu novo serviço";
+const String tAssistanceName = "Nome do serviço";
+const String tDescription = "Descrição";
+const String tClientCpf = "CPF do Cliente";
 const String tClientName = "Nome do Cliente";
-const String period = "Período";
-const String workersIds = "Funcionário alocado para o serviço";
+const String tPeriod = "Período";
+const String tWorkersIds = "Funcionário alocado para o serviço";
 
 //Assistances list screen
-const String assitanceListSubTitle = "Encontre seus serviços!";
+const String tAssitanceListSubTitle = "Encontre seus serviços!";
 
 //Update assistance screen
-const String editAssistance = "Editar serviço";
+const String tEditAssistance = "Editar serviço";
 
 //Worker Home Screen
-const String currentAndNextAssistance = "Seu atual ou próximo serviço";
+const String tCurrentAndNextAssistance = "Seu atual ou próximo serviço";
 
 //Register Category Screen
 const String tRegisterCategoryTitle = "Uma nova categoria A.G.E";
@@ -173,7 +172,7 @@ const String tTitle = "Título";
 const String tTotalPrice = "Preço Total";
 
 //Budget List Screen
-const String budgetListSubTitle = "Encontre seus orçamentos!";
+const String tBudgetListSubTitle = "Encontre seus orçamentos!";
 
 //Update Budget Screen
 const String tEditBudget = "Editar orçamento";

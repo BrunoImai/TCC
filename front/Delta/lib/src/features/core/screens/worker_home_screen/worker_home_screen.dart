@@ -8,6 +8,7 @@ import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_central_control.dart';
 import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_coordinates.dart';
+import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_drawer_menu.dart';
 import 'package:tcc_front/src/features/core/screens/worker_home_screen/widgets/worker_search_bar.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 import 'package:http/http.dart' as http;
@@ -211,8 +212,12 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth < 600 ? 1.0 : 1.0;
+
     return Scaffold(
       appBar: WorkerAppBar(whoAreYouTag: widget.whoAreYouTag),
+      drawer: WorkerDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
       body: SingleChildScrollView(
         child: Container(
         padding: const EdgeInsets.all(homePadding),
@@ -221,10 +226,10 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
           children: [
 
             //Heading
-            Text(homePageTitle + WorkerManager.instance.loggedUser!.worker.name,
+            Text(tHomePageTitle + WorkerManager.instance.loggedUser!.worker.name,
               style: Theme.of(context).textTheme.bodyText2,
             ),
-            Text(exploreServices, style: Theme.of(context).textTheme.headline2,),
+            Text(tExploreControlCentral, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
 
             //Search Box
@@ -232,77 +237,79 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Current and next service
-            Text(currentAndNextAssistance, style: Theme.of(context).textTheme.headline2,),
+            Text(tCurrentAndNextAssistance, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
             FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Card(
-                color: cardBgColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.work, size: 40, color: darkColor),
-                      const SizedBox(height: 10),
-                      Text(
-                        selectedAssistance != null ? 'Serviço Atual' : 'Nenhum serviço atual',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: darkColor,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 10),
-                      if (selectedAssistance != null) ...[
+              widthFactor: widthFactor,
+              child: Center(
+                child: Card(
+                  color: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.work, size: 40, color: darkColor),
+                        const SizedBox(height: 10),
                         Text(
-                          'Cliente: ${selectedAssistance!.clientName}',
+                          selectedAssistance != null ? 'Serviço Atual' : 'Nenhum serviço atual',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
-                            color: darkColor,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          'Endereço: ${selectedAssistance!.assistance.address}, ${selectedAssistance!.assistance.complement}',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
-                            color: darkColor,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          'Descrição: ${selectedAssistance!.assistance.description}',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
                             color: darkColor,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          'Funcionários: ${selectedAssistance!.workersName.join(', ')}',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400,
-                            color: darkColor,
+                        const SizedBox(height: 10),
+                        if (selectedAssistance != null) ...[
+                          Text(
+                            'Cliente: ${selectedAssistance!.clientName}',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: darkColor,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                      ]
-                    ],
+                          const SizedBox(height: 5),
+                          Text(
+                            'Endereço: ${selectedAssistance!.assistance.address}, ${selectedAssistance!.assistance.complement}',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: darkColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Descrição: ${selectedAssistance!.assistance.description}',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: darkColor,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Funcionários: ${selectedAssistance!.workersName.join(', ')}',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: darkColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                        ]
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -311,7 +318,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Control Center
-            Text(controlCenter, style: Theme.of(context).textTheme.headline2,),
+            Text(tControlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
             WorkerCentralControl(whoAreYouTag: widget.whoAreYouTag, selectedAssistance: selectedAssistance,),
             const SizedBox(height: homePadding,),

@@ -309,7 +309,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editClient, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditClient, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -346,7 +346,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: clientNameController,
                               decoration: InputDecoration(
-                                labelText: fullName,
+                                labelText: tFullName,
                                 prefixIcon: const Icon(LineAwesomeIcons.user),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -365,7 +365,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: emailController,
                               decoration: InputDecoration(
-                                labelText: email,
+                                labelText: tEmail,
                                 prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -387,7 +387,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                 MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: InputDecoration(
-                                labelText: cpf,
+                                labelText: tCpf,
                                 prefixIcon: const Icon(Icons.numbers),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -409,7 +409,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                 MaskTextInputFormatter(mask: '(##) #####-####',),
                               ],
                               decoration: InputDecoration(
-                                labelText: cellphone,
+                                labelText: tCellphone,
                                 prefixIcon: const Icon(LineAwesomeIcons.phone),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -431,7 +431,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                 MaskTextInputFormatter(mask: '#####-###',),
                               ],
                               decoration: InputDecoration(
-                                labelText: cep,
+                                labelText: tCep,
                                 prefixIcon: const Icon(Icons.local_post_office),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -452,7 +452,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: addressController,
                               decoration: const InputDecoration(
-                                labelText: address,
+                                labelText: tAddress,
                                 prefixIcon: Icon(Icons.location_on),
                               ),
                               enabled: false,
@@ -461,7 +461,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: numberController,
                               decoration: const InputDecoration(
-                                labelText: number,
+                                labelText: tNumber,
                                 prefixIcon: Icon(Icons.numbers),
                               ),
                             ),
@@ -469,7 +469,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: addressComplementController,
                               decoration: const InputDecoration(
-                                labelText: addressComplement,
+                                labelText: tAddressComplement,
                                 prefixIcon: Icon(Icons.home_rounded),
                               ),
                             ),
@@ -477,7 +477,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: neighborhoodController,
                               decoration: const InputDecoration(
-                                labelText: neighborhood,
+                                labelText: tNeighborhood,
                                 prefixIcon: Icon(Icons.holiday_village_rounded),
                               ),
                               enabled: false,
@@ -486,7 +486,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                             TextFormField(
                               controller: cityController,
                               decoration: const InputDecoration(
-                                labelText: city,
+                                labelText: tCity,
                                 prefixIcon: Icon(Icons.location_on),
                               ),
                               enabled: false,
@@ -499,7 +499,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                 LengthLimitingTextInputFormatter(2),
                               ],
                               decoration: const InputDecoration(
-                                labelText: state,
+                                labelText: tState,
                                 prefixIcon: Icon(Icons.location_on),
                               ),
                               enabled: false,
@@ -518,10 +518,10 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  if (cellphone.isEmpty ||
-                                      email.isEmpty ||
-                                      cpf.isEmpty ||
-                                      currentPassword.isEmpty) {
+                                  if (tCellphone.isEmpty ||
+                                      tEmail.isEmpty ||
+                                      tCpf.isEmpty ||
+                                      tCurrentPassword.isEmpty) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -532,8 +532,8 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                     return;
                                   }
 
-                                  if (newPassword.isNotEmpty &&
-                                      currentPassword == newPassword) {
+                                  if (tNewPassword.isNotEmpty &&
+                                      tCurrentPassword == tNewPassword) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -558,7 +558,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(editProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditProfile.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),
@@ -567,7 +567,7 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

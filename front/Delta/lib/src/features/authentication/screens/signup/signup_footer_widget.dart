@@ -19,10 +19,10 @@ class SignUpFooterWidget extends StatelessWidget {
           onPressed: () => Get.to(() => const WhoAreYouScreen()),
           child: Text.rich(TextSpan(children: [
             TextSpan(
-              text: alreadyHaveAnAccount,
+              text: tAlreadyHaveAnAccount,
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            TextSpan(text: login.toUpperCase())
+            TextSpan(text: tLogin.toUpperCase())
           ])),
         )
       ],

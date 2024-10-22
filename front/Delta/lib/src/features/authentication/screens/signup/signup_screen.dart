@@ -36,8 +36,8 @@ class SignUpScreen extends StatelessWidget {
                         width: elementWidth,
                         child: const FormHeaderWidget(
                           image: welcomeImage,
-                          title: signUpTitle,
-                          subTitle: signUpSubTitle,
+                          title: tSignUpTitle,
+                          subTitle: tSignUpSubTitle,
                           imageHeight: 0.15,
                         ),
                       ),

@@ -29,7 +29,7 @@ class CustomAppbar extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => Get.to(() => CentralHomeScreen(whoAreYouTag: whoAreYouTag)),
                 child: Text(
-                  appName,
+                  tAppName,
                   style: Theme.of(context).textTheme.headline4
                 ),
               ),

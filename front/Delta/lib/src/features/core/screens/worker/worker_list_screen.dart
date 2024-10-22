@@ -113,7 +113,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  workerListSubTitle,
+                  tWorkerListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),

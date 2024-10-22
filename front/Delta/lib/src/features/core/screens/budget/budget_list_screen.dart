@@ -234,7 +234,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  budgetListSubTitle,
+                  tBudgetListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding,),

@@ -367,7 +367,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: assistanceNameController,
               decoration: const InputDecoration(
-                  label: Text(assistanceName),
+                  label: Text(tAssistanceName),
                   prefixIcon: Icon(Icons.work)
               ),
             ),
@@ -375,7 +375,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: descriptionController,
               decoration: const InputDecoration(
-                  label: Text(description),
+                  label: Text(tDescription),
                   prefixIcon: Icon(Icons.add)
               ),
             ),
@@ -458,7 +458,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(clientCpf),
+                  label: Text(tClientCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
             ),
@@ -478,7 +478,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                 MaskTextInputFormatter(mask: '#####-###',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cep),
+                  label: Text(tCep),
                   prefixIcon: Icon(Icons.local_post_office)
               ),
               enabled: _isAddressFieldEnabled,
@@ -487,7 +487,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: addressController,
               decoration: const InputDecoration(
-                  label: Text(address),
+                  label: Text(tAddress),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: _isAddressFieldEnabled,
@@ -496,7 +496,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: numberController,
               decoration: const InputDecoration(
-                  label: Text(number),
+                  label: Text(tNumber),
                   prefixIcon: Icon(Icons.numbers)
               ),
               enabled: _isAddressFieldEnabled,
@@ -505,7 +505,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: addressComplementController,
               decoration: const InputDecoration(
-                  label: Text(addressComplement),
+                  label: Text(tAddressComplement),
                   prefixIcon: Icon(Icons.home_rounded)
               ),
               enabled: _isAddressFieldEnabled,
@@ -514,7 +514,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: neighborhoodController,
               decoration: const InputDecoration(
-                  label: Text(neighborhood),
+                  label: Text(tNeighborhood),
                   prefixIcon: Icon(Icons.holiday_village_rounded)
               ),
               enabled: _isAddressFieldEnabled,
@@ -523,7 +523,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
             TextFormField(
               controller: cityController,
               decoration: const InputDecoration(
-                  label: Text(city),
+                  label: Text(tCity),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: _isAddressFieldEnabled,
@@ -536,7 +536,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                 LengthLimitingTextInputFormatter(2),
               ],
               decoration: const InputDecoration(
-                  label: Text(state),
+                  label: Text(tState),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: _isAddressFieldEnabled,
@@ -686,7 +686,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                     );
                   });
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

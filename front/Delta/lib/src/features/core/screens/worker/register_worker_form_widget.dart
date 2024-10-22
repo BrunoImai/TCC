@@ -218,7 +218,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
             TextFormField(
               controller: workerController,
               decoration: const InputDecoration(
-                  label: Text(fullName),
+                  label: Text(tFullName),
                   prefixIcon: Icon(Icons.person_outline_rounded)
               ),
             ),
@@ -226,7 +226,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
             TextFormField(
               controller: emailController,
               decoration: const InputDecoration(
-                  label: Text(email),
+                  label: Text(tEmail),
                   prefixIcon: Icon(Icons.email_outlined)
               ),
             ),
@@ -237,7 +237,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cpf),
+                  label: Text(tCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
             ),
@@ -248,7 +248,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                 MaskTextInputFormatter(mask: '(##) #####-####',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cellphone),
+                  label: Text(tCellphone),
                   prefixIcon: Icon(Icons.phone_android)
               ),
             ),
@@ -269,8 +269,8 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
               },
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: password,
-                hintText: password,
+                labelText: tPassword,
+                hintText: tPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -308,7 +308,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
+                      Text(tNumberOfCharacters, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -332,7 +332,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(numberCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -356,7 +356,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tLowerCaseCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -380,7 +380,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -404,7 +404,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(specialCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                 ],
@@ -417,8 +417,8 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
               obscureText: !_isVisibleConfirmPassword,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: confirmPassword,
-                hintText: confirmPassword,
+                labelText: tConfirmPassword,
+                hintText: tConfirmPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -439,9 +439,9 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                   String password = passwordController.text;
                   String confirmPassword = confirmPasswordController.text;
 
-                  if (central.isEmpty ||
-                      cellphone.isEmpty ||
-                      email.isEmpty ||
+                  if (tCentral.isEmpty ||
+                      tCellphone.isEmpty ||
+                      tEmail.isEmpty ||
                       password.isEmpty) {
                     showDialog(
                       context: context,
@@ -473,7 +473,7 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
                     });
                   }
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

@@ -40,8 +40,8 @@ class RegisterWorkerScreen extends StatelessWidget{
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: registerWorkerTilte,
-                        subTitle: registerWorkerSubTitle,
+                        title: tRegisterWorkerTilte,
+                        subTitle: tRegisterWorkerSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),

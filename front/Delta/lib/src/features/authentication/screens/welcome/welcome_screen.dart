@@ -59,11 +59,11 @@ class WelcomeScreen extends StatelessWidget{
                   Column(
                     children: [
                       Text(
-                        welcomeTitle,
+                        tWelcomeTitle,
                         style: Theme.of(context).textTheme.headline3,
                       ),
                       Text(
-                        welcomeSubTitle,
+                        tWelcomeSubTitle,
                         style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.center,
                       ),
@@ -77,14 +77,14 @@ class WelcomeScreen extends StatelessWidget{
                             Expanded(
                               child: OutlinedButton(
                                 onPressed: () => Get.to(() => const WhoAreYouScreen()),
-                                child: Text(login.toUpperCase()),
+                                child: Text(tLogin.toUpperCase()),
                               ),
                             ),
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => Get.to(() => SignUpScreen()),
-                                child: Text(signUp.toUpperCase()),
+                                child: Text(tSignUp.toUpperCase()),
                               ),
                             ),
                           ],
@@ -97,7 +97,7 @@ class WelcomeScreen extends StatelessWidget{
                               width: constraints.maxWidth * 0.3,
                               child: OutlinedButton(
                                 onPressed: () => Get.to(() => const WhoAreYouScreen()),
-                                child: Text(login.toUpperCase()),
+                                child: Text(tLogin.toUpperCase()),
                               ),
                             ),
                             const SizedBox(width: 10.0),
@@ -105,7 +105,7 @@ class WelcomeScreen extends StatelessWidget{
                               width: constraints.maxWidth * 0.3,
                               child: ElevatedButton(
                                 onPressed: () => Get.to(() => SignUpScreen()),
-                                child: Text(signUp.toUpperCase()),
+                                child: Text(tSignUp.toUpperCase()),
                               ),
                             ),
                           ],

@@ -118,7 +118,7 @@ class _RegisterCategoryFormWidget extends State<RegisterCategoryFormWidget> {
                     );
                   });
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],
