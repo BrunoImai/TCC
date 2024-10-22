@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(profile, style: Theme.of(context).textTheme.headline4),
+        title: Text(tProfile, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -63,25 +63,25 @@ class ProfileScreen extends StatelessWidget {
                   onPressed: () => Get.to(() => const UpdateProfileScreen()),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor, side: BorderSide.none, shape: const StadiumBorder()),
-                  child: const Text(editProfile, style: TextStyle(color: darkColor)),
+                  child: const Text(tEditProfile, style: TextStyle(color: darkColor)),
                 ),
               ),
               const SizedBox(height: 30),
               const Divider(),
               const SizedBox(height: 10),
-              ProfileMenuWidget(title: settings, icon: LineAwesomeIcons.cog, onPress: () {}),
-              ProfileMenuWidget(title: information, icon: LineAwesomeIcons.info, onPress: () {}),
-              ProfileMenuWidget(title: userManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
+              ProfileMenuWidget(title: tSettings, icon: LineAwesomeIcons.cog, onPress: () {}),
+              ProfileMenuWidget(title: tInformation, icon: LineAwesomeIcons.info, onPress: () {}),
+              ProfileMenuWidget(title: tUserManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
               const Divider(),
               const SizedBox(height: 10),
               ProfileMenuWidget(
-                  title: logout,
+                  title: tLogout,
                   icon: LineAwesomeIcons.alternate_sign_out,
                   textColor: Colors.red,
                   endIcon: false,
                   onPress: () {
                     Get.defaultDialog(
-                      title: logout.toUpperCase(),
+                      title: tLogout.toUpperCase(),
                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       content: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),

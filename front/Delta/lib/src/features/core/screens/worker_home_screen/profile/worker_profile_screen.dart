@@ -20,7 +20,7 @@ class WorkerProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(profile, style: Theme.of(context).textTheme.headline4),
+        title: Text(tProfile, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -68,19 +68,19 @@ class WorkerProfileScreen extends StatelessWidget {
               const SizedBox(height: 30),
               const Divider(),
               const SizedBox(height: 10),
-              WorkerProfileMenuWidget(title: settings, icon: LineAwesomeIcons.cog, onPress: () {}),
-              WorkerProfileMenuWidget(title: information, icon: LineAwesomeIcons.info, onPress: () {}),
-              WorkerProfileMenuWidget(title: userManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
+              WorkerProfileMenuWidget(title: tSettings, icon: LineAwesomeIcons.cog, onPress: () {}),
+              WorkerProfileMenuWidget(title: tInformation, icon: LineAwesomeIcons.info, onPress: () {}),
+              WorkerProfileMenuWidget(title: tUserManagement, icon: LineAwesomeIcons.user_check, onPress: () {}),
               const Divider(),
               const SizedBox(height: 10),
               WorkerProfileMenuWidget(
-                  title: logout,
+                  title: tLogout,
                   icon: LineAwesomeIcons.alternate_sign_out,
                   textColor: Colors.red,
                   endIcon: false,
                   onPress: () {
                     Get.defaultDialog(
-                      title: logout.toUpperCase(),
+                      title: tLogout.toUpperCase(),
                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       content: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),

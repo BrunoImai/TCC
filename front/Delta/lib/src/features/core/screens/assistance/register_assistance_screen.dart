@@ -38,8 +38,8 @@ class RegisterAssistanceScreen extends StatelessWidget{
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: registerAssistanceTitle,
-                        subTitle: registerAssistanceSubTitle,
+                        title: tRegisterAssistanceTitle,
+                        subTitle: tRegisterAssistanceSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),

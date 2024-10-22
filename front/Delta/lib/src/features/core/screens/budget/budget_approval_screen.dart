@@ -301,7 +301,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
 
 
       if (description.isEmpty ||
-          assistanceName.isEmpty ||
+          tAssistanceName.isEmpty ||
           totalPrice.isEmpty ||
           clientCpf.isEmpty ||
           name.isEmpty) {
@@ -442,7 +442,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                             TextFormField(
                               controller: descriptionController,
                               decoration: const InputDecoration(
-                                label: Text(description),
+                                label: Text(tDescription),
                                 prefixIcon: Icon(Icons.subject_rounded),
                               ),
                               readOnly: true,
@@ -454,7 +454,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                                 MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: const InputDecoration(
-                                  label: Text(clientCpf),
+                                  label: Text(tClientCpf),
                                   prefixIcon: Icon(Icons.numbers)
                               ),
                               readOnly: true,
@@ -585,7 +585,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

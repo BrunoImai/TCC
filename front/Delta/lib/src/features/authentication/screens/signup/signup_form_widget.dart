@@ -220,14 +220,14 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
             TextFormField(
               controller: centralController,
               decoration: const InputDecoration(
-                  label: Text(central),
+                  label: Text(tCentral),
                   prefixIcon: Icon(Icons.person_outline_rounded)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
               controller: emailController,
               decoration: const InputDecoration(
-                  label: Text(email), prefixIcon: Icon(Icons.email_outlined)),
+                  label: Text(tEmail), prefixIcon: Icon(Icons.email_outlined)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -236,7 +236,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 MaskTextInputFormatter(mask: '##.###.###/####-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cnpj), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(tCnpj), prefixIcon: Icon(Icons.numbers)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -245,7 +245,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 MaskTextInputFormatter(mask: '(##) #####-####',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cellphone), prefixIcon: Icon(Icons.phone_android)),
+                  label: Text(tCellphone), prefixIcon: Icon(Icons.phone_android)),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -264,8 +264,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               },
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: password,
-                hintText: password,
+                labelText: tPassword,
+                hintText: tPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -303,7 +303,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(numberOfCharacters, style: Theme.of(context).textTheme.overline)
+                      Text(tNumberOfCharacters, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -327,7 +327,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(numberCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -351,7 +351,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(lowercaseCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tLowerCaseCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -375,7 +375,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(uppercaseCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                   const SizedBox(height: formHeight - 29),
@@ -399,7 +399,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                         ),
                       ),
                       const SizedBox(width: formHeight - 25),
-                      Text(specialCharacter, style: Theme.of(context).textTheme.overline)
+                      Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline)
                     ],
                   ),
                 ],
@@ -412,8 +412,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               obscureText: !_isVisibleConfirmPassword,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: confirmPassword,
-                hintText: confirmPassword,
+                labelText: tConfirmPassword,
+                hintText: tConfirmPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -434,9 +434,9 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                   String password = passwordController.text;
                   String confirmPassword = confirmPasswordController.text;
 
-                  if (central.isEmpty ||
-                      cellphone.isEmpty ||
-                      email.isEmpty ||
+                  if (tCentral.isEmpty ||
+                      tCellphone.isEmpty ||
+                      tEmail.isEmpty ||
                       password.isEmpty) {
                     showDialog(
                       context: context,
@@ -468,7 +468,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                     });
                   }
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

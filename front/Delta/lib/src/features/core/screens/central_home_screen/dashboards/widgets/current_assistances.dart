@@ -12,7 +12,6 @@ import '../../../assistance/assistance.dart';
 import '../../../category/category.dart';
 import '../../../client/client.dart';
 import '../../../worker/worker.dart';
-import '../../central_home_screen.dart';
 import '../models/current_assistances_info_model.dart';
 import 'current_assistances_info_detail.dart';
 

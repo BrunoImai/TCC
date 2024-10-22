@@ -466,7 +466,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
             TextFormField(
               controller: descriptionController,
               decoration: const InputDecoration(
-                  label: Text(description),
+                  label: Text(tDescription),
                   prefixIcon: Icon(Icons.subject_rounded)
               ),
             ),
@@ -477,7 +477,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(clientCpf),
+                  label: Text(tClientCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
               readOnly: true,
@@ -600,7 +600,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
                     );
                   });
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

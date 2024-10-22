@@ -264,7 +264,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
 
 
       if (description.isEmpty ||
-          assistanceName.isEmpty ||
+          tAssistanceName.isEmpty ||
           clientCpf.isEmpty ||
           name.isEmpty) {
         showDialog(
@@ -277,7 +277,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         return;
       }
 
-      if (assistanceName.length == 1) {
+      if (tAssistanceName.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -383,7 +383,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editAssistance, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditAssistance, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -438,7 +438,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             TextFormField(
                               controller: descriptionController,
                               decoration: InputDecoration(
-                                  label: const Text(description),
+                                  label: const Text(tDescription),
                                   prefixIcon: const Icon(Icons.subject_rounded),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -460,7 +460,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: const InputDecoration(
-                                  label: Text(clientCpf),
+                                  label: Text(tClientCpf),
                                   prefixIcon: Icon(Icons.numbers)
                               ),
                               readOnly: true,
@@ -623,7 +623,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

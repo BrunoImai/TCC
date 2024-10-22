@@ -19,6 +19,7 @@ import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../category/category.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 import '../worker_home_screen/widgets/worker_app_bar.dart';
@@ -47,7 +48,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.whoAreYouTag == 2) {
+    if (widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userName = CentralManager.instance.loggedUser!.central.name;
@@ -152,7 +153,9 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
         print(jsonData);
         final allWorkers = await getAllWorkers();
 
-        final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
+        final Map<num, String> workerIdToNameMap = {
+          for (var worker in allWorkers) worker.id: worker.name
+        };
         print(workerIdToNameMap);
 
         final List<BudgetInformations> budgetsList = [];
@@ -197,7 +200,6 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
         print('Response body: ${response.body}');
         throw Exception('Failed to load budget list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP budgets: $e');
       throw Exception('Falha ao carregar a lista de budgets');
@@ -213,8 +215,19 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
       appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
     }
 
+    final drawer = widget.whoAreYouTag == 2
+        ? CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag)
+        : CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag);
+
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
       appBar: appBar,
+      drawer: drawer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -225,17 +238,25 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
               children: [
                 Text(
                   "$userName,",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText2,
                 ),
                 Text(
-                  budgetListSubTitle,
-                  style: Theme.of(context).textTheme.headline2,
+                  tBudgetListSubTitle,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline2,
                 ),
-                const SizedBox(height: homePadding,),
-                //Search Box
+                const SizedBox(height: homePadding),
                 Container(
-                  decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                    border: Border(left: BorderSide(width: 4)),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -247,7 +268,8 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle:
+                            TextStyle(color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -255,170 +277,215 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                               icon: const Icon(Icons.search, size: 25),
                             ),
                           ),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline4,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
               ],
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredBudgetsList.length,
-                itemBuilder: (context, index) {
-                  final data = filteredBudgetsList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredBudgetsList.map((data) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            height: 200,
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.content_paste_search_rounded,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              data.budget
+                                                  .assistanceId as String,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w800,
+                                                color: darkColor,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() =>
+                                            UpdateBudgetScreen(
+                                              budget: data.budget,
+                                              whoAreYouTag: widget.whoAreYouTag,
+                                            ));
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit, color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.content_paste_search_rounded,
+                                      Icons.assignment_rounded,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.budget.assistanceId as String,
-                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        data.budget.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateBudgetScreen(budget: data.budget, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.assignment_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.budget.name,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.pending_actions,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.budget.status,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.pending_actions,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.budget.status,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.attach_money_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        "${data.budget.totalPrice} reais",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.attach_money_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  "${data.budget.totalPrice} reais",
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.date_range_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        DateFormat('dd/MM/yyyy').format(
+                                            DateTime.parse(
+                                                data.budget.creationDate)),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.date_range_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.budget.creationDate)),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.people,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.workersName.join(', '),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.workersName.join(', '),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),

@@ -261,7 +261,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
 
 
       if (description.isEmpty ||
-          assistanceName.isEmpty ||
+          tAssistanceName.isEmpty ||
           totalPrice.isEmpty ||
           clientCpf.isEmpty ||
           name.isEmpty) {
@@ -421,7 +421,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                             TextFormField(
                               controller: descriptionController,
                               decoration: InputDecoration(
-                                  label: const Text(description),
+                                  label: const Text(tDescription),
                                   prefixIcon: const Icon(Icons.subject_rounded),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
@@ -443,7 +443,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                 MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: const InputDecoration(
-                                  label: Text(clientCpf),
+                                  label: Text(tClientCpf),
                                   prefixIcon: Icon(Icons.numbers)
                               ),
                               readOnly: true,
@@ -529,7 +529,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joined,
+                                    text: tJoined,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

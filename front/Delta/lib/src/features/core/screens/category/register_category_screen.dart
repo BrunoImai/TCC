@@ -7,6 +7,7 @@ import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 
 class RegisterCategoryScreen extends StatelessWidget{
   const RegisterCategoryScreen({super.key, required this.whoAreYouTag});
@@ -16,6 +17,7 @@ class RegisterCategoryScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CentralAppBar(whoAreYouTag: whoAreYouTag,),
+      drawer: CentralDrawerMenu(whoAreYouTag: whoAreYouTag),
       body: SingleChildScrollView(
         child: LayoutBuilder(
           builder: (context, constraints) {

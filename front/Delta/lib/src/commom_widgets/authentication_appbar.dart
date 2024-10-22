@@ -19,7 +19,7 @@ class WelcomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () => Get.to(() => const WelcomeScreen()),
-          child: Text(appName, style: Theme.of(context).textTheme.headline4),
+          child: Text(tAppName, style: Theme.of(context).textTheme.headline4),
         ),
       ),
       centerTitle: true,

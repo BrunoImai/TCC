@@ -30,12 +30,15 @@ class _WorkDelayedState extends State<WorkDelayed>{
       List<ReportResponse> reports = await getAllReports();
 
       int totalReports = reports.length;
+      print('totalReports D: $totalReports');
       int reportsWithWorkDelayed = reports
           .where((report) => report.delayed == true)
           .length;
+      print('reportsWithWorkDelayed $reportsWithWorkDelayed');
 
       setState(() {
         percent = totalReports > 0 ? reportsWithWorkDelayed / totalReports : 0.0;
+        print('percent D $percent');
       });
     } catch (e) {
       print('Erro ao carregar os dados: $e');

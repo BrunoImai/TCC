@@ -33,7 +33,7 @@ class WorkerAppBar extends StatelessWidget implements PreferredSizeWidget{
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () => Get.to(() => WorkerHomeScreen(whoAreYouTag: whoAreYouTag)),
-          child: Text(appName, style: Theme.of(context).textTheme.headline4),
+          child: Text(tAppName, style: Theme.of(context).textTheme.headline4),
         ),
       ),
       actions: [

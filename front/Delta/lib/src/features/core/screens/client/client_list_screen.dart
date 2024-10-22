@@ -12,6 +12,7 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import 'client.dart';
 
 class ClientListScreen extends StatefulWidget {
@@ -91,18 +92,23 @@ class _ClientListScreenState extends State<ClientListScreen> {
         print('Response body: ${response.body}');
         throw Exception('Failed to load client list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP: $e');
       throw Exception('Falha ao carregar a lista de clientes');
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
       appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag,),
+      drawer: CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -113,14 +119,20 @@ class _ClientListScreenState extends State<ClientListScreen> {
               children: [
                 Text(
                   "${CentralManager.instance.loggedUser!.central.name},",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText2,
                 ),
                 Text(
-                  clientListSubTitle,
-                  style: Theme.of(context).textTheme.headline2,
+                  tClientListSubTitle,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline2,
                 ),
                 const SizedBox(height: homePadding),
-                //Search Box
+                // Search Box
                 Container(
                   decoration: const BoxDecoration(
                       border: Border(left: BorderSide(width: 4))),
@@ -137,8 +149,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle:
-                            TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle: TextStyle(
+                                color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -146,7 +158,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
                               icon: const Icon(Icons.search, size: 25),
                             ),
                           ),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline4,
                         ),
                       ),
                     ],
@@ -157,130 +172,148 @@ class _ClientListScreenState extends State<ClientListScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredClientList.length,
-                itemBuilder: (context, index) {
-                  final client = filteredClientList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredClientList.map((client) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.person_outline_rounded,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              client.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w800,
+                                                color: darkColor,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() =>
+                                            UpdateClientScreen(client: client,
+                                              whoAreYouTag: widget
+                                                  .whoAreYouTag,));
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit, color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.person_outline_rounded,
+                                      Icons.email,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
-                                    Flexible(
+                                    Expanded(
                                       child: Text(
-                                        client.name,
+                                        client.email,
                                         style: GoogleFonts.poppins(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w800,
-                                            color: darkColor),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateClientScreen(client: client, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.email,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  client.email,
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.phone_android_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        client.cellphone,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.phone_android_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  client.cellphone,
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        client.address,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  client.address,
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
           ),

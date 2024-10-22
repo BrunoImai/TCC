@@ -252,7 +252,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: clientController,
               decoration: const InputDecoration(
-                  label: Text(fullName),
+                  label: Text(tFullName),
                   prefixIcon: Icon(Icons.person_outline_rounded)
               ),
             ),
@@ -260,7 +260,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: emailController,
               decoration: const InputDecoration(
-                  label: Text(email),
+                  label: Text(tEmail),
                   prefixIcon: Icon(Icons.email_outlined)
               ),
             ),
@@ -271,7 +271,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cpf),
+                  label: Text(tCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
             ),
@@ -282,7 +282,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                 MaskTextInputFormatter(mask: '(##) #####-####',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cellphone),
+                  label: Text(tCellphone),
                   prefixIcon: Icon(Icons.phone_android)
               ),
             ),
@@ -293,7 +293,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                 MaskTextInputFormatter(mask: '#####-###',),
               ],
               decoration: const InputDecoration(
-                  label: Text(cep),
+                  label: Text(tCep),
                   prefixIcon: Icon(Icons.local_post_office)
               ),
               onChanged: (value) {
@@ -307,7 +307,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: addressController,
               decoration: const InputDecoration(
-                  label: Text(address),
+                  label: Text(tAddress),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: false
@@ -316,7 +316,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: numberController,
               decoration: const InputDecoration(
-                  label: Text(number),
+                  label: Text(tNumber),
                   prefixIcon: Icon(Icons.numbers)
               ),
             ),
@@ -324,7 +324,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: addressComplementController,
               decoration: const InputDecoration(
-                  label: Text(addressComplement),
+                  label: Text(tAddressComplement),
                   prefixIcon: Icon(Icons.home_rounded)
               ),
             ),
@@ -332,7 +332,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: neighborhoodController,
               decoration: const InputDecoration(
-                  label: Text(neighborhood),
+                  label: Text(tNeighborhood),
                   prefixIcon: Icon(Icons.holiday_village_rounded)
               ),
               enabled: false
@@ -341,7 +341,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
             TextFormField(
               controller: cityController,
               decoration: const InputDecoration(
-                  label: Text(city),
+                  label: Text(tCity),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: false
@@ -354,7 +354,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                 LengthLimitingTextInputFormatter(2),
               ],
               decoration: const InputDecoration(
-                  label: Text(state),
+                  label: Text(tState),
                   prefixIcon: Icon(Icons.location_on)
               ),
               enabled: false
@@ -384,7 +384,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
                     );
                   });
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

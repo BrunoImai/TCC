@@ -138,8 +138,8 @@ class _LoginFormState extends State<LoginForm> {
               controller: emailController,
               decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person_outline_outlined),
-                  labelText: email,
-                  hintText: email,
+                  labelText: tEmail,
+                  hintText: tEmail,
                   border: OutlineInputBorder()),
             ),
             const SizedBox(height: formHeight - 20),
@@ -148,8 +148,8 @@ class _LoginFormState extends State<LoginForm> {
               obscureText: !_isVisible,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.fingerprint),
-                labelText: password,
-                hintText: password,
+                labelText: tPassword,
+                hintText: tPassword,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -169,7 +169,7 @@ class _LoginFormState extends State<LoginForm> {
               child: TextButton(
                   onPressed: () =>
                       Get.to(() => const ForgetPasswordMailScreen()),
-                  child: const Text(forgetPassword)),
+                  child: const Text(tForgetPassword)),
             ),
             SizedBox(
               width: double.infinity,
@@ -201,7 +201,7 @@ class _LoginFormState extends State<LoginForm> {
 
                   }
                 },
-                child: Text(login.toUpperCase()),
+                child: Text(tLogin.toUpperCase()),
               ),
             ),
           ],

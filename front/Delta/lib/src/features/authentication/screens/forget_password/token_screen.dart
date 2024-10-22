@@ -88,12 +88,12 @@ class _TokenScreenState extends State<TokenScreen>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              otpTitle,
+              tOtpTitle,
               style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 80.0),
             ),
-            Text(otpSubTitle.toUpperCase(), style: Theme.of(context).textTheme.headline6),
+            Text(tOtpSubTitle.toUpperCase(), style: Theme.of(context).textTheme.headline6),
             const SizedBox(height: 40.0),
-            const Text("$otpMessage equipe.a.g.e.oficial@gmail.com", textAlign: TextAlign.center),
+            const Text("$tOtpMessage equipe.a.g.e.oficial@gmail.com", textAlign: TextAlign.center),
             const SizedBox(height: 20.0),
             Form(
               key: _codeFormKey,
@@ -102,8 +102,8 @@ class _TokenScreenState extends State<TokenScreen>{
                   TextFormField(
                     controller: codeController,
                     decoration: const InputDecoration(
-                        label: Text(code),
-                        hintText: code,
+                        label: Text(tCode),
+                        hintText: tCode,
                         prefixIcon: Icon(Icons.numbers)),
                   ),
                   const SizedBox(height: 20.0),
@@ -125,7 +125,7 @@ class _TokenScreenState extends State<TokenScreen>{
                               });
                             }
                           },
-                          child: Text(next.toUpperCase()))),
+                          child: Text(tNext.toUpperCase()))),
                 ],
               ),
             ),

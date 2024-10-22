@@ -466,7 +466,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
             TextFormField(
               controller: descriptionController,
               decoration: const InputDecoration(
-                  label: Text(description),
+                  label: Text(tDescription),
                   prefixIcon: Icon(Icons.subject_rounded)
               ),
             ),
@@ -477,7 +477,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                 MaskTextInputFormatter(mask: '###.###.###-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(clientCpf),
+                  label: Text(tClientCpf),
                   prefixIcon: Icon(Icons.numbers)
               ),
               readOnly: true,
@@ -695,7 +695,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                     );
                   });
                 },
-                child: Text(signUp.toUpperCase()),
+                child: Text(tSignUp.toUpperCase()),
               ),
             )
           ],

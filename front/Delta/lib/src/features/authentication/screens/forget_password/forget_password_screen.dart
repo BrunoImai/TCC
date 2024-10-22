@@ -90,8 +90,8 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                 const SizedBox(height: defaultSize * 4),
                 FormHeaderWidget(
                   image: forgetPasswordImage,
-                  title: forgetPassword.toUpperCase(),
-                  subTitle: forgetPasswordSubTitle,
+                  title: tForgetPassword.toUpperCase(),
+                  subTitle: tForgetPasswordSubTitle,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   heightBetween: 30.0,
                   textAlign: TextAlign.center,
@@ -104,8 +104,8 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                       TextFormField(
                         controller: emailController,
                         decoration: const InputDecoration(
-                            label: Text(email),
-                            hintText: email,
+                            label: Text(tEmail),
+                            hintText: tEmail,
                             prefixIcon: Icon(Icons.mail_outline_rounded)),
                       ),
                       const SizedBox(height: 20.0),
@@ -127,7 +127,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
                                   });
                                 }
                               },
-                              child: Text(next.toUpperCase()))),
+                              child: Text(tNext.toUpperCase()))),
                     ],
                   ),
                 ),

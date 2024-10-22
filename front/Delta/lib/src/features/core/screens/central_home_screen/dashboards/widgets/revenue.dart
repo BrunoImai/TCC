@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/view_line_chart.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/revenue_line_chart.dart';
 
 import '../../../../../../constants/colors.dart';
 import '../../../../../../constants/sizes.dart';
 
-class Viewers extends StatelessWidget {
-  const Viewers({super.key});
+class Revenue extends StatelessWidget {
+  const Revenue({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Viewers extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Viewers',
+            'Receita',
             style: TextStyle(
               color: darkColor,
               fontWeight: FontWeight.w700,
@@ -28,7 +28,7 @@ class Viewers extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ViewLineChart(),
+            child: RevenueLineChart(),
           )
         ],
       ),

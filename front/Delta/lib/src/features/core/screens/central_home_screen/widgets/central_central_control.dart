@@ -33,16 +33,19 @@ class CentralCentralControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth < 600 ? 0.3 : 0.2;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Center(
         child: Wrap(
-          spacing: homePadding,
-          runSpacing: homePadding,
+          spacing: homePadding - 5,
+          runSpacing: homePadding - 5,
           alignment: WrapAlignment.center,
           children: [
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => NotificationListScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -51,17 +54,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.notifications, size: 40, color: darkColor),
+                      const Icon(Icons.notifications, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tNotificationsHistory,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -72,7 +75,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterClientScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -81,17 +84,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_add, size: 40, color: darkColor),
+                      const Icon(Icons.person_add, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerClient,
+                          tRegisterClient,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -102,7 +105,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => ClientListScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -111,17 +114,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const Icon(Icons.person_search, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          clients,
+                          tClients,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -132,7 +135,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterWorkerScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -141,17 +144,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_add, size: 40, color: darkColor),
+                      const Icon(Icons.person_add, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerWorker,
+                          tRegisterWorker,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -162,7 +165,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => WorkerListScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -171,17 +174,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const Icon(Icons.person_search, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          workers,
+                          tWorkers,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -192,7 +195,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterAssistanceScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -201,17 +204,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.work, size: 40, color: darkColor),
+                      const Icon(Icons.work, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerService,
+                          tRegisterService,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -222,7 +225,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => AssistanceListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -231,17 +234,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.work_history, size: 40, color: darkColor),
+                      const Icon(Icons.work_history, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          serviceHistory,
+                          tServiceHistory,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -252,7 +255,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -261,17 +264,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.attach_money_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.attach_money_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerBudget,
+                          tRegisterBudget,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -282,7 +285,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => BudgetListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -291,17 +294,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.monetization_on_outlined, size: 40, color: darkColor),
+                      const Icon(Icons.monetization_on_outlined, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          budgetHistory,
+                          tBudgetHistory,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -312,7 +315,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: whoAreYouTag)),
                 style: ElevatedButton.styleFrom(
@@ -321,17 +324,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.library_books_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.library_books_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tRegisterReport,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -342,7 +345,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => ReportListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -351,17 +354,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.subject_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.subject_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tReports,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -372,7 +375,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => RegisterCategoryScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -381,17 +384,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.add_box_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.add_box_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tRegisterCategory,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -402,7 +405,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => CategoryListScreen(whoAreYouTag: whoAreYouTag,)),
                 style: ElevatedButton.styleFrom(
@@ -411,17 +414,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.category_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.category_rounded, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
                           tCategories,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -432,7 +435,7 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
@@ -441,17 +444,17 @@ class CentralCentralControl extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.attach_money, size: 40, color: darkColor),
+                      const Icon(Icons.attach_money, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          comissionControl,
+                          tComissionControl,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -462,30 +465,27 @@ class CentralCentralControl extends StatelessWidget {
               ),
             ),
             FractionallySizedBox(
-              widthFactor: 0.3,
+              widthFactor: widthFactor,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => ChangeNotifierProvider(
-                  create: (context) => Controller(),
-                  child: DashBoardScreen(whoAreYouTag: whoAreYouTag),
-                )),
+                onPressed: () => Get.to(() => DashBoardScreen(whoAreYouTag: whoAreYouTag),),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.insert_chart_outlined, size: 40, color: darkColor),
+                      const Icon(Icons.insert_chart_outlined, size: 30, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          dashboards,
+                          tDashboards,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
-                              fontSize: 14.0,
+                              fontSize: 13.0,
                               fontWeight: FontWeight.w600,
                               color: darkColor),
                           maxLines: 2,

@@ -55,11 +55,11 @@ class WhoAreYouScreen extends StatelessWidget{
                   Column(
                     children: [
                       Text(
-                        whoAreYouTitle,
+                        tWhoAreYouTitle,
                         style: Theme.of(context).textTheme.headline3,
                       ),
                       Text(
-                        whoAreYouSubTitle,
+                        tWhoAreYouSubTitle,
                         style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.center,
                       ),
@@ -73,14 +73,14 @@ class WhoAreYouScreen extends StatelessWidget{
                             Expanded(
                               child: OutlinedButton(
                                 onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1)),
-                                child: Text(employee.toUpperCase()),
+                                child: Text(tEmployee.toUpperCase()),
                               ),
                             ),
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 2)),
-                                child: Text(company.toUpperCase()),
+                                child: Text(tCompany.toUpperCase()),
                               ),
                             ),
                           ],
@@ -93,7 +93,7 @@ class WhoAreYouScreen extends StatelessWidget{
                               width: constraints.maxWidth * 0.3,
                               child: OutlinedButton(
                                 onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 1)),
-                                child: Text(employee.toUpperCase()),
+                                child: Text(tEmployee.toUpperCase()),
                               ),
                             ),
                             const SizedBox(width: 10.0),
@@ -101,7 +101,7 @@ class WhoAreYouScreen extends StatelessWidget{
                               width: constraints.maxWidth * 0.3,
                               child: ElevatedButton(
                                 onPressed: () => Get.to(() => const LoginScreen(whoAreYouTag: 2)),
-                                child: Text(company.toUpperCase()),
+                                child: Text(tCompany.toUpperCase()),
                               ),
                             ),
                           ],

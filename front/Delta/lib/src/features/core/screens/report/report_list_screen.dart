@@ -13,10 +13,10 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
+import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker/worker.dart';
 import '../worker/worker_manager.dart';
 import '../worker_home_screen/widgets/worker_app_bar.dart';
-
 
 class ReportListScreen extends StatefulWidget {
   const ReportListScreen({super.key, required this.whoAreYouTag});
@@ -41,7 +41,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.whoAreYouTag == 2) {
+    if (widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userName = CentralManager.instance.loggedUser!.central.name;
@@ -56,7 +56,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
     filteredReportsList = [];
   }
 
-
   void _onSearchChanged() {
     setState(() {
       filteredReportsList = reportList.where((data) {
@@ -70,9 +69,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
   Future<ClientResponse?> getClientById(int id) async {
     final response = await http.get(
       Uri.parse('http://localhost:8080/api/$userType/client/$id'),
-      headers: {
-        'Authorization': 'Bearer $userToken'
-      },
+      headers: {'Authorization': 'Bearer $userToken'},
     );
 
     if (response.statusCode == 200) {
@@ -94,14 +91,11 @@ class _ReportListScreenState extends State<ReportListScreen> {
     }
   }
 
-
   Future<List<WorkersList>> getAllWorkers() async {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/$userType/worker'),
-        headers: {
-          'Authorization': 'Bearer $userToken'
-        },
+        headers: {'Authorization': 'Bearer $userToken'},
       );
       print("Status code: ${response.statusCode}");
 
@@ -135,9 +129,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/$userType/report'),
-        headers: {
-          'Authorization': 'Bearer $userToken'
-        },
+        headers: {'Authorization': 'Bearer $userToken'},
       );
       print("Status code: ${response.statusCode}");
 
@@ -146,7 +138,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
         print(jsonData);
         final allWorkers = await getAllWorkers();
 
-        final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
+        final Map<num, String> workerIdToNameMap = {
+          for (var worker in allWorkers) worker.id: worker.name
+        };
         print("workerIdToNameMap: $workerIdToNameMap");
 
         final List<ReportInformations> reportsList = [];
@@ -158,8 +152,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
               .toList();
 
           final workersIds = (item['responsibleWorkersIds'] as List<dynamic>)
-              .map((id) => id.toString()).toList();
-
+              .map((id) => id.toString())
+              .toList();
 
           final report = ReportResponse(
               id: item['id'].toString(),
@@ -173,13 +167,12 @@ class _ReportListScreenState extends State<ReportListScreen> {
               totalPrice: item['totalPrice'].toString(),
               paymentType: item['paymentType'],
               machinePartExchange: item['machinePartExchange'],
-              delayed: item['delayed']
-          );
+              delayed: item['delayed']);
 
           print("Report: $report");
 
-          final reportInformations = ReportInformations(
-              report.id, workerNames, report);
+          final reportInformations =
+              ReportInformations(report.id, workerNames, report);
           reportsList.add(reportInformations);
         }
 
@@ -195,7 +188,6 @@ class _ReportListScreenState extends State<ReportListScreen> {
         print('Response body: ${response.body}');
         throw Exception('Failed to load report list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP reports: $e');
       throw Exception('Falha ao carregar a lista de reports');
@@ -211,8 +203,16 @@ class _ReportListScreenState extends State<ReportListScreen> {
       appBar = WorkerAppBar(whoAreYouTag: widget.whoAreYouTag);
     }
 
+    final drawer = widget.whoAreYouTag == 2
+        ? CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag)
+        : CentralDrawerMenu(whoAreYouTag: widget.whoAreYouTag);
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth <= 600 ? 1.0 : 0.3;
+
     return Scaffold(
       appBar: appBar,
+      drawer: drawer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -229,11 +229,13 @@ class _ReportListScreenState extends State<ReportListScreen> {
                   tReportListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                const SizedBox(height: homePadding,),
-                //Search Box
+                const SizedBox(height: homePadding),
+                // Search Box
                 Container(
-                  decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(
+                      border: Border(left: BorderSide(width: 4))),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -245,7 +247,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle:
+                                TextStyle(color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -259,167 +262,208 @@ class _ReportListScreenState extends State<ReportListScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: homePadding,),
+                const SizedBox(height: homePadding),
               ],
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(homeCardPadding),
-              child: ListView.builder(
-                itemCount: filteredReportsList.length,
-                itemBuilder: (context, index) {
-                  final data = filteredReportsList[index];
-                  return Card(
-                    elevation: 3,
-                    color: cardBgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(homeCardPadding),
+                child: Center(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: filteredReportsList.map((data) {
+                      return FractionallySizedBox(
+                        widthFactor: widthFactor,
+                        child: Card(
+                          elevation: 3,
+                          color: cardBgColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            height:
+                                200, // Defina uma altura fixa ou ajustável conforme necessário
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.content_paste_search_rounded,
+                                            color: darkColor,
+                                            size: 35,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              data.report.assistanceId
+                                                  as String,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w800,
+                                                color: darkColor,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.to(() => UpdateReportScreen(
+                                            report: data.report,
+                                            whoAreYouTag: widget.whoAreYouTag));
+                                      },
+                                      icon: const Icon(Icons.edit,
+                                          color: darkColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.content_paste_search_rounded,
+                                      Icons.assignment_rounded,
                                       color: darkColor,
-                                      size: 35,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.report.assistanceId as String,
-                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
+                                        data.report.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(() => UpdateReportScreen(report: data.report, whoAreYouTag: widget.whoAreYouTag,));
-                                },
-                                icon: const Icon(Icons.edit, color: darkColor),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.assignment_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.report.name,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.attach_money_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        "${data.report.totalPrice} reais",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.attach_money_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  "${data.report.totalPrice} reais",
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.payment_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.report.paymentType,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.payment_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.report.paymentType,
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.date_range_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        DateFormat('dd/MM/yyyy').format(
+                                            DateTime.parse(
+                                                data.report.creationDate)),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.date_range_rounded,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(data.report.creationDate)),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.people,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        data.workersName.join(', '),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  data.workersName.join(', '),
-                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );

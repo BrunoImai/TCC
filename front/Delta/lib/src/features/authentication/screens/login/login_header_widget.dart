@@ -19,8 +19,8 @@ class LoginHeaderWidget extends StatelessWidget {
       children: [
         FormHeaderWidget(
           image: welcomeImage,
-          title: loginTitle,
-          subTitle: loginSubTitle,
+          title: tLoginTitle,
+          subTitle: tLoginSubTitle,
           imageHeight: 0.2,
         ),
       ],
