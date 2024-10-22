@@ -6,6 +6,7 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/worker")
@@ -128,4 +129,21 @@ class WorkerController(
     fun listUnreadNotifications() =
         service.listUnreadNotifications()
             .map { it.toResponse() }
+
+    // Commission
+
+    @GetMapping("/commission/{date}")
+    fun getCommissionForMonth(@PathVariable("date") date: Date) =
+        service.getCommissionForMonth(date)
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/commission/service/{id}")
+    fun getCommissionForCurrentMonth(@PathVariable("id") id: Long) =
+        service.getCommissionByService(id)
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/commission")
+    fun getAllCommissions() =
+        service.getAllCommissions()
+            .let { ResponseEntity.ok(it) }
 }

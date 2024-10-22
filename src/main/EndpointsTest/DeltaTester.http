@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "Central Bruno",
-  "email": "bruno.y.l.imai@gmail.com",
+  "email": " bv ",
   "password": "central0000",
     "cellphone": "11999999999",
   "cnpj": "12348678902234"
@@ -75,12 +75,26 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "Cleiton",
-    "email": "tesewee@gmail.com",
+    "name": "Bob",
+    "email": "oie@gmail.com",
     "password": "12345678",
     "cellphone": "11999999999",
-    "cpf": "12245678901",
+    "cpf": "12255678901",
     "address": "Rua dos bobos, n 0"
+}
+
+### Criar novo Worker
+POST localhost:8080/api/central/worker
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Jose",
+  "email": "jose@gmail.com",
+  "password": "12345678",
+  "cellphone": "11999999999",
+  "cpf": "12255678902",
+  "address": "Rua dos bobos, n 0"
 }
 
 ### Lista todos os Workers
@@ -150,8 +164,8 @@ Content-Type: application/json
   "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420, Brazil",
   "cpf": "12345678901",
   "period": "Manha",
-  "workersIds": [6],
-  "categoriesId": [3]
+  "workersIds": [2],
+  "categoriesId": [1]
 }
 
 ### Cadastra serviço 2
@@ -202,7 +216,7 @@ Content-Type: application/json
   "assistanceId": 1,
   "responsibleWorkersIds": [6],
   "clientId": 1,
-  "totalPrice": 100.00
+  "totalPrice": 9999.0
 }
 
 
@@ -220,23 +234,23 @@ Content-Type: application/json
   "totalPrice": 200.00
 }
 
-### busca relatório
+### busca orcamento
 
-GET localhost:8080/api/central/budget/1
+GET localhost:8080/api/central/budget/11
 Authorization: Bearer {{token}}
 
 ### Lista todos os orcamentos
-GET localhost:8080/api/worker/budget
+GET localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 
 
-### Cria relatório Central
+### Cria orcamento Central
 POST localhost:8080/api/central/report
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Relatorio 4",
+  "name": "orcamento final",
   "description": "Concerto maquina de lavar",
   "assistanceId": 1,
   "responsibleWorkersIds": [1],

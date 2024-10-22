@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AssistanceRepository : JpaRepository<Assistance, Long> {
     fun findAllByResponsibleCentral(central: Central): List<Assistance>
-    fun findByAddress(address: String): Assistance?
+    fun findByAddress(address: String):  List<Assistance>?
     fun findAllByResponsibleWorkersContains(worker: Worker): List<Assistance>
 
     fun findAssistanceByAssistanceStatusAndClient_Central(status: AssistanceStatus, central: Central) : List<Assistance>

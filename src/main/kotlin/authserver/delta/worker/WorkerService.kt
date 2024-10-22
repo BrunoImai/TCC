@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.TemporalAdjusters
 import java.util.*
 
 @Service
@@ -90,8 +91,9 @@ class WorkerService (
 
         val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
         val closestAssistanceAddress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
-        val closestAssistance = assistanceRepository.findByAddress(closestAssistanceAddress.address) ?: throw IllegalStateException("Serviço não encontrado")
+        val closestAssistances = assistanceRepository.findByAddress(closestAssistanceAddress.address) ?: throw IllegalStateException("Serviço não encontrado")
 
+        val closestAssistance = closestAssistances.first()
         closestAssistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
 
         worker.currentAssistances.add(closestAssistance)
@@ -381,6 +383,58 @@ class WorkerService (
     private fun buildUrl(origin: String, destination: String): String {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"
     }
+
+    fun getCommissionForMonth(date: Date): Double {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+
+        // Converter a data para LocalDate para facilitar a manipulação do mês
+        val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+        // Definir a data inicial e final do mês da data fornecida
+        val startOfMonth = localDate.with(TemporalAdjusters.firstDayOfMonth())
+        val endOfMonth = localDate.with(TemporalAdjusters.lastDayOfMonth())
+
+        // Converter as datas de volta para Date
+        val startDate = Date.from(startOfMonth.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        val endDate = Date.from(endOfMonth.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        // Obter os budgets do worker para o intervalo de datas
+        val budgets = budgetRepository.findAllByWorkerAndDateRange(worker, startDate, endDate)
+
+        // Calcular a comissão do worker para este mês
+        val commissionPercentage = worker.commissionPorcentage?.toDouble() ?: 0.0
+        return budgets.sumOf { it.totalPrice.toDouble() * commissionPercentage / 100 }
+    }
+
+    fun getCommissionByService(serviceId: Long): Double {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        val budget = budgetRepository.findByIdOrNull(serviceId) ?: throw IllegalStateException("Orçamento não encontrado")
+
+        // Verifica se a porcentagem de comissão é válida e converte para um tipo Float
+        val commissionPercentage = worker.commissionPorcentage.toDouble() ?: 0.0
+
+        // Calcula a comissão do budget
+        return budget.totalPrice * commissionPercentage / 100
+    }
+
+    fun getAllCommissions(): Double {
+        val workerId = getWorkerIdFromToken()
+        val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
+        centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+
+        // Obter todos os budgets do worker
+        val budgets = budgetRepository.findAllByResponsibleWorkersContains(worker)
+
+        // Calcular a comissão total do worker
+        val commissionPercentage = worker.commissionPorcentage?.toDouble() ?: 0.0
+        return budgets.sumOf { it.totalPrice.toDouble() * commissionPercentage / 100 }
+    }
+
+
 
 
 
