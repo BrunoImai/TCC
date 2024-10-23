@@ -315,7 +315,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep - Brazil";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep, $country";
 
       UpdateAssistanceRequest updateAssistanceRequest = UpdateAssistanceRequest(
         description: tDescription,
