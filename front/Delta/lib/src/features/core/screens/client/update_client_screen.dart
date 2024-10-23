@@ -96,7 +96,8 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
   }
 
   Future<void> fetchAddress(String cep) async {
-    if (cep.replaceAll(RegExp(r'\D'), '').length != 8) {
+    cep = cep.replaceAll(RegExp(r'\D'), '');
+    if (cep.length != 8) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -106,19 +107,44 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
       return;
     }
 
-    final response = await http.get(Uri.parse('https://viacep.com.br/ws/$cep/json/'));
+    String url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$cep+Brazil&key=AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY';
+
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      if (data['erro'] == null) {
-        setState(() {
-          addressController.text = data['logradouro'] ?? '';
-          neighborhoodController.text = data['bairro'] ?? '';
-          cityController.text = data['localidade'] ?? '';
-          stateController.text = data['uf'] ?? '';
-          countryController.text = 'Brasil';
-        });
+      if (data['status'] == 'OK') {
+        final result = data['results'][0]['formatted_address'];
+
+        List<String> parts = result.trim().split(',');
+
+        if (parts.length >= 4) {
+          String street = parts[0];
+          int firstNumberIndex = street.indexOf(RegExp(r'\d'));
+          if (firstNumberIndex != -1) {
+            street = street.substring(0, firstNumberIndex).trim();
+          }
+
+          String neighborhood = parts.length > 1 ? parts[1].split('-').last.trim() : '';
+          String city = parts.length > 2 ? parts[2].split('-').first.trim() : '';
+          String state = parts.length > 2 ? parts[2].split('-').last.trim().split(' ')[0].trim() : '';
+          String country = parts.length > 3 ? parts[3].trim() : '';
+          setState(() {
+            addressController.text = street;
+            neighborhoodController.text = neighborhood;
+            cityController.text = city;
+            stateController.text = state;
+            countryController.text = country;
+          });
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertPopUp(errorDescription: 'Formato de endereço não reconhecido.');
+            },
+          );
+        }
       } else {
         showDialog(
           context: context,

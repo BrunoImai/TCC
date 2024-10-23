@@ -36,9 +36,9 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
   final TextEditingController neighborhoodController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
 
 
-  bool _isAddressFieldEnabled = true;
   bool _isWorkerExpanded = false;
   bool _isCategoryExpanded = false;
   bool _isPeriodExpanded = false;
@@ -75,7 +75,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       stateController.clear();
       neighborhoodController.clear();
       clientNameController.clear();
-      _isAddressFieldEnabled = true;
     });
   }
 
@@ -185,9 +184,12 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       if (response.statusCode == 200) {
         final clientData = jsonDecode(response.body);
 
+        print(clientData['address']);
+
         setState(() {
           cepController.text = clientData['address'].split(', ')[3];
           addressController.text = clientData['address'].split(', ')[0];
+          countryController.text = clientData['address'].split(', ')[4];
           numberController.text = clientData['address'].split(', ')[1].split(' - ')[0];
           neighborhoodController.text = clientData['address'].split(', ')[1].split(' - ')[1];
           cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
@@ -196,7 +198,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
 
           clientNameController.text = clientData['name'];
 
-          _isAddressFieldEnabled = false;
         });
       } else {
         showDialog(
@@ -227,6 +228,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       String clientCpf = clientCpfController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
       List<num> categoriesId = selectedCategories.map((category) => category.id).toList();
+      String country = countryController.text;
 
       if (description.isEmpty ||
           assistanceName.isEmpty ||
@@ -237,12 +239,13 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
           city.isEmpty ||
           state.isEmpty ||
           neighborhood.isEmpty ||
-          selectedPeriod.isEmpty) {
+          selectedPeriod.isEmpty ||
+          country.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade, estado e período são obrigatórios.');
+                errorDescription: 'Os campos nome do serviço, descrição, CPF do cliente, cep, endereço, número, bairro, cidade, estado, país e período são obrigatórios.');
           },
         );
         return;
@@ -294,7 +297,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return;
       }
 
-      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep";
+      String fullAddress = "$address, $number - $neighborhood, $city - $state, $cep, $country";
 
       AssistanceRequest assistanceRequest = AssistanceRequest(
           description: description,
@@ -469,7 +472,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tClientName),
                   prefixIcon: Icon(Icons.person)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -481,7 +484,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tCep),
                   prefixIcon: Icon(Icons.local_post_office)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -490,7 +493,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tAddress),
                   prefixIcon: Icon(Icons.location_on)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -499,7 +502,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tNumber),
                   prefixIcon: Icon(Icons.numbers)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -508,7 +511,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tAddressComplement),
                   prefixIcon: Icon(Icons.home_rounded)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -517,7 +520,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tNeighborhood),
                   prefixIcon: Icon(Icons.holiday_village_rounded)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -526,7 +529,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tCity),
                   prefixIcon: Icon(Icons.location_on)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -539,7 +542,16 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
                   label: Text(tState),
                   prefixIcon: Icon(Icons.location_on)
               ),
-              enabled: _isAddressFieldEnabled,
+              enabled: false,
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: countryController,
+              decoration: const InputDecoration(
+                label: Text(tCountry),
+                prefixIcon: Icon(Icons.public),
+              ),
+              enabled: false,
             ),
             const SizedBox(height: formHeight - 20),
             GestureDetector(

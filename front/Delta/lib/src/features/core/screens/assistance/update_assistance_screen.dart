@@ -42,6 +42,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
   final TextEditingController stateController = TextEditingController();
   final TextEditingController neighborhoodController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
 
   bool _isAddressFieldEnabled = true;
   bool _isWorkerExpanded = false;
@@ -84,21 +85,6 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
     descriptionController.text = widget.assistance.description;
     clientCpfController.text = widget.assistance.clientCpf;
     addressComplementController.text = widget.assistance.complement!;
-
-    List<String> addressParts = widget.assistance.address.split(', ');
-    addressController.text = addressParts[0];
-    String numberNeighborhood = addressParts[1];
-    String cityState = addressParts[2];
-    cepController.text = addressParts[3];
-
-    List<String> numberNeighborhoodList = numberNeighborhood.split(' - ');
-    numberController.text = numberNeighborhoodList[0];
-    neighborhoodController.text = numberNeighborhoodList[1];
-
-    List<String> cityStateList = cityState.split(' - ');
-    cityController.text = cityStateList[0];
-    stateController.text = cityStateList[1];
-
     selectedPeriod = widget.assistance.period;
   }
 
@@ -221,6 +207,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         setState(() {
           cepController.text = clientData['address'].split(', ')[3];
           addressController.text = clientData['address'].split(', ')[0];
+          countryController.text = clientData['address'].split(', ')[4];
           numberController.text = clientData['address'].split(', ')[1].split(' - ')[0];
           neighborhoodController.text = clientData['address'].split(', ')[1].split(' - ')[1];
           cityController.text = clientData['address'].split(', ')[2].split(' - ')[0];
@@ -256,6 +243,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       String city = cityController.text;
       String state = stateController.text.toUpperCase();
       String neighborhood = neighborhoodController.text;
+      String country = countryController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
       List<num> categoriesId = selectedCategories.map((category) => category.id).toList();
 
@@ -650,6 +638,15 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
                               decoration: const InputDecoration(
                                   label: Text(tState),
                                   prefixIcon: Icon(Icons.location_on)
+                              ),
+                              enabled: false,
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: countryController,
+                              decoration: const InputDecoration(
+                                label: Text(tCountry),
+                                prefixIcon: Icon(Icons.public),
                               ),
                               enabled: false,
                             ),

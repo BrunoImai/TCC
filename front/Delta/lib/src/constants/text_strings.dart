@@ -12,6 +12,7 @@ const String tAddress = "Endereço";
 const String tAddressComplement = "Complemento";
 const String tCity = "Cidade";
 const String tState = "Estado";
+const String tCountry = "País";
 const String tNeighborhood = "Bairro";
 const String tCentral = "Nome da Empresa";
 const String tCellphone = "Celular";
