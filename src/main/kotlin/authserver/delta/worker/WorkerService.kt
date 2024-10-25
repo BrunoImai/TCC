@@ -91,7 +91,7 @@ class WorkerService (
 
         val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
         val closestAssistanceAddress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
-        val closestAssistances = assistanceRepository.findByAddress(closestAssistanceAddress.address) ?: throw IllegalStateException("Serviço não encontrado")
+        val closestAssistances = assistanceRepository.findByAddress(extractAddressWithNumber(closestAssistanceAddress.address)) ?: throw IllegalStateException("Serviço não encontrado")
 
         val closestAssistance = closestAssistances.first()
         closestAssistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
@@ -380,8 +380,14 @@ class WorkerService (
         return worker.central?.notifications?.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
     }
 
+    fun extractAddressWithNumber(input: String): String {
+        val pattern = Regex("([\\w\\s.]+\\d+)")
+        return pattern.find(input)!!.value
+    }
+
     private fun buildUrl(origin: String, destination: String): String {
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"
+        val url = "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$apiKey"
+        return url
     }
 
     fun getCommissionForMonth(date: Date): Double {

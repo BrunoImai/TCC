@@ -55,6 +55,59 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
       return;
     }
 
+    // Construindo a URL usando a Google Geocoding API
+    String url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$cep+Brazil&key=AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['status'] == 'OK') {
+        final result = data['results'][0];
+        Map<String, dynamic> components = {};
+        for (var component in result['address_components']) {
+          String type = component['types'][0];
+          components[type] = component['short_name'];
+        }
+
+        setState(() {
+          addressController.text = components['route'] ?? '';
+          neighborhoodController.text = components['political'] ?? components['sublocality'] ?? components['sublocality_level_1'] ??'';
+          cityController.text = components['administrative_area_level_2'] ?? '';
+          stateController.text = components['administrative_area_level_1'] ?? '';
+          countryController.text = 'Brazil';
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(errorDescription: 'CEP não encontrado.');
+          },
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'Erro ao buscar endereço.');
+        },
+      );
+    }
+  }
+
+  /*Future<void> fetchAddress(String cep) async {
+    cep = cep.replaceAll(RegExp(r'\D'), '');
+    if (cep.length != 8) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertPopUp(errorDescription: 'O CEP deve conter 8 dígitos');
+        },
+      );
+      return;
+    }
+
     String url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$cep+Brazil&key=AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY';
 
     final response = await http.get(Uri.parse(url));
@@ -120,7 +173,7 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
         },
       );
     }
-  }
+  }*/
 
   // Future<void> fetchAddress(String cep) async {
   //   if (cep.replaceAll(RegExp(r'\D'), '').length != 8) {

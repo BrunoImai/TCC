@@ -166,8 +166,9 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-        print(jsonData);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
+
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
@@ -199,12 +200,14 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
           print(categoryIds);
 
 
+          final address = utf8.decode(item['address'].toString().runes.toList());
+
           final assistance = AssistanceResponse(
               id: item['id'].toString(),
               startDate: item['startDate'],
               description: item['description'],
               name: item['name'],
-              address: item['address'],
+              address: address,
               complement: item['complement'],
               clientCpf: item['cpf'],
               period: item['period'],

@@ -13,7 +13,7 @@ class AssistanceRequest {
     required this.description,
     required this.name,
     required this.address,
-    required this.complement,
+    this.complement,
     required this.cpf,
     required this.period,
     required this.categoriesId,
@@ -56,7 +56,7 @@ class  UpdateAssistanceRequest {
   final List<num> workersIds;
   final List<num> categoriesId;
 
-  UpdateAssistanceRequest({required this.description, required this.name, required this.address, required this.complement,required this.cpf,
+  UpdateAssistanceRequest({required this.description, required this.name, required this.address, this.complement,required this.cpf,
     required this.period, required this.workersIds, required this.categoriesId});
 
   Map<String, dynamic> toJson() {

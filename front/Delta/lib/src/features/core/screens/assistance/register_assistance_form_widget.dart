@@ -182,7 +182,7 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       );
 
       if (response.statusCode == 200) {
-        final clientData = jsonDecode(response.body);
+        final clientData = jsonDecode(utf8.decode(response.bodyBytes));
 
         print(clientData['address']);
 
