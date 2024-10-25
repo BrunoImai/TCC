@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -36,12 +37,21 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
+  Timer? assistanceTimer;
 
   @override
   void initState() {
     super.initState();
     fetchWorkers();
-    fetchCurrentAssistance();
+    assistanceTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      fetchCurrentAssistance();
+    });
+  }
+
+  @override
+  void dispose() {
+    assistanceTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> fetchWorkers() async {
