@@ -55,7 +55,6 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
       return;
     }
 
-    // Construindo a URL usando a Google Geocoding API
     String url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$cep+Brazil&key=AIzaSyC7W_sMVL07McvWJcHGyVD9L0OydVx7rxY';
 
     final response = await http.get(Uri.parse(url));

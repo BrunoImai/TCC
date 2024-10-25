@@ -115,36 +115,20 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
       final data = jsonDecode(response.body);
 
       if (data['status'] == 'OK') {
-        final result = data['results'][0]['formatted_address'];
-
-        List<String> parts = result.trim().split(',');
-
-        if (parts.length >= 4) {
-          String street = parts[0];
-          int firstNumberIndex = street.indexOf(RegExp(r'\d'));
-          if (firstNumberIndex != -1) {
-            street = street.substring(0, firstNumberIndex).trim();
-          }
-
-          String neighborhood = parts.length > 1 ? parts[1].split('-').last.trim() : '';
-          String city = parts.length > 2 ? parts[2].split('-').first.trim() : '';
-          String state = parts.length > 2 ? parts[2].split('-').last.trim().split(' ')[0].trim() : '';
-          String country = parts.length > 3 ? parts[3].trim() : '';
-          setState(() {
-            addressController.text = street;
-            neighborhoodController.text = neighborhood;
-            cityController.text = city;
-            stateController.text = state;
-            countryController.text = country;
-          });
-        } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const AlertPopUp(errorDescription: 'Formato de endereço não reconhecido.');
-            },
-          );
+        final result = data['results'][0];
+        Map<String, dynamic> components = {};
+        for (var component in result['address_components']) {
+          String type = component['types'][0];
+          components[type] = component['short_name'];
         }
+
+        setState(() {
+          addressController.text = components['route'] ?? '';
+          neighborhoodController.text = components['political'] ?? components['sublocality'] ?? components['sublocality_level_1'] ??'';
+          cityController.text = components['administrative_area_level_2'] ?? '';
+          stateController.text = components['administrative_area_level_1'] ?? '';
+          countryController.text = 'Brazil';
+        });
       } else {
         showDialog(
           context: context,
