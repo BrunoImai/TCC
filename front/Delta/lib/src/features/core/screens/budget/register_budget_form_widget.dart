@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multiselect/multiselect.dart';
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
 import 'package:tcc_front/src/features/core/screens/category/category.dart';
-import 'package:tcc_front/src/features/core/screens/client/register_client_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
@@ -128,7 +124,8 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -162,8 +159,8 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -191,7 +188,8 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoryList = jsonData.map((item) {
           return CategoryResponse(
@@ -224,7 +222,8 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
 
@@ -384,10 +383,10 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/$userType/budget'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $userToken'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

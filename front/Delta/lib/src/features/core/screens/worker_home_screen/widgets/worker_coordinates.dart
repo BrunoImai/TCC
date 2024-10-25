@@ -19,8 +19,6 @@ class WorkerCoordinates extends StatefulWidget {
 
 class _WorkerCoordinatesState extends State<WorkerCoordinates> {
 
-
-
   @override
   void initState() {
     super.initState();

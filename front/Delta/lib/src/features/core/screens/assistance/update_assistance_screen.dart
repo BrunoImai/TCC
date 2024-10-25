@@ -202,7 +202,7 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
       );
 
       if (response.statusCode == 200) {
-        final clientData = jsonDecode(response.body);
+        final clientData = jsonDecode(utf8.decode(response.bodyBytes));
 
         setState(() {
           cepController.text = clientData['address'].split(', ')[3];
@@ -335,10 +335,10 @@ class _UpdateAssistanceScreenState extends State<UpdateAssistanceScreen> {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/assistance/${widget.assistance.id}'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

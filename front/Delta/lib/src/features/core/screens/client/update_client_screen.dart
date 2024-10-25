@@ -288,10 +288,10 @@ class _UpdateClientScreenState extends State<UpdateClientScreen> {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/client/${widget.client.id}'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

@@ -87,7 +87,8 @@ class _AnalyticInfoCardGridViewState extends State<AnalyticInfoCardGridView> {
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -119,7 +120,8 @@ class _AnalyticInfoCardGridViewState extends State<AnalyticInfoCardGridView> {
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<ClientResponse> clientsList = jsonData.map((item) {
           return ClientResponse(
@@ -154,7 +156,8 @@ class _AnalyticInfoCardGridViewState extends State<AnalyticInfoCardGridView> {
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<BudgetResponse> budgetsList = jsonData.map((item) {
           return BudgetResponse(
@@ -189,7 +192,8 @@ class _AnalyticInfoCardGridViewState extends State<AnalyticInfoCardGridView> {
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<AssistanceResponse> assistancesList = jsonData.map((item) {
           return AssistanceResponse(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:tcc_front/src/features/core/screens/worker/worker.dart';
-
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -191,10 +188,10 @@ class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/worker/${widget.worker.id}'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

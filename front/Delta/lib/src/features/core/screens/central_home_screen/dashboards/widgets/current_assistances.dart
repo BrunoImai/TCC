@@ -44,8 +44,8 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -73,7 +73,8 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoryList = jsonData.map((item) {
           return CategoryResponse(
@@ -107,7 +108,8 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -149,8 +151,8 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
         print("Status code for $status: ${response.statusCode}");
 
         if (response.statusCode == 200) {
-          final jsonData = json.decode(response.body) as List<dynamic>;
-          print("Data for $status: $jsonData");
+          var decodedBody = utf8.decode(response.bodyBytes);
+          var jsonData = json.decode(decodedBody) as List<dynamic>;
 
           final allWorkers = await getAllWorkers();
           final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};

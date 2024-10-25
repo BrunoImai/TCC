@@ -128,7 +128,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -162,8 +163,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -191,7 +192,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoryList = jsonData.map((item) {
           return CategoryResponse(
@@ -224,7 +226,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
 
@@ -384,10 +387,10 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/$userType/report'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $userToken'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

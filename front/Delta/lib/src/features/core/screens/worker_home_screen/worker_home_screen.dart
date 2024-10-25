@@ -66,7 +66,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -100,8 +101,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -129,7 +130,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoryList = jsonData.map((item) {
           return CategoryResponse(
@@ -162,8 +164,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as Map<String, dynamic>;
-        print(jsonData);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as Map<String, dynamic>;
 
         final client = await getClientByCpf(jsonData['cpf']);
         final allWorkers = await getAllWorkers();

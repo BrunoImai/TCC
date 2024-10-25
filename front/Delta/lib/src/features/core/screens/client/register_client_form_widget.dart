@@ -332,10 +332,10 @@ class _RegisterClientFormWidget extends State<RegisterClientFormWidget> {
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/central/client'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

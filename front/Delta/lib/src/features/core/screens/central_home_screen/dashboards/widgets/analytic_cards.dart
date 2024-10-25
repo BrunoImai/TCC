@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../../../constants/responsive.dart';
-import '../../../../../../constants/sizes.dart';
-import 'analytic_info_card.dart';
 import 'analytic_info_card_grid_view.dart';
 
 class AnalyticCards extends StatelessWidget {

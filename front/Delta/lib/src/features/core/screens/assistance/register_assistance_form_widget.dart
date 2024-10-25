@@ -100,7 +100,8 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -147,7 +148,8 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoriesList = jsonData.map((item) {
           return CategoryResponse(
@@ -317,10 +319,10 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/central/assistance'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

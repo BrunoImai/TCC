@@ -73,8 +73,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -100,7 +100,8 @@ class _ReportListScreenState extends State<ReportListScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -134,8 +135,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-        print(jsonData);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
+
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,9 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:tcc_front/src/features/authentication/screens/welcome/welcome_screen.dart';
-
 import '../../../../../commom_widgets/alert_dialog.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/images_strings.dart';
@@ -172,10 +169,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/central/update/$id'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

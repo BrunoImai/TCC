@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,10 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:tcc_front/src/features/core/screens/assistance/assistance.dart';
 import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
-
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -98,7 +95,8 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -132,8 +130,8 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      print(jsonData);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ClientResponse(
         id: jsonData['id'],
         name: jsonData['name'],
@@ -161,7 +159,8 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<CategoryResponse> categoryList = jsonData.map((item) {
           return CategoryResponse(
@@ -194,7 +193,8 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as Map<String, dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as Map<String, dynamic>;
 
         final client = await getClientByCpf(jsonData['cpf']);
         final allWorkers = await getAllWorkers();
@@ -319,10 +319,10 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
         final response = await http.put(
           Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $userToken'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {

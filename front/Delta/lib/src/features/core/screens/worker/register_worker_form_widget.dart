@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/central_home_screen.dart';
 import 'package:tcc_front/src/features/core/screens/worker/worker_list_screen.dart';
-
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
@@ -164,10 +161,10 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
         final response = await http.post(
           Uri.parse('http://localhost:8080/api/central/worker'),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
           },
-          body: requestBody,
+          body: utf8.encode(requestBody),
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
