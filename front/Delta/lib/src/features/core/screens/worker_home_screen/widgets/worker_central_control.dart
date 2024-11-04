@@ -61,7 +61,8 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
       );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as Map<String, dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as Map<String, dynamic>;
         final budget = BudgetResponse.fromJson(jsonData);
 
         setState(() {

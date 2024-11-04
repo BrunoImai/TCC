@@ -104,7 +104,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
         .width;
     final widthFactor = screenWidth <= 600
         ? 1.0
-        : 0.3; // Usar um fator de largura semelhante
+        : 0.3;
 
     return Scaffold(
       appBar: CentralAppBar(whoAreYouTag: widget.whoAreYouTag),

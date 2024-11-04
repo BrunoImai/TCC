@@ -43,7 +43,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
   void initState() {
     super.initState();
     fetchWorkers();
-    assistanceTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    assistanceTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       fetchCurrentAssistance();
     });
   }
