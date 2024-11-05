@@ -68,7 +68,6 @@ class _WorkDelayedState extends State<WorkDelayed>{
             assistanceId: item['assistanceId'],
             responsibleWorkersIds:
             (item['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
-            totalPrice: item['totalPrice'].toString(),
             paymentType: item['paymentType'],
             machinePartExchange: item['machinePartExchange'],
             delayed: item['delayed'],

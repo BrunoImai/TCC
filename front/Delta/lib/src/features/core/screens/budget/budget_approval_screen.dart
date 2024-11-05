@@ -345,10 +345,23 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
         return;
       }
 
+      String convertStatus(String status) {
+        switch (status) {
+          case 'Em análise':
+            return 'EM_ANALISE';
+          case 'Aprovado':
+            return 'APROVADO';
+          case 'Reprovado':
+            return 'REPROVADO';
+          default:
+            return status;
+        }
+      }
+
       UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,
-        status: selectedStatus,
+        status: convertStatus(selectedStatus),
         assistanceId: assistanceId,
         clientId: clientId,
         responsibleWorkersIds: workersIds,
@@ -531,28 +544,28 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ListTile(
-                                    title: Text('APROVADO', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('Aprovado', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'APROVADO';
+                                        selectedStatus = 'Aprovado';
                                         _isStatusExpanded = false;
                                       });
                                     },
                                   ),
                                   ListTile(
-                                    title: Text('REPROVADO', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('Reprovado', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'REPROVADO';
+                                        selectedStatus = 'Reprovado';
                                         _isStatusExpanded = false;
                                       });
                                     },
                                   ),
                                   ListTile(
-                                    title: Text('EM_ANALISE', style: Theme.of(context).textTheme.bodyText2),
+                                    title: Text('Em análise', style: Theme.of(context).textTheme.bodyText2),
                                     onTap: () {
                                       setState(() {
-                                        selectedStatus = 'EM_ANALISE';
+                                        selectedStatus = 'Em análise';
                                         _isStatusExpanded = false;
                                       });
                                     },

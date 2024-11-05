@@ -122,7 +122,6 @@ class _LoginFormState extends State<LoginForm> {
             );
           }
         } catch (e) {
-          // Handle any error that occurred during the HTTP request
           print('Error occurred: $e');
         }
       }

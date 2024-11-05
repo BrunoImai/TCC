@@ -9,7 +9,6 @@ data class ReportResponse (
     val status: String,
     val assistanceId: Long?,
     val responsibleWorkersIds: List<Long>,
-    val totalPrice: Float,
     val paymentType: PaymentType,
     val machinePartExchange: Boolean,
     val delayed: Boolean,

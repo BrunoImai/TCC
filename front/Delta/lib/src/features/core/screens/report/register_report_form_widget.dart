@@ -32,7 +32,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
-  final TextEditingController totalPriceController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
 
@@ -45,8 +44,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
   List<CategoryResponse> categories = [];
   List<CategoryResponse> selectedCategories = [];
   String selectedPaymentType = "";
-  late List<AssistanceInformations> assistanceList;
-  late List<AssistanceInformations> filteredAssistancesList;
+  late List<AssistanceInformations> assistanceList = [];
+  late List<AssistanceInformations> filteredAssistancesList = [];
   AssistanceInformations? selectedAssistance;
   String userToken = "";
   String userType = "";
@@ -227,7 +226,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
 
       if (response.statusCode == 200) {
         var decodedBody = utf8.decode(response.bodyBytes);
-        var jsonData = json.decode(decodedBody) as List<dynamic>;
+        var jsonData = json.decode(decodedBody);
 
         final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
 
@@ -302,7 +301,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
       String description = descriptionController.text;
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
-      String totalPrice = totalPriceController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
       if (description.isEmpty ||
@@ -374,7 +372,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
         description: description,
         responsibleWorkersIds: workersIds,
         assistanceId: assistanceId,
-        totalPrice: totalPrice,
         paymentType: selectedPaymentType,
         machinePartExchange: _machinePartExchange,
         delayed: _delayed
@@ -568,15 +565,6 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                   );
                 }).toList(),
               ),
-            const SizedBox(height: formHeight - 20),
-            TextFormField(
-              controller: totalPriceController,
-              decoration: const InputDecoration(
-                  label: Text(tTotalPrice),
-                  prefixIcon: Icon(Icons.attach_money_rounded)
-              ),
-              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-            ),
             const SizedBox(height: formHeight - 20),
             GestureDetector(
               onTap: () {

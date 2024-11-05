@@ -6,7 +6,6 @@ data class ReportRequest(
     val description: String,
     val responsibleWorkersIds: List<Long>,
     val assistanceId: Long,
-    val totalPrice: Float,
     val paymentType: PaymentType,
     val machinePartExchange: Boolean,
     val delayed: Boolean,

@@ -223,7 +223,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
 
       if (response.statusCode == 200) {
         var decodedBody = utf8.decode(response.bodyBytes);
-        var jsonData = json.decode(decodedBody) as List<dynamic>;
+        var jsonData = json.decode(decodedBody);
 
         final List<dynamic> assistancesJson = (jsonData is List) ? jsonData : [jsonData];
 
@@ -288,7 +288,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
 
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      throw Exception('Falha ao carregar assistências');
     }
   }
 

@@ -78,15 +78,17 @@ class BudgetResponse {
 
   factory BudgetResponse.fromJson(Map<String, dynamic> json) {
     return BudgetResponse(
-      id: json['id'] as String?,
+      id: json['id']?.toString(),
       name: json['name'] as String,
       description: json['description'] as String,
       creationDate: json['creationDate'] as String,
       status: json['status'] as String,
-      assistanceId: json['assistanceId'] as String?,
-      clientId: json['clientId'] as String,
-      responsibleWorkersIds: List<String>.from(json['responsibleWorkersIds'] as List<dynamic>),
-      totalPrice: json['totalPrice'] as String,
+      assistanceId: json['assistanceId']?.toString(),
+      clientId: json['clientId'].toString(),
+      responsibleWorkersIds: List<String>.from(
+        (json['responsibleWorkersIds'] as List<dynamic>).map((e) => e.toString()),
+      ),
+      totalPrice: json['totalPrice'].toString(),
     );
   }
 

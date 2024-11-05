@@ -882,7 +882,6 @@ class CentralService(
             machinePartExchange = reportReq.machinePartExchange,
             assistance = assistance,
             workDelayed = reportReq.delayed,
-            totalPrice = reportReq.totalPrice
         )
 
         return reportRepository.save(report)

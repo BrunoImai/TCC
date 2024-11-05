@@ -36,7 +36,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController clientCpfController = TextEditingController();
   final TextEditingController clientNameController = TextEditingController();
-  final TextEditingController totalPriceController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
   final TextEditingController assistanceIdController = TextEditingController();
   final TextEditingController assistanceSearchController = TextEditingController();
@@ -70,7 +69,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
 
     descriptionController.text = widget.report.description;
     nameController.text = widget.report.name;
-    totalPriceController.text = widget.report.totalPrice;
     statusController.text = widget.report.status;
     selectedPaymentType = widget.report.paymentType;
     _machinePartExchange = widget.report.machinePartExchange;
@@ -259,7 +257,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
       String description = descriptionController.text;
       String name = nameController.text;
       String clientCpf = clientCpfController.text;
-      String totalPrice = totalPriceController.text;
       String status = statusController.text;
       List<num> workersIds = selectedWorkers.map((worker) => worker.id).toList();
 
@@ -323,7 +320,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         status: status,
         assistanceId: assistanceId,
         responsibleWorkersIds: workersIds,
-        totalPrice: totalPrice,
         paymentType: selectedPaymentType,
         machinePartExchange: _machinePartExchange,
         delayed: _delayed
@@ -487,16 +483,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                     ? ''
                                     : selectedWorkers.map((worker) => worker.name).join(', '),
                               ),
-                            ),
-
-                            const SizedBox(height: formHeight - 20),
-                            TextFormField(
-                              controller: totalPriceController,
-                              decoration: const InputDecoration(
-                                  label: Text(tTotalPrice),
-                                  prefixIcon: Icon(Icons.attach_money_rounded)
-                              ),
-                              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
                             const SizedBox(height: formHeight - 20),
                             GestureDetector(

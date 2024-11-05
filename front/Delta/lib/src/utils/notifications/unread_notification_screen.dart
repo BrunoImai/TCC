@@ -82,7 +82,8 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
         final List<WorkersList> workersList = jsonData.map((item) {
           return WorkersList(
@@ -119,8 +120,9 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
       print("Status code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List<dynamic>;
-        print(jsonData);
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
+
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {
@@ -179,7 +181,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
       return BudgetResponse(
           id: jsonData['id'].toString(),

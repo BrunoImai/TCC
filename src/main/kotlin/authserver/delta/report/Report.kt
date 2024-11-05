@@ -33,8 +33,6 @@ class Report (
     @Column(nullable = false)
     var creationDate: Date,
 
-    @Column
-    var totalPrice: Float = 0.0f,
 
     @OneToOne(mappedBy = "report")
     var assistance: Assistance? = null,
@@ -53,5 +51,5 @@ class Report (
     var workDelayed: Boolean,
 
     ) {
-    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, responsibleWorkers.map { it.id!! }, totalPrice, paymentType, machinePartExchange, workDelayed)
+    fun toResponse() = ReportResponse(id!!, name, description, creationDate.toString(), status.toString(), assistance?.id, responsibleWorkers.map { it.id!! }, paymentType, machinePartExchange, workDelayed)
 }

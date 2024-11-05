@@ -33,6 +33,7 @@ class WorkerCentralControl extends StatefulWidget {
 
 class _WorkerCentralControlState extends State<WorkerCentralControl> {
   String? budgetStatus;
+  AssistanceResponse? currentAssistance;
 
 
   @override
@@ -127,40 +128,41 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
             ),
 
             // Registrar orçamento
-            FractionallySizedBox(
-            widthFactor: widthFactor,
-            child: ElevatedButton(
-              onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: widget.whoAreYouTag)),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                backgroundColor: cardBgColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              child: SizedBox(
-                height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.attach_money_rounded, size: 30, color: darkColor),
-                    const SizedBox(height: 10),
-                    Flexible(
-                      child: Text(
-                        tRegisterBudget,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w600,
-                          color: darkColor,
+            if(widget.selectedAssistance != null)
+              FractionallySizedBox(
+              widthFactor: widthFactor,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: widget.whoAreYouTag)),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 120,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.attach_money_rounded, size: 30, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tRegisterBudget,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w600,
+                            color: darkColor,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
             // Histórico de orçamento
             FractionallySizedBox(

@@ -302,13 +302,14 @@ class WorkerService (
             machinePartExchange = reportReq.machinePartExchange,
             assistance = assistance,
             workDelayed = reportReq.delayed,
-            totalPrice = reportReq.totalPrice
             )
 
         assistance.report = report
         assistanceRepository.save(assistance)
 
-        return reportRepository.save(report)
+        return assistance.report!!
+
+//        return reportRepository.save(report)
     }
 
     fun getReport(reportId: Long) : Report {
