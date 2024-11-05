@@ -66,7 +66,7 @@ class NotificationController extends GetxController {
 
     fetchUnreadNotifications();
 
-    _timer = Timer.periodic(Duration(seconds:3000), (timer) {
+    _timer = Timer.periodic(const Duration(seconds:15), (timer) {
       fetchUnreadNotifications();
     });
   }

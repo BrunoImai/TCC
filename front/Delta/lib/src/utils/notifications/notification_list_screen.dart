@@ -174,12 +174,25 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
 
+      String convertStatus(String status) {
+        switch (status) {
+          case 'EM_ANALISE':
+            return 'em análise';
+          case 'APROVADO':
+            return 'aprovado';
+          case 'REPROVADO':
+            return 'reprovado';
+          default:
+            return status;
+        }
+      }
+
       return BudgetResponse(
           id: jsonData['id'].toString(),
           name: jsonData['name'],
           description: jsonData['description'],
           creationDate: jsonData['creationDate'],
-          status: jsonData['status'],
+          status: convertStatus(jsonData['status']),
           assistanceId: jsonData['assistanceId'].toString(),
           clientId: jsonData['clientId'].toString(),
           responsibleWorkersIds:

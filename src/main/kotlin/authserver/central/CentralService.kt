@@ -392,7 +392,8 @@ class CentralService(
             responsibleCentral = central,
             client = client,
             responsibleWorkers = workers.toMutableSet(),
-            categories = categories.toMutableSet()
+            categories = categories.toMutableSet(),
+            assistanceStatus = if (workers.isNotEmpty()) AssistanceStatus.EM_ANDAMENTO else AssistanceStatus.AGUARDANDO
         )
         central.assistanceQueue.add(assistance)
         return assistanceRepository.save(assistance)
@@ -843,9 +844,7 @@ class CentralService(
         for (notification in budget.notifications) {
             notification.readed = false
             notification.message = "Seu orçamento foi ${budget.status}"
-//            if (budget.status == BudgetStatus.APROVADO) {
-//                notification.message = "Seu orçamento foi aprovado!"
-//            } else if (budget.status == BudgetStatus.REPROVADO)
+
             notificationRepository.save(notification)
         }
         return budget
@@ -884,7 +883,10 @@ class CentralService(
             workDelayed = reportReq.delayed,
         )
 
-        return reportRepository.save(report)
+        assistance.assistanceStatus = AssistanceStatus.FINALIZADO
+        assistanceRepository.save(assistance)
+
+        return assistance.report!!
     }
 
     fun getReport(reportId: Long) : Report {

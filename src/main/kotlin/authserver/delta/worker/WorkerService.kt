@@ -305,7 +305,9 @@ class WorkerService (
             )
 
         assistance.report = report
+        assistance.assistanceStatus = AssistanceStatus.FINALIZADO
         assistanceRepository.save(assistance)
+
 
         return assistance.report!!
 

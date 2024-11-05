@@ -26,12 +26,14 @@ class CurrentAssistances extends StatefulWidget {
 
 class _CurrentAssistancesState extends State<CurrentAssistances> {
   late List<AssistanceInformations> assistanceList = [];
-  late List<AssistanceInformations> filteredAssistancesList = [];
+
+  List<String> statusOptions = ['AGUARDANDO', 'EM_ANDAMENTO', 'FINALIZADO'];
+  String selectedStatus = 'EM_ANDAMENTO';
 
   @override
   void initState() {
     super.initState();
-    getAllAssistances();
+    getAllAssistances(selectedStatus);
   }
 
 
@@ -135,85 +137,86 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
   }
 
 
-  Future<List<AssistanceInformations>> getAllAssistances() async {
+  Future<List<AssistanceInformations>> getAllAssistances(String status) async {
     try {
-      final statusFilters = ['AGUARDANDO', 'EM_ANDAMENTO'];
-
       final List<AssistanceInformations> assistancesList = [];
 
-      for (String status in statusFilters) {
-        final response = await http.get(
-          Uri.parse('http://localhost:8080/api/central/assistance/status/$status'),
-          headers: {
-            'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-          },
-        );
-        print("Status code for $status: ${response.statusCode}");
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/assistance/status/$status'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code for $status: ${response.statusCode}");
 
-        if (response.statusCode == 200) {
-          var decodedBody = utf8.decode(response.bodyBytes);
-          var jsonData = json.decode(decodedBody) as List<dynamic>;
+      if (response.statusCode == 200) {
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
 
-          final allWorkers = await getAllWorkers();
-          final Map<num, String> workerIdToNameMap = {for (var worker in allWorkers) worker.id: worker.name};
-          print(workerIdToNameMap);
+        final allWorkers = await getAllWorkers();
+        final Map<num, String> workerIdToNameMap = {
+          for (var worker in allWorkers) worker.id: worker.name
+        };
 
-          final allCategories = await getAllCategories();
-          final Map<num, String> categoryIdToNameMap = {for (var category in allCategories) category.id: category.name};
-          print(categoryIdToNameMap);
+        final allCategories = await getAllCategories();
+        final Map<num, String> categoryIdToNameMap = {
+          for (var category in allCategories) category.id: category.name
+        };
 
-          for (var item in jsonData) {
-            final client = await getClientByCpf(item['cpf']);
+        for (var item in jsonData) {
+          final client = await getClientByCpf(item['cpf']);
 
-            final workerNames = (item['workersIds'] as List<dynamic>)
-                .map((id) => workerIdToNameMap[id] ?? 'Unknown')
-                .toList();
+          final workerNames = (item['workersIds'] as List<dynamic>)
+              .map((id) => workerIdToNameMap[id] ?? 'Unknown')
+              .toList();
 
-            final workersIds = (item['workersIds'] as List<dynamic>)
-                .map((id) => id.toString()).toList();
+          final workersIds = (item['workersIds'] as List<dynamic>)
+              .map((id) => id.toString())
+              .toList();
 
-            final categoriesName = (item['categoryIds'] as List<dynamic>)
-                .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
-                .toList();
-            print(categoriesName);
+          final categoriesName = (item['categoryIds'] as List<dynamic>)
+              .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
+              .toList();
 
-            final categoryIds = (item['categoryIds'] as List<dynamic>)
-                .map((id) => id.toString()).toList();
-            print(categoryIds);
+          final categoryIds = (item['categoryIds'] as List<dynamic>)
+              .map((id) => id.toString())
+              .toList();
 
-            final assistance = AssistanceResponse(
-              id: item['id'].toString(),
-              startDate: item['startDate'],
-              description: item['description'],
-              name: item['name'],
-              address: item['address'],
-              complement: item['complement'],
-              clientCpf: item['cpf'],
-              period: item['period'],
-              workersIds: workersIds,
-              categoryIds: categoryIds,
-            );
+          final assistance = AssistanceResponse(
+            id: item['id'].toString(),
+            startDate: item['startDate'],
+            description: item['description'],
+            name: item['name'],
+            address: item['address'],
+            complement: item['complement'],
+            clientCpf: item['cpf'],
+            period: item['period'],
+            workersIds: workersIds,
+            categoryIds: categoryIds,
+          );
 
-            final assistanceInformations = AssistanceInformations(
-                assistance.id, workerNames, client!.name, assistance, categoriesName
-            );
-            assistancesList.add(assistanceInformations);
-          }
-        } else {
-          print('Response status: ${response.statusCode} for $status');
-          print('Response body: ${response.body}');
+          final assistanceInformations = AssistanceInformations(
+            assistance.id,
+            workerNames,
+            client!.name,
+            assistance,
+            categoriesName,
+          );
+          assistancesList.add(assistanceInformations);
         }
+      } else {
+        print('Response status: ${response.statusCode} for $status');
+        print('Response body: ${response.body}');
       }
 
       setState(() {
         assistanceList = assistancesList;
-        filteredAssistancesList = assistancesList;
       });
 
       return assistanceList;
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de assistências');
+      print('Error fetching data: $e');
+      throw Exception('Failed to load assistance list');
     }
   }
 
@@ -229,18 +232,18 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Existing Row with title and navigation
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Serviços em andamento',
-                 style: GoogleFonts.poppins(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600,
-                    color: darkColor
+                'Serviços',
+                style: GoogleFonts.poppins(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600,
+                  color: darkColor,
                 ),
               ),
-
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
@@ -248,39 +251,53 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
                   child: Text(
                     'Todos os serviços',
                     style: GoogleFonts.poppins(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w200,
-                        color: darkColor.withOpacity(0.5)
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w200,
+                      color: darkColor.withOpacity(0.5),
                     ),
                   ),
                 ),
               ),
-
-
             ],
           ),
-          const SizedBox(
-            height: homePadding,
+          const SizedBox(height: homePadding),
+          // Dropdown Menu for Status Selection
+          DropdownButton<String>(
+            value: selectedStatus,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  selectedStatus = newValue;
+                  getAllAssistances(selectedStatus);
+                });
+              }
+            },
+            items: statusOptions.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
+          const SizedBox(height: homePadding),
           Expanded(
             child: ListView.builder(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: filteredAssistancesList.length,
+              itemCount: assistanceList.length,
               itemBuilder: (context, index) => CurrentAssistancesInfoDetail(
                 whoAreYouTag: widget.whoAreYouTag,
                 info: CurrentAssistancesInfoModel(
-                  assistanceName: filteredAssistancesList[index].assistance.name,
-                  clientName: "Cliente: ${filteredAssistancesList[index].clientName}",
-                  workersName: "Funcionário: ${filteredAssistancesList[index].workersName.join(', ')}",
-                  status: filteredAssistancesList[index].assistance.period,
+                  assistanceName: assistanceList[index].assistance.name,
+                  clientName: "Cliente: ${assistanceList[index].clientName}",
+                  workersName: "Funcionário: ${assistanceList[index].workersName.join(', ')}",
+                  status: assistanceList[index].assistance.period,
                   icon: Icons.construction,
-                  assistanceResponse: filteredAssistancesList[index].assistance,
+                  assistanceResponse: assistanceList[index].assistance,
                 ),
               ),
             ),
-          )
-
+          ),
         ],
       ),
     );
