@@ -38,6 +38,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
   Timer? assistanceTimer;
+  String _searchText = '';
 
   @override
   void initState() {
@@ -46,6 +47,12 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
     fetchCurrentAssistance();
     assistanceTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       fetchCurrentAssistance();
+    });
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      _searchText = value;
     });
   }
 
@@ -241,14 +248,14 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
 
             //Heading
             Text(
-              tHomePageTitle + utf8.decode(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits).codeUnits),
+              tHomePageTitle + utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits),
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(tExploreControlCentral, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const WorkerSearchBar(),
+            WorkerSearchBar(onSearchChanged: _onSearchChanged),
             const SizedBox(height: homePadding,),
 
             //Current and next service
@@ -262,68 +269,72 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.work, size: 40, color: darkColor),
-                        const SizedBox(height: 10),
-                        Text(
-                          selectedAssistance != null ? 'Serviço Atual' : 'Nenhum serviço atual',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                            color: darkColor,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 10),
-                        if (selectedAssistance != null) ...[
+                    child: SizedBox(
+                      height: selectedAssistance != null ? 220 : 120,
+                      width: 500,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.work, size: 40, color: darkColor),
+                          const SizedBox(height: 10),
                           Text(
-                            'Cliente: ${selectedAssistance!.clientName}',
+                            selectedAssistance != null ? 'Serviço Atual' : 'Nenhum serviço atual',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.poppins(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                              color: darkColor,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Endereço: ${selectedAssistance!.assistance.address}, ${selectedAssistance!.assistance.complement}',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                              color: darkColor,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Descrição: ${selectedAssistance!.assistance.description}',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
                               color: darkColor,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Funcionários: ${selectedAssistance!.workersName.join(', ')}',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400,
-                              color: darkColor,
+                          const SizedBox(height: 10),
+                          if (selectedAssistance != null) ...[
+                            Text(
+                              'Cliente: ${selectedAssistance!.clientName}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                color: darkColor,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                        ]
-                      ],
+                            const SizedBox(height: 5),
+                            Text(
+                              'Endereço: ${selectedAssistance!.assistance.address}, ${selectedAssistance!.assistance.complement}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                color: darkColor,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Serviço: ${selectedAssistance!.assistance.name}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                color: darkColor,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Funcionários: ${selectedAssistance!.workersName.join(', ')}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                color: darkColor,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -331,7 +342,6 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             ),
             WorkerCoordinates(selectedAssistance: selectedAssistance),
             const SizedBox(height: homePadding,),
-
             //Control Center
             Text(tControlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),

@@ -18,14 +18,15 @@ import '../../report/report_list_screen.dart';
 import '../../worker/worker_manager.dart';
 
 class WorkerCentralControl extends StatefulWidget {
-  const WorkerCentralControl({
-    super.key,
-    required this.whoAreYouTag,
-    this.selectedAssistance
-  });
+  const WorkerCentralControl(
+      {super.key,
+      required this.whoAreYouTag,
+      this.selectedAssistance,
+      this.searchQuery});
 
   final num whoAreYouTag;
   final AssistanceInformations? selectedAssistance;
+  final String? searchQuery;
 
   @override
   _WorkerCentralControlState createState() => _WorkerCentralControlState();
@@ -34,7 +35,6 @@ class WorkerCentralControl extends StatefulWidget {
 class _WorkerCentralControlState extends State<WorkerCentralControl> {
   String? budgetStatus;
   AssistanceResponse? currentAssistance;
-
 
   @override
   void initState() {
@@ -47,7 +47,8 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
   @override
   void didUpdateWidget(covariant WorkerCentralControl oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedAssistance != null && widget.selectedAssistance != oldWidget.selectedAssistance) {
+    if (widget.selectedAssistance != null &&
+        widget.selectedAssistance != oldWidget.selectedAssistance) {
       fetchBudgetStatus(widget.selectedAssistance!.assistance.id);
     }
   }
@@ -55,7 +56,8 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
   Future<void> fetchBudgetStatus(String assistanceId) async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/worker/budget/byAssistance/$assistanceId'),
+        Uri.parse(
+            'http://localhost:8080/api/worker/budget/byAssistance/$assistanceId'),
         headers: {
           'Authorization': 'Bearer ${WorkerManager.instance.loggedUser!.token}'
         },
@@ -77,11 +79,19 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final widthFactor = screenWidth < 600 ? 1.0 : 0.3;
+
+    bool matchesSearchQuery(String cardTitle) {
+      if (widget.searchQuery == null || widget.searchQuery!.isEmpty) {
+        return true; // Always show card if no search query
+      }
+      return cardTitle
+          .toLowerCase()
+          .contains(widget.searchQuery!.toLowerCase());
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -92,131 +102,148 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
           alignment: WrapAlignment.center,
           children: [
             // Notificações
-            FractionallySizedBox(
-              widthFactor: widthFactor,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => NotificationListScreen(whoAreYouTag: widget.whoAreYouTag)),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.notifications, size: 30, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          tNotificationsHistory,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w600,
-                            color: darkColor,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Registrar orçamento
-            if(widget.selectedAssistance != null)
-              FractionallySizedBox(
-              widthFactor: widthFactor,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => RegisterBudgetScreen(whoAreYouTag: widget.whoAreYouTag)),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.attach_money_rounded, size: 30, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          tRegisterBudget,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w600,
-                            color: darkColor,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Histórico de orçamento
-            FractionallySizedBox(
-              widthFactor: widthFactor,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => BudgetListScreen(whoAreYouTag: widget.whoAreYouTag)),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.monetization_on_outlined, size: 30, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          tBudgetHistory,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w600,
-                            color: darkColor,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Registrar relatório
-            if(budgetStatus == 'APROVADO')
+            if (matchesSearchQuery(tNotificationsHistory))
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(
-                  onPressed: () => Get.to(() => RegisterReportScreen(whoAreYouTag: widget.whoAreYouTag)),
+                  onPressed: () => Get.to(() => NotificationListScreen(
+                      whoAreYouTag: widget.whoAreYouTag)),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero,
                     backgroundColor: cardBgColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   child: SizedBox(
                     height: 120,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.library_books_rounded, size: 30, color: darkColor),
+                        const Icon(Icons.notifications,
+                            size: 30, color: darkColor),
+                        const SizedBox(height: 10),
+                        Flexible(
+                          child: Text(
+                            tNotificationsHistory,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w600,
+                              color: darkColor,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            // Registrar orçamento
+            if (widget.selectedAssistance != null &&
+                matchesSearchQuery(tRegisterBudget))
+              FractionallySizedBox(
+                widthFactor: widthFactor,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(() =>
+                      RegisterBudgetScreen(whoAreYouTag: widget.whoAreYouTag)),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: cardBgColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: SizedBox(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.attach_money_rounded,
+                            size: 30, color: darkColor),
+                        const SizedBox(height: 10),
+                        Flexible(
+                          child: Text(
+                            tRegisterBudget,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w600,
+                              color: darkColor,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            // Histórico de orçamento
+            if (matchesSearchQuery(tBudgetHistory))
+              FractionallySizedBox(
+                widthFactor: widthFactor,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(() =>
+                      BudgetListScreen(whoAreYouTag: widget.whoAreYouTag)),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: cardBgColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: SizedBox(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.monetization_on_outlined,
+                            size: 30, color: darkColor),
+                        const SizedBox(height: 10),
+                        Flexible(
+                          child: Text(
+                            tBudgetHistory,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w600,
+                              color: darkColor,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            // Registrar relatório
+
+            if (budgetStatus == 'APROVADO' &&
+                matchesSearchQuery(tRegisterReport))
+              FractionallySizedBox(
+                widthFactor: widthFactor,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(() =>
+                      RegisterReportScreen(whoAreYouTag: widget.whoAreYouTag)),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: cardBgColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: SizedBox(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.library_books_rounded,
+                            size: 30, color: darkColor),
                         const SizedBox(height: 10),
                         Flexible(
                           child: Text(
@@ -238,40 +265,44 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
               ),
 
             // Histórico de relatórios
-            FractionallySizedBox(
-              widthFactor: widthFactor,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => ReportListScreen(whoAreYouTag: widget.whoAreYouTag)),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.subject_rounded, size: 30, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          tReports,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w600,
-                            color: darkColor,
+            if (matchesSearchQuery(tReports))
+              FractionallySizedBox(
+                widthFactor: widthFactor,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(() =>
+                      ReportListScreen(whoAreYouTag: widget.whoAreYouTag)),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: cardBgColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: SizedBox(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.subject_rounded,
+                            size: 30, color: darkColor),
+                        const SizedBox(height: 10),
+                        Flexible(
+                          child: Text(
+                            tReports,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w600,
+                              color: darkColor,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

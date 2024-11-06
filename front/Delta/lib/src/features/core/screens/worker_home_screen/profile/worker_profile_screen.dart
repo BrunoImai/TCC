@@ -57,16 +57,6 @@ class WorkerProfileScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Text(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits), style: Theme.of(context).textTheme.headline4),
               Text(WorkerManager.instance.loggedUser!.worker.email, style: Theme.of(context).textTheme.bodyText2),
-              const SizedBox(height: 20),
-              /*SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () => Get.to(() => const UpdateProfileScreen()),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor, side: BorderSide.none, shape: const StadiumBorder()),
-                  child: const Text(editProfile, style: TextStyle(color: darkColor)),
-                ),
-              ),*/
               const SizedBox(height: 30),
               const Divider(),
               const SizedBox(height: 10),

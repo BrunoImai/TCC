@@ -48,6 +48,9 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthFactor = screenWidth < 600 ? 1.0 : 1.0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Center(
@@ -58,22 +61,28 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
           children: [
             if (widget.selectedAssistance == null)
               FractionallySizedBox(
-                widthFactor: 0.9,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await _sendCurrentLocation(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    backgroundColor: cardBgColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                widthFactor: widthFactor,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: screenWidth < 600 ? screenWidth : 528,
+                    maxWidth: 528,
                   ),
-                  child: Text(
-                    'Enviar localização',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: darkColor,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await _sendCurrentLocation(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      backgroundColor: cardBgColor,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(
+                      'Enviar localização',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                        color: darkColor,
+                      ),
                     ),
                   ),
                 ),

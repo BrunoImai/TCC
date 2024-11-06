@@ -10,6 +10,7 @@ import '../../../../../../constants/images_strings.dart';
 import '../../../../../../constants/responsive.dart';
 import '../../../../../../utils/notifications/notification_controller.dart';
 import '../../../../../../utils/notifications/unread_notification_screen.dart';
+import '../../profile/profile_screen.dart';
 
 class ProfileInfo extends StatelessWidget {
   const ProfileInfo({super.key,required this.whoAreYouTag});
@@ -68,31 +69,42 @@ class ProfileInfo extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(left: homePadding),
-          padding: const EdgeInsets.symmetric(
-            horizontal: homePadding,
-            vertical: homePadding / 2,
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Image.asset(
-                  userProfileImage,
-                  height: 38,
-                  width: 38,
-                  fit: BoxFit.cover,
-                ),
+        GestureDetector(
+          onTap: () {
+            Get.to(() => const ProfileScreen());
+          },
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Container(
+              margin: const EdgeInsets.only(left: homePadding),
+              padding: const EdgeInsets.symmetric(
+                horizontal: homePadding,
+                vertical: homePadding / 2,
               ),
-              if(!Responsive.isMobile(context))
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: homePadding / 2),
-                child: Text('Olá, ${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)}', style: Theme.of(context).textTheme.headline4),
-              )
-            ],
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      userProfileImage,
+                      height: 38,
+                      width: 38,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  if (!Responsive.isMobile(context))
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: homePadding / 2),
+                      child: Text(
+                        'Olá, ${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)}',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        )
+        ),
       ],
     );
   }
