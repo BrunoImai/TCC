@@ -24,7 +24,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  final TextEditingController centralController = TextEditingController(text: CentralManager.instance.loggedUser!.central.name);
+  final TextEditingController centralController = TextEditingController(text: utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits));
   final TextEditingController emailController = TextEditingController(text: CentralManager.instance.loggedUser!.central.email);
   final TextEditingController cnpjController = TextEditingController(text: CentralManager.instance.loggedUser!.central.cnpj);
   final TextEditingController cellphoneController = TextEditingController(text: CentralManager.instance.loggedUser!.central.cellphone);

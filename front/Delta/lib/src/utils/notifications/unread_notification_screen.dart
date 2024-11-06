@@ -48,12 +48,12 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userUrl = 'http://localhost:8080/api/central/assistance';
-      userName = CentralManager.instance.loggedUser!.central.name;
+      userName = utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits);
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
       userUrl = 'http://localhost:8080/api/worker/assistance/currentAssistance';
-      userName = WorkerManager.instance.loggedUser!.worker.name;
+      userName = utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits);
     }
     futureData = getAllUnreadNotifications();
     searchController.addListener(_onSearchChanged);

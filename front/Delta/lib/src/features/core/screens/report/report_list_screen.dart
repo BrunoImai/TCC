@@ -44,11 +44,11 @@ class _ReportListScreenState extends State<ReportListScreen> {
     if (widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
-      userName = CentralManager.instance.loggedUser!.central.name;
+      userName = utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits);
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
-      userName = WorkerManager.instance.loggedUser!.worker.name;
+      userName = utf8.decode(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits).codeUnits);
     }
     futureData = getAllReports();
     searchController.addListener(_onSearchChanged);

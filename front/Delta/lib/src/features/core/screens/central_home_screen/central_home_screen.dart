@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tcc_front/src/constants/sizes.dart';
-import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/custom_appbar.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_app_bar.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_central_control.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/central_drawer_menu.dart';
@@ -10,7 +11,6 @@ import 'package:tcc_front/src/features/core/screens/central_home_screen/widgets/
 
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import 'dashboards/widgets/drawer_menu.dart';
 
 class CentralHomeScreen extends StatefulWidget{
   const CentralHomeScreen({super.key, required this.whoAreYouTag});
@@ -19,12 +19,9 @@ class CentralHomeScreen extends StatefulWidget{
   @override
   State<CentralHomeScreen> createState() => _CentralHomeScreenState();
 
-
-
 }
 
 class _CentralHomeScreenState extends State<CentralHomeScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class _CentralHomeScreenState extends State<CentralHomeScreen> {
           children: [
 
             //Heading
-            Text(tHomePageTitle + CentralManager.instance.loggedUser!.central.name,
+            Text(tHomePageTitle + utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits),
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(tExploreWorker, style: Theme.of(context).textTheme.headline2,),

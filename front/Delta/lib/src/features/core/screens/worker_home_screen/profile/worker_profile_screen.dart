@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -53,7 +55,7 @@ class WorkerProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(WorkerManager.instance.loggedUser!.worker.name, style: Theme.of(context).textTheme.headline4),
+              Text(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits), style: Theme.of(context).textTheme.headline4),
               Text(WorkerManager.instance.loggedUser!.worker.email, style: Theme.of(context).textTheme.bodyText2),
               const SizedBox(height: 20),
               /*SizedBox(

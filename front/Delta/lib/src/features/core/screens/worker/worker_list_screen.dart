@@ -118,7 +118,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${CentralManager.instance.loggedUser!.central.name},",
+                  "${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)},",
                   style: Theme
                       .of(context)
                       .textTheme

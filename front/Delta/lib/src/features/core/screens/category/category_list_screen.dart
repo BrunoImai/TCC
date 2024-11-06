@@ -116,7 +116,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${CentralManager.instance.loggedUser!.central.name},",
+                  "${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)},",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(

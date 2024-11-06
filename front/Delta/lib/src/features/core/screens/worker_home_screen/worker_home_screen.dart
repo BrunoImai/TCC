@@ -240,7 +240,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
           children: [
 
             //Heading
-            Text(tHomePageTitle + WorkerManager.instance.loggedUser!.worker.name,
+            Text(
+              tHomePageTitle + utf8.decode(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits).codeUnits),
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(tExploreControlCentral, style: Theme.of(context).textTheme.headline2,),

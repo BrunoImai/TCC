@@ -48,12 +48,12 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
       userUrl = 'http://localhost:8080/api/central/assistance';
-      userName = CentralManager.instance.loggedUser!.central.name;
+      userName = utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits);
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
       userUrl = 'http://localhost:8080/api/worker/assistance/currentAssistance';
-      userName = WorkerManager.instance.loggedUser!.worker.name;
+      userName = utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits);
     }
     futureData = getAllNotifications();
     searchController.addListener(_onSearchChanged);
@@ -172,7 +172,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
     );
 
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
       String convertStatus(String status) {
         switch (status) {

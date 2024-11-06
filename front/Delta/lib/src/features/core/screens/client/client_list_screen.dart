@@ -119,7 +119,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${CentralManager.instance.loggedUser!.central.name},",
+                  "${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)},",
                   style: Theme
                       .of(context)
                       .textTheme

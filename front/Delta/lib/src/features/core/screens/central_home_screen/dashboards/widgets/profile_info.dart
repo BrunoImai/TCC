@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -86,7 +88,7 @@ class ProfileInfo extends StatelessWidget {
               if(!Responsive.isMobile(context))
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: homePadding / 2),
-                child: Text('Olá, ${CentralManager.instance.loggedUser!.central.name}', style: Theme.of(context).textTheme.headline4),
+                child: Text('Olá, ${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)}', style: Theme.of(context).textTheme.headline4),
               )
             ],
           ),

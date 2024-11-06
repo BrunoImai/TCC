@@ -258,7 +258,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${CentralManager.instance.loggedUser!.central.name},",
+                  "${utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits)},",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(

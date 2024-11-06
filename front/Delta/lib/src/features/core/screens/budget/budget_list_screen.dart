@@ -51,11 +51,11 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
     if (widget.whoAreYouTag == 2) {
       userToken = CentralManager.instance.loggedUser!.token;
       userType = 'central';
-      userName = CentralManager.instance.loggedUser!.central.name;
+      userName = utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits);
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
-      userName = WorkerManager.instance.loggedUser!.worker.name;
+      userName = utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits);
     }
     futureData = getAllBudgets();
     searchController.addListener(_onSearchChanged);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -54,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(CentralManager.instance.loggedUser!.central.name, style: Theme.of(context).textTheme.headline4),
+              Text(utf8.decode(CentralManager.instance.loggedUser!.central.name.codeUnits), style: Theme.of(context).textTheme.headline4),
               Text(CentralManager.instance.loggedUser!.central.email, style: Theme.of(context).textTheme.bodyText2),
               const SizedBox(height: 20),
               SizedBox(
