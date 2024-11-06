@@ -5,28 +5,72 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:tcc_front/src/constants/colors.dart';
+import 'package:tcc_front/src/constants/sizes.dart';
 import '../../../../../authentication/screens/signup/central_manager.dart';
 import '../../../assistance/assistance.dart';
+import '../../../worker/worker.dart';
 
-class BarChartAssistances extends StatefulWidget {
-  const BarChartAssistances({super.key});
+class BarChartWorker extends StatefulWidget {
+  const BarChartWorker({super.key});
 
   @override
-  _BarChartAssistancesState createState() => _BarChartAssistancesState();
+  _BarChartWorkerState createState() => _BarChartWorkerState();
 }
 
-class _BarChartAssistancesState extends State<BarChartAssistances> {
-  late Future<Map<DateTime, int>> assistancesByWeekFuture;
+class _BarChartWorkerState extends State<BarChartWorker> {
+  late Future<Map<String, int>> assistancesByWorkerFuture;
 
-  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Últimos 90 dias'];
-  String selectedDateRange = 'Últimos 7 dias';
+  final Map<String, String> statusOptions = {
+    'AGUARDANDO': 'Aguardando',
+    'EM_ANDAMENTO': 'Em andamento',
+    'FINALIZADO': 'Finalizado',
+  };
+  String selectedStatus = 'EM_ANDAMENTO';
 
   @override
   void initState() {
     super.initState();
-    assistancesByWeekFuture = getAssistancesByWeek();
+    assistancesByWorkerFuture = getAssistancesByWorker();
   }
-  
+
+  Future<List<WorkersList>> getAllWorkers() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/worker'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+      print("Status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        var decodedBody = utf8.decode(response.bodyBytes);
+        var jsonData = json.decode(decodedBody) as List<dynamic>;
+
+        final List<WorkersList> workersList = jsonData.map((item) {
+          return WorkersList(
+            id: item['id'],
+            name: item['name'],
+            email: item['email'],
+            entryDate: item['entryDate'],
+            cpf: item['cpf'],
+            cellphone: item['cellphone'],
+          );
+        }).toList();
+
+        return workersList;
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load worker list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de workers');
+    }
+  }
+
+
   Future<List<AssistanceResponse>> getAllAssistances() async {
     try {
       final response = await http.get(
@@ -69,61 +113,26 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
     }
   }
 
-  // Get week range string for display
-  String getWeekRange(DateTime date) {
-    final startOfWeek = date;
-    final endOfWeek = startOfWeek.add(const Duration(days: 6));
-    final formatter = DateFormat('dd/MM');
-    return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
-  }
-
-  // Updated function to get assistances grouped by week start dates
-  Future<Map<DateTime, int>> getAssistancesByWeek() async {
+  Future<Map<String, int>> getAssistancesByWorker() async {
     try {
       final assistances = await getAllAssistances();
-      final Map<DateTime, int> weeklyAssistances = {};
+      final workers = await getAllWorkers();
 
-      DateTime now = DateTime.now();
-      DateTime startDateRange;
-
-      // Determine the start date based on the selected date range
-      if (selectedDateRange == 'Últimos 7 dias') {
-        startDateRange = now.subtract(Duration(days: 7));
-      } else if (selectedDateRange == 'Últimos 30 dias') {
-        startDateRange = now.subtract(Duration(days: 30));
-      } else {
-        startDateRange = now.subtract(Duration(days: 90));
-      }
-
-      // Generate week start dates between startDateRange and now
-      DateTime currentWeekStart = startDateRange.subtract(Duration(days: startDateRange.weekday - 1));
-      while (currentWeekStart.isBefore(now)) {
-        weeklyAssistances[currentWeekStart] = 0;
-        currentWeekStart = currentWeekStart.add(Duration(days: 7));
-      }
-
-      // Filter assistances within the date range
       final filteredAssistances = assistances.where((assistance) {
-        DateTime startDate = DateTime.parse(assistance.startDate);
-        return startDate.isAfter(startDateRange);
+        return assistance.assistanceStatus == selectedStatus;
       }).toList();
 
-      // Map assistances to their corresponding week start dates
-      for (var assistance in filteredAssistances) {
-        DateTime startDate = DateTime.parse(assistance.startDate);
-        DateTime weekStartDate = startDate.subtract(Duration(days: startDate.weekday - 1));
-        weekStartDate = DateTime(weekStartDate.year, weekStartDate.month, weekStartDate.day);
-
-        if (weeklyAssistances.containsKey(weekStartDate)) {
-          weeklyAssistances[weekStartDate] = weeklyAssistances[weekStartDate]! + 1;
-        } else {
-          weeklyAssistances[weekStartDate] = 1;
-        }
+      final Map<String, int> assistancesByWorker = {};
+      for (var worker in workers) {
+        int assistanceCount = filteredAssistances.where((assistance) {
+          return assistance.workersIds.contains(worker.id);
+        }).length;
+        assistancesByWorker[worker.name] = assistanceCount;
       }
 
-      return weeklyAssistances;
+      return assistancesByWorker;
     } catch (e) {
-      throw Exception('Error loading assistances by week: $e');
+      throw Exception('Error loading assistances by worker: $e');
     }
   }
 
@@ -131,55 +140,50 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(height: homePadding - 15,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: dateRangeOptions.map((String dateRange) {
+          children: statusOptions.keys.map((status) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    selectedDateRange = dateRange;
-                    assistancesByWeekFuture = getAssistancesByWeek();
+                    selectedStatus = status;
+                    assistancesByWorkerFuture = getAssistancesByWorker();
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: selectedDateRange == dateRange
+                  backgroundColor: selectedStatus == status
                       ? primaryColor
                       : Colors.grey[300],
                   side: BorderSide.none,
                 ),
                 child: Text(
-                  dateRange,
+                  statusOptions[status]!,
                   style: GoogleFonts.poppins(
                     fontSize: 10.0,
                     fontWeight: FontWeight.w400,
-                    color: selectedDateRange == dateRange
-                        ? Colors.white
-                        : Colors.black,
-                  ),
+                    color: selectedStatus == status ? Colors.white : Colors.black,
+                ),
                 ),
               ),
             );
           }).toList(),
         ),
         Expanded(
-          child: FutureBuilder<Map<DateTime, int>>(
-            future: assistancesByWeekFuture,
+          child: FutureBuilder<Map<String, int>>(
+            future: assistancesByWorkerFuture,
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('No data available');
               }
-
-              final weeklyAssistances = snapshot.data!;
-              List<DateTime> sortedWeekStarts = weeklyAssistances.keys.toList()..sort();
+              final assistancesByWorker = snapshot.data!;
               List<BarChartGroupData> barGroups = [];
               List<String> xLabels = [];
 
-              for (int i = 0; i < sortedWeekStarts.length; i++) {
-                DateTime weekStart = sortedWeekStarts[i];
-                int count = weeklyAssistances[weekStart] ?? 0;
-
+              int i = 0;
+              assistancesByWorker.forEach((workerName, count) {
                 barGroups.add(
                   BarChartGroupData(x: i, barRods: [
                     BarChartRodData(
@@ -190,10 +194,9 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                     )
                   ]),
                 );
-
-                String weekRange = getWeekRange(weekStart);
-                xLabels.add(weekRange);
-              }
+                xLabels.add(workerName);
+                i++;
+              });
 
               return BarChart(
                 BarChartData(
@@ -207,19 +210,18 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                         showTitles: true,
                         getTitlesWidget: (double value, TitleMeta meta) {
                           final style = GoogleFonts.poppins(
-                            fontSize: 8.0,
+                            fontSize: 10.0,
                             fontWeight: FontWeight.w300,
                             color: Colors.black,
                           );
                           int index = value.toInt();
                           if (index >= 0 && index < xLabels.length) {
-                            String label = xLabels[index];
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
                               space: 8.0,
                               child: Transform.rotate(
                                 angle: -0.45,
-                                child: Text(label, style: style),
+                                child: Text(xLabels[index], style: style),
                               ),
                             );
                           } else {

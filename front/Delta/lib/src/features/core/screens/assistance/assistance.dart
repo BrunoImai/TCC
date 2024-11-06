@@ -84,6 +84,7 @@ class AssistanceResponse {
   final String period;
   final List<String> workersIds;
   final List<String> categoryIds;
+  final String assistanceStatus;
 
   AssistanceResponse({
     required this.id,
@@ -96,6 +97,7 @@ class AssistanceResponse {
     required this.period,
     required this.workersIds,
     required this.categoryIds,
+    required this.assistanceStatus
   });
 
   factory AssistanceResponse.fromJson(Map<String, dynamic> json) {
@@ -114,6 +116,7 @@ class AssistanceResponse {
       categoryIds: List<String>.from(
         (json['categoryIds'] as List<dynamic>).map((e) => e.toString()),
       ),
+      assistanceStatus: json['assistanceStatus'],
     );
   }
 
@@ -129,6 +132,7 @@ class AssistanceResponse {
       'period': period,
       'workersIds': workersIds,
       'categoryIds': categoryIds,
+      'assistanceStatus': assistanceStatus
     };
   }
 }

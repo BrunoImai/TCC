@@ -215,6 +215,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               period: item['period'],
               workersIds: workersIds,
               categoryIds: categoryIds,
+              assistanceStatus: item['assistanceStatus']
           );
           final assistanceInformations = AssistanceInformations(
               assistance.id, workerNames, client!.name, assistance, categoriesName);

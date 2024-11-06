@@ -229,6 +229,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                 period: jsonData['period'],
                 workersIds: (jsonData['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
                 categoryIds: (jsonData['categoryIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+                assistanceStatus: jsonData['assistanceStatus']
               ),
               categoriesName
           );

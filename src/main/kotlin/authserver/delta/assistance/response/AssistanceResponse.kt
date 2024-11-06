@@ -14,4 +14,5 @@ data class AssistanceResponse(
     val period: String,
     val workersIds: Set<Long?>,
     val categoryIds: Set<Long?>,
+    val assistanceStatus: AssistanceStatus,
 )

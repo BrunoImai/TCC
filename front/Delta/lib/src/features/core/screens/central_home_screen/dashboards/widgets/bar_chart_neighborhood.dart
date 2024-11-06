@@ -8,15 +8,15 @@ import 'package:tcc_front/src/constants/colors.dart';
 import '../../../../../authentication/screens/signup/central_manager.dart';
 import '../../../assistance/assistance.dart';
 
-class BarChartAssistances extends StatefulWidget {
-  const BarChartAssistances({super.key});
+class BarChartNeighborhood extends StatefulWidget {
+  const BarChartNeighborhood({super.key});
 
   @override
-  _BarChartAssistancesState createState() => _BarChartAssistancesState();
+  _BarChartNeighborhoodState createState() => _BarChartNeighborhoodState();
 }
 
-class _BarChartAssistancesState extends State<BarChartAssistances> {
-  late Future<Map<DateTime, int>> assistancesByWeekFuture;
+class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
+  late Future<Map<String, int>> assistancesByNeighborhoodFuture;
 
   List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Últimos 90 dias'];
   String selectedDateRange = 'Últimos 7 dias';
@@ -24,9 +24,9 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
   @override
   void initState() {
     super.initState();
-    assistancesByWeekFuture = getAssistancesByWeek();
+    assistancesByNeighborhoodFuture = getAssistancesByNeighborhood();
   }
-  
+
   Future<List<AssistanceResponse>> getAllAssistances() async {
     try {
       final response = await http.get(
@@ -40,27 +40,25 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
         var decodedBody = utf8.decode(response.bodyBytes);
         var jsonData = json.decode(decodedBody) as List<dynamic>;
 
-        final List<AssistanceResponse> assistancesList = jsonData.map((item) {
+        return jsonData.map((item) {
           return AssistanceResponse(
-            id: item['id'].toString(),
-            startDate: item['startDate'],
-            description: item['description'],
-            name: item['name'],
-            address: item['address'],
-            complement: item['complement'],
-            clientCpf: item['cpf'],
-            period: item['period'],
-            workersIds: (item['workersIds'] as List<dynamic>)
-                .map((id) => id.toString())
-                .toList(),
-            categoryIds: (item['categoryIds'] as List<dynamic>)
-                .map((id) => id.toString())
-                .toList(),
-            assistanceStatus: item['assistanceStatus']
+              id: item['id'].toString(),
+              startDate: item['startDate'],
+              description: item['description'],
+              name: item['name'],
+              address: item['address'],
+              complement: item['complement'],
+              clientCpf: item['cpf'],
+              period: item['period'],
+              workersIds: (item['workersIds'] as List<dynamic>)
+                  .map((id) => id.toString())
+                  .toList(),
+              categoryIds: (item['categoryIds'] as List<dynamic>)
+                  .map((id) => id.toString())
+                  .toList(),
+              assistanceStatus: item['assistanceStatus']
           );
         }).toList();
-
-        return assistancesList;
       } else {
         throw Exception('Failed to load assistance list');
       }
@@ -69,24 +67,15 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
     }
   }
 
-  // Get week range string for display
-  String getWeekRange(DateTime date) {
-    final startOfWeek = date;
-    final endOfWeek = startOfWeek.add(const Duration(days: 6));
-    final formatter = DateFormat('dd/MM');
-    return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
-  }
-
-  // Updated function to get assistances grouped by week start dates
-  Future<Map<DateTime, int>> getAssistancesByWeek() async {
+  Future<Map<String, int>> getAssistancesByNeighborhood() async {
     try {
       final assistances = await getAllAssistances();
-      final Map<DateTime, int> weeklyAssistances = {};
+      final Map<String, int> neighborhoodCounts = {};
 
+      // Filtrar assistências dentro do intervalo de datas
       DateTime now = DateTime.now();
       DateTime startDateRange;
 
-      // Determine the start date based on the selected date range
       if (selectedDateRange == 'Últimos 7 dias') {
         startDateRange = now.subtract(Duration(days: 7));
       } else if (selectedDateRange == 'Últimos 30 dias') {
@@ -95,37 +84,29 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
         startDateRange = now.subtract(Duration(days: 90));
       }
 
-      // Generate week start dates between startDateRange and now
-      DateTime currentWeekStart = startDateRange.subtract(Duration(days: startDateRange.weekday - 1));
-      while (currentWeekStart.isBefore(now)) {
-        weeklyAssistances[currentWeekStart] = 0;
-        currentWeekStart = currentWeekStart.add(Duration(days: 7));
-      }
-
-      // Filter assistances within the date range
       final filteredAssistances = assistances.where((assistance) {
         DateTime startDate = DateTime.parse(assistance.startDate);
         return startDate.isAfter(startDateRange);
       }).toList();
 
-      // Map assistances to their corresponding week start dates
+      // Processar e agrupar por bairro-cidade
       for (var assistance in filteredAssistances) {
-        DateTime startDate = DateTime.parse(assistance.startDate);
-        DateTime weekStartDate = startDate.subtract(Duration(days: startDate.weekday - 1));
-        weekStartDate = DateTime(weekStartDate.year, weekStartDate.month, weekStartDate.day);
+        List<String> addressParts = assistance.address.split(', ');
+        if (addressParts.length > 2) {
+          String neighborhood = addressParts[1].split(' - ')[1];
+          String city = addressParts[2].split(' - ')[0];
+          String key = '$neighborhood - $city';
 
-        if (weeklyAssistances.containsKey(weekStartDate)) {
-          weeklyAssistances[weekStartDate] = weeklyAssistances[weekStartDate]! + 1;
-        } else {
-          weeklyAssistances[weekStartDate] = 1;
+          neighborhoodCounts[key] = (neighborhoodCounts[key] ?? 0) + 1;
         }
       }
 
-      return weeklyAssistances;
+      return neighborhoodCounts;
     } catch (e) {
-      throw Exception('Error loading assistances by week: $e');
+      throw Exception('Error loading assistances by neighborhood: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +121,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                 onPressed: () {
                   setState(() {
                     selectedDateRange = dateRange;
-                    assistancesByWeekFuture = getAssistancesByWeek();
+                    assistancesByNeighborhoodFuture = getAssistancesByNeighborhood();
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -164,21 +145,20 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
           }).toList(),
         ),
         Expanded(
-          child: FutureBuilder<Map<DateTime, int>>(
-            future: assistancesByWeekFuture,
+          child: FutureBuilder<Map<String, int>>(
+            future: assistancesByNeighborhoodFuture,
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('No data available');
               }
 
-              final weeklyAssistances = snapshot.data!;
-              List<DateTime> sortedWeekStarts = weeklyAssistances.keys.toList()..sort();
+              final neighborhoodCounts = snapshot.data!;
+              List<String> neighborhoods = neighborhoodCounts.keys.toList();
               List<BarChartGroupData> barGroups = [];
-              List<String> xLabels = [];
 
-              for (int i = 0; i < sortedWeekStarts.length; i++) {
-                DateTime weekStart = sortedWeekStarts[i];
-                int count = weeklyAssistances[weekStart] ?? 0;
+              for (int i = 0; i < neighborhoods.length; i++) {
+                String neighborhood = neighborhoods[i];
+                int count = neighborhoodCounts[neighborhood] ?? 0;
 
                 barGroups.add(
                   BarChartGroupData(x: i, barRods: [
@@ -190,9 +170,6 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                     )
                   ]),
                 );
-
-                String weekRange = getWeekRange(weekStart);
-                xLabels.add(weekRange);
               }
 
               return BarChart(
@@ -206,20 +183,19 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (double value, TitleMeta meta) {
+                          int index = value.toInt();
                           final style = GoogleFonts.poppins(
                             fontSize: 8.0,
                             fontWeight: FontWeight.w300,
                             color: Colors.black,
                           );
-                          int index = value.toInt();
-                          if (index >= 0 && index < xLabels.length) {
-                            String label = xLabels[index];
+                          if (index >= 0 && index < neighborhoods.length) {
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
                               space: 8.0,
                               child: Transform.rotate(
                                 angle: -0.45,
-                                child: Text(label, style: style),
+                                child: Text(neighborhoods[index], style: style),
                               ),
                             );
                           } else {

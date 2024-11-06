@@ -81,6 +81,7 @@ class WorkerService (
                 assistance.period,
                 assistance.responsibleWorkers.map { it.id!! }.toSet(),
                 assistance.categories.map { it.id!! }.toSet(),
+                assistance.assistanceStatus
             )
         }
         val restTemplate = RestTemplate()
@@ -112,6 +113,7 @@ class WorkerService (
             closestAssistance.period,
             closestAssistance.responsibleWorkers.map{ it.id!! }.toSet(),
             closestAssistance.categories.map{ it.id!! }.toSet(),
+            closestAssistance.assistanceStatus
         )
     }
 

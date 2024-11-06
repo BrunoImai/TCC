@@ -27,7 +27,11 @@ class CurrentAssistances extends StatefulWidget {
 class _CurrentAssistancesState extends State<CurrentAssistances> {
   late List<AssistanceInformations> assistanceList = [];
 
-  List<String> statusOptions = ['AGUARDANDO', 'EM_ANDAMENTO', 'FINALIZADO'];
+  final Map<String, String> statusOptions = {
+    'AGUARDANDO': 'Aguardando',
+    'EM_ANDAMENTO': 'Em andamento',
+    'FINALIZADO': 'Finalizado',
+  };
   String selectedStatus = 'EM_ANDAMENTO';
 
   @override
@@ -36,6 +40,18 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
     getAllAssistances(selectedStatus);
   }
 
+  String convertStatus(String status) {
+    switch (status) {
+      case 'AGUARDANDO':
+        return 'Aguardando';
+      case 'EM_ANDAMENTO':
+        return 'Em andamento';
+      case 'FINALIZADO':
+        return 'Finalizado';
+      default:
+        return status;
+    }
+  }
 
   Future<ClientResponse?> getClientByCpf(String cpf) async {
     final response = await http.get(
@@ -193,6 +209,7 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
             period: item['period'],
             workersIds: workersIds,
             categoryIds: categoryIds,
+            assistanceStatus: item['assistanceStatus']
           );
 
           final assistanceInformations = AssistanceInformations(
@@ -232,7 +249,6 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Existing Row with title and navigation
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -248,38 +264,55 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () => Get.to(() => AssistanceListScreen(whoAreYouTag: widget.whoAreYouTag)),
-                  child: Text(
-                    'Todos os serviços',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w200,
-                      color: darkColor.withOpacity(0.5),
+                  child: SizedBox(
+                    width: 80,
+                    child: Text(
+                      'Todos os serviços',
+                      maxLines: 2,
+                      softWrap: true,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w200,
+                        color: darkColor.withOpacity(0.5),
+                      ),
+                      textAlign: TextAlign.right,
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: homePadding),
-          // Dropdown Menu for Status Selection
-          DropdownButton<String>(
-            value: selectedStatus,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() {
-                  selectedStatus = newValue;
-                  getAllAssistances(selectedStatus);
-                });
-              }
-            },
-            items: statusOptions.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
+          const SizedBox(height: homePadding - 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: statusOptions.keys.map((status) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedStatus = status;
+                      getAllAssistances(selectedStatus);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedStatus == status
+                        ? primaryColor
+                        : Colors.grey[300],
+                    side: BorderSide.none,
+                  ),
+                  child: Text(
+                    statusOptions[status]!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w400,
+                      color: selectedStatus == status ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
               );
             }).toList(),
           ),
-          const SizedBox(height: homePadding),
           Expanded(
             child: ListView.builder(
               physics: const ScrollPhysics(),
@@ -291,7 +324,7 @@ class _CurrentAssistancesState extends State<CurrentAssistances> {
                   assistanceName: assistanceList[index].assistance.name,
                   clientName: "Cliente: ${assistanceList[index].clientName}",
                   workersName: "Funcionário: ${assistanceList[index].workersName.join(', ')}",
-                  status: assistanceList[index].assistance.period,
+                  status: convertStatus(assistanceList[index].assistance.assistanceStatus),
                   icon: Icons.construction,
                   assistanceResponse: assistanceList[index].assistance,
                 ),

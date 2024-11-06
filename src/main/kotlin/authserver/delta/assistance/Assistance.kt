@@ -81,5 +81,5 @@ class Assistance(
 
 
 ) {
-    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet())
+    fun toResponse() = AssistanceResponse(id!!, description, startDate ,name, address, complement, cpf, period, responsibleWorkers.map { it.id }.toSet(), categories.map { it.id }.toSet(), assistanceStatus)
 }

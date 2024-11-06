@@ -266,6 +266,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
             period: item['period'],
             workersIds: workersIds,
             categoryIds: categoryIds,
+            assistanceStatus: item['assistanceStatus']
           );
 
           final assistanceInformations = AssistanceInformations(

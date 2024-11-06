@@ -4,10 +4,12 @@ import 'package:tcc_front/src/constants/sizes.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/analytic_cards.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/custom_appbar.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/current_assistances.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/neighborhood_chart.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/work_delayed.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/assistances_chart.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/machine_part_exchange.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/revenue.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/worker_chart.dart';
 import '../../../../../../constants/responsive.dart';
 
 class DashboardContent extends StatelessWidget {
@@ -93,6 +95,42 @@ class DashboardContent extends StatelessWidget {
                       const Expanded(
                           flex: 2,
                           child: MachinePartExchange()
+                      ),
+                  ],
+                ),
+                const SizedBox(height: homePadding,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if(!Responsive.isMobile(context))
+                                const Expanded(
+                                  flex: 1,
+                                  child: WorkerChart(),
+                                ),
+                            ],
+                          ),
+                          if(Responsive.isMobile(context))
+                            const WorkerChart(),
+                          if(Responsive.isMobile(context))
+                            const SizedBox(height: homePadding,),
+                          if(Responsive.isMobile(context))
+                            const NeighborhoodChart(),
+                        ],
+                      ),
+                    ),
+                    if(!Responsive.isMobile(context))
+                      const SizedBox(width: homePadding,),
+                    if(!Responsive.isMobile(context))
+                      const Expanded(
+                          flex: 2,
+                          child: NeighborhoodChart()
                       ),
                   ],
                 ),

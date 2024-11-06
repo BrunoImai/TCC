@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tcc_front/src/constants/colors.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/bar_chart_neighborhood.dart';
+import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/bar_chart_worker.dart';
 
 import '../../../../../../constants/sizes.dart';
 import 'bar_chart_assistances.dart';
 
 
-class AssistancesChart extends StatelessWidget {
-  const AssistancesChart({super.key});
+class NeighborhoodChart extends StatelessWidget {
+  const NeighborhoodChart({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 350,
       width: double.infinity,
       padding: const EdgeInsets.all(homePadding),
       decoration: BoxDecoration(
@@ -23,7 +25,7 @@ class AssistancesChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Serviços",
+            "Quantidade de serviços por bairro",
             style: GoogleFonts.poppins(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w700,
@@ -31,7 +33,7 @@ class AssistancesChart extends StatelessWidget {
             ),
           ),
           const Expanded(
-            child: BarChartAssistances(),
+            child: BarChartNeighborhood(),
           )
         ],
       ),

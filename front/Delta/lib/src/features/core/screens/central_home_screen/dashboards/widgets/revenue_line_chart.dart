@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -23,113 +24,15 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
 
   List<FlSpot> revenueSpots = [];
   List<String> xAxisLabels = [];
-  List<String> dateRangeOptions = ['Last 7 days', 'Last 30 days', 'This Year', 'All Years'];
-  String selectedDateRange = 'Last 7 days';
+  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Esse ano', 'Todos os anos'];
+  String selectedDateRange = 'Últimos 7 dias';
 
   @override
   void initState() {
     super.initState();
     fetchBudgetData();
   }
-
-  // String getWeekRange(DateTime date) {
-  //   final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
-  //   final endOfWeek = startOfWeek.add(const Duration(days: 6));
-  //   final formatter = DateFormat('dd/MM');
-  //   return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
-  // }
-  //
-  // int _getWeekOfYear(DateTime date) {
-  //   final startOfYear = DateTime(date.year, 1, 1);
-  //   final daysDifference = date.difference(startOfYear).inDays;
-  //   return (daysDifference / 7).ceil();
-  // }
-  //
-  // Future<void> fetchBudgetData() async {
-  //   try {
-  //     final budgets = await getAllBudgets();
-  //     final approvedBudgets = budgets
-  //         .where((budget) => budget.status == 'APROVADO')
-  //         .toList();
-  //
-  //     Map<int, double> weeklyRevenue = {};
-  //
-  //     final now = DateTime.now();
-  //     final threeMonthsAgo = now.subtract(Duration(days: 90));
-  //
-  //     DateTime currentDate = threeMonthsAgo;
-  //     while (currentDate.isBefore(now)) {
-  //       int weekOfYear = _getWeekOfYear(currentDate);
-  //       weeklyRevenue[weekOfYear] = 0.0;
-  //       currentDate = currentDate.add(Duration(days: 7));
-  //     }
-  //
-  //     for (var budget in approvedBudgets) {
-  //       final creationDate = DateTime.parse(budget.creationDate);
-  //       if (creationDate.isAfter(threeMonthsAgo)) {
-  //         int weekOfYear = _getWeekOfYear(creationDate);
-  //         double totalPrice = double.tryParse(budget.totalPrice) ?? 0.0;
-  //
-  //         if (totalPrice >= 0) {
-  //           if (weeklyRevenue.containsKey(weekOfYear)) {
-  //             weeklyRevenue[weekOfYear] = weeklyRevenue[weekOfYear]! + totalPrice;
-  //           }
-  //         }
-  //       }
-  //     }
-  //
-  //     List<FlSpot> spots = weeklyRevenue.entries.map((entry) {
-  //       return FlSpot(entry.key.toDouble(), entry.value);
-  //     }).toList();
-  //
-  //     setState(() {
-  //       revenueSpots = spots;
-  //     });
-  //   } catch (e) {
-  //     print('Erro ao buscar dados: $e');
-  //   }
-  // }
-  //
-  //
-  // Future<List<BudgetResponse>> getAllBudgets() async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse('http://localhost:8080/api/central/budget'),
-  //       headers: {
-  //         'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
-  //       },
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       var decodedBody = utf8.decode(response.bodyBytes);
-  //       var jsonData = json.decode(decodedBody) as List<dynamic>;
-  //
-  //       final List<BudgetResponse> budgetsList = jsonData.map((item) {
-  //         return BudgetResponse(
-  //           id: item['id'].toString(),
-  //           name: item['name'],
-  //           description: item['description'],
-  //           creationDate: item['creationDate'],
-  //           status: item['status'],
-  //           assistanceId: item['assistanceId'].toString(),
-  //           clientId: item['clientId'].toString(),
-  //           responsibleWorkersIds:
-  //           (item['responsibleWorkersIds'] as List<dynamic>)
-  //               .map((id) => id.toString())
-  //               .toList(),
-  //           totalPrice: item['totalPrice'].toString(),
-  //         );
-  //       }).toList();
-  //
-  //       return budgetsList;
-  //     } else {
-  //       throw Exception('Failed to load budget list');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Erro ao carregar a lista de budgets: $e');
-  //   }
-  // }
-
+  
   Future<void> fetchBudgetData() async {
     try {
       final budgets = await getAllBudgets();
@@ -139,8 +42,8 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
 
       final now = DateTime.now();
 
-      if (selectedDateRange == 'Last 7 days' || selectedDateRange == 'Last 30 days') {
-        int days = selectedDateRange == 'Last 7 days' ? 7 : 30;
+      if (selectedDateRange == 'Últimos 7 dias' || selectedDateRange == 'Últimos 30 dias') {
+        int days = selectedDateRange == 'Últimos 7 dias' ? 7 : 30;
         DateTime startDate = now.subtract(Duration(days: days));
 
         // Initialize revenue data map for each day
@@ -162,7 +65,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
             }
           }
         }
-      } else if (selectedDateRange == 'This Year') {
+      } else if (selectedDateRange == 'Esse ano') {
         int currentYear = now.year;
 
         // Initialize revenue data map for each month
@@ -183,7 +86,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
             }
           }
         }
-      } else if (selectedDateRange == 'All Years') {
+      } else if (selectedDateRange == 'Todos os anos') {
         // Aggregate revenue per year
         for (var budget in approvedBudgets) {
           final creationDate = DateTime.parse(budget.creationDate);
@@ -262,13 +165,13 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
       return '';
     }
 
-    if (selectedDateRange == 'Last 7 days' || selectedDateRange == 'Last 30 days') {
+    if (selectedDateRange == 'Últimos 7 dias' || selectedDateRange == 'Últimos 30 dias') {
       DateTime date = DateTime.parse(xAxisLabels[index]);
       return DateFormat('dd/MM').format(date);
-    } else if (selectedDateRange == 'This Year') {
+    } else if (selectedDateRange == 'Esse ano') {
       DateTime date = DateTime.parse('${xAxisLabels[index]}-01');
       return DateFormat('MMM').format(date);
-    } else if (selectedDateRange == 'All Years') {
+    } else if (selectedDateRange == 'Todos os anos') {
       return xAxisLabels[index];
     }
     return '';
@@ -285,21 +188,33 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
       ),
       child: Column(
         children: [
-          // Dropdown for date range selection
-          DropdownButton<String>(
-            value: selectedDateRange,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() {
-                  selectedDateRange = newValue;
-                  fetchBudgetData();
-                });
-              }
-            },
-            items: dateRangeOptions.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: dateRangeOptions.map((dateRange) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedDateRange = dateRange;
+                      fetchBudgetData();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedDateRange == dateRange
+                        ? primaryColor
+                        : Colors.grey[300],
+                    side: BorderSide.none,
+                  ),
+                  child: Text(
+                    dateRange,
+                    style: GoogleFonts.poppins(
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w400,
+                      color: selectedDateRange == dateRange ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
               );
             }).toList(),
           ),

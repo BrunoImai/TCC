@@ -207,6 +207,7 @@ class _AnalyticInfoCardGridViewState extends State<AnalyticInfoCardGridView> {
             period: item['period'],
             workersIds: (item['workersIds'] as List<dynamic>).map((id) => id.toString()).toList(),
             categoryIds: (item['categoryIds'] as List<dynamic>).map((id) => id.toString()).toList(),
+            assistanceStatus: item['assistanceStatus']
           );
         }).toList();
 
