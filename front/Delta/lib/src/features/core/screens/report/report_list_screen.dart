@@ -48,7 +48,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
     } else {
       userToken = WorkerManager.instance.loggedUser!.token;
       userType = 'worker';
-      userName = utf8.decode(utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits).codeUnits);
+      userName = utf8.decode(WorkerManager.instance.loggedUser!.worker.name.codeUnits);
     }
     futureData = getAllReports();
     searchController.addListener(_onSearchChanged);

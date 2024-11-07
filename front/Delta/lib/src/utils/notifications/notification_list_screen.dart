@@ -118,7 +118,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       if (response.statusCode == 200) {
         var decodedBody = utf8.decode(response.bodyBytes);
         var jsonData = json.decode(decodedBody) as List<dynamic>;
-        
+
         final allWorkers = await getAllWorkers();
 
         final Map<num, String> workerIdToNameMap = {

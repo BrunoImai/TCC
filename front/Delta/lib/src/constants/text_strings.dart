@@ -178,6 +178,10 @@ const String tBudgetListSubTitle = "Encontre seus orçamentos!";
 //Update Budget Screen
 const String tEditBudget = "Editar orçamento";
 
+//Budget approval screen
+const String tBudgetApproval = "Aprovação do orçamento";
+const String tBudgetStatus = "Status";
+
 //Register Report Screen
 const String tRegisterBudgetTitle = "Orçamento A.G.E";
 const String tRegisterBudgetSubTitle = "Cadastre seu novo orçamento";

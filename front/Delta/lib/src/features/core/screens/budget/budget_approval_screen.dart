@@ -404,7 +404,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(tEditBudget, style: Theme.of(context).textTheme.headline4),
+        title: Text(tBudgetApproval, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -528,8 +528,8 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
                               },
                               child: InputDecorator(
                                 decoration: InputDecoration(
-                                  labelText: 'Método de Pagamento',
-                                  prefixIcon: const Icon(Icons.payment_rounded),
+                                  labelText: tBudgetApproval,
+                                  prefixIcon: const Icon(Icons.check_rounded),
                                   suffixIcon: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: Icon(
