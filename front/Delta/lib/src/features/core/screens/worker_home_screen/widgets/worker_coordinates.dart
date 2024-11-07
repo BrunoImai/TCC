@@ -49,7 +49,7 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final widthFactor = screenWidth < 600 ? 1.0 : 1.0;
+    final widthFactor = screenWidth < 600;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -61,7 +61,7 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
           children: [
             if (widget.selectedAssistance == null)
               FractionallySizedBox(
-                widthFactor: widthFactor,
+                widthFactor: widthFactor ? 1.0 : null,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minWidth: screenWidth < 600 ? screenWidth : 528,
