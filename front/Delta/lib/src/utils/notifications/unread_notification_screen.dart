@@ -183,25 +183,13 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
-      String convertStatus(String status) {
-        switch (status) {
-          case 'EM_ANALISE':
-            return 'em análise';
-          case 'APROVADO':
-            return 'aprovado';
-          case 'REPROVADO':
-            return 'reprovado';
-          default:
-            return status;
-        }
-      }
 
       return BudgetResponse(
           id: jsonData['id'].toString(),
           name: jsonData['name'],
           description: jsonData['description'],
           creationDate: jsonData['creationDate'],
-          status: convertStatus(jsonData['status']),
+          status: jsonData['status'],
           assistanceId: jsonData['assistanceId'].toString(),
           clientId: jsonData['clientId'].toString(),
           responsibleWorkersIds: (jsonData['responsibleWorkersIds'] as List<

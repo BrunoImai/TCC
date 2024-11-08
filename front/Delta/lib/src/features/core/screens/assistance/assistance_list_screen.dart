@@ -328,7 +328,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Container(
-                            height: 220,
+                            height: 230,
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

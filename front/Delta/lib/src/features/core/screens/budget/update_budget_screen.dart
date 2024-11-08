@@ -73,6 +73,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
     assistanceIdController.text = widget.budget.assistanceId!;
   }
 
+
   Future<void> fetchWorkers() async {
     try {
       final workersList = await getAllWorkers();
@@ -346,7 +347,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
       }
     }
 
-    Future<void> deleteAssistance() async {
+    Future<void> deleteBudget() async {
 
       final response = await http.delete(
         Uri.parse('http://localhost:8080/api/$userType/budget/${widget.budget.id}'),
@@ -356,11 +357,13 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
         },
       );
 
+      print(response.statusCode);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         setState(() {
           Navigator.pop(context, true);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Serviço excluído com sucesso!')),
+            const SnackBar(content: Text('Orçamento excluído com sucesso!')),
           );
         });
       }
@@ -549,22 +552,19 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                         padding: EdgeInsets.symmetric(vertical: 15.0),
                                         child: Text("Tem certeza que deseja excluir esse orçamento?"),
                                       ),
-                                      confirm: Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            deleteAssistance();
-                                            Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag));
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Orçamento excluído com sucesso!')),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.redAccent, side: BorderSide.none),
-                                          child: const Text("Sim"),
-                                        ),
+                                      confirm: ElevatedButton(
+                                        onPressed: () {
+                                          deleteBudget();
+                                          Get.to(CentralHomeScreen(whoAreYouTag: widget.whoAreYouTag));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.redAccent, side: BorderSide.none),
+                                        child: const Text("Sim"),
                                       ),
                                       cancel: OutlinedButton(
-                                          onPressed: () => Get.back(), child: const Text("Não")),
+                                        onPressed: () => Get.back(),
+                                        child: const Text("Não"),
+                                      ),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(

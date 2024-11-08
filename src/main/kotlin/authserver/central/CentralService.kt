@@ -850,10 +850,30 @@ class CentralService(
         return budget
     }
 
-    fun deleteBudget(budgetId: Long) : Boolean {
-        val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
+//    fun deleteBudget(budgetId: Long) : Boolean {
+//        val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
+//        val budget = budgetRepository.findByIdOrNull(budgetId) ?: return false
+//        if (budget.assistance!!.responsibleCentral!!.id!! != central.id) throw IllegalStateException("Orçamento não encontrado")
+//        budgetRepository.delete(budget)
+//        return true
+//    }
+
+    fun deleteBudget(budgetId: Long): Boolean {
+        val central = centralRepository.findByIdOrNull(getCentralIdFromToken())
+            ?: throw IllegalStateException("Central não encontrada")
         val budget = budgetRepository.findByIdOrNull(budgetId) ?: return false
-        if (budget.assistance!!.responsibleCentral!!.id!! != central.id) throw IllegalStateException("Orçamento não encontrado")
+
+        if (budget.assistance?.responsibleCentral?.id != central.id)
+            throw IllegalStateException("Orçamento não encontrado")
+
+        val assistance = budget.assistance
+        if (assistance != null) {
+            // Remove the budget reference from Assistance
+            assistance.budget = null
+            assistanceRepository.save(assistance)
+        }
+
+        // Now delete the Budget
         budgetRepository.delete(budget)
         return true
     }

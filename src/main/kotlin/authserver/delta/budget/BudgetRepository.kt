@@ -14,8 +14,8 @@ interface BudgetRepository : JpaRepository<Budget, Long> {
 
     fun findAllByResponsibleCentral(central: Central) : List<Budget>
 
-    @Query("SELECT b FROM Budget b LEFT JOIN FETCH b.assistance WHERE b.id = :id")
-    fun findByIdWithAssistance(@Param("id") id: Long): Budget?
+    @Query("SELECT b FROM Budget b WHERE b.assistance.id = :assistanceId")
+    fun findByAssistanceId(@Param("assistanceId") assistanceId: Long): Budget?
 
     fun findAllByResponsibleWorkersContains(worker: Worker) : List<Budget>
 

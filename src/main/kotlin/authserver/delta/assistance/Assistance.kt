@@ -75,8 +75,8 @@ class Assistance(
     @JoinColumn(name = "report_id", referencedColumnName = "id")
     var report: Report? = null,
 
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "budget_id", referencedColumnName = "id")
+    @OneToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
+    @JoinColumn(name = "budget_id", referencedColumnName = "id", nullable = true)
     var budget: Budget? = null,
 
 

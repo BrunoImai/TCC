@@ -35,6 +35,19 @@ Content-Type: application/json
     client.global.set("id", response.body.central.id)
 %}
 
+### Login como Central 2
+POST localhost:8080/api/central/login
+Content-Type: application/json
+
+{
+  "email": "marcella14peralta14@gmail.com",
+  "password": "Abcde12!!"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.central.id)
+%}
+
 
 ### Listar Todos os clientes da central
 GET localhost:8080/api/central/client
@@ -250,7 +263,7 @@ Content-Type: application/json
 
 ### busca orcamento
 
-GET localhost:8080/api/central/budget/11
+GET localhost:8080/api/central/budget/2
 Authorization: Bearer {{token}}
 
 ### Lista todos os orcamentos
@@ -318,5 +331,5 @@ GET localhost:8080/api/central/notification/1
 Authorization: Bearer {{token}}
 
 ### Deleta orcamento
-DELETE localhost:8080/api/central/budget/1
+DELETE localhost:8080/api/central/budget/2
 Authorization: Bearer {{token}}

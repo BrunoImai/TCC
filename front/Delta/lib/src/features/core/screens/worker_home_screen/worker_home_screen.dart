@@ -196,6 +196,8 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             .map((id) => categoryIdToNameMap[id] ?? 'Unknown')
             .toList();
 
+
+
         setState(() {
           selectedAssistance = AssistanceInformations(
               jsonData['id'].toString(),

@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest
 import authserver.delta.assistance.AssistanceStatus
 import authserver.delta.budget.Budget
 import authserver.delta.budget.BudgetRepository
+import authserver.delta.budget.BudgetStatus
 import authserver.delta.budget.request.BudgetRequest
 import authserver.delta.category.Category
 import authserver.delta.category.CategoryRepository
@@ -213,10 +214,12 @@ class WorkerService (
     }
 
 
-    fun getBudgetByAssistanceId (assistanceId: Long) : Budget? {
+    fun getBudgetByAssistanceId(assistanceId: Long): Budget? {
         val workerId = getWorkerIdFromToken()
-        workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrada")
-        val budget = budgetRepository.findByIdWithAssistance(assistanceId)
+        workerRepository.findByIdOrNull(workerId)
+            ?: throw IllegalStateException("Funcionário não encontrado")
+        val budget = budgetRepository.findByAssistanceId(assistanceId)
+            ?: throw IllegalStateException("Orçamento não encontrado")
         return budget
     }
 
@@ -243,7 +246,24 @@ class WorkerService (
         budget.description = budgetReq.description
         budget.client = client
         budget.responsibleWorkers = workers.toMutableSet()
-        budget.status = budgetReq.status ?: throw IllegalStateException("Status não pode ser nulo")
+        budget.status = BudgetStatus.EM_ANALISE
+        budget.totalPrice = budgetReq.totalPrice
+
+
+        val central = centralRepository.findByIdOrNull(worker.central?.id!!) ?: throw IllegalStateException("Central não encontrada")
+        val assistance = assistanceRepository.findByIdOrNull(budgetReq.assistanceId) ?: throw IllegalStateException("Assistência não encontrada")
+        budget.assistance = assistance
+
+        val notification = Notification(
+            title = "Orçamento ${budgetReq.name}",
+            message = "Um novo orçamento foi criado para a assistência ${assistance.name}",
+            central = central,
+            creationDate = currentTime(),
+            budget = budget
+        )
+
+        notificationRepository.save(notification)
+
         return budgetRepository.save(budget)
     }
 
