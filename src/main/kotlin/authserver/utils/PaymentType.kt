@@ -1,8 +1,8 @@
 package authserver.utils
 
 enum class PaymentType {
-    Crédito,
-    Débito,
-    Dinheiro,
-    Pix
+    CREDITO,
+    DEBITO,
+    DINHEIRO,
+    PIX
 }

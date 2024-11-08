@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "Central Bruno",
-  "email": " bv ",
+  "email": "bruno.y.l.imai@gmail.com",
   "password": "central0000",
     "cellphone": "11999999999",
   "cnpj": "12348678902234"
@@ -47,11 +47,11 @@ Content-Type: application/json
 
 {
     "name": "Bruno",
-    "cpf": "12345678901",
-    "address": "Rua dos bobos, n 0",
-    "complement": "Sobrado 2",
+    "cpf": "12345678902",
+    "address": "R. do Semeador, 702 - Cidade Industrial de Curitiba, Curitiba - PR, 81270-050",
+    "complement": null,
     "cellphone": "11999999999",
-    "email": "bruno.y.l.imai@gmail.com"
+    "email": "bruno.k.l.imai@gmail.com"
 }
 
 ### Esqueci a senha central 1
@@ -75,11 +75,11 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "Bob",
-    "email": "oie@gmail.com",
+    "name": "Cleber",
+    "email": "cle@gmail.com",
     "password": "12345678",
     "cellphone": "11999999999",
-    "cpf": "12255678901",
+    "cpf": "12455678901",
     "address": "Rua dos bobos, n 0"
 }
 
@@ -94,6 +94,20 @@ Content-Type: application/json
   "password": "12345678",
   "cellphone": "11999999999",
   "cpf": "12255678902",
+  "address": "Rua dos bobos, n 0"
+}
+
+### Criar novo Worker
+POST localhost:8080/api/central/worker
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Joses",
+  "email": "joses@gmail.com",
+  "password": "12345678",
+  "cellphone": "11999999999",
+  "cpf": "12265678902",
   "address": "Rua dos bobos, n 0"
 }
 
@@ -125,7 +139,7 @@ Authorization: Bearer {{token}}
 
 
 ### Lista o usuário 2
-GET localhost:8080/api/central/client/1
+GET localhost:8080/api/central/client/
 Authorization: Bearer {{token}}
 
 ### lista todos os usuários
@@ -159,12 +173,12 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "description": "Concerto maquina de lavar",
+  "description": "Geladeira",
   "name": "Concerto",
-  "address": "R. Mal. Cardoso Júnior, 563 - Jardim das Américas, Curitiba - PR, 81530-420, Brazil",
-  "cpf": "12345678901",
+  "address": "Av. São Sebastião, 340 - Centro, Quatro Barras - PR, 81270-050, Brazil",
+  "cpf": "123.456.789-02",
   "period": "Manha",
-  "workersIds": [2],
+  "workersIds": [],
   "categoriesId": [1]
 }
 
@@ -244,7 +258,7 @@ GET localhost:8080/api/central/budget
 Authorization: Bearer {{token}}
 
 
-### Cria orcamento Central
+### Cria relatorio Central
 POST localhost:8080/api/central/report
 Authorization: Bearer {{token}}
 Content-Type: application/json

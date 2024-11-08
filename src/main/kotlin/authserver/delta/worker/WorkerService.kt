@@ -60,7 +60,7 @@ class WorkerService (
     }
 
     fun getClosestAssistance(currentLocation: String): AssistanceResponse {
-        val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionario não encontrado")
+        val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionário não encontrado")
 
         val priorityAssistances = listAllAssistanceQueueByCentralId().filter { it.priority > 2 }
         if (priorityAssistances.isNotEmpty()) {
@@ -70,7 +70,7 @@ class WorkerService (
             workerRepository.save(worker)
             assistance.responsibleWorkers.add(worker)
             assistanceRepository.save(assistance)
-            return AssistanceResponse (
+            return AssistanceResponse(
                 assistance.id!!,
                 assistance.description,
                 assistance.startDate,
@@ -84,18 +84,33 @@ class WorkerService (
                 assistance.assistanceStatus
             )
         }
+
         val restTemplate = RestTemplate()
-        val responses = listAllAssistanceQueueByCentralId().map { assistance ->
+
+        val allOpenAssistances = listAllAssistanceQueueByCentralId().filter { it.assistanceStatus == AssistanceStatus.AGUARDANDO }
+
+        val responses = allOpenAssistances.map { assistance ->
             val url = buildUrl(currentLocation, assistance.address)
             restTemplate.getForObject(url, MapResponse::class.java)
         }
 
         val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
-        val closestAssistanceAddress =  AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
-        val closestAssistances = assistanceRepository.findByAddress(extractAddressWithNumber(closestAssistanceAddress.address)) ?: throw IllegalStateException("Serviço não encontrado")
+        val closestAssistanceAddress = AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
+        val closestAssistances = assistanceRepository.findByAddress(extractAddressWithNumber(closestAssistanceAddress.address))
+            ?: throw IllegalStateException("Serviço não encontrado")
 
         val closestAssistance = closestAssistances.first()
         closestAssistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO
+
+        val earlierAssistances = listAllAssistanceQueueByCentralId()
+            .filter { it.startDate.before(closestAssistance.startDate) }
+
+        earlierAssistances.forEach { assistance ->
+            if (assistance.assistanceStatus == AssistanceStatus.AGUARDANDO) {
+                assistance.priority += 1
+                assistanceRepository.save(assistance)
+            }
+        }
 
         worker.currentAssistances.add(closestAssistance)
         workerRepository.save(worker)
@@ -111,11 +126,12 @@ class WorkerService (
             closestAssistance.complement,
             closestAssistance.cpf,
             closestAssistance.period,
-            closestAssistance.responsibleWorkers.map{ it.id!! }.toSet(),
-            closestAssistance.categories.map{ it.id!! }.toSet(),
+            closestAssistance.responsibleWorkers.map { it.id!! }.toSet(),
+            closestAssistance.categories.map { it.id!! }.toSet(),
             closestAssistance.assistanceStatus
         )
     }
+
 
     fun login(credentials: LoginRequest): WorkerLoginResponse? {
         val worker = workerRepository.findByEmail(credentials.email!!) ?: throw InvalidCredentialException("Credenciais inválidas!")
@@ -311,9 +327,9 @@ class WorkerService (
         assistanceRepository.save(assistance)
 
 
+
         return assistance.report!!
 
-//        return reportRepository.save(report)
     }
 
     fun getReport(reportId: Long) : Report {

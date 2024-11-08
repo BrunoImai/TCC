@@ -3,8 +3,8 @@ POST localhost:8080/api/worker/login
 Content-Type: application/json
 
 {
-  "email": "ze@gmail.com",
-  "password": "Abcde12!!"
+  "email": "jose@gmail.com",
+  "password": "12345678"
 }
 > {%
     client.global.set("token", response.body.token)
@@ -95,3 +95,20 @@ Authorization: Bearer {{token}}
 ### Lista Ultimo servico
 GET localhost:8080/api/worker/assistance/currentAssistance
 Authorization: Bearer {{token}}
+
+### Cria relatorio Worker
+POST localhost:8080/api/worker/report
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "orcamento final",
+  "description": "Concerto maquina de lavar",
+  "assistanceId": 1,
+  "responsibleWorkersIds": [1],
+  "clientId": 1,
+  "totalPrice": 100.00,
+  "paymentType": "CREDITO",
+  "machinePartExchange": true,
+  "delayed": false
+}
