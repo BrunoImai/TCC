@@ -21,12 +21,10 @@ class WorkerCentralControl extends StatefulWidget {
   const WorkerCentralControl(
       {super.key,
       required this.whoAreYouTag,
-      this.selectedAssistance,
-      this.searchQuery});
+      this.selectedAssistance});
 
   final num whoAreYouTag;
   final AssistanceInformations? selectedAssistance;
-  final String? searchQuery;
 
   @override
   _WorkerCentralControlState createState() => _WorkerCentralControlState();
@@ -84,15 +82,6 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
     final screenWidth = MediaQuery.of(context).size.width;
     final widthFactor = screenWidth < 600 ? 1.0 : 0.3;
 
-    bool matchesSearchQuery(String cardTitle) {
-      if (widget.searchQuery == null || widget.searchQuery!.isEmpty) {
-        return true; // Always show card if no search query
-      }
-      return cardTitle
-          .toLowerCase()
-          .contains(widget.searchQuery!.toLowerCase());
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Center(
@@ -102,7 +91,6 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
           alignment: WrapAlignment.center,
           children: [
             // Notificações
-            if (matchesSearchQuery(tNotificationsHistory))
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(
@@ -142,8 +130,7 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
               ),
 
             // Registrar orçamento
-            if (widget.selectedAssistance != null &&
-                matchesSearchQuery(tRegisterBudget))
+            if (widget.selectedAssistance != null)
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(
@@ -183,7 +170,6 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
               ),
 
             // Histórico de orçamento
-            if (matchesSearchQuery(tBudgetHistory))
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(
@@ -223,9 +209,7 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
               ),
 
             // Registrar relatório
-
-            if (budgetStatus == 'APROVADO' &&
-                matchesSearchQuery(tRegisterReport))
+            if (budgetStatus == 'APROVADO')
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(
@@ -265,7 +249,6 @@ class _WorkerCentralControlState extends State<WorkerCentralControl> {
               ),
 
             // Histórico de relatórios
-            if (matchesSearchQuery(tReports))
               FractionallySizedBox(
                 widthFactor: widthFactor,
                 child: ElevatedButton(

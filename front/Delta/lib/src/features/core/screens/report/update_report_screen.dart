@@ -54,6 +54,21 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
   String userToken = "";
   String userType = "";
 
+  String convertPaymentType(String status) {
+    switch (status) {
+      case 'DEBITO':
+        return 'Débito';
+      case 'CREDITO':
+        return 'Crédito';
+      case 'DINHEIRO':
+        return 'Dinheiro';
+      case 'PIX':
+        return 'Pix';
+      default:
+        return status;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -70,7 +85,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     descriptionController.text = widget.report.description;
     nameController.text = widget.report.name;
     statusController.text = widget.report.status;
-    selectedPaymentType = widget.report.paymentType;
+    selectedPaymentType = convertPaymentType(widget.report.paymentType);
     _machinePartExchange = widget.report.machinePartExchange;
     _delayed = widget.report.delayed;
   }
@@ -315,13 +330,28 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         return;
       }
 
+      String convertPaymentTypeRequest(String status) {
+        switch (status) {
+          case 'Débito':
+            return 'DEBITO';
+          case 'Crédito':
+            return 'CREDITO';
+          case 'Dinheiro':
+            return 'DINHEIRO';
+          case 'Pix':
+            return 'PIX';
+          default:
+            return status;
+        }
+      }
+
       UpdateReportRequest updateReportRequest = UpdateReportRequest(
         name: name,
         description: description,
         status: status,
         assistanceId: assistanceId,
         responsibleWorkersIds: workersIds,
-        paymentType: selectedPaymentType,
+        paymentType: convertPaymentTypeRequest(selectedPaymentType),
         machinePartExchange: _machinePartExchange,
         delayed: _delayed
       );
@@ -381,7 +411,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(tEditAssistance, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditReport, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

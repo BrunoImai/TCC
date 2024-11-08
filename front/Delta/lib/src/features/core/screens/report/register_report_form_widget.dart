@@ -368,12 +368,27 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
         return;
       }
 
+      String convertPaymentTypeRequest(String status) {
+        switch (status) {
+          case 'Débito':
+            return 'DEBITO';
+          case 'Crédito':
+            return 'CREDITO';
+          case 'Dinheiro':
+            return 'DINHEIRO';
+          case 'Pix':
+            return 'PIX';
+          default:
+            return status;
+        }
+      }
+
       ReportRequest reportRequest = ReportRequest(
         name: name,
         description: description,
         responsibleWorkersIds: workersIds,
         assistanceId: assistanceId,
-        paymentType: selectedPaymentType,
+        paymentType: convertPaymentTypeRequest(selectedPaymentType),
         machinePartExchange: _machinePartExchange,
         delayed: _delayed
       );

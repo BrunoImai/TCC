@@ -38,23 +38,19 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
   List<CategoryResponse> selectedCategories = [];
   late List<AssistanceInformations> assistanceList;
   Timer? assistanceTimer;
-  String _searchText = '';
 
   @override
   void initState() {
     super.initState();
     fetchWorkers();
     fetchCurrentAssistance();
-    assistanceTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    assistanceTimer = Timer.periodic(const Duration(seconds: 7), (timer) {
       fetchCurrentAssistance();
-    });
+      setState(() {});
+    }
+    );
   }
 
-  void _onSearchChanged(String value) {
-    setState(() {
-      _searchText = value;
-    });
-  }
 
   @override
   void dispose() {
@@ -255,7 +251,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             const SizedBox(height: homePadding,),
 
             //Search Box
-            WorkerSearchBar(onSearchChanged: _onSearchChanged),
+            WorkerSearchBar(),
             const SizedBox(height: homePadding,),
 
             //Current and next service
@@ -345,7 +341,7 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
             //Control Center
             Text(tControlCenter, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
-            WorkerCentralControl(whoAreYouTag: widget.whoAreYouTag, selectedAssistance: selectedAssistance,),
+            WorkerCentralControl(whoAreYouTag: widget.whoAreYouTag, selectedAssistance: selectedAssistance),
             const SizedBox(height: homePadding,),
 
             //

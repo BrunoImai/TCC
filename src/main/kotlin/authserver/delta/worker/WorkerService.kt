@@ -59,7 +59,7 @@ class WorkerService (
         } ?: throw IllegalStateException("Funcionario não está autenticada!")
     }
 
-    fun getClosestAssistance(currentLocation: String): AssistanceResponse {
+    fun getClosestAssistance(currentLocation: String): AssistanceResponse? {
         val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionário não encontrado")
 
         val priorityAssistances = listAllAssistanceQueueByCentralId().filter { it.priority > 2 }
@@ -88,6 +88,8 @@ class WorkerService (
         val restTemplate = RestTemplate()
 
         val allOpenAssistances = listAllAssistanceQueueByCentralId().filter { it.assistanceStatus == AssistanceStatus.AGUARDANDO }
+
+        if (allOpenAssistances.isEmpty()) return null
 
         val responses = allOpenAssistances.map { assistance ->
             val url = buildUrl(currentLocation, assistance.address)

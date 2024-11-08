@@ -39,9 +39,8 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
         );
       }
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao enviar a localização: $e')),
+        SnackBar(content: Text('Ocorreu um erro: $e')),
       );
     }
   }

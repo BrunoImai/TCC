@@ -75,6 +75,7 @@ class WorkerController(
     fun getClosestAssistance(@RequestParam("coordinate") coordinate: String) =
         service.getClosestAssistance(coordinate)
 
+
     @PostMapping("/report")
     fun createReport(@Valid @RequestBody reportRequest: ReportRequest) =
         service.createReport(reportRequest)

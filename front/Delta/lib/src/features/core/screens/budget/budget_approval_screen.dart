@@ -71,6 +71,19 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
     fetchBudget();
   }
 
+  String convertStatus(String status) {
+    switch (status) {
+      case 'EM_ANALISE':
+        return 'Em análise';
+      case 'APROVADO':
+        return 'Aprovado';
+      case 'REPROVADO':
+        return 'Reprovado';
+      default:
+        return status;
+    }
+  }
+
   Future<void> fetchBudget() async {
     budget = await getBudgetById(widget.budgetId);
     print(budget);
@@ -79,7 +92,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       descriptionController.text = budget!.description;
       nameController.text = budget!.name;
       totalPriceController.text = budget!.totalPrice;
-      selectedStatus = budget!.status;
+      selectedStatus = convertStatus(budget!.status);
 
       assistanceIdController.text = budget!.assistanceId!;
       fetchWorkers();
@@ -346,7 +359,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
         return;
       }
 
-      String convertStatus(String status) {
+      String convertStatusRequest(String status) {
         switch (status) {
           case 'Em análise':
             return 'EM_ANALISE';
@@ -362,7 +375,7 @@ class _BudgetApprovalScreenState extends State<BudgetApprovalScreen> {
       UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,
-        status: convertStatus(selectedStatus),
+        status: convertStatusRequest(selectedStatus),
         assistanceId: assistanceId,
         clientId: clientId,
         responsibleWorkersIds: workersIds,

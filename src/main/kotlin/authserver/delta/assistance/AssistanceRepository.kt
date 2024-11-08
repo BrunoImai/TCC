@@ -12,7 +12,7 @@ interface AssistanceRepository : JpaRepository<Assistance, Long> {
     //fun findByAddress(address: String):  List<Assistance>?
     fun findAllByResponsibleWorkersContains(worker: Worker): List<Assistance>
 
-    @Query("SELECT a FROM Assistance a WHERE a.address LIKE %:address%")
+    @Query("SELECT a FROM Assistance a WHERE a.address LIKE %:address% AND a.assistanceStatus = 'AGUARDANDO'")
     fun findByAddress(address: String): List<Assistance>?
 
     fun findAssistanceByAssistanceStatusAndClient_Central(status: AssistanceStatus, central: Central) : List<Assistance>

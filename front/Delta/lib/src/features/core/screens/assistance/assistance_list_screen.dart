@@ -201,21 +201,31 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
               .map((id) => id.toString()).toList();
           print(categoryIds);
 
-
-          final address = utf8.decode(item['address'].toString().runes.toList());
+          String convertStatus(String status) {
+            switch (status) {
+              case 'AGUARDANDO':
+                return 'Aguardando';
+              case 'EM_ANDAMENTO':
+                return 'Em andamento';
+              case 'FINALIZADO':
+                return 'Finalizado';
+              default:
+                return status;
+            }
+          }
 
           final assistance = AssistanceResponse(
               id: item['id'].toString(),
               startDate: item['startDate'],
               description: item['description'],
               name: item['name'],
-              address: address,
+              address: item['address'],
               complement: item['complement'],
               clientCpf: item['cpf'],
               period: item['period'],
               workersIds: workersIds,
               categoryIds: categoryIds,
-              assistanceStatus: item['assistanceStatus']
+              assistanceStatus: convertStatus(item['assistanceStatus'])
           );
           final assistanceInformations = AssistanceInformations(
               assistance.id, workerNames, client!.name, assistance, categoriesName);
@@ -237,7 +247,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
 
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      throw Exception('Falha ao carregar a lista de assistências');
     }
   }
 
@@ -318,7 +328,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Container(
-                            height: 200,
+                            height: 220,
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,7 +407,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.clientName,
+                                        "Cliente: ${data.clientName}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -445,7 +455,31 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.workersName.join(', '),
+                                        "Funcionário(os): ${data.workersName.join(', ')}",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: darkColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.check_rounded,
+                                      color: darkColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        "Status: ${data.assistance.assistanceStatus}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,

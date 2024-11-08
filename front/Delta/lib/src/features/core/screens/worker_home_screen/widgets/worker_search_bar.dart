@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../../constants/text_strings.dart';
 
 class WorkerSearchBar extends StatelessWidget {
-  final ValueChanged<String> onSearchChanged;
 
   const WorkerSearchBar({
-    Key? key,
-    required this.onSearchChanged,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,6 @@ class WorkerSearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              onChanged: onSearchChanged, // Chama a função sempre que o texto muda
               decoration: InputDecoration(
                 hintText: "Pesquisar",
                 hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),

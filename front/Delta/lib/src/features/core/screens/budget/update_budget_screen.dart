@@ -303,6 +303,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
         return;
       }
 
+
       UpdateBudgetRequest updateBudgetRequest = UpdateBudgetRequest(
         name: name,
         description: description,

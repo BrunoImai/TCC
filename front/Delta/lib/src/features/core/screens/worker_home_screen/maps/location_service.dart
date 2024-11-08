@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:tcc_front/src/features/core/screens/worker/worker_manager.dart';
@@ -52,6 +55,10 @@ class LocationService {
     print('Token: $token');
     print('Status Code: ${response.statusCode}');
     print('Response Body: ${response.body}');
+
+    if(response.body == ""){
+      throw Exception('Não há serviços no momento, tente novamente mais tarde!');
+    }
 
     if (response.statusCode != 200) {
       throw Exception('Falha ao enviar a localização para o servidor. Status Code: ${response.statusCode}');
