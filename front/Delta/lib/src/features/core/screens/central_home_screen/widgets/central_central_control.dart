@@ -437,36 +437,6 @@ class CentralCentralControl extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: widthFactor,
               child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.attach_money, size: 30, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          tComissionControl,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 13.0, fontWeight: FontWeight.w600, color: darkColor),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: widthFactor,
-              child: ElevatedButton(
                 onPressed: () => Get.to(() => DashBoardScreen(whoAreYouTag: whoAreYouTag),),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,

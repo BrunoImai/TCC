@@ -125,7 +125,7 @@ class _BarChartWorkerState extends State<BarChartWorker> {
       final Map<String, int> assistancesByWorker = {};
       for (var worker in workers) {
         int assistanceCount = filteredAssistances.where((assistance) {
-          return assistance.workersIds.contains(worker.id);
+          return assistance.workersIds.contains(worker.id.toString());
         }).length;
         assistancesByWorker[worker.name] = assistanceCount;
       }

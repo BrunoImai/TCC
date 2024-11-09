@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import 'package:tcc_front/src/features/core/screens/central_home_screen/dashboards/widgets/bar_chart_worker.dart';
-
 import '../../../../../../constants/sizes.dart';
-import 'bar_chart_assistances.dart';
 
 
 class WorkerChart extends StatelessWidget {
