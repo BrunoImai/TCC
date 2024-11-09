@@ -331,5 +331,9 @@ GET localhost:8080/api/central/notification/1
 Authorization: Bearer {{token}}
 
 ### Deleta orcamento
-DELETE localhost:8080/api/central/budget/2
+DELETE localhost:8080/api/central/budget/3
+Authorization: Bearer {{token}}
+
+### deletar todas notificações
+DELETE localhost:8080/api/central/notification
 Authorization: Bearer {{token}}

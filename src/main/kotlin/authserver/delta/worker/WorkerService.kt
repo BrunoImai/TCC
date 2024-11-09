@@ -32,6 +32,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
 import java.util.*
@@ -483,13 +484,9 @@ class WorkerService (
         return budgets.sumOf { it.totalPrice.toDouble() * commissionPercentage / 100 }
     }
 
-
-
-
-
-    fun currentTime() : Date {
-        val currentDate = LocalDate.now()
-        return Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    fun currentTime(): Date {
+        val currentDateTime = LocalDateTime.now()
+        return Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant())
     }
 
 }

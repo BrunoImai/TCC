@@ -59,6 +59,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
@@ -850,14 +851,6 @@ class CentralService(
         return budget
     }
 
-//    fun deleteBudget(budgetId: Long) : Boolean {
-//        val central = centralRepository.findByIdOrNull(getCentralIdFromToken()) ?: throw IllegalStateException("Central não encontrada")
-//        val budget = budgetRepository.findByIdOrNull(budgetId) ?: return false
-//        if (budget.assistance!!.responsibleCentral!!.id!! != central.id) throw IllegalStateException("Orçamento não encontrado")
-//        budgetRepository.delete(budget)
-//        return true
-//    }
-
     fun deleteBudget(budgetId: Long): Boolean {
         val central = centralRepository.findByIdOrNull(getCentralIdFromToken())
             ?: throw IllegalStateException("Central não encontrada")
@@ -964,14 +957,16 @@ class CentralService(
     fun listUnreadNotifications() : MutableSet<Notification> {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        return central.notifications.filter { !it.readed }.toMutableSet()
+        val notifications = central.notifications.filter { !it.readed }.toMutableSet()
+        return notifications
     }
 
     fun getNotification(notificationId: Long) : Notification {
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val notification = central.notifications.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
-        return notification
+        notification.readed = true
+        return notificationRepository.save(notification)
     }
 
     fun deleteNotification(notificationId: Long) : Boolean {
@@ -991,9 +986,9 @@ class CentralService(
 
     // Utils
 
-    fun currentTime() : Date {
-        val currentDate = LocalDate.now()
-        return Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    fun currentTime(): Date {
+        val currentDateTime = LocalDateTime.now()
+        return Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant())
     }
 
     companion object {

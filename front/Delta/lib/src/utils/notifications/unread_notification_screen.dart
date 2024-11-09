@@ -396,7 +396,7 @@ class _UnreadNotificationScreenState extends State<UnreadNotificationScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.workerName,
+                                        "Funcionário: ${data.workerName}",
                                         style: GoogleFonts.poppins(fontSize: 14.0,
                                             fontWeight: FontWeight.w500,
                                             color: darkColor),
