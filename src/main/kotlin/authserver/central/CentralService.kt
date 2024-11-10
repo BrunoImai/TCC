@@ -580,8 +580,8 @@ class CentralService(
 
     fun listCategories(): List<Category> {
         val centralId = getCentralIdFromToken()
-        centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
-        return categoryRepository.findAll()
+        val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
+        return categoryRepository.findAllByCentral(central)
     }
 
     fun getCategory(categoryId: Long): Category? {

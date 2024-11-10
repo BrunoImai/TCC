@@ -64,7 +64,7 @@ class WorkerService (
     fun getClosestAssistance(currentLocation: String): AssistanceResponse? {
         val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionário não encontrado")
 
-        val priorityAssistances = listAllAssistanceQueueByCentralId().filter { it.priority > 2 }
+        val priorityAssistances = listAllAssistanceQueueByCentralId().filter { it.priority > 1 && it.assistanceStatus == AssistanceStatus.AGUARDANDO }
         if (priorityAssistances.isNotEmpty()) {
             val assistance = priorityAssistances.minByOrNull { it.startDate }!!
             assistance.assistanceStatus = AssistanceStatus.EM_ANDAMENTO

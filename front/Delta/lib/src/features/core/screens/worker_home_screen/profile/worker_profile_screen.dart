@@ -80,7 +80,7 @@ class WorkerProfileScreen extends StatelessWidget {
                       ),
                       confirm: Expanded(
                         child: ElevatedButton(
-                          onPressed: () => Get.to(() => const WelcomeScreen()),
+                          onPressed: () => Get.offAll(() => const WelcomeScreen()),
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                           child: const Text("Sim"),
                         ),
