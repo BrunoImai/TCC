@@ -16,8 +16,8 @@ class WorkerCoordinates extends StatefulWidget {
   _WorkerCoordinatesState createState() => _WorkerCoordinatesState();
 }
 
-
 class _WorkerCoordinatesState extends State<WorkerCoordinates> {
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -25,6 +25,9 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
   }
 
   Future<void> _sendCurrentLocation(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       Position? position = await LocationService.getCurrentLocation();
       print(position);
@@ -42,6 +45,10 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ocorreu um erro: $e')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -66,7 +73,9 @@ class _WorkerCoordinatesState extends State<WorkerCoordinates> {
                     minWidth: screenWidth < 600 ? screenWidth : 528,
                     maxWidth: 528,
                   ),
-                  child: ElevatedButton(
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
                     onPressed: () async {
                       await _sendCurrentLocation(context);
                     },

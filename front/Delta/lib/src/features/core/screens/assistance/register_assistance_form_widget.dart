@@ -117,7 +117,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return workersList;
       } else {
         print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
         throw Exception('Failed to load worker list');
       }
     } catch (e) {
@@ -162,7 +161,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
         return categoriesList;
       } else {
         print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
         throw Exception('Failed to load worker list');
       }
     } catch (e) {
@@ -185,8 +183,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
 
       if (response.statusCode == 200) {
         final clientData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        print(clientData['address']);
 
         setState(() {
           cepController.text = clientData['address'].split(', ')[3];
@@ -313,7 +309,6 @@ class _RegisterAssistanceFormWidget extends State<RegisterAssistanceFormWidget> 
       );
 
       String requestBody = jsonEncode(assistanceRequest.toJson());
-      print(requestBody);
 
       try {
         final response = await http.post(

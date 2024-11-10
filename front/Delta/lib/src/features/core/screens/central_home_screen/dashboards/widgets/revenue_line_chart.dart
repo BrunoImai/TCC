@@ -218,6 +218,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
               );
             }).toList(),
           ),
+          const SizedBox(height: homePadding - 5,),
           Expanded(
             child: revenueSpots.isEmpty
                 ? const Center(child: Text('No data available'))
@@ -267,10 +268,19 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
                         );
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
-                          child: Text(value.toStringAsFixed(0), style: style),
+                          child: Transform.rotate(
+                              angle: -0.5,
+                              child: Text(value.toStringAsFixed(0), style: style)
+                          ),
                         );
                       },
                     ),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
                 borderData: FlBorderData(

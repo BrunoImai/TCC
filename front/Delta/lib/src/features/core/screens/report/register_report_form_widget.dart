@@ -438,6 +438,7 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                 prefixIcon: Icon(Icons.content_paste_search_rounded)
               ),
               onTap: () async {
+                fetchAssistances();
                 AssistanceInformations? selectedAssistance = await showDialog<AssistanceInformations>(
                   context: context,
                   builder: (BuildContext context) {

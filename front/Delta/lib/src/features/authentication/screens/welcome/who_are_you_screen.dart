@@ -25,7 +25,7 @@ class WhoAreYouScreen extends StatelessWidget{
     final isDarkMode = brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDarkMode ? secondaryColor : primaryColor,
+      backgroundColor: isDarkMode ? secondaryColor : whiteColor,
       body: Stack(
         children: [
           FadeInAnimation(

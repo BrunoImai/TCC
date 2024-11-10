@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:tcc_front/src/constants/colors.dart';
+import '../../../../../../constants/sizes.dart';
 import '../../../../../authentication/screens/signup/central_manager.dart';
 import '../../../assistance/assistance.dart';
 
@@ -163,6 +164,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             );
           }).toList(),
         ),
+        const SizedBox(height: homePadding - 5,),
         Expanded(
           child: FutureBuilder<Map<DateTime, int>>(
             future: assistancesByWeekFuture,
@@ -244,6 +246,12 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                           );
                         },
                       ),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
                   barGroups: barGroups,

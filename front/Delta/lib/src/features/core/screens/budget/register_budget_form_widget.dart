@@ -422,6 +422,7 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
                 prefixIcon: Icon(Icons.content_paste_search_rounded)
               ),
               onTap: () async {
+                fetchAssistances();
                 AssistanceInformations? selectedAssistance = await showDialog<AssistanceInformations>(
                   context: context,
                   builder: (BuildContext context) {

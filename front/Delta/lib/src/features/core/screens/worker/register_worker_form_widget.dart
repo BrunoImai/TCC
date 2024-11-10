@@ -155,7 +155,6 @@ class _RegisterWorkerFormWidget extends State<RegisterWorkerFormWidget> {
       );
 
       String requestBody = jsonEncode(workerRequest.toJson());
-      print(requestBody);
 
       try {
         final response = await http.post(

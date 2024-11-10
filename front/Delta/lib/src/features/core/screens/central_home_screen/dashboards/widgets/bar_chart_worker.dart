@@ -171,6 +171,7 @@ class _BarChartWorkerState extends State<BarChartWorker> {
             );
           }).toList(),
         ),
+        const SizedBox(height: homePadding - 5,),
         Expanded(
           child: FutureBuilder<Map<String, int>>(
             future: assistancesByWorkerFuture,
@@ -246,6 +247,12 @@ class _BarChartWorkerState extends State<BarChartWorker> {
                           );
                         },
                       ),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
                   barGroups: barGroups,

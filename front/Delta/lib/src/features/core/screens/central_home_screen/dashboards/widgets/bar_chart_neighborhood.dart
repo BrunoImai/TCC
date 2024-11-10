@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:tcc_front/src/constants/colors.dart';
+import '../../../../../../constants/sizes.dart';
 import '../../../../../authentication/screens/signup/central_manager.dart';
 import '../../../assistance/assistance.dart';
 
@@ -144,6 +145,7 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
             );
           }).toList(),
         ),
+        const SizedBox(height: homePadding - 5,),
         Expanded(
           child: FutureBuilder<Map<String, int>>(
             future: assistancesByNeighborhoodFuture,
@@ -220,6 +222,12 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
                           );
                         },
                       ),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
                   barGroups: barGroups,
