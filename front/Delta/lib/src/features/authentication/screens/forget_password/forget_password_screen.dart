@@ -89,7 +89,7 @@ class _ForgetPasswordMailScreenState extends State<ForgetPasswordMailScreen> {
               children: [
                 const SizedBox(height: defaultSize * 4),
                 FormHeaderWidget(
-                  image: forgetPasswordImage,
+                  image: logoDegrade,
                   title: tForgetPassword.toUpperCase(),
                   subTitle: tForgetPasswordSubTitle,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -51,10 +51,14 @@ flutter_native_splash:
   color_dark: #272727
   assets:
     - assets/images/pngwingcom.png
+    - assets/images/iconeDegrade.png
+    - assets/images/logoDegrade.png
 
   android_12:
     assets:
       - assets/images/pngwingcom.png
+      - assets/images/iconeDegrade.png
+      - assets/images/logoDegrade.png
     icon_background_color: #f7f6f1
     icon_background_color_dark: #f7f6f1
 
@@ -65,4 +69,6 @@ flutter:
   assets:
     - assets/images/pngwingcom.png
     - assets/images/userProfileImage.png
+    - assets/images/iconeDegrade.png
+    - assets/images/logoDegrade.png
 

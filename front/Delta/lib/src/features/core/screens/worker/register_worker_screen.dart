@@ -39,7 +39,7 @@ class RegisterWorkerScreen extends StatelessWidget{
                       width: elementWidth,
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        image: welcomeImage,
+                        image: iconeDegrade,
                         title: tRegisterWorkerTilte,
                         subTitle: tRegisterWorkerSubTitle,
                         imageHeight: 0.15,

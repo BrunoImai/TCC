@@ -51,7 +51,7 @@ class RegisterReportScreen extends StatelessWidget{
                       width: elementWidth,
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        image: welcomeImage,
+                        image: iconeDegrade,
                         title: tRegisterReportTitle,
                         subTitle: tRegisterReportSubTitle,
                         imageHeight: 0.15,

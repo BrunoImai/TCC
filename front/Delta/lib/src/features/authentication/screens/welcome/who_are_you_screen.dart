@@ -48,7 +48,7 @@ class WhoAreYouScreen extends StatelessWidget{
                   Hero(
                     tag: 'welcome-image-tag',
                     child: Image(
-                      image: const AssetImage(welcomeImage),
+                      image: const AssetImage(logoDegrade),
                       height: height * 0.6,
                     ),
                   ),

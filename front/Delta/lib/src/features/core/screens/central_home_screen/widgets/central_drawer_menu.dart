@@ -34,7 +34,7 @@ class CentralDrawerMenu extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(homePadding),
-            child: Image.asset(welcomeImage),
+            child: Image.asset(logoDegrade),
           ),
           DrawerListTile(
               title: 'Home',

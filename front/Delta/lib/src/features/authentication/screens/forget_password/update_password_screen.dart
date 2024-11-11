@@ -128,7 +128,7 @@ class _UpdatePasswordScreen extends State<UpdatePasswordScreen> {
               children: [
                 const SizedBox(height: defaultSize * 4),
                 FormHeaderWidget(
-                  image: forgetPasswordImage,
+                  image: iconeDegrade,
                   title: tUpdatePasswordTitle.toUpperCase(),
                   subTitle: tUpdatePasswordSubTitle,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -53,7 +53,7 @@ class RegisterBudgetScreen extends StatelessWidget{
                       width: elementWidth,
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        image: welcomeImage,
+                        image: iconeDegrade,
                         title: tRegisterBudgetTitle,
                         subTitle: tRegisterBudgetSubTitle,
                         imageHeight: 0.15,

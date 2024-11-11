@@ -38,7 +38,7 @@ class RegisterCategoryScreen extends StatelessWidget{
                       width: elementWidth,
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        image: welcomeImage,
+                        image: iconeDegrade,
                         title: tRegisterCategoryTitle,
                         subTitle: tRegisterCategorySubTitle,
                         imageHeight: 0.15,
