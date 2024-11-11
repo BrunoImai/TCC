@@ -24,7 +24,12 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
 
   List<FlSpot> revenueSpots = [];
   List<String> xAxisLabels = [];
-  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Esse ano', 'Todos os anos'];
+  List<String> dateRangeOptions = [
+    'Últimos 7 dias',
+    'Últimos 30 dias',
+    'Esse ano',
+    'Todos os anos'
+  ];
   String selectedDateRange = 'Últimos 7 dias';
 
   @override
@@ -32,17 +37,19 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
     super.initState();
     fetchBudgetData();
   }
-  
+
   Future<void> fetchBudgetData() async {
     try {
       final budgets = await getAllBudgets();
-      final approvedBudgets = budgets.where((budget) => budget.status == 'APROVADO').toList();
+      final approvedBudgets =
+          budgets.where((budget) => budget.status == 'APROVADO').toList();
 
       Map<String, double> revenueData = {};
 
       final now = DateTime.now();
 
-      if (selectedDateRange == 'Últimos 7 dias' || selectedDateRange == 'Últimos 30 dias') {
+      if (selectedDateRange == 'Últimos 7 dias' ||
+          selectedDateRange == 'Últimos 30 dias') {
         int days = selectedDateRange == 'Últimos 7 dias' ? 7 : 30;
         DateTime startDate = now.subtract(Duration(days: days));
 
@@ -78,7 +85,8 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
         for (var budget in approvedBudgets) {
           final creationDate = DateTime.parse(budget.creationDate);
           if (creationDate.year == currentYear) {
-            String monthKey = '${creationDate.year}-${creationDate.month.toString().padLeft(2, '0')}';
+            String monthKey =
+                '${creationDate.year}-${creationDate.month.toString().padLeft(2, '0')}';
             double totalPrice = double.tryParse(budget.totalPrice) ?? 0.0;
 
             if (revenueData.containsKey(monthKey)) {
@@ -102,7 +110,8 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
       }
 
       // Convert revenue data to FlSpot list for the chart
-      List<String> sortedKeys = revenueData.keys.toList()..sort((a, b) => a.compareTo(b));
+      List<String> sortedKeys = revenueData.keys.toList()
+        ..sort((a, b) => a.compareTo(b));
       List<FlSpot> spots = [];
 
       for (int i = 0; i < sortedKeys.length; i++) {
@@ -143,9 +152,10 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
             status: item['status'],
             assistanceId: item['assistanceId'].toString(),
             clientId: item['clientId'].toString(),
-            responsibleWorkersIds: (item['responsibleWorkersIds'] as List<dynamic>)
-                .map((id) => id.toString())
-                .toList(),
+            responsibleWorkersIds:
+                (item['responsibleWorkersIds'] as List<dynamic>)
+                    .map((id) => id.toString())
+                    .toList(),
             totalPrice: item['totalPrice'].toString(),
           );
         }).toList();
@@ -165,7 +175,8 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
       return '';
     }
 
-    if (selectedDateRange == 'Últimos 7 dias' || selectedDateRange == 'Últimos 30 dias') {
+    if (selectedDateRange == 'Últimos 7 dias' ||
+        selectedDateRange == 'Últimos 30 dias') {
       DateTime date = DateTime.parse(xAxisLabels[index]);
       return DateFormat('dd/MM').format(date);
     } else if (selectedDateRange == 'Esse ano') {
@@ -211,108 +222,135 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
                     style: GoogleFonts.poppins(
                       fontSize: 10.0,
                       fontWeight: FontWeight.w400,
-                      color: selectedDateRange == dateRange ? Colors.white : Colors.black,
+                      color: selectedDateRange == dateRange
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ),
               );
             }).toList(),
           ),
-          const SizedBox(height: homePadding - 5,),
+          const SizedBox(
+            height: homePadding - 5,
+          ),
           Expanded(
             child: revenueSpots.isEmpty
                 ? const Center(child: Text('No data available'))
                 : LineChart(
-              LineChartData(
-                gridData: const FlGridData(
-                  show: false,
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        int index = value.toInt();
-                        if (index < 0 || index >= revenueSpots.length) {
-                          return const SizedBox.shrink();
-                        }
-                        String label = getXAxisLabel(index);
-
-                        const style = TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 8,
-                        );
-
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          space: 8.0,
-                          child: Transform.rotate(
-                            angle: -0.45,
-                            child: Text(label, style: style),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        const style = TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 8,
-                        );
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: Transform.rotate(
-                              angle: -0.5,
-                              child: Text(value.toStringAsFixed(0), style: style)
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: Colors.grey, width: 1),
-                ),
-                minX: 0,
-                maxX: revenueSpots.isNotEmpty ? (revenueSpots.length - 1).toDouble() : 0,
-                minY: 0,
-                maxY: revenueSpots.isNotEmpty
-                    ? revenueSpots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b)
-                    : 0,
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: revenueSpots,
-                    isCurved: true,
-                    color: primaryColor,
-                    barWidth: 5,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(show: false),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      gradient: LinearGradient(
-                        colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                    LineChartData(
+                      gridData: const FlGridData(
+                        show: false,
                       ),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              int index = value.toInt();
+                              if (index < 0 || index >= revenueSpots.length) {
+                                return const SizedBox.shrink();
+                              }
+                              String label = getXAxisLabel(index);
+
+                              const style = TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 8,
+                              );
+
+                              return SideTitleWidget(
+                                axisSide: meta.axisSide,
+                                space: 8.0,
+                                child: Transform.rotate(
+                                  angle: -0.45,
+                                  child: Text(label, style: style),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              const style = TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 8,
+                              );
+
+                              String formattedValue;
+                              if (value >= 1000) {
+                                formattedValue =
+                                    "${(value / 1000).toStringAsFixed(1)}K";
+                              } else {
+                                formattedValue = value.toStringAsFixed(0);
+                              }
+
+                              return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  space: 10,
+                                  fitInside: const SideTitleFitInsideData(
+                                      enabled: true,
+                                      axisPosition: 0,
+                                      parentAxisSize: 0,
+                                      distanceFromEdge: 0),
+                                  child: Text(
+                                    formattedValue,
+                                    style: style,
+                                    overflow: TextOverflow.clip,
+                                    softWrap: false,
+                                  )
+                              );
+                            },
+                          ),
+                        ),
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(color: Colors.grey, width: 1),
+                      ),
+                      minX: 0,
+                      maxX: revenueSpots.isNotEmpty
+                          ? (revenueSpots.length - 1).toDouble()
+                          : 0,
+                      minY: 0,
+                      maxY: revenueSpots.isNotEmpty
+                          ? revenueSpots
+                              .map((spot) => spot.y)
+                              .reduce((a, b) => a > b ? a : b)
+                          : 0,
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: revenueSpots,
+                          isCurved: true,
+                          color: primaryColor,
+                          barWidth: 5,
+                          isStrokeCapRound: true,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            gradient: LinearGradient(
+                              colors: gradientColors
+                                  .map((color) => color.withOpacity(0.3))
+                                  .toList(),
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

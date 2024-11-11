@@ -842,12 +842,21 @@ class CentralService(
 
     fun validateBudget(budgetId: Long, budgetReq: BudgetRequest) : Budget {
         val budget = updateBudget(budgetId, budgetReq)
-        for (notification in budget.notifications) {
-            notification.readed = false
-            notification.message = "Seu orçamento foi ${budget.status}"
+        val central = centralRepository.findByIdOrNull(getCentralIdFromToken())
+            ?: throw IllegalStateException("Central não encontrada")
+//        var status = ""
+//        if (budget.status == BudgetStatus.APROVADO) status = "aprovado"
+//        if (budget.status == BudgetStatus.REPROVADO) status = "reprovado"
+//        if (budget.status == BudgetStatus.EM_ANALISE) status = "em análise"
+        val notification = Notification(
+            title = "Orçamento ${budget.name}",
+            message = "Seu orçamento foi  ${budget.status}",
+            central = central,
+            creationDate = currentTime(),
+            budget = budget
+        )
 
-            notificationRepository.save(notification)
-        }
+        notificationRepository.save(notification)
         return budget
     }
 
@@ -958,6 +967,8 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val notifications = central.notifications.filter { !it.readed }.toMutableSet()
+        notifications.map { it.readed = true
+            notificationRepository.save(it)}
         return notifications
     }
 
