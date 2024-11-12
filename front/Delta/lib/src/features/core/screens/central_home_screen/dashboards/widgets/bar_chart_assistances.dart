@@ -242,7 +242,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
                               child: Transform.rotate(
-                                angle: -0.5,
+                                angle: -0.8,
                                 child: Text(xLabels[index],
                                     style: GoogleFonts.poppins(
                                       fontSize: 8.0,
