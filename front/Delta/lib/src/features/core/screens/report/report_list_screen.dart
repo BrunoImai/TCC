@@ -285,8 +285,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Container(
-                            height:
-                                200, // Defina uma altura fixa ou ajustável conforme necessário
+                            height: 200,
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,8 +305,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                           const SizedBox(width: 5),
                                           Expanded(
                                             child: Text(
-                                              data.report.assistanceId
-                                                  as String,
+                                              "Número do serviço: ${data.report.assistanceId as String}",
                                               style: GoogleFonts.poppins(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.w800,
@@ -367,7 +365,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.report.paymentType,
+                                        "Tipo de pagamento: ${data.report.paymentType}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -391,9 +389,9 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        DateFormat('dd/MM/yyyy').format(
+                                        "Data de cadastro: ${DateFormat('dd/MM/yyyy').format(
                                             DateTime.parse(
-                                                data.report.creationDate)),
+                                                data.report.creationDate))}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -417,7 +415,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.workersName.join(', '),
+                                        "Funcionário: ${data.workersName.join(', ')}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,

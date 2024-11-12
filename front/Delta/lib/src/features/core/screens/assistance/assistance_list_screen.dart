@@ -15,7 +15,6 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../category/category.dart';
-import '../central_home_screen/dashboards/widgets/drawer_menu.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker/worker.dart';
@@ -347,7 +346,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                           const SizedBox(width: 5),
                                           Expanded(
                                             child: Text(
-                                              data.assistance.name,
+                                             data.assistance.name,
                                               style: GoogleFonts.poppins(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.w800,
@@ -383,7 +382,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.categoriesName.join(', '),
+                                        "Categoria: ${data.categoriesName.join(', ')}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -455,7 +454,7 @@ class _AssistancesListScreenState extends State<AssistanceListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        "Funcionário(os): ${data.workersName.join(', ')}",
+                                        "Funcionário: ${data.workersName.join(', ')}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,

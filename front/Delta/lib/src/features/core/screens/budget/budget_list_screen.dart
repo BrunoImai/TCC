@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -11,13 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
 import 'package:tcc_front/src/features/core/screens/budget/update_budget_screen.dart';
 import 'package:tcc_front/src/features/core/screens/client/client.dart';
-import 'package:tcc_front/src/features/core/screens/budget/budget.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../category/category.dart';
 import '../central_home_screen/widgets/central_app_bar.dart';
 import '../central_home_screen/widgets/central_drawer_menu.dart';
 import '../worker/worker.dart';
@@ -331,8 +325,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                                           const SizedBox(width: 5),
                                           Expanded(
                                             child: Text(
-                                              data.budget
-                                                  .assistanceId as String,
+                                              "Número do serviço: ${data.budget.assistanceId as String}",
                                               style: GoogleFonts.poppins(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.w800,
@@ -394,7 +387,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.budget.status,
+                                        "Status: ${data.budget.status}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -418,7 +411,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        "${data.budget.totalPrice} reais",
+                                        "Preço total: ${data.budget.totalPrice} reais",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -442,9 +435,9 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        DateFormat('dd/MM/yyyy').format(
+                                        "Data de casdastro: ${DateFormat('dd/MM/yyyy').format(
                                             DateTime.parse(
-                                                data.budget.creationDate)),
+                                                data.budget.creationDate))}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
@@ -468,7 +461,7 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        data.workersName.join(', '),
+                                        "Funcionário: ${data.workersName.join(', ')}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,

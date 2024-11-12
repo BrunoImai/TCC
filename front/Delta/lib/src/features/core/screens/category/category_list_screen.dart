@@ -231,7 +231,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                     const SizedBox(width: 5),
                                     Expanded(
                                       child: Text(
-                                        DateFormat('dd/MM/yyyy').format(DateTime.parse(category.creationDate)),
+                                        "Data de cadastro: ${DateFormat('dd/MM/yyyy').format(DateTime.parse(category.creationDate))}",
                                         style: GoogleFonts.poppins(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w500,
