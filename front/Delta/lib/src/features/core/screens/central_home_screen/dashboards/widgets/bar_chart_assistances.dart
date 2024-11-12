@@ -20,9 +20,15 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
   late Future<Map<String, int>> assistancesGroupedFuture;
 
   List<String> dateRangeOptions = [
-    'Últimos 7 dias', 'Últimos 30 dias', 'Esse ano', 'Todos os anos'
+    'Últimos 7 dias',
+    'Últimos 30 dias',
+    'Esse ano',
+    'Todos os anos',
+    'Período personalizado'
   ];
   String selectedDateRange = 'Últimos 7 dias';
+  DateTime? customStartDate;
+  DateTime? customEndDate;
 
   @override
   void initState() {
@@ -45,22 +51,21 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
 
         final List<AssistanceResponse> assistancesList = jsonData.map((item) {
           return AssistanceResponse(
-            id: item['id'].toString(),
-            startDate: item['startDate'],
-            description: item['description'],
-            name: item['name'],
-            address: item['address'],
-            complement: item['complement'],
-            clientCpf: item['cpf'],
-            period: item['period'],
-            workersIds: (item['workersIds'] as List<dynamic>)
-                .map((id) => id.toString())
-                .toList(),
-            categoryIds: (item['categoryIds'] as List<dynamic>)
-                .map((id) => id.toString())
-                .toList(),
-            assistanceStatus: item['assistanceStatus']
-          );
+              id: item['id'].toString(),
+              startDate: item['startDate'],
+              description: item['description'],
+              name: item['name'],
+              address: item['address'],
+              complement: item['complement'],
+              clientCpf: item['cpf'],
+              period: item['period'],
+              workersIds: (item['workersIds'] as List<dynamic>)
+                  .map((id) => id.toString())
+                  .toList(),
+              categoryIds: (item['categoryIds'] as List<dynamic>)
+                  .map((id) => id.toString())
+                  .toList(),
+              assistanceStatus: item['assistanceStatus']);
         }).toList();
 
         return assistancesList;
@@ -72,13 +77,6 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
     }
   }
 
-  String getWeekRange(DateTime date) {
-    final startOfWeek = date;
-    final endOfWeek = startOfWeek.add(const Duration(days: 6));
-    final formatter = DateFormat('dd/MM/yy');
-    return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
-  }
-
   Future<Map<String, int>> getAssistancesByPeriod() async {
     try {
       final assistances = await getAllAssistances();
@@ -88,36 +86,45 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       DateTime nowDateOnly = DateTime(now.year, now.month, now.day);
 
       DateTime startDateRange;
+      DateTime endDateRange = nowDateOnly;
 
       switch (selectedDateRange) {
         case 'Últimos 7 dias':
-          startDateRange = nowDateOnly.subtract(Duration(days: 6)); // Inclui hoje
+          startDateRange = nowDateOnly.subtract(Duration(days: 6));
           break;
         case 'Últimos 30 dias':
-          startDateRange = nowDateOnly.subtract(Duration(days: 29)); // Inclui hoje
+          startDateRange = nowDateOnly.subtract(Duration(days: 29));
           break;
         case 'Esse ano':
           startDateRange = DateTime(now.year, 1, 1);
+          break;
+        case 'Todos os anos':
+          startDateRange = DateTime(now.year - 10, 1, 1);
+          break;
+        case 'Período personalizado':
+          if (customStartDate != null && customEndDate != null) {
+            startDateRange = DateTime(customStartDate!.year,
+                customStartDate!.month, customStartDate!.day);
+            endDateRange = DateTime(
+                customEndDate!.year, customEndDate!.month, customEndDate!.day);
+          } else {
+            throw Exception('No custom date range selected');
+          }
           break;
         default:
           startDateRange = DateTime(now.year - 10, 1, 1);
           break;
       }
 
-      if (selectedDateRange == 'Esse ano' || selectedDateRange == 'Todos os anos') {
-        DateTime current = startDateRange;
-        while (current.isBefore(nowDateOnly) || current.isAtSameMomentAs(nowDateOnly)) {
-          tempGroupedAssistances[current] = 0;
-          if (selectedDateRange == 'Esse ano') {
-            current = DateTime(current.year, current.month + 1, 1);
-          } else {
-            current = DateTime(current.year + 1, 1, 1);
-          }
-        }
-      } else {
-        DateTime current = startDateRange;
-        while (current.isBefore(nowDateOnly) || current.isAtSameMomentAs(nowDateOnly)) {
-          tempGroupedAssistances[current] = 0;
+      DateTime current = startDateRange;
+      while (current.isBefore(endDateRange) ||
+          current.isAtSameMomentAs(endDateRange)) {
+        tempGroupedAssistances[current] = 0;
+        if (selectedDateRange == 'Esse ano') {
+          current = DateTime(current.year, current.month + 1, 1);
+        } else if (selectedDateRange == 'Todos os anos') {
+          current = DateTime(current.year + 1, 1, 1);
+        } else {
           current = current.add(Duration(days: 1));
         }
       }
@@ -125,6 +132,11 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       for (var assistance in assistances) {
         DateTime startDate = DateTime.parse(assistance.startDate);
         DateTime keyDate;
+
+        if (startDate.isBefore(startDateRange) ||
+            startDate.isAfter(endDateRange)) {
+          continue;
+        }
 
         if (selectedDateRange == 'Esse ano') {
           keyDate = DateTime(startDate.year, startDate.month, 1);
@@ -135,14 +147,14 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
         }
 
         if (tempGroupedAssistances.containsKey(keyDate)) {
-          tempGroupedAssistances[keyDate] = (tempGroupedAssistances[keyDate] ?? 0) + 1;
+          tempGroupedAssistances[keyDate] =
+              (tempGroupedAssistances[keyDate] ?? 0) + 1;
         }
       }
 
       final sortedGroupedAssistances = Map.fromEntries(
           tempGroupedAssistances.entries.toList()
-            ..sort((a, b) => a.key.compareTo(b.key))
-      );
+            ..sort((a, b) => a.key.compareTo(b.key)));
 
       Map<String, int> finalGroupedAssistances = {};
       for (var entry in sortedGroupedAssistances.entries) {
@@ -173,11 +185,33 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
               child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedDateRange = dateRange;
-                    assistancesGroupedFuture = getAssistancesByPeriod();
-                  });
+                onPressed: () async {
+                  if (dateRange == 'Período personalizado') {
+                    final picked = await showDateRangePicker(
+                      context: context,
+                      initialDateRange:
+                          customStartDate != null && customEndDate != null
+                              ? DateTimeRange(
+                                  start: customStartDate!, end: customEndDate!)
+                              : null,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime.now(),
+                    );
+
+                    if (picked != null) {
+                      setState(() {
+                        customStartDate = picked.start;
+                        customEndDate = picked.end;
+                        selectedDateRange = dateRange;
+                        assistancesGroupedFuture = getAssistancesByPeriod();
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      selectedDateRange = dateRange;
+                      assistancesGroupedFuture = getAssistancesByPeriod();
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: selectedDateRange == dateRange
@@ -199,6 +233,20 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             );
           }).toList(),
         ),
+        if (selectedDateRange == 'Período personalizado' &&
+            customStartDate != null &&
+            customEndDate != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              'Período: ${DateFormat('dd/MM/yyyy').format(customStartDate!)} - ${DateFormat('dd/MM/yyyy').format(customEndDate!)}',
+              style: GoogleFonts.poppins(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
+          ),
         const SizedBox(height: 16.0),
         Expanded(
           child: FutureBuilder<Map<String, int>>(
