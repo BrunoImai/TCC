@@ -17,17 +17,19 @@ class BarChartAssistances extends StatefulWidget {
 }
 
 class _BarChartAssistancesState extends State<BarChartAssistances> {
-  late Future<Map<DateTime, int>> assistancesByWeekFuture;
+  late Future<Map<String, int>> assistancesGroupedFuture;
 
-  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Últimos 90 dias'];
+  List<String> dateRangeOptions = [
+    'Últimos 7 dias', 'Últimos 30 dias', 'Esse ano', 'Todos os anos'
+  ];
   String selectedDateRange = 'Últimos 7 dias';
 
   @override
   void initState() {
     super.initState();
-    assistancesByWeekFuture = getAssistancesByWeek();
+    assistancesGroupedFuture = getAssistancesByPeriod();
   }
-  
+
   Future<List<AssistanceResponse>> getAllAssistances() async {
     try {
       final response = await http.get(
@@ -69,62 +71,94 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       throw Exception('Error loading assistances: $e');
     }
   }
-
-  // Get week range string for display
+  
   String getWeekRange(DateTime date) {
     final startOfWeek = date;
     final endOfWeek = startOfWeek.add(const Duration(days: 6));
-    final formatter = DateFormat('dd/MM');
+    final formatter = DateFormat('dd/MM/yy');
     return '${formatter.format(startOfWeek)} - ${formatter.format(endOfWeek)}';
   }
 
-  // Updated function to get assistances grouped by week start dates
-  Future<Map<DateTime, int>> getAssistancesByWeek() async {
+  Future<Map<String, int>> getAssistancesByPeriod() async {
     try {
       final assistances = await getAllAssistances();
-      final Map<DateTime, int> weeklyAssistances = {};
+      Map<DateTime, int> tempGroupedAssistances = {};
 
       DateTime now = DateTime.now();
       DateTime startDateRange;
 
-      // Determine the start date based on the selected date range
-      if (selectedDateRange == 'Últimos 7 dias') {
-        startDateRange = now.subtract(Duration(days: 7));
-      } else if (selectedDateRange == 'Últimos 30 dias') {
-        startDateRange = now.subtract(Duration(days: 30));
+      switch (selectedDateRange) {
+        case 'Últimos 7 dias':
+          startDateRange = now.subtract(Duration(days: 7));
+          break;
+        case 'Últimos 30 dias':
+          startDateRange = now.subtract(Duration(days: 30));
+          break;
+        case 'Esse ano':
+          startDateRange = DateTime(now.year, 1, 1);
+          break;
+        default: // 'Todos os anos'
+          startDateRange = DateTime(now.year - 10, 1, 1);
+          break;
+      }
+
+      if (selectedDateRange == 'Esse ano' || selectedDateRange == 'Todos os anos') {
+        DateTime current = startDateRange;
+        while (current.isBefore(now)) {
+          tempGroupedAssistances[current] = 0;
+          if (selectedDateRange == 'Esse ano') {
+            current = DateTime(current.year, current.month + 1, 1);
+          } else {
+            current = DateTime(current.year + 1, 1, 1);
+          }
+        }
       } else {
-        startDateRange = now.subtract(Duration(days: 90));
-      }
-
-      // Generate week start dates between startDateRange and now
-      DateTime currentWeekStart = startDateRange.subtract(Duration(days: startDateRange.weekday - 1));
-      while (currentWeekStart.isBefore(now)) {
-        weeklyAssistances[currentWeekStart] = 0;
-        currentWeekStart = currentWeekStart.add(Duration(days: 7));
-      }
-
-      // Filter assistances within the date range
-      final filteredAssistances = assistances.where((assistance) {
-        DateTime startDate = DateTime.parse(assistance.startDate);
-        return startDate.isAfter(startDateRange);
-      }).toList();
-
-      // Map assistances to their corresponding week start dates
-      for (var assistance in filteredAssistances) {
-        DateTime startDate = DateTime.parse(assistance.startDate);
-        DateTime weekStartDate = startDate.subtract(Duration(days: startDate.weekday - 1));
-        weekStartDate = DateTime(weekStartDate.year, weekStartDate.month, weekStartDate.day);
-
-        if (weeklyAssistances.containsKey(weekStartDate)) {
-          weeklyAssistances[weekStartDate] = weeklyAssistances[weekStartDate]! + 1;
-        } else {
-          weeklyAssistances[weekStartDate] = 1;
+        DateTime current = startDateRange;
+        while (current.isBefore(now)) {
+          tempGroupedAssistances[current] = 0;
+          current = current.add(Duration(days: 1));
         }
       }
 
-      return weeklyAssistances;
+      for (var assistance in assistances) {
+        DateTime startDate = DateTime.parse(assistance.startDate);
+        DateTime keyDate = startDate;
+
+        if (selectedDateRange == 'Esse ano') {
+          keyDate = DateTime(startDate.year, startDate.month, 1);
+        } else if (selectedDateRange == 'Todos os anos') {
+          keyDate = DateTime(startDate.year, 1, 1);
+        }
+
+        if (tempGroupedAssistances.containsKey(keyDate)) {
+          tempGroupedAssistances[keyDate] = (tempGroupedAssistances[keyDate] ?? 0) + 1;
+        } else {
+          tempGroupedAssistances[keyDate] = 1;
+        }
+      }
+
+      final sortedGroupedAssistances = Map.fromEntries(
+          tempGroupedAssistances.entries.toList()
+            ..sort((a, b) => a.key.compareTo(b.key))
+      );
+
+      // Convert DateTime keys to formatted string keys
+      Map<String, int> finalGroupedAssistances = {};
+      for (var entry in sortedGroupedAssistances.entries) {
+        String formattedKey;
+        if (selectedDateRange == 'Esse ano') {
+          formattedKey = DateFormat('MMM yyyy').format(entry.key);
+        } else if (selectedDateRange == 'Todos os anos') {
+          formattedKey = DateFormat('yyyy').format(entry.key);
+        } else {
+          formattedKey = DateFormat('dd/MM/yy').format(entry.key);
+        }
+        finalGroupedAssistances[formattedKey] = entry.value;
+      }
+
+      return finalGroupedAssistances;
     } catch (e) {
-      throw Exception('Error loading assistances by week: $e');
+      throw Exception('Error loading assistances by period: $e');
     }
   }
 
@@ -141,7 +175,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                 onPressed: () {
                   setState(() {
                     selectedDateRange = dateRange;
-                    assistancesByWeekFuture = getAssistancesByWeek();
+                    assistancesGroupedFuture = getAssistancesByPeriod();
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -164,23 +198,22 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             );
           }).toList(),
         ),
-        const SizedBox(height: homePadding - 5,),
+        const SizedBox(height: 16.0),
         Expanded(
-          child: FutureBuilder<Map<DateTime, int>>(
-            future: assistancesByWeekFuture,
+          child: FutureBuilder<Map<String, int>>(
+            future: assistancesGroupedFuture,
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('No data available');
               }
 
-              final weeklyAssistances = snapshot.data!;
-              List<DateTime> sortedWeekStarts = weeklyAssistances.keys.toList()..sort();
+              final groupedAssistances = snapshot.data!;
+              List<String> xLabels = groupedAssistances.keys.toList();
               List<BarChartGroupData> barGroups = [];
-              List<String> xLabels = [];
 
-              for (int i = 0; i < sortedWeekStarts.length; i++) {
-                DateTime weekStart = sortedWeekStarts[i];
-                int count = weeklyAssistances[weekStart] ?? 0;
+              for (int i = 0; i < xLabels.length; i++) {
+                final label = xLabels[i];
+                final count = groupedAssistances[label] ?? 0;
 
                 barGroups.add(
                   BarChartGroupData(x: i, barRods: [
@@ -192,9 +225,6 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                     )
                   ]),
                 );
-
-                String weekRange = getWeekRange(weekStart);
-                xLabels.add(weekRange);
               }
 
               return BarChart(
@@ -203,25 +233,22 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                   borderData: FlBorderData(border: Border.all(width: 0)),
                   groupsSpace: 15,
                   titlesData: FlTitlesData(
-                    show: true,
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (double value, TitleMeta meta) {
-                          final style = GoogleFonts.poppins(
-                            fontSize: 8.0,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black,
-                          );
                           int index = value.toInt();
                           if (index >= 0 && index < xLabels.length) {
-                            String label = xLabels[index];
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
-                              space: 8.0,
                               child: Transform.rotate(
-                                angle: -0.45,
-                                child: Text(label, style: style),
+                                angle: -0.5,
+                                child: Text(xLabels[index],
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 8.0,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black,
+                                    )),
                               ),
                             );
                           } else {
@@ -234,15 +261,14 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (double value, TitleMeta meta) {
-                          const style = TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          );
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
-                            space: 8,
-                            child: Text('${value.toInt()}', style: style),
+                            child: Text('${value.toInt()}',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                )),
                           );
                         },
                       ),

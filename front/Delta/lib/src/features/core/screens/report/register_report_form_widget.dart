@@ -143,8 +143,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
 
         return workersList;
       } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print('Response status worker: ${response.statusCode}');
+        print('Response body worker: ${response.body}');
         throw Exception('Failed to load worker list');
       }
     } catch (e) {
@@ -204,8 +204,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
 
         return categoryList;
       } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print('Response status category: ${response.statusCode}');
+        print('Response body category: ${response.body}');
         throw Exception('Failed to load category list');
       }
     } catch (e) {
@@ -285,8 +285,8 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
 
         return assistanceList;
       } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print('Response status assistance: ${response.statusCode}');
+        print('Response body assistance: ${response.body}');
         throw Exception('Failed to load assistance list');
       }
 
@@ -442,22 +442,47 @@ class _RegisterReportFormWidget extends State<RegisterReportFormWidget> {
                 AssistanceInformations? selectedAssistance = await showDialog<AssistanceInformations>(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Selecione um serviço', style: Theme.of(context).textTheme.headline4),
-                      content: SizedBox(
-                        width: double.maxFinite,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: assistanceList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final assistance = assistanceList[index];
-                            return ListTile(
-                              title: Text(assistance.assistance.id),
-                              onTap: () {
-                                Navigator.pop(context, assistance);
-                              },
-                            );
-                          },
+                    double screenWidth = MediaQuery.of(context).size.width;
+
+                    double dialogWidth;
+                    if (screenWidth < 800) {
+                      dialogWidth = screenWidth;
+                    } else {
+                      dialogWidth = screenWidth * 0.3;
+                    }
+
+                    return Dialog(
+                      insetPadding: const EdgeInsets.symmetric(horizontal: homePadding - 5),
+                      child: SizedBox(
+                        width: dialogWidth,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(
+                                'Selecione um serviço',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ),
+                            const Divider(height: 1),
+                            SizedBox(
+                              height: 350,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: assistanceList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final assistance = assistanceList[index];
+                                  return ListTile(
+                                    title: Text(assistance.assistance.id),
+                                    onTap: () {
+                                      Navigator.pop(context, assistance);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

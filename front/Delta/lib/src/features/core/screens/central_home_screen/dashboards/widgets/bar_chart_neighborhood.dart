@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:tcc_front/src/constants/colors.dart';
 import '../../../../../../constants/sizes.dart';
 import '../../../../../authentication/screens/signup/central_manager.dart';
@@ -19,7 +18,7 @@ class BarChartNeighborhood extends StatefulWidget {
 class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
   late Future<Map<String, int>> assistancesByNeighborhoodFuture;
 
-  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Últimos 90 dias'];
+  List<String> dateRangeOptions = ['Últimos 7 dias', 'Últimos 30 dias', 'Esse ano', 'Todos os anos'];
   String selectedDateRange = 'Últimos 7 dias';
 
   @override
@@ -71,9 +70,9 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
   Future<Map<String, int>> getAssistancesByNeighborhood() async {
     try {
       final assistances = await getAllAssistances();
-      final Map<String, int> neighborhoodCounts = {};
+      Map<String, int> neighborhoodCounts = {};
 
-      // Filtrar assistências dentro do intervalo de datas
+      // Filter assistances within the date range
       DateTime now = DateTime.now();
       DateTime startDateRange;
 
@@ -81,16 +80,18 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
         startDateRange = now.subtract(Duration(days: 7));
       } else if (selectedDateRange == 'Últimos 30 dias') {
         startDateRange = now.subtract(Duration(days: 30));
-      } else {
-        startDateRange = now.subtract(Duration(days: 90));
+      } else if (selectedDateRange == 'Esse ano') {
+        startDateRange = DateTime(now.year, 1, 1);
+      } else { // 'Todos os anos'
+        startDateRange = DateTime(2000, 1, 1);
       }
 
       final filteredAssistances = assistances.where((assistance) {
         DateTime startDate = DateTime.parse(assistance.startDate);
-        return startDate.isAfter(startDateRange);
+        return startDate.isAfter(startDateRange) && startDate.isBefore(now);
       }).toList();
 
-      // Processar e agrupar por bairro-cidade
+      // Process and group by neighborhood-city
       for (var assistance in filteredAssistances) {
         List<String> addressParts = assistance.address.split(', ');
         if (addressParts.length > 2) {
@@ -101,6 +102,17 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
           neighborhoodCounts[key] = (neighborhoodCounts[key] ?? 0) + 1;
         }
       }
+
+      // Sort neighborhoods by count in descending order
+      var sortedEntries = neighborhoodCounts.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+
+      // Limit to top 10 neighborhoods (optional)
+      int topN = 10;
+      sortedEntries = sortedEntries.take(topN).toList();
+
+      // Convert back to a Map
+      neighborhoodCounts = Map.fromEntries(sortedEntries);
 
       return neighborhoodCounts;
     } catch (e) {
@@ -196,7 +208,7 @@ class _BarChartNeighborhoodState extends State<BarChartNeighborhood> {
                               axisSide: meta.axisSide,
                               space: 8.0,
                               child: Transform.rotate(
-                                angle: -0.45,
+                                angle: -0.5,
                                 child: Text(neighborhoods[index], style: style),
                               ),
                             );

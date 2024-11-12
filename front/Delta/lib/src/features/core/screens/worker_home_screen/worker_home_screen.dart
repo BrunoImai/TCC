@@ -219,13 +219,14 @@ class _WorkerHomeScreenState extends State<WorkerHomeScreen> {
               categoriesName
           );
         });
+        print(selectedAssistance);
       } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        throw Exception('Failed to load assistance');
+        print('Response status ASSISTANCE HOME SCREEN: ${response.statusCode}');
+        print('Response body  ASSISTANCE HOME SCREEN: ${response.body}');
+        throw Exception('Failed to load assistance  ASSISTANCE HOME SCREEN');
       }
     } catch (e) {
-      print('Error fetching assistance: $e');
+      print('Error fetching assistance  ASSISTANCE HOME SCREEN: $e');
     }
   }
 

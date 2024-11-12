@@ -157,7 +157,7 @@ class WorkerService (
 
     fun currentAssistance(): Assistance? {
         val worker = workerRepository.findByIdOrNull(getWorkerIdFromToken()) ?: throw IllegalStateException("Funcionario não encontrado")
-        val currentAssistance = worker.currentAssistances.lastOrNull() ?: return null
+        val currentAssistance = worker.currentAssistances.maxByOrNull { it.id!! } ?: return null
         if (currentAssistance.assistanceStatus == AssistanceStatus.FINALIZADO || currentAssistance.assistanceStatus == AssistanceStatus.CANCELADO) {
             return null
         }
@@ -412,7 +412,6 @@ class WorkerService (
 
     fun listUnreadNotifications() : List<Notification> {
         val workerId = getWorkerIdFromToken()
-        print("Entrou notificações não lidas worker")
         workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
         val unreadedNotifications =  listNotifications().filter { !it.readed }
         return unreadedNotifications

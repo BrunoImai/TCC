@@ -418,30 +418,56 @@ class _RegisterBudgetFormWidget extends State<RegisterBudgetFormWidget> {
             TextFormField(
               controller: assistanceIdController,
               decoration: const InputDecoration(
-                labelText: 'Número do serviço',
-                prefixIcon: Icon(Icons.content_paste_search_rounded)
+                  labelText: 'Número do serviço',
+                  prefixIcon: Icon(Icons.content_paste_search_rounded)
               ),
               onTap: () async {
                 fetchAssistances();
                 AssistanceInformations? selectedAssistance = await showDialog<AssistanceInformations>(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Selecione um serviço', style: Theme.of(context).textTheme.headline4),
-                      content: SizedBox(
-                        width: double.maxFinite,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: assistanceList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final assistance = assistanceList[index];
-                            return ListTile(
-                              title: Text(assistance.assistance.id),
-                              onTap: () {
-                                Navigator.pop(context, assistance);
-                              },
-                            );
-                          },
+                    double screenWidth = MediaQuery.of(context).size.width;
+
+                    // Apply the same sizing logic
+                    double dialogWidth;
+                    if (screenWidth < 800) {
+                      dialogWidth = screenWidth; // Or set a specific width
+                    } else {
+                      dialogWidth = screenWidth * 0.3;
+                    }
+
+                    return Dialog(
+                      insetPadding: const EdgeInsets.symmetric(horizontal: homePadding - 5),
+                      child: SizedBox(
+                        width: dialogWidth,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Selecione um serviço',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ),
+                            const Divider(height: 1),
+                            SizedBox(
+                              height: 350,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: assistanceList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final assistance = assistanceList[index];
+                                  return ListTile(
+                                    title: Text(assistance.assistance.id),
+                                    onTap: () {
+                                      Navigator.pop(context, assistance);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

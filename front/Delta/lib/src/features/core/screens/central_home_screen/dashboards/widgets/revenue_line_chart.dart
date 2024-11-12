@@ -53,14 +53,12 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
         int days = selectedDateRange == 'Últimos 7 dias' ? 7 : 30;
         DateTime startDate = now.subtract(Duration(days: days));
 
-        // Initialize revenue data map for each day
-        for (int i = 0; i <= days; i++) {
+        for (int i = 0; i < days; i++) {
           DateTime date = startDate.add(Duration(days: i));
           String dateKey = DateFormat('yyyy-MM-dd').format(date);
           revenueData[dateKey] = 0.0;
         }
 
-        // Aggregate revenue per day
         for (var budget in approvedBudgets) {
           final creationDate = DateTime.parse(budget.creationDate);
           if (!creationDate.isBefore(startDate) && !creationDate.isAfter(now)) {
@@ -75,13 +73,11 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
       } else if (selectedDateRange == 'Esse ano') {
         int currentYear = now.year;
 
-        // Initialize revenue data map for each month
         for (int month = 1; month <= 12; month++) {
           String monthKey = '$currentYear-${month.toString().padLeft(2, '0')}';
           revenueData[monthKey] = 0.0;
         }
 
-        // Aggregate revenue per month
         for (var budget in approvedBudgets) {
           final creationDate = DateTime.parse(budget.creationDate);
           if (creationDate.year == currentYear) {
@@ -95,7 +91,6 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
           }
         }
       } else if (selectedDateRange == 'Todos os anos') {
-        // Aggregate revenue per year
         for (var budget in approvedBudgets) {
           final creationDate = DateTime.parse(budget.creationDate);
           String yearKey = '${creationDate.year}';
@@ -109,7 +104,6 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
         }
       }
 
-      // Convert revenue data to FlSpot list for the chart
       List<String> sortedKeys = revenueData.keys.toList()
         ..sort((a, b) => a.compareTo(b));
       List<FlSpot> spots = [];
@@ -122,14 +116,13 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
 
       setState(() {
         revenueSpots = spots;
-        xAxisLabels = sortedKeys; // Store the labels
+        xAxisLabels = sortedKeys;
       });
     } catch (e) {
       print('Error fetching data: $e');
     }
   }
 
-  // Fetch all budgets from the API
   Future<List<BudgetResponse>> getAllBudgets() async {
     try {
       final response = await http.get(
@@ -169,7 +162,6 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
     }
   }
 
-  // Get X-axis labels based on the selected date range
   String getXAxisLabel(int index) {
     if (index < 0 || index >= xAxisLabels.length) {
       return '';
@@ -178,7 +170,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
     if (selectedDateRange == 'Últimos 7 dias' ||
         selectedDateRange == 'Últimos 30 dias') {
       DateTime date = DateTime.parse(xAxisLabels[index]);
-      return DateFormat('dd/MM').format(date);
+      return DateFormat('dd/MM/yy').format(date);
     } else if (selectedDateRange == 'Esse ano') {
       DateTime date = DateTime.parse('${xAxisLabels[index]}-01');
       return DateFormat('MMM').format(date);
@@ -247,6 +239,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
+                            interval: 1,
                             reservedSize: 40,
                             getTitlesWidget: (double value, TitleMeta meta) {
                               int index = value.toInt();
@@ -258,14 +251,14 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
                               const style = TextStyle(
                                 color: Colors.grey,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 8,
+                                fontSize: 7.5,
                               );
 
                               return SideTitleWidget(
                                 axisSide: meta.axisSide,
-                                space: 8.0,
+                                space: 10.0,
                                 child: Transform.rotate(
-                                  angle: -0.45,
+                                  angle: -0.8,
                                   child: Text(label, style: style),
                                 ),
                               );
@@ -292,7 +285,7 @@ class _RevenueLineChartState extends State<RevenueLineChart> {
 
                               return SideTitleWidget(
                                   axisSide: meta.axisSide,
-                                  space: 10,
+                                  space: 4,
                                   fitInside: const SideTitleFitInsideData(
                                       enabled: true,
                                       axisPosition: 0,
