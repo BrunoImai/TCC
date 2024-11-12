@@ -165,16 +165,6 @@ class WorkerService (
     }
 
     // Maps
-//    fun getClosestAssist(currentLocation: String): AddressResponse {
-//        val restTemplate = RestTemplate()
-//        val responses = listAllAssistanceQueueByCentralId().map { assistance ->
-//            val url = buildUrl(currentLocation, assistance.adress)
-//            restTemplate.getForObject(url, MapResponse::class.java)
-//        }
-//
-//        val closest = responses.filterNotNull().minByOrNull { it.routes[0].legs[0].duration.value }
-//        return AddressResponse(closest?.routes?.get(0)?.legs?.get(0)?.endAddress ?: "No valid address found")
-//    }
 
     fun createBudget(budgetReq: BudgetRequest) : Budget {
         val workerId = getWorkerIdFromToken()
@@ -420,7 +410,9 @@ class WorkerService (
     fun getNotification(notificationId: Long) : Notification {
         val workerId = getWorkerIdFromToken()
         val worker = workerRepository.findByIdOrNull(workerId) ?: throw IllegalStateException("Funcionário não encontrado")
-        return worker.central?.notifications?.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
+        val notification = worker.central!!.notifications.find { it.id == notificationId } ?: throw IllegalStateException("Notificação não encontrada")
+        notification.readed = true
+        return notificationRepository.save(notification)
     }
 
     fun extractAddressWithNumber(input: String): String {

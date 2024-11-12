@@ -71,7 +71,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       throw Exception('Error loading assistances: $e');
     }
   }
-  
+
   String getWeekRange(DateTime date) {
     final startOfWeek = date;
     final endOfWeek = startOfWeek.add(const Duration(days: 6));
@@ -85,26 +85,28 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
       Map<DateTime, int> tempGroupedAssistances = {};
 
       DateTime now = DateTime.now();
+      DateTime nowDateOnly = DateTime(now.year, now.month, now.day);
+
       DateTime startDateRange;
 
       switch (selectedDateRange) {
         case 'Últimos 7 dias':
-          startDateRange = now.subtract(Duration(days: 7));
+          startDateRange = nowDateOnly.subtract(Duration(days: 6)); // Inclui hoje
           break;
         case 'Últimos 30 dias':
-          startDateRange = now.subtract(Duration(days: 30));
+          startDateRange = nowDateOnly.subtract(Duration(days: 29)); // Inclui hoje
           break;
         case 'Esse ano':
           startDateRange = DateTime(now.year, 1, 1);
           break;
-        default: // 'Todos os anos'
+        default:
           startDateRange = DateTime(now.year - 10, 1, 1);
           break;
       }
 
       if (selectedDateRange == 'Esse ano' || selectedDateRange == 'Todos os anos') {
         DateTime current = startDateRange;
-        while (current.isBefore(now)) {
+        while (current.isBefore(nowDateOnly) || current.isAtSameMomentAs(nowDateOnly)) {
           tempGroupedAssistances[current] = 0;
           if (selectedDateRange == 'Esse ano') {
             current = DateTime(current.year, current.month + 1, 1);
@@ -114,7 +116,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
         }
       } else {
         DateTime current = startDateRange;
-        while (current.isBefore(now)) {
+        while (current.isBefore(nowDateOnly) || current.isAtSameMomentAs(nowDateOnly)) {
           tempGroupedAssistances[current] = 0;
           current = current.add(Duration(days: 1));
         }
@@ -122,18 +124,18 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
 
       for (var assistance in assistances) {
         DateTime startDate = DateTime.parse(assistance.startDate);
-        DateTime keyDate = startDate;
+        DateTime keyDate;
 
         if (selectedDateRange == 'Esse ano') {
           keyDate = DateTime(startDate.year, startDate.month, 1);
         } else if (selectedDateRange == 'Todos os anos') {
           keyDate = DateTime(startDate.year, 1, 1);
+        } else {
+          keyDate = DateTime(startDate.year, startDate.month, startDate.day);
         }
 
         if (tempGroupedAssistances.containsKey(keyDate)) {
           tempGroupedAssistances[keyDate] = (tempGroupedAssistances[keyDate] ?? 0) + 1;
-        } else {
-          tempGroupedAssistances[keyDate] = 1;
         }
       }
 
@@ -142,12 +144,11 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             ..sort((a, b) => a.key.compareTo(b.key))
       );
 
-      // Convert DateTime keys to formatted string keys
       Map<String, int> finalGroupedAssistances = {};
       for (var entry in sortedGroupedAssistances.entries) {
         String formattedKey;
         if (selectedDateRange == 'Esse ano') {
-          formattedKey = DateFormat('MMM yyyy').format(entry.key);
+          formattedKey = DateFormat('MMM yyyy', 'pt_BR').format(entry.key);
         } else if (selectedDateRange == 'Todos os anos') {
           formattedKey = DateFormat('yyyy').format(entry.key);
         } else {
@@ -204,7 +205,7 @@ class _BarChartAssistancesState extends State<BarChartAssistances> {
             future: assistancesGroupedFuture,
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Text('No data available');
+                return const Text('Sem dados disponíveis');
               }
 
               final groupedAssistances = snapshot.data!;

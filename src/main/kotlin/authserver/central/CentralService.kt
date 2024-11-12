@@ -967,8 +967,6 @@ class CentralService(
         val centralId = getCentralIdFromToken()
         val central = centralRepository.findByIdOrNull(centralId) ?: throw IllegalStateException("Central não encontrada")
         val notifications = central.notifications.filter { !it.readed }.toMutableSet()
-        notifications.map { it.readed = true
-            notificationRepository.save(it)}
         return notifications
     }
 
